@@ -1,0 +1,8 @@
+!.gitignore
+autoload/*
+backup/*
+plugged/*
+spell/*
+swap/*
+undo/*
+view/*
