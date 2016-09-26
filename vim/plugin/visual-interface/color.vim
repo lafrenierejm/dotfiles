@@ -11,3 +11,7 @@ colors default
 if has('syntax') && !exists('g:syntax_on')
 	syntax enable
 endif
+
+" Make line numbers grey
+highlight LineNr ctermfg=grey
+highlight CursorLineNr ctermfg=grey
