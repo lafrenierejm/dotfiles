@@ -1,0 +1,18 @@
+# Attachment view keybindings
+bind attach G       last-entry
+bind attach g       first-entry
+
+# Index keybindings
+bind index  <tab>   sync-mailbox
+bind index  <space> collapse-thread
+bind index  G       last-entry
+bind index  g       first-entry
+bind index  R       group-reply
+
+# Pager keybindings
+bind pager  G       bottom
+bind pager  g       top
+bind pager  J       next-entry
+bind pager  j       next-line
+bind pager  K       previous-entry
+bind pager  k       previous-line
