@@ -1,0 +1,43 @@
+# This is the main user configuration file
+# It is sourced when zsh is started as an interactive shell
+################################################################################
+
+# Alway run inside tmux
+## Attempt to attach if SSH'd in
+if [[ -n "$SSH_CLIENT" ]] && [[ -z "$TMUX" ]]; then
+	tmux attach || tmux new-session
+## Else replace shell with tmux session
+elif [[ -z "$TMUX" ]]; then
+	exec tmux
+fi
+
+# Source file containing aliases;
+if [ -f "${XDG_CONFIG_HOME}/zsh/aliases" ]; then
+	source "${XDG_CONFIG_HOME}/zsh/aliases"
+fi
+
+# Enable autocompletion
+autoload -U compinit
+compinit
+
+# History settings
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory nomatch
+## Ignore duplicate lines in the history
+setopt HIST_IGNORE_DUPS
+unsetopt autocd beep extendedglob notify
+
+# Use vi mode
+bindkey -v
+
+# Source the zsh-syntax-highlighting script
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+	source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# Set the left-aligned prompt
+## Display the current directory, shortening $HOME to '~'
+## Display '#' if root, '%' otherwise
+PS1="%~%# "
