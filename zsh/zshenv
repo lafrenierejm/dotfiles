@@ -1,0 +1,16 @@
+# This file is used to set environment variables
+
+# Set the default editor to vim
+export EDITOR=vim
+
+# Set the default pager to less
+export PAGER=less
+
+# Set the first terminal to be tried by i3
+export TERMINAL=urxvt
+
+# Set the base directory to which user-specific configuration files should be written
+export XDG_CONFIG_HOME="${HOME}/.config/"
+
+# gpg-agent
+export GPG_TTY=${TTY}
