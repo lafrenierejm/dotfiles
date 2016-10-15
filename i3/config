@@ -1,0 +1,173 @@
+# Should you change your keyboard layout some time, delete
+# this file and re-run i3-config-wizard(1).
+
+# Set the modifer key
+set $mod Mod4
+
+# Set fonts
+font -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Set urxvt as the terminal emulator
+bindsym $mod+Return exec urxvt
+
+# kill focused window
+bindsym $mod+q kill
+
+# Reload the configuration file
+bindsym $mod+Shift+C reload
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# Exit i3 (logs you out of your X session)
+bindsym $mod+Shift+Escape exit
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec dmenu_run -nb "#181818" -nf "#d8d8d8" -sb "#383838" -sf "#d8d8d8"
+
+# Don't automatically change focuse with mouse
+focus_follows_mouse no
+
+# Change focus with vi bindings
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+# Alternatively, use the arrow keys
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move focused window with Shift + vi bindings
+bindsym $mod+Shift+H move left
+bindsym $mod+Shift+J move down
+bindsym $mod+Shift+K move up
+bindsym $mod+Shift+L move right
+# Alternatively, use the arrow keys
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Horizontal splits
+bindsym $mod+g split h
+
+# Vertical splits
+bindsym $mod+v split v
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# Switch focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+a focus parent
+
+# Focus the child container
+#bindsym $mod+d focus child
+
+# Switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# Enter resize window mode
+bindsym $mod+r mode "resize"
+# These bindings triggek as soon as you enter resize mode
+# Click + drag can also be used
+mode "resize" {
+        # Pressing left will shrink the window width.
+        # Pressing right will grow the window width.
+        # Pressing up will shrink the window height.
+        # Pressing down will grow the window height.
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym j resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+        # Same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize shrink height 10 px or 10 ppt
+        bindsym Up resize grow height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# Colors
+## class                border  backgr  text    indicator
+client.focused          #181818 #383838 #d8d8d8 #d8d8d8
+client.focused_inactive #181818 #383838 #d8d8d8 #d8d8d8
+client.unfocused        #181818 #181818 #d8d8d8 #d8d8d8
+client.urgent           #181818 #bf616a #d8d8d8 #d8d8d8
+client.placeholder      #181818 #181818 #d8d8d8 #d8d8d8
+client.background       #181818
+
+# No window borders
+new_window none
+new_float none
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+	status_command i3status
+	tray_output primary
+	# Permanently at one edge of the screen
+	## dock | hide | invisible
+	mode dock
+	# Show the bar
+	## hide|show
+	hidden_state show
+	# Position at top of screen
+	position top
+	# Show workspace numbering
+	## yes|no
+	workspace_buttons yes
+
+	colors {
+		background #181818
+		statusline #d8d8d8
+		separator  #585858
+
+		#class             border  backgr  text
+		focused_workspace  #181818 #383838 #d8d8d8
+		active_workspace   #181818 #383838 #d8d8d8
+		inactive_workspace #181818 #181818 #d8d8d8
+		urgent_workspace   #181818 #383838 #181818
+		#binding_mode
+	}
+}
+
+# Automatically start some applications
+exec --no-startup-id urxvt
