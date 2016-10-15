@@ -1,0 +1,43 @@
+# i3status configuration file
+# See "man i3status" for documentation
+
+general {
+	output_format = "i3bar"
+	colors = false
+	# Refresh interval in seconds
+	interval = 15
+}
+
+# Items to display
+order += "wireless wlp1s0"
+order += "ethernet enp0s20u1"
+order += "battery 0"
+order += "tztime local"
+
+# Configure items
+wireless wlp1s0 {
+	format_up      = "%quality, %bitrate on %essid at %ip"
+	format_down    = "Wireless down"
+	color_good     = "#d8d8d8"
+	color_degraded = "#d8d8d8"
+	color_bad      = "#d8d8d8"
+}
+
+ethernet enp0s20u1 {
+	format_up      = "%speed at %ip"
+	format_down    = "Wired down"
+	color_good     = "#d8d8d8"
+	color_degraded = "#d8d8d8"
+	color_bad      = "#d8d8d8"
+}
+
+battery 0 {
+	format         = "%status %percentage"
+	color_good     = "#d8d8d8"
+	color_degraded = "#d8d8d8"
+	color_bad      = "#d8d8d8"
+}
+
+tztime local {
+	format = "%Y-%m-%d %H:%M:%S"
+}
