@@ -1,0 +1,32 @@
+#!/bin/sh
+
+user_resources=${XDG_CONFIG_HOME}/X11/Xresources
+user_modmap=${XDG_CONFIG_HOME}/X11/Xmodmap
+sys_resources=/etc/X11/xinit/.Xresources
+sys_modmap=/etc/X11/xinit/.Xmodmap
+
+# Merge settings from system files
+if [ -f "${sys_resources}" ]; then
+	xrdb -merge "$sys_resources"
+fi
+if [ -f "${sys_modmap}" ]; then
+	xmodmap "${sys_modmap}"
+fi
+
+# Apply user settings
+if [ -f "${user_resources}" ]; then
+	xrdb "${user_resources}"
+fi
+if [ -f "${user_modmap}" ]; then
+	xmodmap "${user_modmap}"
+	if hash 'xcape' >/dev/null 2>&1; then
+		xcape -t 250 -e "Super_L=Left"
+	fi
+fi
+
+# Set the background color
+xsetroot -solid "#181818"
+# Start xautolock in the background with a 5 minute timer and i3lock
+xautolock -time 5 -locker i3lock-pixelate.sh &
+# Start i3wm
+exec i3
