@@ -1,0 +1,130 @@
+################################################################################
+# Defaults
+################################################################################
+Create    Both
+SyncState *
+
+################################################################################
+# lafrenierejm@gmail.com
+################################################################################
+IMAPAccount com.gmail.lafrenierejm
+	Host        imap.gmail.com
+	PassCmd     "pass email/gmail.com/mutt"
+	Port        993
+	SSLType     IMAPS
+	SSLVersions TLSv1.2
+	User        lafrenierejm
+
+IMAPStore remote-com.gmail.lafrenierejm
+	Account com.gmail.lafrenierejm
+
+MaildirStore local-com.gmail.lafrenierejm
+	Inbox ~/mail/com.gmail.lafrenierejm/inbox
+	Path  ~/mail/com.gmail.lafrenierejm/
+
+Channel com.gmail.lafrenierejm-sent
+	Master ":remote-com.gmail.lafrenierejm:[Gmail]/Drafts"
+	Slave  ":local-com.gmail.lafrenierejm:drafts"
+
+Channel com.gmail.lafrenierejm-inbox
+	Master ":remote-com.gmail.lafrenierejm:INBOX"
+	Slave  ":local-com.gmail.lafrenierejm:INBOX"
+
+Channel com.gmail.lafrenierejm-sent
+	Master ":remote-com.gmail.lafrenierejm:[Gmail]/Sent Mail"
+	Slave  ":local-com.gmail.lafrenierejm:sent"
+
+Group com.gmail.lafrenierejm
+	Channel com.gmail.lafrenierejm-drafts
+	Channel com.gmail.lafrenierejm-inbox
+	Channel com.gmail.lafrenierejm-sent
+
+################################################################################
+# jml140230@utdallas.edu
+################################################################################
+IMAPAccount edu.utdallas.jml140230
+	Host        outlook.office365.com
+	PassCmd     "pass utd/netid/password"
+	Port        993
+	SSLType     IMAPS
+	SSLVersions TLSv1.2
+	User        jml140230@utdallas.edu
+
+IMAPStore remote-edu.utdallas.jml140230
+	Account edu.utdallas.jml140230
+
+MaildirStore local-edu.utdallas.jml140230
+	Inbox ~/mail/edu.utdallas.jml140230/inbox
+	Path  ~/mail/edu.utdallas.jml140230/
+
+Channel edu.utdallas.jml140230-drafts
+	Master ":remote-edu.utdallas.jml140230:Drafts"
+	Slave  ":local-edu.utdallas.jml140230:drafts"
+
+Channel edu.utdallas.jml140230-inbox
+	Master ":remote-edu.utdallas.jml140230:INBOX"
+	Slave  ":local-edu.utdallas.jml140230:INBOX"
+
+Group edu.utdallas.jml140230
+	Channel edu.utdallas.jml140230-drafts
+	Channel edu.utdallas.jml140230-inbox
+
+################################################################################
+# admin@lafreniere.xyz
+################################################################################
+IMAPAccount xyz.lafreniere.admin
+	Host        imap.kolabnow.com
+	PassCmd     "pass email/kolabnow.com/admin/password"
+	Port        993
+	SSLType     IMAPS
+	SSLVersions TLSv1.2
+	User        admin@lafreniere.xyz
+
+IMAPStore remote-xyz.lafreniere.admin
+	Account xyz.lafreniere.admin
+
+MaildirStore local-xyz.lafreniere.admin
+	Inbox ~/mail/xyz.lafreniere.admin/inbox
+	Path  ~/mail/xyz.lafreniere.admin/
+
+Channel xyz.lafreniere.admin-inbox
+	Master ":remote-xyz.lafreniere.admin:INBOX"
+	Slave  ":local-xyz.lafreniere.admin:INBOX"
+
+Channel xyz.lafreniere.admin-sent
+	Master ":remote-xyz.lafreniere.admin:Sent"
+	Slave  ":local-xyz.lafreniere.admin:sent"
+
+Group xyz.lafreniere.admin
+	Channel xyz.lafreniere.admin-inbox
+	Channel xyz.lafreniere.admin-sent
+
+################################################################################
+# joseph@lafreniere.xyz
+################################################################################
+IMAPAccount xyz.lafreniere.joseph
+	Host        imap.kolabnow.com
+	PassCmd     "pass email/kolabnow.com/joseph/password"
+	Port        993
+	SSLType     IMAPS
+	SSLVersions TLSv1.2
+	User        joseph@lafreniere.xyz
+
+IMAPStore remote-xyz.lafreniere.joseph
+	Account xyz.lafreniere.joseph
+
+MaildirStore local-xyz.lafreniere.joseph
+	Inbox ~/mail/xyz.lafreniere.joseph/inbox
+	Path  ~/mail/xyz.lafreniere.joseph/
+
+Channel xyz.lafreniere.joseph-inbox
+	Master ":remote-xyz.lafreniere.joseph:INBOX"
+	Slave  ":local-xyz.lafreniere.joseph:INBOX"
+
+Channel xyz.lafreniere.joseph-sent
+	Master ":remote-xyz.lafreniere.joseph:Sent"
+	Slave  ":local-xyz.lafreniere.joseph:sent"
+
+Group xyz.lafreniere.joseph
+	Channel xyz.lafreniere.joseph-inbox
+	Channel xyz.lafreniere.joseph-sent
