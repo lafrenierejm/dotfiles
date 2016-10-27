@@ -1,6 +1,6 @@
 # This is the main user configuration file
 # It is sourced when zsh is started as an interactive shell
-################################################################################
+# ##############################################################################
 
 # Alway run inside tmux
 ## Attempt to attach if SSH'd in
@@ -11,17 +11,22 @@ elif [[ -z "$TMUX" ]]; then
 	exec tmux
 fi
 
-# Source file containing aliases;
-if [ -f "${XDG_CONFIG_HOME}/zsh/aliases" ]; then
-	source "${XDG_CONFIG_HOME}/zsh/aliases"
-fi
+# Use vi mode
+bindkey -v
+## Set a 1ms delay on pressing ESC
+export KEYTIMEOUT=1
 
 # Enable autocompletion
 autoload -U compinit
 compinit
 
 # History settings
-HISTFILE=~/.zsh_history
+if [ -d "${HOME}/.local/share/zsh" ]; then
+	HISTFILE="${HOME}/.local/share/history.txt"
+else
+	mkdir -p "${HOME}/.local/share/zsh"
+	HISTFILE="${HOME}/.local/share/history.txt"
+fi
 HISTSIZE=1000
 SAVEHIST=1000
 setopt appendhistory nomatch
@@ -29,12 +34,17 @@ setopt appendhistory nomatch
 setopt HIST_IGNORE_DUPS
 unsetopt autocd beep extendedglob notify
 
-# Use vi mode
-bindkey -v
-
-# Source the zsh-syntax-highlighting script
-if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-	source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Source external files
+if [ -d "${ZDOTDIR}/interactive" ]; then
+	for file in $(find "${ZDOTDIR}/interactive" -name '*.zsh' -print); do
+		source "${file}"
+	done
+elif [ -d "${HOME}/.config/zsh/interactive" ]; then
+	for file in $(
+			find "${HOME}/.config/zsh/interactive" -name '*.zsh' -print
+	); do
+		source "${file}"
+	done
 fi
 
 # Set the left-aligned prompt
