@@ -53,7 +53,7 @@ if hash 'mutt' >/dev/null 2>&1; then
 		fi
 
 		# Run mutt
-		mutt
+		mutt -F "${HOME}/.config/mutt/muttrc"
 	}
 fi
 
