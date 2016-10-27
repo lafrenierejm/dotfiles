@@ -2,8 +2,13 @@
 # This file gets sourced from zshrc
 # ##############################################################################
 
-alias up='cd ../'
+# Remove all current aliases
+unalias -m '*'
+
+# Create parent directories as needed
 alias mkdir='mkdir -p'
+
+# Remove recursively and forcefully
 alias rmrf='rm -rf'
 
 # `img` opens images in feh when inside graphical environment
@@ -18,10 +23,9 @@ if [[ -n "${DISPLAY}" ]] && hash 'feh' >/dev/null 2>&1; then
 fi
 
 # `ll` is `ls` with human-readable size, long, filetype, colored
-unalias ll
 ll () {
 	# Not in config if nothing is replaced
-	if [[ "$(pwd)" == "${$(pwd)%${XDG_CONFIG_HOME}*}" ]] &&
+	if [[ "$(pwd)" == "${$(pwd)%*config*}" ]] &&
 	   [[ "$(pwd)" == "${$(pwd)%*dotfile*}" ]]; then
 		ls -hlF --color=auto "$@"
 	# Otherwise add '-A' option
@@ -39,6 +43,8 @@ if hash 'mutt' >/dev/null 2>&1; then
 		# Attempt to get the directory from xdg-user-dir
 		if hash 'xdg-user-dir' >/dev/null 2>&1; then
 			directory=$(xdg-user-dir DOWNLOAD)
+		elif [[ -d "${HOME}/download" ]]; then
+			directory="${HOME}/download"
 		# Attempt to find a download dir in $HOME
 		else
 			directory=$(find "${HOME}" -maxdepth 1 -path "${HOME}/[Dd]ownload*")
