@@ -1,9 +1,9 @@
 #!/bin/sh
 
-user_resources=${XDG_CONFIG_HOME}/X11/Xresources
-user_modmap=${XDG_CONFIG_HOME}/X11/Xmodmap
-sys_resources=/etc/X11/xinit/.Xresources
-sys_modmap=/etc/X11/xinit/.Xmodmap
+user_resources="${HOME}/.config/X11/Xresources"
+user_modmap="${HOME}/.config/X11/Xmodmap"
+sys_resources='/etc/X11/xinit/.Xresources'
+sys_modmap='/etc/X11/xinit/.Xmodmap'
 
 # Merge settings from system files
 if [ -f "${sys_resources}" ]; then
