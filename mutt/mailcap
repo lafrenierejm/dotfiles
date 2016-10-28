@@ -1,1 +1,3 @@
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
+application/pdf; mupdf '%s';
+image/*; feh --scale-down '%s';
