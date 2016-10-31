@@ -22,7 +22,7 @@ MaildirStore local-com.gmail.lafrenierejm
 	Inbox ~/mail/com.gmail.lafrenierejm/inbox
 	Path  ~/mail/com.gmail.lafrenierejm/
 
-Channel com.gmail.lafrenierejm-sent
+Channel com.gmail.lafrenierejm-drafts
 	Master ":remote-com.gmail.lafrenierejm:[Gmail]/Drafts"
 	Slave  ":local-com.gmail.lafrenierejm:drafts"
 
