@@ -65,9 +65,14 @@ Channel edu.utdallas.jml140230-inbox
 	Master ":remote-edu.utdallas.jml140230:INBOX"
 	Slave  ":local-edu.utdallas.jml140230:INBOX"
 
+Channel edu.utdallas.jml140230-sent
+	Master ":remote-edu.utdallas.jml140230:Sent"
+	Slave  ":local-edu.utdallas.jml140230:sent"
+
 Group edu.utdallas.jml140230
 	Channel edu.utdallas.jml140230-draft
 	Channel edu.utdallas.jml140230-inbox
+	Channel edu.utdallas.jml140230-sent
 
 ################################################################################
 # admin@lafreniere.xyz
@@ -87,6 +92,10 @@ MaildirStore local-xyz.lafreniere.admin
 	Inbox ~/mail/xyz.lafreniere.admin/inbox
 	Path  ~/mail/xyz.lafreniere.admin/
 
+Channel xyz.lafreniere.admin-draft
+	Master ":remote-xyz.lafreniere.admin:Drafts"
+	Slave  ":local-xyz.lafreniere.admin:draft"
+
 Channel xyz.lafreniere.admin-inbox
 	Master ":remote-xyz.lafreniere.admin:INBOX"
 	Slave  ":local-xyz.lafreniere.admin:INBOX"
@@ -96,6 +105,7 @@ Channel xyz.lafreniere.admin-sent
 	Slave  ":local-xyz.lafreniere.admin:sent"
 
 Group xyz.lafreniere.admin
+	Channel xyz.lafreniere.admin-draft
 	Channel xyz.lafreniere.admin-inbox
 	Channel xyz.lafreniere.admin-sent
 
@@ -117,6 +127,10 @@ MaildirStore local-xyz.lafreniere.joseph
 	Inbox ~/mail/xyz.lafreniere.joseph/inbox
 	Path  ~/mail/xyz.lafreniere.joseph/
 
+Channel xyz.lafreniere.joseph-draft
+	Master ":remote-xyz.lafreniere.joseph:Drafts"
+	Slave  ":local-xyz.lafreniere.joseph:draft"
+
 Channel xyz.lafreniere.joseph-inbox
 	Master ":remote-xyz.lafreniere.joseph:INBOX"
 	Slave  ":local-xyz.lafreniere.joseph:INBOX"
@@ -126,5 +140,6 @@ Channel xyz.lafreniere.joseph-sent
 	Slave  ":local-xyz.lafreniere.joseph:sent"
 
 Group xyz.lafreniere.joseph
+	Channel xyz.lafreniere.joseph-draft
 	Channel xyz.lafreniere.joseph-inbox
 	Channel xyz.lafreniere.joseph-sent
