@@ -3,21 +3,26 @@ set nomodeline
 
 " Per-OS changes
 if has('win32')
-	" Default location of config
-	let g:NVIM_CONFIG_HOME='~/vimfiles'
-	" Use system clipboard
+	" set the configuration directory
+	let g:VIM_CONFIG_HOME='~/vimfiles'
+	" use system clipboard
 	set clipboard+=unnamedplus
 else
-	let g:NVIM_CONFIG_HOME=$XDG_CONFIG_HOME.'/nvim'
-	" Use system clipboard
-	if has('clipboard')
+	" set the configuration directory
+	if has('nvim')
+		let g:VIM_CONFIG_HOME=$HOME.'/.config/nvim'
+	else
+		let g:VIM_CONFIG_HOME=$HOME.'/.vim'
+	endif
+	" use system clipboard if running in X
+	if has('clipboard') && $TERM !~# 'linux'
 		set clipboard+=unnamedplus
 	endif
 endif
 
 " Look for a readable instance of Vim-Plug
-if filereadable(expand(g:NVIM_CONFIG_HOME.'/autoload/plug.vim'))
-	call plug#begin(g:NVIM_CONFIG_HOME . '/plugged')
+if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
+	call plug#begin(g:VIM_CONFIG_HOME.'/plugged')
 		Plug 'AndrewRadev/splitjoin.vim'                  " Switch between multi- and single-line statements
 		Plug 'PProvost/vim-ps1'                           " Syntax for powershell scripts ( . ps1)
 		Plug 'airblade/vim-gitgutter'                     " show git diff and stage/unstage hunks
@@ -35,11 +40,11 @@ endif
 
 " Temporary files
 "" Backups
-execute 'set backupdir='.$XDG_DATA_HOME.'/nvim/backup//'
+execute 'set backupdir='.$HOME.'/.local/share/nvim/backup//'
 "" Swap files
-execute 'set directory='.$XDG_DATA_HOME.'/nvim/swap//'
+execute 'set directory='.$HOME.'/.local/share/nvim/swap//'
 "" Undo
-execute 'set undodir='.$XDG_DATA_HOME.'/nvim/undo//'
+execute 'set undodir='.$HOME.'/.local/share/nvim/undo//'
 set undofile
 
 " Character encoding
