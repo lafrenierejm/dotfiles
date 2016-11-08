@@ -20,12 +20,14 @@ if filereadable(expand(g:NVIM_CONFIG_HOME.'/autoload/plug.vim'))
 	call plug#begin(g:NVIM_CONFIG_HOME . '/plugged')
 		Plug 'AndrewRadev/splitjoin.vim'                  " Switch between multi- and single-line statements
 		Plug 'PProvost/vim-ps1'                           " Syntax for powershell scripts ( . ps1)
+		Plug 'airblade/vim-gitgutter'                     " show git diff and stage/unstage hunks
 		Plug 'amirh/HTML-AutoCloseTag', { 'for': 'html' } " Auto close html tags
 		Plug 'cespare/vim-toml'                           " Syntax for TOML
 		Plug 'junegunn/vim-easy-align'                    " Easy column-based alignment
 		Plug 'neomake/neomake'                            " Async :make and linting framework
 		Plug 'rust-lang/rust.vim'                         " Configuration for Rust
 		Plug 'tpope/vim-commentary'                       " Comment and uncomment easily
+		Plug 'tpope/vim-fugitive'                         " a git porcelain
 		Plug 'tpope/vim-repeat'                           " `.` support for plugins
 		Plug 'tpope/vim-surround'                         " Quoting and parenthesizing
 	call plug#end()
