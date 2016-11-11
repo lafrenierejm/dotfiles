@@ -18,3 +18,7 @@ Host *
 	SendEnv LANG LC_*
 	# Protects against 2016 Roaming Vulnerability
 	UseRoaming No
+
+Host carbon
+	User Fhqwhgads
+	HostName carbon.collegiumv.org
