@@ -35,6 +35,7 @@ if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 		Plug 'tpope/vim-fugitive'                         " a git porcelain
 		Plug 'tpope/vim-repeat'                           " `.` support for plugins
 		Plug 'tpope/vim-surround'                         " Quoting and parenthesizing
+		Plug 'wogong/msmtp.vim'                           " msmtp syntax highlighting
 	call plug#end()
 endif
 
