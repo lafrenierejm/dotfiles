@@ -28,7 +28,7 @@ function! s:MailAreaDetect_Switch(vmode)
 			sleep 1
 		endif
 	endif
-endfu
+endfunction
 
 function! s:MailAreaDetect_On()
 	silent autocmd! MailAreaDetect CursorMoved,CursorMovedI
@@ -51,19 +51,36 @@ function! s:AreaOptions()
 	execute s:defaults
 	if <SID>CheckArea('\v^From( |: ).*\n','\v^$')
 		"echo 'Header'
-		setlocal fo-=a fo-=w fo-=t sts=0 sw=8 noet
-	elseif <SID>CheckArea('\_^>*-- \_$','\_^\_$')
+		setlocal formatoptions-=a
+		setlocal formatoptions-=t
+		setlocal formatoptions-=w
+		setlocal noexpandtab
+		setlocal shiftwidth=8
+		setlocal softtabstop=0
+	elseif <SID>CheckArea('\_^>* \=-- \_$','\_^\_$')
 		"echo 'Signature'
-		setlocal fo-=a fo-=w fo-=t sts=0 sw=8 noet
-	elseif getline('.')=~'\_^>.*'
+		setlocal formatoptions-=a
+		setlocal formatoptions-=t
+		setlocal formatoptions-=w
+		setlocal noexpandtab
+		setlocal shiftwidth=8
+		setlocal softtabstop=0
+	elseif getline('.')=~?'\_^>.*'
 		"echo 'Quotation'
-		setlocal fo+=a fo+=w
+		setlocal formatoptions+=a
+		setlocal formatoptions+=w
 	elseif <SID>CheckArea('\m^--- .*\n^+++ ','\v(^$|\n^-- $)')
 		"echo 'Patch'
-		setlocal fo-=a fo-=w fo-=t sts=0 sw=8 noet
+		setlocal formatoptions-=a
+		setlocal formatoptions-=t
+		setlocal formatoptions-=w
+		setlocal noexpandtab
+		setlocal shiftwidth=8
+		setlocal softtabstop=0
 	else
 		"echo 'My text'
-		setlocal fo+=aw et
+		setlocal expandtab
+		setlocal formatoptions+=aw
 	endif
 endfunction
 
