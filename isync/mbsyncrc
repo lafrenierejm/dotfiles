@@ -44,7 +44,7 @@ Group com.gmail.lafrenierejm
 ################################################################################
 IMAPAccount edu.utdallas.jml140230
 	Host        outlook.office365.com
-	PassCmd     "pass utd/netid/password"
+	PassCmd     "pass utd/netid"
 	Port        993
 	SSLType     IMAPS
 	SSLVersions TLSv1.2
