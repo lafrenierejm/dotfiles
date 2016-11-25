@@ -3,8 +3,7 @@
 # ##############################################################################
 
 function zle-keymap-select zle-line-init {
-	# If running in TMUX on top of an rxvt-based emulator
-	if [ -n "${TMUX}" ] && [ "${TERMINAL#*rxvt}" != "${TERMINAL}" ]; then
+	if [ -n "${TMUX}" ]; then
 		case "${KEYMAP}" in
 			'viins'|'main')
 				echo -ne "\033Ptmux;\033\033[6 q\033\\" # Line cursor
@@ -17,8 +16,7 @@ function zle-keymap-select zle-line-init {
 				echo -ne "\033Ptmux;\033\033[6 q\033\\" # Line cursor
 				;;
 		esac
-	# If running in an rxvt-based emulator
-	elif [ "${TERM#*rxvt}" != "${TERM}" ]; then
+	else
 		case "${KEYMAP}" in
 			'viins'|'main')
 				echo -ne "\033[6 q" # Line cursor
@@ -36,11 +34,9 @@ function zle-keymap-select zle-line-init {
 	zle -R
 }
 function zle-line-finish {
-	# If running in TMUX on top of an rxvt-based emulator
-	if [ -n "${TMUX}" ] && [ "${TERMINAL#*rxvt}" != "${TERMINAL}" ]; then
+	if [ -n "${TMUX}" ]; then
 		echo -ne "\033Ptmux;\033\033[2 q\033\\" # Block cursor
-	# If running in an rxvt-based emulator
-	elif [ "${TERM#*rxvt}" != "${TERM}" ]; then
+	else
 		echo -ne "\033[2 q" # Block cursor
 	fi
 }
