@@ -8,4 +8,5 @@ alias cp='cp -r' # copy directories recursively
 alias la='ls -hlAF --color=auto' # human sizes, amost-all, colored
 alias mkdir='mkdir -p' # create parent directories as needed
 alias rmrf='rm -rf' # recurse, force
+alias scp='scp -r' # copy directories recursively
 alias termbin='nc termbin.com 9999' # send to termbin.com
