@@ -51,16 +51,6 @@ if hash 'mutt' >/dev/null 2>&1; then
 	}
 fi
 
-# `pdf` opens PDFs in mupdf when inside graphical environment
-if [[ -n "${DISPLAY}" ]] && hash 'mupdf' >/dev/null 2>&1; then
-	pdf () {
-		{
-			mupdf "$@" >/dev/null 2>&1 &
-			disown
-		} >/dev/null
-	}
-fi
-
 # `termbin` sends information to termbin.com
 if hash 'nc' >/dev/null 2>&1; then
 	alias termbin='nc termbin.com 9999'
