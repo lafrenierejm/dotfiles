@@ -1,5 +1,6 @@
 [alias]
 	amend = commit --amend
+	continue = rebase --continue
 	fixup = commit --amend -C HEAD
 	pop = stash pop
 	st = status -sb
