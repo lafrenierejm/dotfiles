@@ -4,6 +4,13 @@
 	fixup = commit --amend -C HEAD
 	pop = stash pop
 	st = status -sb
+[commit]
+	gpgSign = true
+[gpg]
+	program = gpg2
+[push]
+	gpgSign = true
 [user]
 	name = Joseph LaFreniere
 	email = joseph@lafreniere.xyz
+	signingkey = CDE632EA
