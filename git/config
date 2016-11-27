@@ -9,7 +9,7 @@
 [gpg]
 	program = "gpg2"
 [push]
-	gpgSign = true
+	gpgSign = "if-asked"
 [user]
 	name = "Joseph LaFreniere"
 	email = "joseph@lafreniere.xyz"
