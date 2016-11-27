@@ -11,17 +11,6 @@ alias mkdir='mkdir -p'
 # Remove recursively and forcefully
 alias rmrf='rm -rf'
 
-# `img` opens images in feh when inside graphical environment
-if [[ -n "${DISPLAY}" ]] && hash 'feh' >/dev/null 2>&1; then
-	img () {
-		{
-			feh -. "$@" >/dev/null 2>&1 &
-			# '-.' scales images to fit the window
-			disown
-		} >/dev/null
-	}
-fi
-
 # `lla` is `ls` with human-readable size, long, almost all, filetype, colored
 alias lla='ls -hlAF --color=auto'
 
