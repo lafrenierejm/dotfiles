@@ -22,18 +22,6 @@ if [[ -n "${DISPLAY}" ]] && hash 'feh' >/dev/null 2>&1; then
 	}
 fi
 
-# `ll` is `ls` with human-readable size, long, filetype, colored
-ll () {
-	# Not in config if nothing is replaced
-	if [[ "$(pwd)" == "${$(pwd)%*config*}" ]] &&
-	   [[ "$(pwd)" == "${$(pwd)%*dotfile*}" ]]; then
-		ls -hlF --color=auto "$@"
-	# Otherwise add '-A' option
-	else
-		ls -hlAF --color=auto "$@"
-	fi
-}
-
 # `lla` is `ls` with human-readable size, long, almost all, filetype, colored
 alias lla='ls -hlAF --color=auto'
 
