@@ -12,12 +12,8 @@ autoload -U compinit
 compinit
 
 # History settings
-if [ -d "${HOME}/.local/share/zsh" ]; then
-	HISTFILE="${HOME}/.local/share/history.txt"
-else
-	mkdir -p "${HOME}/.local/share/zsh"
-	HISTFILE="${HOME}/.local/share/history.txt"
-fi
+mkdir -p "${HOME}/.local/share/zsh"
+HISTFILE="${HOME}/.local/share/zsh/history.txt"
 HISTSIZE=1000
 SAVEHIST=1000
 setopt appendhistory nomatch
