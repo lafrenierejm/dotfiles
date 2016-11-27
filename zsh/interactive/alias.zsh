@@ -2,17 +2,12 @@
 # This file gets sourced from zshrc
 # ##############################################################################
 
-# Remove all current aliases
-unalias -m '*'
+unalias -m '*' # remove all current aliases
 
-# Create parent directories as needed
-alias mkdir='mkdir -p'
-
-# Remove recursively and forcefully
-alias rmrf='rm -rf'
-
-# `lla` is `ls` with human-readable size, long, almost all, filetype, colored
-alias lla='ls -hlAF --color=auto'
+alias lla='ls -hlAF --color=auto' # human sizes, amost-all, colored
+alias mkdir='mkdir -p' # create parent directories as needed
+alias rmrf='rm -rf' # recurse, force
+alias termbin='nc termbin.com 9999' # send to termbin.com
 
 # `mail` opens mutt in download directory
 if hash 'mutt' >/dev/null 2>&1; then
@@ -38,9 +33,4 @@ if hash 'mutt' >/dev/null 2>&1; then
 		# Run mutt
 		mutt -F "${HOME}/.config/mutt/muttrc"
 	}
-fi
-
-# `termbin` sends information to termbin.com
-if hash 'nc' >/dev/null 2>&1; then
-	alias termbin='nc termbin.com 9999'
 fi
