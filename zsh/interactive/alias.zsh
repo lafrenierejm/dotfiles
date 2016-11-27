@@ -77,13 +77,3 @@ fi
 if hash 'nc' >/dev/null 2>&1; then
 	alias termbin='nc termbin.com 9999'
 fi
-
-# `vid` opens videos in mplayer when inside graphical environment
-## '-volume 0' mutes
-## '-zoom' scales video to window
-if [[ -n "${DISPLAY}" ]] && hash 'mplayer' >/dev/null 2>&1; then
-	vid () {
-		mplayer -volume 0 -zoom "$@" >/dev/null 2>&1 &
-		disown
-	} >/dev/null
-fi
