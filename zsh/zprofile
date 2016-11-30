@@ -1,15 +1,16 @@
-# This file is sourced at the beginning of initial progress
-# when zsh is started as a login shell
+# This file is sourced at the beginning of initial progress when zsh is started
+# as a login shell
+# ##############################################################################
+
+# Start ssh-agent if it's not already running
+if [ ! $(pgrep -U "${USER}" 'ssh-agent')]; then
+	eval $(ssh-agent) >/dev/null
+fi
 
 # Add unique values to $PATH
 typeset -U path
 if [[ -d ${HOME}/.local/bin ]]; then
 	path=(${HOME}/.local/bin $path)
-fi
-
-# Start ssh-agent if it's not already running
-if [[ -z "$SSH_AGENT_PID" ]]; then
-	eval $(ssh-agent) > /dev/null
 fi
 
 # Do things if in tty
@@ -21,6 +22,6 @@ if [ ${current_vt#*/dev/tty} != "${current_vt}" ]; then
 	fi
 	# Start X if in tty1
 	if [ ${current_vt: -1} -eq 1 ]; then
-		exec startx "${HOME}/.config/X11/xinitrc"
+		startx "${HOME}/.config/X11/xinitrc"
 	fi
 fi
