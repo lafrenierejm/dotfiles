@@ -3,41 +3,45 @@
 # ##############################################################################
 
 function zle-keymap-select zle-line-init {
-	if [ -n "${TMUX}" ]; then
-		case "${KEYMAP}" in
-			'viins'|'main')
-				echo -ne "\033Ptmux;\033\033[6 q\033\\" # Line cursor
-				;;
-			'vicmd')
-				echo -ne "\033Ptmux;\033\033[2 q\033\\" # Block cursor
-				;;
-			*)
-				printf "KEYMAP = %s\n" "${KEYMAP}" # Print the unkown $KEYMAP
-				echo -ne "\033Ptmux;\033\033[6 q\033\\" # Line cursor
-				;;
-		esac
-	else
-		case "${KEYMAP}" in
-			'viins'|'main')
-				echo -ne "\033[6 q" # Line cursor
-				;;
-			'vicmd')
-				echo -ne "\033[2 q" # Block cursor
-				;;
-			*)
-				printf "KEYMAP = %s\n" "${KEYMAP}" # Print the unkown $KEYMAP
-				echo -ne "\033[2 q" # Block cursor
-				;;
-		esac
+	if [[ "{TMUX}" != 'linux' ]]; then
+		if [[ -n "${TMUX}" ]]; then
+			case "${KEYMAP}" in
+				'viins'|'main')
+					echo -ne "\033Ptmux;\033\033[6 q\033\\" # Line cursor
+					;;
+				'vicmd')
+					echo -ne "\033Ptmux;\033\033[2 q\033\\" # Block cursor
+					;;
+				*)
+					printf "KEYMAP = %s\n" "${KEYMAP}" # Print the unkown $KEYMAP
+					echo -ne "\033Ptmux;\033\033[6 q\033\\" # Line cursor
+					;;
+			esac
+		else
+			case "${KEYMAP}" in
+				'viins'|'main')
+					echo -ne "\033[6 q" # Line cursor
+					;;
+				'vicmd')
+					echo -ne "\033[2 q" # Block cursor
+					;;
+				*)
+					printf "KEYMAP = %s\n" "${KEYMAP}" # Print the unkown $KEYMAP
+					echo -ne "\033[2 q" # Block cursor
+					;;
+			esac
+		fi
 	fi
 	zle reset-prompt
 	zle -R
 }
 function zle-line-finish {
-	if [ -n "${TMUX}" ]; then
-		echo -ne "\033Ptmux;\033\033[2 q\033\\" # Block cursor
-	else
-		echo -ne "\033[2 q" # Block cursor
+	if [[ "${TMUX}" != 'linux' ]]; then
+		if [[ -n "${TMUX}" ]]; then
+			echo -ne "\033Ptmux;\033\033[2 q\033\\" # Block cursor
+		else
+			echo -ne "\033[2 q" # Block cursor
+		fi
 	fi
 }
 
