@@ -2,6 +2,9 @@
 # list of available options, their meanings and defaults, please see the
 # ssh_config(5) man page.
 
+# Add key to ssh-agent at first use
+AddKeysToAgent yes
+
 # More Reading
 # https://stribika.github.io/2015/01/04/secure-secure-shell.html
 Host *
