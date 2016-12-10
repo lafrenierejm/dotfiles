@@ -1,4 +1,5 @@
 !.gitignore
+.netrwhist
 autoload/*
 plugged/*
 spell/*
