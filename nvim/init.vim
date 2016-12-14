@@ -24,6 +24,7 @@ endif
 if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 	call plug#begin(g:VIM_CONFIG_HOME.'/plugged')
 		Plug 'https://gitlab.com/lafrenierejm/vim-format-flowed.git' " dynamically set mail formatoptions
+		Plug 'https://gitlab.com/lafrenierejm/vim-monokai.git' " monokai color scheme
 		Plug 'AndrewRadev/splitjoin.vim'                  " Switch between multi- and single-line statements
 		Plug 'PProvost/vim-ps1'                           " Syntax for powershell scripts ( . ps1)
 		Plug 'airblade/vim-gitgutter'                     " show git diff and stage/unstage hunks
