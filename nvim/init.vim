@@ -33,7 +33,6 @@ if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 		Plug 'https://github.com/neomake/neomake.git' " Async :make and linting framework
 		Plug 'https://github.com/rust-lang/rust.vim.git' " Configuration for Rust
 		Plug 'https://github.com/tpope/vim-commentary.git' " Comment and uncomment easily
-		Plug 'https://github.com/tpope/vim-fugitive.git' " a git porcelain
 		Plug 'https://github.com/tpope/vim-repeat.git' " `.` support for plugins
 		Plug 'https://github.com/tpope/vim-surround.git' " Quoting and parenthesizing
 		Plug 'https://github.com/wogong/msmtp.vim.git' " msmtp syntax highlighting
