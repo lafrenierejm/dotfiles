@@ -23,22 +23,22 @@ endif
 " Look for a readable instance of Vim-Plug
 if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 	call plug#begin(g:VIM_CONFIG_HOME.'/plugged')
-		Plug 'https://gitlab.com/lafrenierejm/vim-format-flowed.git' " dynamically set mail formatoptions
+		Plug 'https://github.com/AndrewRadev/splitjoin.vim.git' " Switch between multi- and single-line statements
+		Plug 'https://github.com/PProvost/vim-ps1.git' " Syntax for powershell scripts ( . ps1)
+		Plug 'https://github.com/airblade/vim-gitgutter.git' " show git diff and stage/unstage hunks
+		Plug 'https://github.com/amirh/HTML-AutoCloseTag', { 'for': 'html.git' } " Auto close html tags
 		Plug 'https://github.com/ap/vim-css-color.git' " show corresponding colors in source
+		Plug 'https://github.com/cespare/vim-toml.git' " Syntax for TOML
+		Plug 'https://github.com/junegunn/vim-easy-align.git' " Easy column-based alignment
+		Plug 'https://github.com/neomake/neomake.git' " Async :make and linting framework
+		Plug 'https://github.com/rust-lang/rust.vim.git' " Configuration for Rust
+		Plug 'https://github.com/tpope/vim-commentary.git' " Comment and uncomment easily
+		Plug 'https://github.com/tpope/vim-fugitive.git' " a git porcelain
+		Plug 'https://github.com/tpope/vim-repeat.git' " `.` support for plugins
+		Plug 'https://github.com/tpope/vim-surround.git' " Quoting and parenthesizing
+		Plug 'https://github.com/wogong/msmtp.vim.git' " msmtp syntax highlighting
+		Plug 'https://gitlab.com/lafrenierejm/vim-format-flowed.git' " dynamically set mail formatoptions
 		Plug 'https://gitlab.com/lafrenierejm/vim-monokai.git' " monokai color scheme
-		Plug 'AndrewRadev/splitjoin.vim'                  " Switch between multi- and single-line statements
-		Plug 'PProvost/vim-ps1'                           " Syntax for powershell scripts ( . ps1)
-		Plug 'airblade/vim-gitgutter'                     " show git diff and stage/unstage hunks
-		Plug 'amirh/HTML-AutoCloseTag', { 'for': 'html' } " Auto close html tags
-		Plug 'cespare/vim-toml'                           " Syntax for TOML
-		Plug 'junegunn/vim-easy-align'                    " Easy column-based alignment
-		Plug 'neomake/neomake'                            " Async :make and linting framework
-		Plug 'rust-lang/rust.vim'                         " Configuration for Rust
-		Plug 'tpope/vim-commentary'                       " Comment and uncomment easily
-		Plug 'tpope/vim-fugitive'                         " a git porcelain
-		Plug 'tpope/vim-repeat'                           " `.` support for plugins
-		Plug 'tpope/vim-surround'                         " Quoting and parenthesizing
-		Plug 'wogong/msmtp.vim'                           " msmtp syntax highlighting
 	call plug#end()
 endif
 
