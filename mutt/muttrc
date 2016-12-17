@@ -37,7 +37,7 @@ unset help                                                           # Show the 
   set indent_string    = ">"                                         # String to prefix replied text
 # set keep_flagged  = no                                             # Move from spool when marked as flag
 # set locale   = "C"                                                 # Locale to use for printing time
-  set mailcap_path     = "${HOME}/.config/mutt/mailcap"              # Consult when displaying MIME bodies not directly supported
+  set mailcap_path     = "${HOME}/.config/mutt/setting/mailcap"      # Consult when displaying MIME bodies not directly supported
 # set mail_check  = 10                                               # how often to poll for new mail (seconds)
   set nomark_old                                                     # Don't mark messages as old; new/read is enough
   set markers          = no                                          # No '+' for lines that wrap
@@ -92,20 +92,20 @@ unset save_name                                                      # Save outg
 
 ################################################################################
 # Source account configurations
-folder-hook "com.gmail.lafrenierejm" "source ${HOME}/.config/mutt/accounts/com.gmail.lafrenierejm.rc"
-folder-hook "edu.utdallas.jml140230" "source ${HOME}/.config/mutt/accounts/edu.utdallas.jml140230.rc"
-folder-hook "xyz.lafreniere.admin"   "source ${HOME}/.config/mutt/accounts/xyz.lafreniere.admin.rc"
-folder-hook "xyz.lafreniere.joseph"  "source ${HOME}/.config/mutt/accounts/xyz.lafreniere.joseph.rc"
+folder-hook "com.gmail.lafrenierejm" "source ${HOME}/.config/mutt/setting/account/com.gmail.lafrenierejm.rc"
+folder-hook "edu.utdallas.jml140230" "source ${HOME}/.config/mutt/setting/account/edu.utdallas.jml140230.rc"
+folder-hook "xyz.lafreniere.admin"   "source ${HOME}/.config/mutt/setting/account/xyz.lafreniere.admin.rc"
+folder-hook "xyz.lafreniere.joseph"  "source ${HOME}/.config/mutt/setting/account/xyz.lafreniere.joseph.rc"
 # Default account
-source ${HOME}/.config/mutt/accounts/edu.utdallas.jml140230.rc
+source ${HOME}/.config/mutt/setting/account/edu.utdallas.jml140230.rc
 
 ################################################################################
 # Source external files
-source $alias_file                         # Aliases
-source ${HOME}/.config/mutt/crypt.rc       # Cryptographics configuration
-source ${HOME}/.config/mutt/headers.rc     # Configure header display
-source ${HOME}/.config/mutt/keybindings.rc # Configure key bindings
-source ${HOME}/.config/mutt/pgp.rc         # PGP configuration
+source $alias_file # aliases
+source ${HOME}/.config/mutt/setting/crypt.rc      # cryptographics configuration
+source ${HOME}/.config/mutt/setting/header.rc     # configure header display
+source ${HOME}/.config/mutt/setting/keybinding.rc # configure key bindings
+source ${HOME}/.config/mutt/setting/pgp.rc        # PGP configuration
 
 ################################################################################
 # Specify default filename when saving messages
