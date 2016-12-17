@@ -10,8 +10,8 @@ font -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# Set urxvt as the terminal emulator
-bindsym $mod+Return exec urxvt
+# Set st as the terminal emulator
+bindsym $mod+Return exec st
 
 # kill focused window
 bindsym $mod+q kill
@@ -170,4 +170,4 @@ bar {
 }
 
 # Automatically start some applications
-exec --no-startup-id urxvt
+exec --no-startup-id st

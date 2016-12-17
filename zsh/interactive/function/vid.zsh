@@ -1,14 +1,11 @@
 #!/bin/env zsh
 #
-# Open files in mplayer
+# Open files in mpv
 #
 
-if [[ -n "${DISPLAY}" ]] && hash 'mplayer' >/dev/null 2>&1; then
+if [[ -n "${DISPLAY}" ]] && hash 'mpv' >/dev/null 2>&1; then
 	vid () {
-		mplayer \
-			-volume 0 \ # mute
-			-zoom \     # fit to window
-			"$@" >/dev/null 2>&1 &
+		mpv --volume 0 "$@" >/dev/null 2>&1 &
 		disown
 	} >/dev/null
 fi

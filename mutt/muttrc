@@ -91,6 +91,15 @@ unset save_name                                                      # Save outg
 # set write_inc=25                                                   # show progress while writing mailboxes
 
 ################################################################################
+# From field gets 30% of remaining space, Subject gets 70%.
+# Remaining space is the total width minus the other fields (35), minus the sidebar (19)
+set my_index_format_pre='set my_col_from = `echo $((30 * ($(tput cols)-35-19) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-35-19) / 100))`; set index_format="%2C %Z [%D] %-$my_col_from.${my_col_from}'
+set my_index_format_post=' (%-4.4c) %?M?<%M> ?%-$my_col_subject.${my_col_subject}s"'
+
+folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post"
+folder-hook ! .*[sS]ent.* "$my_index_format_pre"F"$my_index_format_post"
+
+################################################################################
 # Source account configurations
 folder-hook "com.gmail.lafrenierejm" "source ${HOME}/.config/mutt/setting/account/com.gmail.lafrenierejm.rc"
 folder-hook "edu.utdallas.jml140230" "source ${HOME}/.config/mutt/setting/account/edu.utdallas.jml140230.rc"
@@ -101,10 +110,11 @@ source ${HOME}/.config/mutt/setting/account/edu.utdallas.jml140230.rc
 
 ################################################################################
 # Source external files
-source $alias_file # aliases
+source $alias_file # Aliases
 source ${HOME}/.config/mutt/setting/crypt.rc      # cryptographics configuration
 source ${HOME}/.config/mutt/setting/header.rc     # configure header display
 source ${HOME}/.config/mutt/setting/keybinding.rc # configure key bindings
+source ${HOME}/.config/mutt/setting/list.rc       # set mailing list addresses
 source ${HOME}/.config/mutt/setting/pgp.rc        # PGP configuration
 
 ################################################################################

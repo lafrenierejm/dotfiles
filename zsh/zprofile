@@ -3,7 +3,7 @@
 # ##############################################################################
 
 # Start ssh-agent if it's not already running
-if [ ! $(pgrep -U "${USER}" 'ssh-agent')]; then
+if [[ ! $(pgrep -U "${USER}" 'ssh-agent') ]]; then
 	eval $(ssh-agent) >/dev/null
 fi
 
@@ -15,7 +15,7 @@ fi
 
 # Do things if in tty
 current_vt=$(tty) # Get the current virtual terminal
-if [ ${current_vt#*/dev/tty} != "${current_vt}" ]; then
+if [[ ${current_vt#*/dev/tty} != "${current_vt}" ]]; then
 	# Set font to terminus size 14 if font is installed
 	if [[ -f /usr/share/kbd/consolefonts/ter-114n.psf.gz ]]; then
 		setfont ter-114n -m 8859-2

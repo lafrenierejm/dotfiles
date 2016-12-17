@@ -8,6 +8,11 @@ bindkey -v
 export KEYTIMEOUT=1
 
 # Enable autocompletion
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*' group-name
 autoload -U compinit
 compinit
 
@@ -23,13 +28,11 @@ unsetopt autocd beep extendedglob notify
 
 # Source external files
 if [ -d "${ZDOTDIR}/interactive" ]; then
-	for file in $(find "${ZDOTDIR}/interactive" -name '*.zsh' -print); do
+	for file in ${ZDOTDIR}/interactive/**/*.zsh; do
 		source "${file}"
 	done
 elif [ -d "${HOME}/.config/zsh/interactive" ]; then
-	for file in $(
-			find "${HOME}/.config/zsh/interactive" -name '*.zsh' -print
-	); do
+	for file in ${HOME}/.config/zsh/interactive/**/*.zsh; do
 		source "${file}"
 	done
 fi

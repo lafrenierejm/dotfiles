@@ -7,7 +7,7 @@ export EDITOR=vim
 export PAGER=less
 
 # Set the first terminal to be tried by i3
-export TERMINAL=urxvt
+export TERMINAL=st
 
 # Set the base directory to which user-specific configuration files should be written
 export XDG_CONFIG_HOME="${HOME}/.config/"
