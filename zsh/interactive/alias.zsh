@@ -8,6 +8,7 @@ alias cp='cp -r' # copy directories recursively
 alias la='ls -hlAF --color=auto' # human sizes, amost-all, colored
 alias mbsync='mbsync -c "${HOME}/.config/isync/mbsyncrc" -a' # sync all channels
 alias mkdir='mkdir -p' # create parent directories as needed
+alias mutt='mutt -F "${HOME}/.config/mutt/muttrc"'
 alias rmrf='rm -rf' # recurse, force
 alias scp='scp -r' # copy directories recursively
 alias termbin='nc termbin.com 9999' # send to termbin.com
