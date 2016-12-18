@@ -19,9 +19,6 @@ if [ -f "${user_resources}" ]; then
 fi
 if [ -f "${user_modmap}" ]; then
 	xmodmap "${user_modmap}"
-	if hash 'xcape' >/dev/null 2>&1; then
-		xcape -t 250 -e "Super_L=Left"
-	fi
 fi
 
 # Set the background color
