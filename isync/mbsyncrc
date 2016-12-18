@@ -79,7 +79,7 @@ Group edu.utdallas.jml140230
 ################################################################################
 IMAPAccount xyz.lafreniere.admin
 	Host        imap.kolabnow.com
-	PassCmd     "pass email/kolabnow.com/admin/password"
+	PassCmd     "pass email/kolabnow.com/admin-lafreniere-xyz"
 	Port        993
 	SSLType     IMAPS
 	SSLVersions TLSv1.2
@@ -114,7 +114,7 @@ Group xyz.lafreniere.admin
 ################################################################################
 IMAPAccount xyz.lafreniere.joseph
 	Host        imap.kolabnow.com
-	PassCmd     "pass email/kolabnow.com/joseph/password"
+	PassCmd     "pass email/kolabnow.com/joseph-lafreniere-xyz"
 	Port        993
 	SSLType     IMAPS
 	SSLVersions TLSv1.2
