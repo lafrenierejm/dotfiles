@@ -34,7 +34,7 @@ unset edit_headers                                                   # Don't edi
 unset help                                                           # Show the help lines
 # set history=20                                                     # Number of lines of history to remember
   set include                                                        # Always include messages when replying
-  set indent_string    = ">"                                         # String to prefix replied text
+# set indent_string    = "> "                                        # string used to quote replies; not applied when using text_flowed
 # set keep_flagged  = no                                             # Move from spool when marked as flag
 # set locale   = "C"                                                 # Locale to use for printing time
   set mailcap_path     = "${HOME}/.config/mutt/setting/mailcap"      # Consult when displaying MIME bodies not directly supported
