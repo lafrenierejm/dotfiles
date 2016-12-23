@@ -135,6 +135,10 @@ Channel xyz.lafreniere.joseph-inbox
 	Master ":remote-xyz.lafreniere.joseph:INBOX"
 	Slave  ":local-xyz.lafreniere.joseph:INBOX"
 
+Channel xyz.lafreniere.joseph-password_store
+	Master ":remote-xyz.lafreniere.joseph:password_store"
+	Slave  ":local-xyz.lafreniere.joseph:password_store"
+
 Channel xyz.lafreniere.joseph-sent
 	Master ":remote-xyz.lafreniere.joseph:Sent"
 	Slave  ":local-xyz.lafreniere.joseph:sent"
@@ -142,4 +146,5 @@ Channel xyz.lafreniere.joseph-sent
 Group xyz.lafreniere.joseph
 	Channel xyz.lafreniere.joseph-draft
 	Channel xyz.lafreniere.joseph-inbox
+	Channel xyz.lafreniere.joseph-password_store
 	Channel xyz.lafreniere.joseph-sent
