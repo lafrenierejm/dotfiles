@@ -1,6 +1,12 @@
 set record    = "+edu.utdallas.jml140230/sent"  # Directory for sent messages
-set from      = "jml140230@utdallas.edu"        # Address for 'from' field
+set from      = "lafrenierejm@utdallas.edu"     # Address for 'from' field
 set mbox      = "+edu.utdallas.jml140230/inbox" # Directory for saved messages
 set postponed = "+edu.utdallas.jml140230/draft" # Directory for drafts
 set realname  = "LaFreniere, Joseph"            # Name for 'from' field
 set sendmail  = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a edu.utdallas.jml140230" # Command used to send mail
+
+# Manage alternate addresses
+## Set from to "lafrenierejm" if addressed to non-utdallas.edu address
+send-hook "~f @utdallas.edu !(~t @utdallas.edu)" set from="lafrenierejm@utdallas.edu"
+## Set from to "jml140230" if addressed to utdallas.edu address
+send-hook "~f @utdallas.edu ~t @utdallas.edu" set from="jml140230@utdallas.edu"
