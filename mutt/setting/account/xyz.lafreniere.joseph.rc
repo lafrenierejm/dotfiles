@@ -2,5 +2,5 @@ set record    = "+xyz.lafreniere.joseph/sent"  # Directory for sent messages
 set from      = "joseph@lafreniere.xyz"        # String for for 'from' field
 set mbox      = "+xyz.lafreniere.joseph/inbox" # Directory for saved messages
 set postponed = "+xyz.lafreniere.joseph/draft" # Directory for drafts
-set realname  = "Joseph LaFreniere"            # Name for 'from' field
+set realname  = "LaFreniere, Joseph"           # Name for 'from' field
 set sendmail  = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.joseph" # Command used to send mail
