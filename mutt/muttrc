@@ -12,7 +12,7 @@ alternative_order text/plain text/enriched text/html # Save HTML for last
   set autoedit                                                       # Go immediately to editor when composing
 # set auto_tag                                                       # Always operate on tagged messages
 # set bounce = yes                                                   # Don't prompt before bouncing messages
-# set charset = "iso-10646-1"                                        # Terminal's character set
+  set charset          = "utf-8"                                     # Terminal's character set
 # set noconfirmappend                                                # Don't ask for appending to mailboxes
 # set confirmcreate                                                  # Prompt when creating new files
   set copy             = yes                                         # Always save a copy of outgoing messages
