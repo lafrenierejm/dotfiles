@@ -67,7 +67,7 @@ unset reply_self                                                     # If replyi
   set reply_regexp     = "^(re:[ \t]*)+"                             # How to identify replies in the subject
 # set resolve                                                        # Move to next message when action is performed
   set reverse_alias                                                  # Attempt to look up my names for people
-  set reverse_name                                                   # Use my address as appears in reply-to message
+unset reverse_name                                                   # use the from address *I* set, even in replies
   set nosave_empty                                                   # Remove files when no messages are left
 unset save_name                                                      # Save outgoing messages by recipient
   set sendmail_wait    = 0                                           # Wait for msmtp to return
