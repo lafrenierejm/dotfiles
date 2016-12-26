@@ -38,7 +38,7 @@ unset help                                                           # Show the 
 # set indent_string    = "> "                                        # string used to quote replies; not applied when using text_flowed
 # set keep_flagged  = no                                             # Move from spool when marked as flag
 # set locale   = "C"                                                 # Locale to use for printing time
-  set mailcap_path     = "${HOME}/.config/mutt/setting/mailcap"      # Consult when displaying MIME bodies not directly supported
+  set mailcap_path     = "${HOME}/.config/mutt/setting/mailcap.rc"   # Consult when displaying MIME bodies not directly supported
 # set mail_check  = 10                                               # how often to poll for new mail (seconds)
   set nomark_old                                                     # Don't mark messages as old; new/read is enough
   set markers          = no                                          # No '+' for lines that wrap
