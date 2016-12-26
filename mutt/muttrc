@@ -16,6 +16,7 @@ alternative_order text/plain text/enriched text/html # Save HTML for last
 # set noconfirmappend                                                # Don't ask for appending to mailboxes
 # set confirmcreate                                                  # Prompt when creating new files
   set copy             = yes                                         # Always save a copy of outgoing messages
+  set date_format      = "%F %H:%M"                                  # format of the string substituted for "%D" in $index_format: YYYY-MM-DD HH:mm in locale time
   set delete           = ask-yes                                     # Ask before purging deleted messages
 unset delete_untag                                                   # Preserve tags when marking for deletion
 unset edit_headers                                                   # Don't edit the message header when composing
@@ -91,10 +92,10 @@ unset save_name                                                      # Save outg
 # set write_inc=25                                                   # show progress while writing mailboxes
 
 ################################################################################
-# From field gets 30% of remaining space, Subject gets 70%.
-# Remaining space is the total width minus the other fields (35), minus the sidebar (19)
-set my_index_format_pre='set my_col_from = `echo $((30 * ($(tput cols)-35-19) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-35-19) / 100))`; set index_format="%2C %Z [%D] %-$my_col_from.${my_col_from}'
-set my_index_format_post=' (%-4.4c) %?M?<%M> ?%-$my_col_subject.${my_col_subject}s"'
+# $from field gets 30% of remaining space, $subject gets 70%.
+# Remaining space is the total width minus the other fields (27).
+set my_index_format_pre='set my_col_from = `echo $((30 * ($(tput cols)-27) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-27) / 100))`; set index_format="%3C [%Z] %D | %-$my_col_from.${my_col_from}'
+set my_index_format_post=' %?M?<%M> ? | %-$my_col_subject.${my_col_subject}s"'
 
 folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post"
 folder-hook ! .*[sS]ent.* "$my_index_format_pre"F"$my_index_format_post"
