@@ -1,10 +1,11 @@
 " Print visible characters as representations
 set list
 
-" Set what and how to show characters
+" clear 'listchars'
 set listchars=
-set listchars+=tab:→\ ,
+" set the characters to show and how to represent those characters
+set listchars+=tab:│\ ,
 set listchars+=trail:·,
-set listchars+=extends:»,
-set listchars+=precedes:«,
+set listchars+=extends:→,
+set listchars+=precedes:←,
 set listchars+=nbsp:⣿,
