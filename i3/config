@@ -5,7 +5,7 @@
 set $mod Mod1
 
 # Set fonts
-font -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso10646-1
+font pango:Source Code Pro 12
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -29,7 +29,7 @@ bindsym $mod+F9 exec amixer -q set PCM 10%- # reduce volume by 10%
 bindsym $mod+F10 exec amixer -q set PCM 10%+ # increase volume by 10%
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -nb "#181818" -nf "#d8d8d8" -sb "#383838" -sf "#d8d8d8"
+bindsym $mod+d exec dmenu_run -fn "Source Code Pro 14" -nb "#272822" -nf "#F1EBEB" -sb "#48483E" -sf "#F1EBEB"
 
 # Don't automatically change focuse with mouse
 focus_follows_mouse no
@@ -111,37 +111,39 @@ bindsym $mod+r mode "resize"
 # These bindings triggek as soon as you enter resize mode
 # Click + drag can also be used
 mode "resize" {
-        # Pressing left will shrink the window width.
-        # Pressing right will grow the window width.
-        # Pressing up will shrink the window height.
-        # Pressing down will grow the window height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym j resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
-        # Same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize shrink height 10 px or 10 ppt
-        bindsym Up resize grow height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+	# Pressing left will shrink the window width.
+	# Pressing right will grow the window width.
+	# Pressing up will shrink the window height.
+	# Pressing down will grow the window height.
+	bindsym h resize shrink width  10 px or 10 ppt
+	bindsym k resize grow   height 10 px or 10 ppt
+	bindsym j resize shrink height 10 px or 10 ppt
+	bindsym l resize grow   width  10 px or 10 ppt
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+	# Same bindings, but for the arrow keys
+	bindsym Left  resize shrink width  10 px or 10 ppt
+	bindsym Down  resize shrink height 10 px or 10 ppt
+	bindsym Up    resize grow   height 10 px or 10 ppt
+	bindsym Right resize grow   width  10 px or 10 ppt
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 
 # Colors
-## class                border  backgr  text    indicator
-client.focused          #181818 #383838 #d8d8d8 #d8d8d8
-client.focused_inactive #181818 #383838 #d8d8d8 #d8d8d8
-client.unfocused        #181818 #181818 #d8d8d8 #d8d8d8
-client.urgent           #181818 #bf616a #d8d8d8 #d8d8d8
-client.placeholder      #181818 #181818 #d8d8d8 #d8d8d8
-client.background       #181818
+## class                border  background text    indicator child_border
+client.focused          #272822 #48483e    #F1EBEB #CFD0C2   #48483E
+client.focused_inactive #272822 #48483e    #F1EBEB #272822   #272822
+client.unfocused        #272822 #272822    #F1EBEB #272822   #272822
+client.urgent           #272822 #272822    #F1EBEB #272822   #272822
+client.placeholder      #272822 #272822    #F1EBEB #272822   #272822
+client.background       #272822
 
-# No window borders
-new_window none
-new_float none
+# Window borders
+## Set the border width to 1 pixel
+for_window [class=".*"] border pixel 2
+hide_edge_borders smart
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -161,17 +163,20 @@ bar {
 	workspace_buttons yes
 
 	colors {
-		background #181818
-		statusline #d8d8d8
-		separator  #585858
+		background #272822
+		statusline #F1EBEB
+		separator  #ACADA1
 
 		#class             border  backgr  text
-		focused_workspace  #181818 #383838 #d8d8d8
-		active_workspace   #181818 #383838 #d8d8d8
-		inactive_workspace #181818 #181818 #d8d8d8
-		urgent_workspace   #181818 #383838 #181818
+		focused_workspace  #272822 #48483E #F1EBEB
+		active_workspace   #272822 #48483E #F1EBEB
+		inactive_workspace #272822 #272822 #F1EBEB
+		urgent_workspace   #272822 #E7DB75 #272822
 		#binding_mode
 	}
+
+	font pango:Source Code Pro 12
+	separator_symbol " | "
 }
 
 # Automatically start some applications
