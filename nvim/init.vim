@@ -26,7 +26,6 @@ if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 		Plug 'https://github.com/AndrewRadev/splitjoin.vim.git' " Switch between multi- and single-line statements
 		Plug 'https://github.com/PProvost/vim-ps1.git' " Syntax for powershell scripts ( . ps1)
 		Plug 'https://github.com/airblade/vim-gitgutter.git' " show git diff and stage/unstage hunks
-		Plug 'https://github.com/amirh/HTML-AutoCloseTag', { 'for': 'html.git' } " Auto close html tags
 		Plug 'https://github.com/ap/vim-css-color.git' " show corresponding colors in source
 		Plug 'https://github.com/cespare/vim-toml.git' " Syntax for TOML
 		Plug 'https://github.com/junegunn/vim-easy-align.git' " Easy column-based alignment

@@ -4,7 +4,8 @@
 export EDITOR=vim
 
 # Set the default pager to less
-export PAGER=less
+## '-i' is intelligent case-sensitivity
+export PAGER='less -i'
 
 # Set the first terminal to be tried by i3
 export TERMINAL=st
