@@ -3,39 +3,41 @@
 
 general {
 	output_format = "i3bar"
-	colors = false
-	# Refresh interval in seconds
-	interval = 15
+	colors        = false
+	interval      = 1 # Refresh interval in seconds
 }
 
 # Items to display
 order += "wireless wlp1s0"
-order += "ethernet enp0s20u1"
+order += "ethernet enp0s29u1u2"
+order += "volume PCM"
 order += "battery 0"
 order += "tztime local"
 
 # Configure items
 wireless wlp1s0 {
-	format_up      = "%quality, %bitrate on %essid at %ip"
-	format_down    = "Wireless down"
-	color_good     = "#d8d8d8"
-	color_degraded = "#d8d8d8"
-	color_bad      = "#d8d8d8"
+	format_up   = "%quality, %bitrate on %essid at %ip"
+	format_down = "wireless down"
 }
 
-ethernet enp0s20u1 {
-	format_up      = "%speed at %ip"
-	format_down    = "Wired down"
-	color_good     = "#d8d8d8"
-	color_degraded = "#d8d8d8"
-	color_bad      = "#d8d8d8"
+ethernet enp0s29u1u2 {
+	format_up   = "%speed at %ip"
+	format_down = "wired down"
+}
+
+volume PCM {
+	format       = "unmute %volume"
+	format_muted = "mute %volume"
+	device       = "default"
+	mixer        = "PCM"
+	mixer_idx    = 0
 }
 
 battery 0 {
-	format         = "%status %percentage"
-	color_good     = "#d8d8d8"
-	color_degraded = "#d8d8d8"
-	color_bad      = "#d8d8d8"
+	format      = "%status %percentage"
+	status_chr  = "charge"
+	status_bat  = "discharge"
+	status_full = "full"
 }
 
 tztime local {
