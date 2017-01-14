@@ -1,6 +1,13 @@
-set record    = "+xyz.lafreniere.joseph/sent"  # Directory for sent messages
-set from      = "joseph@lafreniere.xyz"        # String for for 'from' field
-set mbox      = "+xyz.lafreniere.joseph/inbox" # Directory for saved messages
-set postponed = "+xyz.lafreniere.joseph/draft" # Directory for drafts
-set realname  = "LaFreniere, Joseph"           # Name for 'from' field
-set sendmail  = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.joseph" # Command used to send mail
+# clear aliases
+set alias_file = "${HOME}/.config/mutt/setting/unalias.rc"
+source $alias_file
+# load aliases
+set alias_file = "${HOME}/.local/share/mutt/alias/xyz-lafreniere-joseph.rc"
+source $alias_file
+
+set from       = "joseph@lafreniere.xyz"        # String for for 'from' field
+set mbox       = "+xyz.lafreniere.joseph/inbox" # Directory for saved messages
+set postponed  = "+xyz.lafreniere.joseph/draft" # Directory for drafts
+set realname   = "LaFreniere, Joseph"           # Name for 'from' field
+set record     = "+xyz.lafreniere.joseph/sent"  # Directory for sent messages
+set sendmail   = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.joseph" # Command used to send mail

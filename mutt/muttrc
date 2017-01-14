@@ -2,7 +2,6 @@ auto_view text/html                                  # View HTML automatically
 alternative_order text/plain text/enriched text/html # Save HTML for last
 
   set abort_unmodified = yes                                         # Automatically abort unedited replies
-  set alias_file       = "${HOME}/.local/share/mutt/alias"           # Where to keep aliases
 # set allow_8bit                                                     # Never do Q-P encoding on legal 8-bit chars
 # set arrow_cursor                                                   # Use '->' instead of hilighting line
 # set ascii_chars                                                    # Use ASCII instead of ACS chars for threads
@@ -111,7 +110,6 @@ source ${HOME}/.config/mutt/setting/account/edu.utdallas.jml140230.rc
 
 ################################################################################
 # Source external files
-source $alias_file # Aliases
 source ${HOME}/.config/mutt/setting/crypt.rc      # cryptographics configuration
 source ${HOME}/.config/mutt/setting/header.rc     # configure header display
 source ${HOME}/.config/mutt/setting/keybinding.rc # configure key bindings

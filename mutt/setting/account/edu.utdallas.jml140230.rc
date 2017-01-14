@@ -1,8 +1,15 @@
-set record    = "+edu.utdallas.jml140230/sent"  # Directory for sent messages
+# clear aliases
+set alias_file = "${HOME}/.config/mutt/setting/unalias.rc"
+source $alias_file
+# load aliases
+set alias_file = "${HOME}/.local/share/mutt/alias/edu-utdallas-jml140230.rc"
+source $alias_file
+
 set from      = "lafrenierejm@utdallas.edu"     # Address for 'from' field
 set mbox      = "+edu.utdallas.jml140230/inbox" # Directory for saved messages
 set postponed = "+edu.utdallas.jml140230/draft" # Directory for drafts
 set realname  = "LaFreniere, Joseph"            # Name for 'from' field
+set record    = "+edu.utdallas.jml140230/sent"  # Directory for sent messages
 set sendmail  = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a edu.utdallas.jml140230" # Command used to send mail
 
 # Manage alternate addresses
