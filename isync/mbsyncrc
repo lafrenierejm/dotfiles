@@ -66,7 +66,7 @@ Channel edu.utdallas.jml140230-inbox
 	Slave  ":local-edu.utdallas.jml140230:INBOX"
 
 Channel edu.utdallas.jml140230-sent
-	Master ":remote-edu.utdallas.jml140230:Sent"
+	Master ":remote-edu.utdallas.jml140230:Sent Items"
 	Slave  ":local-edu.utdallas.jml140230:sent"
 
 Group edu.utdallas.jml140230
