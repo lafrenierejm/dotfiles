@@ -1,11 +1,14 @@
-" Print visible characters as representations
+" specify script's character encoding
+scriptencoding utf-8
+
+" print visible characters to represent non-visible characters/conditions
 set list
 
 " clear 'listchars'
 set listchars=
-" set the characters to show and how to represent those characters
+" set characters/conditions to show
+set listchars+=extends:→,
+set listchars+=nbsp:⣿,
+set listchars+=precedes:←,
 set listchars+=tab:│\ ,
 set listchars+=trail:·,
-set listchars+=extends:→,
-set listchars+=precedes:←,
-set listchars+=nbsp:⣿,
