@@ -2,6 +2,15 @@
 # It is sourced when zsh is started as an interactive shell
 # ##############################################################################
 
+# always run inside tmux
+## attempt to attach if over SSH
+if [[ -n "${SSH_CLIENT}" ]] && [[ -z "${TMUX}" ]]; then
+	tmux attach || tmux new-session
+## else replace shell with tmux session
+elif [[ -z "${TMUX}" ]]; then
+	exec tmux
+fi
+
 # Use vi mode
 bindkey -v
 ## Set a 1ms delay on pressing ESC
