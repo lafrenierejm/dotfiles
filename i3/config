@@ -23,6 +23,10 @@ bindsym $mod+Shift+r restart
 # Exit i3 (logs you out of your X session)
 bindsym $mod+Shift+Escape exit
 
+# control brightness
+bindsym $mod+F6 exec xbacklight -dec 10
+bindsym $mod+F7 exec xbacklight -inc 10
+
 # control volume
 bindsym $mod+F8 exec amixer -q set PCM 0% # set volume to 0%, different than muting
 bindsym $mod+F9 exec amixer -q set PCM 10%- # reduce volume by 10%
