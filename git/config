@@ -3,6 +3,7 @@
 	continue = "rebase --continue"
 	fixup = "commit --amend -C HEAD"
 	pop = "stash pop"
+	review = "diff --staged"
 	st = "status -sb"
 	unstage = "reset HEAD --"
 [commit]
