@@ -4,6 +4,7 @@
 	fixup = "commit --amend -C HEAD"
 	pop = "stash pop"
 	st = "status -sb"
+	unstage = "reset HEAD --"
 [commit]
 	gpgSign = true
 [gpg]
