@@ -2,6 +2,7 @@
 	amend = "commit --amend"
 	continue = "rebase --continue"
 	fixup = "commit --amend -C HEAD"
+	last = "log -1 HEAD"
 	pop = "stash pop"
 	review = "diff --staged"
 	st = "status -sb"
