@@ -5,12 +5,13 @@ source $alias_file
 set alias_file = "${HOME}/.local/share/mutt/alias/edu-utdallas-jml140230.rc"
 source $alias_file
 
-set from      = "lafrenierejm@utdallas.edu"     # Address for 'from' field
-set mbox      = "+edu.utdallas.jml140230/inbox" # Directory for saved messages
+set from = "lafrenierejm@utdallas.edu" # Address for 'from' field
+set mbox = "+edu.utdallas.jml140230/inbox" # Directory for saved messages
 set postponed = "+edu.utdallas.jml140230/draft" # Directory for drafts
-set realname  = "LaFreniere, Joseph"            # Name for 'from' field
-set record    = "+edu.utdallas.jml140230/sent"  # Directory for sent messages
-set sendmail  = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a edu.utdallas.jml140230" # Command used to send mail
+set realname = "LaFreniere, Joseph" # Name for 'from' field
+set record = "+edu.utdallas.jml140230/sent" # Directory for sent messages
+set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a edu.utdallas.jml140230" # Command used to send mail
+set signature = "${HOME}/.local/share/mutt/signature/edu-utdallas-jml140230" # file which contains user signature
 
 # Manage alternate addresses
 ## Set from to "lafrenierejm" if addressed to non-utdallas.edu address

@@ -1,6 +1,7 @@
-set record    = "+com.gmail.lafrenierejm/sent"  # Directory for sent messages
-set from      = "lafrenierejm@gmail.com"        # Address for 'from' field
-set mbox      = "+com.gmail.lafrenierejm/inbox" # Directory for saved messages
+set from = "lafrenierejm@gmail.com" # Address for 'from' field
+set mbox = "+com.gmail.lafrenierejm/inbox" # Directory for saved messages
 set postponed = "+com.gmail.lafrenierejm/draft" # Directory for drafts
-set realname  = "LaFreniere, Joseph"            # Name for 'from' field
-set sendmail  = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a com.gmail.lafrenierejm" # Command used to send mail
+set realname = "LaFreniere, Joseph" # Name for 'from' field
+set record = "+com.gmail.lafrenierejm/sent" # Directory for sent messages
+set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a com.gmail.lafrenierejm" # Command used to send mail
+set signature = "${HOME}/.local/share/mutt/signature/com-gmail-lafrenierejm" # File which contains user signature

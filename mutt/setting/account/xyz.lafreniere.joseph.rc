@@ -5,9 +5,10 @@ source $alias_file
 set alias_file = "${HOME}/.local/share/mutt/alias/xyz-lafreniere-joseph.rc"
 source $alias_file
 
-set from       = "joseph@lafreniere.xyz"        # String for for 'from' field
-set mbox       = "+xyz.lafreniere.joseph/inbox" # Directory for saved messages
-set postponed  = "+xyz.lafreniere.joseph/draft" # Directory for drafts
-set realname   = "LaFreniere, Joseph"           # Name for 'from' field
-set record     = "+xyz.lafreniere.joseph/sent"  # Directory for sent messages
-set sendmail   = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.joseph" # Command used to send mail
+set from = "joseph@lafreniere.xyz" # address for 'from' field
+set mbox = "+xyz.lafreniere.joseph/inbox" # directory for saved messages
+set postponed = "+xyz.lafreniere.joseph/draft" # directory for drafts
+set realname = "LaFreniere, Joseph" # name for 'from' field
+set record = "+xyz.lafreniere.joseph/sent" # directory for sent messages
+set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.joseph" # command used to send mail
+set signature = "${HOME}/.local/share/mutt/signature/xyz-lafreniere-joseph" # file which contains user signature
