@@ -1,1 +1,1 @@
-subscribe password-store
+subscribe "password-.*@lists\.zx2c4\.com"
