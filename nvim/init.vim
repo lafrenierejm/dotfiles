@@ -29,6 +29,8 @@ if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 		Plug 'https://github.com/ap/vim-css-color.git' " show corresponding colors in source
 		Plug 'https://github.com/cespare/vim-toml.git' " Syntax for TOML
 		Plug 'https://github.com/junegunn/vim-easy-align.git' " Easy column-based alignment
+		Plug 'https://github.com/kana/vim-textobj-indent.git' " indentation text objects (i)
+		Plug 'https://github.com/kana/vim-textobj-user.git' " dependency for custom text objects
 		Plug 'https://github.com/neomake/neomake.git' " Async :make and linting framework
 		Plug 'https://github.com/rust-lang/rust.vim.git' " Configuration for Rust
 		Plug 'https://github.com/tpope/vim-commentary.git' " Comment and uncomment easily
