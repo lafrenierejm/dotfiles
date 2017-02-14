@@ -114,6 +114,7 @@ source ${HOME}/.config/mutt/setting/crypt.rc      # cryptographics configuration
 source ${HOME}/.config/mutt/setting/header.rc     # configure header display
 source ${HOME}/.config/mutt/setting/keybinding.rc # configure key bindings
 source ${HOME}/.config/mutt/setting/list.rc       # set mailing list addresses
+source ${HOME}/.config/mutt/setting/mailboxes.rc  # mailboxes configuration
 source ${HOME}/.config/mutt/setting/pgp.rc        # PGP configuration
 
 ################################################################################
