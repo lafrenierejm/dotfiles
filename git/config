@@ -4,7 +4,7 @@
 	fixup = "commit --amend -C HEAD"
 	last = "log -1 HEAD"
 	pop = "stash pop"
-	pure = "!git pull --rebase"
+	pure = "pull --rebase"
 	review = "diff --staged"
 	st = "status -sb"
 	unstage = "reset HEAD --"
