@@ -1,18 +1,37 @@
 " Disable modeline for better security
 set nomodeline
 
-" Per-OS changes
+" operating system-specific changes
 if has('win32')
-	" set the configuration directory
+	" configuration file location
 	let g:VIM_CONFIG_HOME='~/vimfiles'
 	" use system clipboard
 	set clipboard+=unnamedplus
 else
-	" set the configuration directory
 	if has('nvim')
+		" configuration file location
 		let g:VIM_CONFIG_HOME=$HOME.'/.config/nvim'
+		" backup file location
+		execute 'set backupdir='.$HOME.'/.local/share/nvim/backup//'
+		call mkdir(&backupdir, 'p', 0700)
+		" swap file location
+		execute 'set directory='.$HOME.'/.local/share/nvim/swap//'
+		call mkdir(&directory, 'p', 0700)
+		" undo file location
+		execute 'set undodir='.$HOME.'/.local/share/nvim/undo//'
+		call mkdir(&undodir, 'p', 0700)
 	else
+		" configuration file location
 		let g:VIM_CONFIG_HOME=$HOME.'/.vim'
+		" backup file location
+		execute 'set backupdir='.$HOME.'/.local/share/vim/backup//'
+		call mkdir(&backupdir, 'p', 0700)
+		" swap file location
+		execute 'set directory='.$HOME.'/.local/share/vim/swap//'
+		call mkdir(&directory, 'p', 0700)
+		" undo file location
+		execute 'set undodir='.$HOME.'/.local/share/vim/undo//'
+		call mkdir(&undodir, 'p', 0700)
 	endif
 	" use system clipboard if running in X
 	if has('clipboard') && ($DISPLAY != '')
