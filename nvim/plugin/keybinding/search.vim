@@ -1,9 +1,9 @@
 " Search forward for word under cursor
 nnoremap // *
-" Search forward for current selection
-vnoremap // y/<C-R>"<CR>
+" Search forward for text containing the current selection's equivalence.
+vnoremap <leader>/ :VisualEquivalenceForward<CR>
 
 " Search backward for word under cursor
 nnoremap ?? #
-" Search backward for current selection
-vnoremap ?? y?<C-R>"<CR>
+" Search backward for text containing the current selection's equivalence.
+vnoremap <leader>? :VisualEquivalenceBackward<CR>

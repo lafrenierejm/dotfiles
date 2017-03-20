@@ -50,12 +50,14 @@ if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 		Plug 'https://github.com/junegunn/vim-easy-align.git' " Easy column-based alignment
 		Plug 'https://github.com/kana/vim-textobj-indent.git' " indentation text objects (i)
 		Plug 'https://github.com/kana/vim-textobj-user.git' " dependency for custom text objects
+		Plug 'https://github.com/lafrenierejm/wstrip.vim.git', " strip trailing whitespace on changed lines
 		Plug 'https://github.com/neomake/neomake.git' " Async :make and linting framework
 		Plug 'https://github.com/rust-lang/rust.vim.git' " Configuration for Rust
 		Plug 'https://github.com/tpope/vim-commentary.git' " Comment and uncomment easily
 		Plug 'https://github.com/tpope/vim-repeat.git' " `.` support for plugins
 		Plug 'https://github.com/tpope/vim-surround.git' " Quoting and parenthesizing
 		Plug 'https://github.com/wogong/msmtp.vim.git' " msmtp syntax highlighting
+		Plug 'https://gitlab.com/lafrenierejm/vim-equivalence.git' " search for character equivalencies
 		Plug 'https://gitlab.com/lafrenierejm/vim-format-flowed.git' " dynamically set mail formatoptions
 		Plug 'https://gitlab.com/lafrenierejm/vim-monokai.git' " monokai color scheme
 	call plug#end()
