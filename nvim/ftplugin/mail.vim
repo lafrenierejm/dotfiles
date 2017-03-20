@@ -1,6 +1,3 @@
-" Keep lines' trailing whitespace
-let b:keepLineTrailWhitespace=1
-
 " Set text width to 78.
 "" This is per RFC 5322, which states, "Each line of characters MUST be no more
 ""+than 998 characters, and SHOULD be no more than 78 characters, excluding the
@@ -14,6 +11,9 @@ setlocal formatoptions+=aw
 
 " Use English spellcheck
 set spell spelllang=en
+
+" allow a maximum of 2 trailing spaces
+let b:wstrip_trailing_max=2
 
 " Define an autocmd group to strip blank trailing quotes
 augroup StripTrailMailQuote
