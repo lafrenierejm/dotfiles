@@ -8,7 +8,9 @@ bind alias g first-entry
 
 # browser keybindings
 bind browser <space> tag-entry
-bind browser v       view-file
+bind browser G last-entry
+bind browser g first-entry
+bind browser v view-file
 
 # index keybindings
 bind index <space> collapse-thread
