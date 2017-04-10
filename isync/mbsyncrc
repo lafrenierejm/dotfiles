@@ -40,6 +40,41 @@ Group com.gmail.lafrenierejm
 	Channel com.gmail.lafrenierejm-sent
 
 ################################################################################
+# utdlug@gmail.com
+################################################################################
+IMAPAccount com.gmail.utdlug
+	Host        imap.gmail.com
+	PassCmd     "pass email/gmail.com/utdlug-gmail-com/pixel13.lafreniere.xyz"
+	Port        993
+	SSLType     IMAPS
+	SSLVersions TLSv1.2
+	User        utdlug
+
+IMAPStore remote-com.gmail.utdlug
+	Account com.gmail.utdlug
+
+MaildirStore local-com.gmail.utdlug
+	Inbox ~/mail/com.gmail.utdlug/inbox
+	Path  ~/mail/com.gmail.utdlug/
+
+Channel com.gmail.utdlug-draft
+	Master ":remote-com.gmail.utdlug:[Gmail]/Drafts"
+	Slave  ":local-com.gmail.utdlug:draft"
+
+Channel com.gmail.utdlug-inbox
+	Master ":remote-com.gmail.utdlug:INBOX"
+	Slave  ":local-com.gmail.utdlug:INBOX"
+
+Channel com.gmail.utdlug-sent
+	Master ":remote-com.gmail.utdlug:[Gmail]/Sent Mail"
+	Slave  ":local-com.gmail.utdlug:sent"
+
+Group com.gmail.utdlug
+	Channel com.gmail.utdlug-draft
+	Channel com.gmail.utdlug-inbox
+	Channel com.gmail.utdlug-sent
+
+################################################################################
 # jml140230@utdallas.edu
 ################################################################################
 IMAPAccount edu.utdallas.jml140230
