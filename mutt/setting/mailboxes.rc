@@ -1,6 +1,5 @@
+mailboxes "=com.gmail.utdlug/inbox"
 mailboxes "=edu.utdallas.jml140230/inbox"
 mailboxes "=xyz.lafreniere.admin/inbox"
 mailboxes "=xyz.lafreniere.joseph/inbox"
-mailboxes "=xyz.lafreniere.joseph/nixers"
 mailboxes "=xyz.lafreniere.joseph/password_store"
-mailboxes "=xyz.lafreniere.joseph/suckless"
