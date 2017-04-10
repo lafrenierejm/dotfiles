@@ -1,9 +1,9 @@
 set crypt_autoencrypt           = no  # Do not always attempt to encrypt outgoing msgs
 set crypt_autopgp               = yes # Allow mutt to automatically control PGP
-set crypt_autosign              = yes # Automatically sign all outgoing messages
+set crypt_autosign              = no  # Do not sign all outgoing messages
 set crypt_autosmime             = yes # Allow mutt to automatically control S/MIME
 set crypt_confirmhook           = no  # Don't prompt for confirmation of keys
-set crypt_opportunistic_encrypt = yes # Enable for all available recipient keys
+set crypt_opportunistic_encrypt = no  # Disable for all available recipient keys
 set crypt_replyencrypt          = yes # Encrypt replies to encrypted messages
 set crypt_replysign             = yes # Sign replies to signed signed messages
 set crypt_replysignencrypted    = yes # Encrypt and sign replies to encrypted msgs
