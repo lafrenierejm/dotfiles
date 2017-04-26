@@ -35,8 +35,8 @@ volume PCM {
 
 battery 0 {
 	format      = "%status %percentage"
-	status_chr  = "charge"
-	status_bat  = "discharge"
+	status_chr  = "charging"
+	status_bat  = "discharging"
 	status_full = "full"
 }
 
