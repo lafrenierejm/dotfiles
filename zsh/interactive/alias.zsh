@@ -13,4 +13,5 @@ alias mkdir='mkdir -p' # create parent directories as needed
 alias mutt='cd "${HOME}/download"; mutt -F "${HOME}/.config/mutt/muttrc"'
 alias rmrf='rm -rf' # recurse, force
 alias scp='scp -r' # copy directories recursively
+alias sprunge='curl -F "sprunge=<-" http://sprunge.us' # send to sprunge.us
 alias termbin='nc termbin.com 9999' # send to termbin.com
