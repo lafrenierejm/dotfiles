@@ -1,0 +1,8 @@
+[commit]
+	gpgSign = true
+[gpg]
+	program = "gpg2"
+[push]
+	gpgSign = "if-asked"
+[user]
+	signingkey = "0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3"
