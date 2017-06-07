@@ -18,9 +18,11 @@ bind index <tab> sync-mailbox
 bind index G last-entry
 bind index M recall-message
 bind index R group-reply
+bind index d noop
 bind index dT delete-thread
 bind index dd delete-message
 bind index dt delete-subthread
+bind index g noop
 bind index gT previous-thread
 bind index gg first-entry
 bind index gt next-thread
@@ -30,6 +32,7 @@ bind pager G bottom
 bind pager J next-entry
 bind pager K previous-entry
 bind pager R group-reply
+bind pager d noop
 bind pager dT delete-thread
 bind pager dd delete-message
 bind pager dt delete-subthread
