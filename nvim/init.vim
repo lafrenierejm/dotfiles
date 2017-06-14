@@ -18,8 +18,11 @@ else
 		execute 'set directory='.$HOME.'/.local/share/nvim/swap//'
 		call mkdir(&directory, 'p', 0700)
 		" undo file location
-		execute 'set undodir='.$HOME.'/.local/share/nvim/undo//'
-		call mkdir(&undodir, 'p', 0700)
+		if has('persistent_undo')
+			execute 'set undodir='.$HOME.'/.local/share/nvim/undo//'
+			call mkdir(&undodir, 'p', 0700)
+			set undofile
+		endif
 	else
 		" configuration file location
 		let g:VIM_CONFIG_HOME=$HOME.'/.vim'
@@ -30,8 +33,11 @@ else
 		execute 'set directory='.$HOME.'/.local/share/vim/swap//'
 		call mkdir(&directory, 'p', 0700)
 		" undo file location
-		execute 'set undodir='.$HOME.'/.local/share/vim/undo//'
-		call mkdir(&undodir, 'p', 0700)
+		if has('persistent_undo')
+			execute 'set undodir='.$HOME.'/.local/share/vim/undo//'
+			call mkdir(&undodir, 'p', 0700)
+			set undofile
+		endif
 	endif
 	" use system clipboard if running in X
 	if has('clipboard') && ($DISPLAY != '')
@@ -62,15 +68,6 @@ if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
 		Plug 'https://gitlab.com/lafrenierejm/vim-monokai.git' " monokai color scheme
 	call plug#end()
 endif
-
-" Temporary files
-"" Backups
-execute 'set backupdir='.$HOME.'/.local/share/nvim/backup//'
-"" Swap files
-execute 'set directory='.$HOME.'/.local/share/nvim/swap//'
-"" Undo
-execute 'set undodir='.$HOME.'/.local/share/nvim/undo//'
-set undofile
 
 " Character encoding
 set encoding=utf-8
