@@ -1,8 +1,8 @@
 " Set text width to 78.
-"" This is per RFC 5322, which states, "Each line of characters MUST be no more
-""+than 998 characters, and SHOULD be no more than 78 characters, excluding the
-""+CRLF."
-setlocal tw=78
+"" This is per RFC 5322:
+"" > Each line of characters MUST be no more than 998 characters, and SHOULD
+"" > be no more than 78 characters, excluding the CRLF.
+setlocal textwidth=78
 
 " Automatic formatting
 "" a - automatic formatting of paragraphs
