@@ -83,10 +83,6 @@ set backspace=indent,eol,start
 " Always show the ruler
 set ruler
 
-" Show quickfix window
-au QuickFixCmdPost [^l]* nested cwindow
-au QuickFixCmdPost    l* nested lwindow
-
 " No bells
 set belloff=all
 
