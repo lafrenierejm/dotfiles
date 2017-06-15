@@ -3,7 +3,7 @@
 	cloner = "clone --recursive"
 	continue = "rebase --continue"
 	fixup = "commit --amend -C HEAD"
-	last = "log -1 HEAD"
+	head = "log -1 HEAD"
 	pop = "stash pop"
 	pure = "pull --rebase"
 	review = "diff --staged"
