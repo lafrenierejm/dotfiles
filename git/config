@@ -9,6 +9,8 @@
 	review = "diff --word-diff=color --staged"
 	st = "status -sb"
 	unstage = "reset HEAD --"
+[diff]
+	indentHeuristic = on
 [user]
 	name = "Joseph LaFreniere"
 	email = "joseph@lafreniere.xyz"
