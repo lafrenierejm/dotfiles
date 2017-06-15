@@ -2,6 +2,7 @@
 	amend = "commit --amend"
 	cloner = "clone --recursive"
 	continue = "rebase --continue"
+	delete = "!git branch -d \"$1\" ; git push \"$2\" --delete \"$1\" #"
 	dif = "diff --word-diff=color"
 	fixup = "commit --amend -C HEAD"
 	head = "log -1 HEAD"
