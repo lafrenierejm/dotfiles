@@ -6,7 +6,7 @@
 	head = "log -1 HEAD"
 	pop = "stash pop"
 	pure = "pull --rebase"
-	review = "diff --staged"
+	review = "diff --word-diff=color --staged"
 	st = "status -sb"
 	unstage = "reset HEAD --"
 [user]
