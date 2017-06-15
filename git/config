@@ -2,6 +2,7 @@
 	amend = "commit --amend"
 	cloner = "clone --recursive"
 	continue = "rebase --continue"
+	dif = "diff --word-diff=color"
 	fixup = "commit --amend -C HEAD"
 	head = "log -1 HEAD"
 	pop = "stash pop"
