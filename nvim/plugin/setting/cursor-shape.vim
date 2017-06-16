@@ -2,7 +2,8 @@
 
 " Use Neovim's built-in cursor change
 if has('nvim')
-	let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+	" https://github.com/neovim/neovim/wiki/Following-HEAD#20170402
+	set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 " Change the cursor shape for VTE-compatible terminals
 "" Allow for the running of TMUX by surrounding with DCS sequence
 "" https://gist.github.com/andyfowler/1195581
