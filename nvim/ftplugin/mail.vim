@@ -12,11 +12,10 @@ setlocal formatoptions+=aw
 " Use English spellcheck
 set spell spelllang=en
 
+" Remove lines from the end of the buffer that start with any number of '>'s
+" followed by any amount of whitespace.
+let b:strip_end_regex = '>*\s*'
+
 " allow a maximum of 2 trailing spaces
 let b:wstrip_trailing_max=2
 
-" Define an autocmd group to strip blank trailing quotes
-augroup StripTrailMailQuote
-	autocmd!
-	autocmd BufWritePre * :call StripTrailMailQuote()
-augroup END
