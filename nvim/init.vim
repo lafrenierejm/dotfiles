@@ -4,13 +4,13 @@ set nomodeline
 " operating system-specific changes
 if has('win32')
 	" configuration file location
-	let g:VIM_CONFIG_HOME='~/vimfiles'
+	let g:CONFIG_HOME='~/vimfiles'
 	" use system clipboard
 	set clipboard+=unnamedplus
 else
 	if has('nvim')
 		" configuration file location
-		let g:VIM_CONFIG_HOME=$HOME.'/.config/nvim'
+		let g:CONFIG_HOME=$HOME.'/.config/nvim'
 		" backup file location
 		execute 'set backupdir='.$HOME.'/.local/share/nvim/backup//'
 		call mkdir(&backupdir, 'p', 0700)
@@ -25,7 +25,7 @@ else
 		endif
 	else
 		" configuration file location
-		let g:VIM_CONFIG_HOME=$HOME.'/.vim'
+		let g:CONFIG_HOME=$HOME.'/.vim'
 		" backup file location
 		execute 'set backupdir='.$HOME.'/.local/share/vim/backup//'
 		call mkdir(&backupdir, 'p', 0700)
@@ -46,8 +46,8 @@ else
 endif
 
 " Look for a readable instance of Vim-Plug
-if filereadable(expand(g:VIM_CONFIG_HOME.'/autoload/plug.vim'))
-	call plug#begin(g:VIM_CONFIG_HOME.'/plugged')
+if filereadable(expand(g:CONFIG_HOME.'/autoload/plug.vim'))
+	call plug#begin(g:CONFIG_HOME.'/plugged')
 		Plug 'https://github.com/AndrewRadev/splitjoin.vim.git' " Switch between multi- and single-line statements
 		Plug 'https://github.com/PProvost/vim-ps1.git' " Syntax for powershell scripts ( . ps1)
 		Plug 'https://github.com/airblade/vim-gitgutter.git' " show git diff and stage/unstage hunks
