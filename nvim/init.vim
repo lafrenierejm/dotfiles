@@ -11,30 +11,32 @@ else
 	if has('nvim')
 		" configuration file location
 		let g:CONFIG_HOME=$HOME.'/.config/nvim'
+		let g:DATA_HOME=$HOME.'/.local/share/nvim'
 		" backup file location
-		execute 'set backupdir='.$HOME.'/.local/share/nvim/backup//'
+		execute 'set backupdir='.g:DATA_HOME.'/backup//'
 		call mkdir(&backupdir, 'p', 0700)
 		" swap file location
-		execute 'set directory='.$HOME.'/.local/share/nvim/swap//'
+		execute 'set directory='.g:DATA_HOME.'/swap//'
 		call mkdir(&directory, 'p', 0700)
 		" undo file location
 		if has('persistent_undo')
-			execute 'set undodir='.$HOME.'/.local/share/nvim/undo//'
+			execute 'set undodir='.g:DATA_HOME.'/undo//'
 			call mkdir(&undodir, 'p', 0700)
 			set undofile
 		endif
 	else
 		" configuration file location
 		let g:CONFIG_HOME=$HOME.'/.vim'
+		let g:DATA_HOME=$HOME.'/.local/share/vim'
 		" backup file location
-		execute 'set backupdir='.$HOME.'/.local/share/vim/backup//'
+		execute 'set backupdir='.g:DATA_HOME.'/backup//'
 		call mkdir(&backupdir, 'p', 0700)
 		" swap file location
-		execute 'set directory='.$HOME.'/.local/share/vim/swap//'
+		execute 'set directory='.g:DATA_HOME.'/swap//'
 		call mkdir(&directory, 'p', 0700)
 		" undo file location
 		if has('persistent_undo')
-			execute 'set undodir='.$HOME.'/.local/share/vim/undo//'
+			execute 'set undodir='.g:DATA_HOME.'/undo//'
 			call mkdir(&undodir, 'p', 0700)
 			set undofile
 		endif
