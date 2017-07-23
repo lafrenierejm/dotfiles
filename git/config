@@ -1,4 +1,5 @@
 [alias]
+	abort = "rebase --abort"
 	amend = "commit --amend"
 	cloner = "clone --recursive"
 	cont = "rebase --continue"
