@@ -1,4 +1,6 @@
 [alias]
+	aban = "checkout --"
+	abanp = "checkout -p --"
 	abort = "rebase --abort"
 	amend = "commit --amend"
 	cloner = "clone --recursive"
