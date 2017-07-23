@@ -1,7 +1,7 @@
-# clear aliases
+# Clear aliases
 set alias_file = "${HOME}/.config/mutt/setting/unalias.rc"
 source $alias_file
-# load aliases
+# Load aliases
 set alias_file = "${HOME}/.local/share/mutt/alias/edu-utdallas-jml140230.rc"
 source $alias_file
 
@@ -18,3 +18,13 @@ set signature = "${HOME}/.config/mutt/signature/edu.utdallas.jml140230" # File c
 send-hook "~f @utdallas.edu !(~t @utdallas.edu)" set from="lafrenierejm@utdallas.edu"
 ## Set from to "jml140230" if addressed to utdallas.edu address
 send-hook "~f @utdallas.edu ~t @utdallas.edu" set from="jml140230@utdallas.edu"
+
+# Do not use PGP
+unset pgp_sign_as
+set crypt_autoencrypt = no # do not always attempt to encrypt outgoing msgs
+set crypt_autosign = no # do not sign all outgoing messages
+set crypt_opportunistic_encrypt = no # disable for all available recipient keys
+set crypt_replyencrypt = no # encrypt replies to encrypted messages
+set crypt_replysign = no # sign replies to signed signed messages
+set crypt_replysignencrypted = no # encrypt and sign replies to encrypted msgs
+set crypt_verify_sig = yes # automatically verify sign of opened messages

@@ -12,3 +12,13 @@ set realname = "LaFreniere, Joseph" # name for 'from' field
 set record = "+xyz.lafreniere.joseph/sent" # directory for sent messages
 set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.joseph" # command used to send mail
 set signature = "${HOME}/.config/mutt/signature/xyz.lafreniere.joseph" # File containing signature
+
+# Set PGP key
+set pgp_sign_as = 0x141EFCA3 # key to use for signing and encrypting
+set crypt_autoencrypt = no # do not always attempt to encrypt outgoing msgs
+set crypt_autosign = yes # sign all outgoing messages
+set crypt_opportunistic_encrypt = yes # sign with available recipient keys
+set crypt_replyencrypt = yes # encrypt replies to encrypted messages
+set crypt_replysign = yes # sign replies to signed signed messages
+set crypt_replysignencrypted = yes # encrypt and sign replies to encrypted msgs
+set crypt_verify_sig = yes # automatically verify sign of opened messages
