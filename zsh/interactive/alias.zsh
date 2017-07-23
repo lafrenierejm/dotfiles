@@ -4,6 +4,7 @@
 
 unalias -m '*' # remove all current aliases
 
+alias clipboard='xclip -selection clipboard'
 alias cp='cp -r' # copy directories recursively
 alias la='ls -hlAF --color=auto' # human sizes, amost-all, colored
 alias less='less -i' # case sensitive search only when term contains a capital
