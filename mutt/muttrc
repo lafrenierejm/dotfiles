@@ -7,9 +7,9 @@ alternative_order text/plain text/enriched text/html # Save HTML for last
 # set ascii_chars                                                    # Use ASCII instead of ACS chars for threads
 # set askbcc                                                         #
 # set askcc                                                          #
-# set attribution="On %d, %n wrote:"                                 # How to attribute replies
   set autoedit                                                       # Go immediately to editor when composing
 # set auto_tag                                                       # Always operate on tagged messages
+  set attribution      = "\"%n\" <%a> %(!%FT%T%z):"                  # String to precede message included in reply
 # set bounce = yes                                                   # Don't prompt before bouncing messages
   set charset          = "utf-8"                                     # Terminal's character set
 # set noconfirmappend                                                # Don't ask for appending to mailboxes
