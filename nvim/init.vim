@@ -55,6 +55,7 @@ if filereadable(expand(g:CONFIG_HOME.'/autoload/plug.vim'))
 		Plug 'https://github.com/airblade/vim-gitgutter.git' " show git diff and stage/unstage hunks
 		Plug 'https://github.com/ap/vim-css-color.git' " show corresponding colors in source
 		Plug 'https://github.com/cespare/vim-toml.git' " Syntax for TOML
+		Plug 'https://github.com/dkarter/bullets.vim' " Automatic bulleted lists
 		Plug 'https://github.com/junegunn/vim-easy-align.git' " Easy column-based alignment
 		Plug 'https://github.com/kana/vim-textobj-indent.git' " indentation text objects (i)
 		Plug 'https://github.com/kana/vim-textobj-user.git' " dependency for custom text objects
