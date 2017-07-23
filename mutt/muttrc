@@ -15,7 +15,7 @@ alternative_order text/plain text/enriched text/html # Save HTML for last
 # set noconfirmappend                                                # Don't ask for appending to mailboxes
 # set confirmcreate                                                  # Prompt when creating new files
   set copy             = yes                                         # Always save a copy of outgoing messages
-  set date_format      = "%F %H:%M"                                  # format of the string substituted for "%D" in $index_format: YYYY-MM-DD HH:mm in locale time
+  set date_format      = "%F %R"                                     # format of the string substituted for "%D" in $index_format: YYYY-MM-DD HH:mm in local time
   set delete           = ask-yes                                     # Ask before purging deleted messages
 unset delete_untag                                                   # Preserve tags when marking for deletion
 unset edit_headers                                                   # Don't edit the message header when composing
