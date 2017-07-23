@@ -72,9 +72,9 @@ unset reverse_name                                                   # use the f
 unset save_name                                                      # Save outgoing messages by recipient
   set sendmail_wait    = 0                                           # Wait for msmtp to return
   set sig_on_top                                                     # Include signature before any quoted text
-  set sort             = threads                                     # Primary sorting method
-  set sort_aux         = last-date                                   # Date of the last message in thread
-  set sort_browser     = date                                        # How to sort files in the dir browser
+  set sort             = reverse-threads                             # Sort by thread, newest on top
+  set sort_aux         = last-date-received                          # Sort newest on top within each thread
+  set sort_browser     = alpha                                       # Sort files in the dir browser alphabetically
   set spoolfile        = "${HOME}/mail/edu.utdallas.jml140230/inbox" # where my new mail is located
 # set status_on_top                                                  # some people prefer the status bar on top
 # set strict_threads                                                 # don't thread by subject
