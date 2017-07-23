@@ -11,4 +11,4 @@ set postponed = "+xyz.lafreniere.joseph/draft" # directory for drafts
 set realname = "LaFreniere, Joseph" # name for 'from' field
 set record = "+xyz.lafreniere.joseph/sent" # directory for sent messages
 set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.joseph" # command used to send mail
-set signature = "${HOME}/.local/share/mutt/signature/xyz-lafreniere-joseph" # file which contains user signature
+set signature = "${HOME}/.config/mutt/signature/xyz.lafreniere.joseph" # File containing signature

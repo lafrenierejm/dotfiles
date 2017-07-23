@@ -4,4 +4,4 @@ set postponed = "+com.gmail.utdlug/draft" # Directory for drafts
 set realname = "LaFreniere, Joseph" # Name for 'from' field
 set record = "+com.gmail.utdlug/sent" # Directory for sent messages
 set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a com.gmail.utdlug" # Command used to send mail
-set signature = "${HOME}/.local/share/mutt/signature/com-gmail-utdlug" # file which contains user signature
+set signature = "${HOME}/.config/mutt/signature/com.gmail.utdlug" # File containing signature

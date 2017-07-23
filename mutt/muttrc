@@ -72,7 +72,6 @@ unset reverse_name                                                   # use the f
 unset save_name                                                      # Save outgoing messages by recipient
   set sendmail_wait    = 0                                           # Wait for msmtp to return
   set sig_on_top                                                     # Include signature before any quoted text
-  set signature        = "${HOME}/.local/share/mutt/signature"       # File which contains user signature
   set sort             = threads                                     # Primary sorting method
   set sort_aux         = last-date                                   # Date of the last message in thread
   set sort_browser     = date                                        # How to sort files in the dir browser
