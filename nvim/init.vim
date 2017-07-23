@@ -107,12 +107,5 @@ set showmatch
 set splitright " Horizontal split will go right
 set splitbelow " Vertical split will go below
 
-" Folding
-"if has('folding')
-"	set foldenable        " Enable folding
-"	set foldnestmax=10    " Limit maximum embedded folds to 10
-"	set foldmethod=syntax " Fold based on syntax
-"endif
-
 " Switch buffers without requiring that buffers be saved
 set hidden
