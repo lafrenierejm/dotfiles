@@ -13,5 +13,6 @@ nnoremap <Esc> :noh<Return><Esc>
 
 " Always search forward with `n` and backward with `N`.
 " The bindings apply in Normal, Visual, Select, and Operator-pending modes.
+" Credit: FDinoff (http://stackoverflow.com/a/18523395)
 noremap <expr> n (v:searchforward ? 'n' : 'N')
 noremap <expr> N (v:searchforward ? 'N' : 'n')
