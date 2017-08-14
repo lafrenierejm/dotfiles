@@ -2,6 +2,7 @@
 	aban = "checkout --"
 	abanp = "checkout -p --"
 	abort = "rebase --abort"
+	alias = "! git config --get-regexp '^alias.' | sed -e 's/^alias.//' -e 's/ / = /'"
 	amend = "commit --amend"
 	cloner = "clone --recursive"
 	cont = "rebase --continue"
