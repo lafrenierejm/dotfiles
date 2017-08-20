@@ -1,11 +1,6 @@
 # This file is sourced at the beginning of initial progress when zsh is started
 # as a login shell
-# ##############################################################################
-
-# Start ssh-agent if it's not already running
-if [[ ! $(pgrep -U "${USER}" 'ssh-agent') ]]; then
-	eval $(ssh-agent) >/dev/null
-fi
+# #############################################################################
 
 # Add unique values to $PATH
 typeset -U path
