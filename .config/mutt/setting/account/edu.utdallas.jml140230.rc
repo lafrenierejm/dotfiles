@@ -10,7 +10,7 @@ set mbox = "+edu.utdallas.jml140230/inbox" # Directory for saved messages
 set postponed = "+edu.utdallas.jml140230/draft" # Directory for drafts
 set realname = "LaFreniere, Joseph" # Name for 'from' field
 set record = "+edu.utdallas.jml140230/sent" # Directory for sent messages
-set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a edu.utdallas.jml140230" # Command used to send mail
+set sendmail = "msmtp -a edu.utdallas.jml140230" # Command used to send mail
 set signature = "${HOME}/.config/mutt/signature/edu.utdallas.jml140230" # File containing signature
 
 # Manage alternate addresses

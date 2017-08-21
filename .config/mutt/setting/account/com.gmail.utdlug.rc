@@ -1,0 +1,17 @@
+set from = "utdlug@gmail.com" # Address for 'from' field
+set mbox = "+com.gmail.utdlug/inbox" # Directory for saved messages
+set postponed = "+com.gmail.utdlug/draft" # Directory for drafts
+set realname = "Linux Users Group at UT Dallas" # Name for 'from' field
+set record = "+com.gmail.utdlug/sent" # Directory for sent messages
+set sendmail = "msmtp -a com.gmail.utdlug" # Command used to send mail
+set signature = "${HOME}/.config/mutt/signature/com.gmail.utdlug" # File containing signature
+
+# Do not use PGP
+unset pgp_sign_as
+set crypt_autoencrypt = no # do not always attempt to encrypt outgoing msgs
+set crypt_autosign = no # do not sign all outgoing messages
+set crypt_opportunistic_encrypt = no # disable for all available recipient keys
+set crypt_replyencrypt = no # encrypt replies to encrypted messages
+set crypt_replysign = no # sign replies to signed signed messages
+set crypt_replysignencrypted = no # encrypt and sign replies to encrypted msgs
+set crypt_verify_sig = yes # automatically verify sign of opened messages

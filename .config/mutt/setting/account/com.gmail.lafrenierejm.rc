@@ -1,10 +1,10 @@
-set from = "utdlug@gmail.com" # Address for 'from' field
-set mbox = "+com.gmail.utdlug/inbox" # Directory for saved messages
-set postponed = "+com.gmail.utdlug/draft" # Directory for drafts
-set realname = "Linux Users Group at UT Dallas" # Name for 'from' field
-set record = "+com.gmail.utdlug/sent" # Directory for sent messages
-set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a com.gmail.utdlug" # Command used to send mail
-set signature = "${HOME}/.config/mutt/signature/com.gmail.utdlug" # File containing signature
+set from = "lafrenierejm@gmail.com" # Address for 'from' field
+set mbox = "+com.gmail.lafrenierejm/inbox" # Directory for saved messages
+set postponed = "+com.gmail.lafrenierejm/draft" # Directory for drafts
+set realname = "LaFreniere, Joseph" # Name for 'from' field
+set record = "+com.gmail.lafrenierejm/sent" # Directory for sent messages
+set sendmail = "msmtp -a com.gmail.lafrenierejm" # Command used to send mail
+set signature = "${HOME}/.config/mutt/signature/com.gmail.lafrenierejm" # File containing signature
 
 # Do not use PGP
 unset pgp_sign_as

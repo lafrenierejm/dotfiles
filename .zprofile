@@ -17,6 +17,6 @@ if [[ ${current_vt#*/dev/tty} != "${current_vt}" ]]; then
 	fi
 	# Start X if in tty1
 	if [ ${current_vt: -1} -eq 1 ]; then
-		startx "${HOME}/.config/X11/xinitrc"
+		startx
 	fi
 fi

@@ -51,8 +51,8 @@ setopt HIST_IGNORE_DUPS
 unsetopt autocd beep extendedglob notify
 
 # Source external files
-if [ -d "${ZDOTDIR}/interactive" ]; then
-	for file in ${ZDOTDIR}/interactive/**/*.zsh; do
+if [ -d "${XDG_CONFIG_HOME}/zsh/interactive" ]; then
+	for file in ${XDG_CONFIG_HOME}/zsh/interactive/**/*.zsh; do
 		source "${file}"
 	done
 elif [ -d "${HOME}/.config/zsh/interactive" ]; then

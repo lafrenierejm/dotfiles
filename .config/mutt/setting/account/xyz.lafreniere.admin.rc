@@ -3,7 +3,7 @@ set mbox = "+xyz.lafreniere.admin/inbox" # Directory for saved messages
 set postponed = "+xyz.lafreniere.admin/draft" # Directory for drafts
 set realname = "LaFreniere, Joseph" # Name for 'from' field
 set record = "+xyz.lafreniere.admin/sent" # Directory for sent messages
-set sendmail = "msmtp -C ${HOME}/.config/msmtp/msmtprc -a xyz.lafreniere.admin" # Command used to send mail
+set sendmail = "msmtp -a xyz.lafreniere.admin" # Command used to send mail
 set signature = "${HOME}/.config/mutt/signature/xyz.lafreniere.admin" # File containing signature
 
 # Do not use PGP

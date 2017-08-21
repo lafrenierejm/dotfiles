@@ -11,7 +11,7 @@ export PAGER='less -i'
 export TERMINAL=st
 
 # Set the base directory to which user-specific configuration files should be written
-export XDG_CONFIG_HOME="${HOME}/.config/"
+export XDG_CONFIG_HOME="${HOME}/.config"
 
 # gpg-agent
 export GPG_TTY=${TTY}
