@@ -4,6 +4,7 @@
 
 unalias -m '*' # remove all current aliases
 
+alias dotfile='git --git-dir="${HOME}/.dotfiles" --work-tree="${HOME}"'
 alias clipboard='xclip -selection clipboard'
 alias cp='cp -r' # copy directories recursively
 alias la='ls -hlAF --color=auto' # human sizes, amost-all, colored
