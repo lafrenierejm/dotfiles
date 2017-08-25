@@ -8,6 +8,11 @@ if [[ -n "${SSH_CLIENT}" ]] && [[ -z "${TMUX}" ]]; then
 	tmux attach || tmux new-session
 ## else replace shell with tmux session
 elif [[ -z "${TMUX}" ]]; then
+	if [[ -f "${HOME}/.config/base16-shell/scripts/base16-monokai.sh" ]] &&
+			[[ -s "${HOME}/.config/base16-shell/profile_helper.sh" ]]; then
+		source "${HOME}/.config/base16-shell/scripts/base16-monokai.sh"
+		eval "$(${HOME}/.config/base16-shell/profile_helper.sh)"
+	fi
 	exec tmux
 fi
 
