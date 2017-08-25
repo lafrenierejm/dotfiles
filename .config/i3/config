@@ -11,7 +11,7 @@ font pango:Source Code Pro 12
 floating_modifier $mod
 
 # Set st as the terminal emulator
-bindsym $mod+Return exec st
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+q kill
