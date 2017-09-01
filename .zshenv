@@ -1,17 +1,7 @@
 # This file is used to set environment variables
 
-# Set the default editor to vim
-export EDITOR=vim
-
-# Set the default pager to less
-## '-i' is intelligent case-sensitivity
-export PAGER='less -i'
-
-# Set the first terminal to be tried by i3
-export TERMINAL=st
-
-# Set the base directory to which user-specific configuration files should be written
-export XDG_CONFIG_HOME="${HOME}/.config"
-
-# gpg-agent
-export GPG_TTY=${TTY}
+export EDITOR='vim' # default editor
+export GPG_TTY="${TTY}" # for `gpg-agent`
+export MAILDIR="${HOME}/mail"
+export PAGER='less -i' # `-i` is intelligent case-sensitivity
+export XDG_CONFIG_HOME="${HOME}/.config" # user-specific config files
