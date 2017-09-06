@@ -4,16 +4,18 @@
 
 # always run inside tmux
 ## attempt to attach if over SSH
-if [[ -n "${SSH_CLIENT}" ]] && [[ -z "${TMUX}" ]]; then
-	tmux attach || tmux new-session
-## else replace shell with tmux session
-elif [[ -z "${TMUX}" ]]; then
-	if [[ -f "${HOME}/.config/base16-shell/scripts/base16-monokai.sh" ]] &&
-			[[ -s "${HOME}/.config/base16-shell/profile_helper.sh" ]]; then
-		source "${HOME}/.config/base16-shell/scripts/base16-monokai.sh"
-		eval "$(${HOME}/.config/base16-shell/profile_helper.sh)"
-	fi
-	exec tmux
+if hash 'tmux' >/dev/null 2>&1; then
+    if [[ -n "${SSH_CLIENT}" ]] && [[ -z "${TMUX}" ]]; then
+	    tmux attach || tmux new-session
+    ## else replace shell with tmux session
+    elif [[ -z "${TMUX}" ]]; then
+	    if [[ -f "${HOME}/.config/base16-shell/scripts/base16-monokai.sh" ]] &&
+			    [[ -s "${HOME}/.config/base16-shell/profile_helper.sh" ]]; then
+		    source "${HOME}/.config/base16-shell/scripts/base16-monokai.sh"
+		    eval "$(${HOME}/.config/base16-shell/profile_helper.sh)"
+	    fi
+	    exec tmux
+    fi
 fi
 
 # Automatically cache ssh keys
