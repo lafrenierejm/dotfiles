@@ -81,7 +81,7 @@ zstyle ':vcs_info:hg*' formats "%b" # display branch name
 # Set the left-aligned prompt
 ## Display the current directory, shortening $HOME to '~'
 ## Display '#' if root, '%' otherwise
-PROMPT='%~%# '
+PROMPT='%m:%~%# '
 # set the right-aligned prompt
 ## display version control information
 RPROMPT='${vcs_info_msg_0_}'
