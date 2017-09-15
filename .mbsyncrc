@@ -174,10 +174,6 @@ Channel xyz.lafreniere.joseph-nixers
 	Master ":remote-xyz.lafreniere.joseph:nixers"
 	Slave  ":local-xyz.lafreniere.joseph:nixers"
 
-Channel xyz.lafreniere.joseph-password_store
-	Master ":remote-xyz.lafreniere.joseph:password_store"
-	Slave  ":local-xyz.lafreniere.joseph:password_store"
-
 Channel xyz.lafreniere.joseph-sent
 	Master ":remote-xyz.lafreniere.joseph:Sent"
 	Slave  ":local-xyz.lafreniere.joseph:sent"
@@ -186,5 +182,4 @@ Group xyz.lafreniere.joseph
 	Channel xyz.lafreniere.joseph-draft
 	Channel xyz.lafreniere.joseph-inbox
 	Channel xyz.lafreniere.joseph-nixers
-	Channel xyz.lafreniere.joseph-password_store
 	Channel xyz.lafreniere.joseph-sent
