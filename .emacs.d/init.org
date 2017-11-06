@@ -1,0 +1,167 @@
+#+TITLE: Initialization File
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+
+* License
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+
+* About This File
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Optional Debug
+  Use the following if there is a bug that cannot be found with =emacs --debug-init=:
+
+  #+BEGIN_SRC emacs-lisp :tangle no
+(toggle-debug-on-error)
+  #+END_SRC
+
+* Load =package-config.el=
+  =package-config.el=, which is part of =Package.el=, must be loaded prior to the configuration of any installed packages:
+
+  #+BEGIN_SRC emacs-lisp :tangle yes
+(package-initialize)
+(load (expand-file-name "package-config.el" user-emacs-directory))
+  #+END_SRC
+
+* Extracting Emacs Lisp from Org
+** Extracting =init.org=
+   An Emacs configuration written in Org-mode is not in a form that is able to be directly evaluated by Emacs.
+   The Emacs Lisp components must be extracted and collated apart from the surrounding markup.
+   Org-mode has the built-in =org-babel-load-file= which accomplishes this.
+
+** Extracting Remaining Configuration
+   Running =org-babel-load-file= requires the evaluation of a significant amount of Org-mode's source;
+   loading one's entire configuration using that method is not performant.
+   So rather than evaluating source blocks directly using Org-mode, the Emacs Lisp in each Org file shall be tangled to (exported as) individual =.el= files.
+
+   For this repository, source blocks from Org files shall be tangled when:
+
+   1. The Org file has been modified more recently than its corresponding Emacs Lisp file.
+   2. The Org section containing the source block is not marked =TODO= or =CANCELED=.
+
+*** Build the File List
+    1. The given directory (passed as an argument) is searched recursively for Org mode files (=.org= extension).
+       Each Org file found is added to a list.
+    2. For each Org file in the list, look for a corresponding Emacs Lisp file (=.el= extension).
+       "Correspondence" is determined by the Org and Lisp filenames matching until the extension.
+       1. If the Emacs Lisp file has been modified more recently than its corresponding Org file, remove the Org file from the list.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(defun init/filter (condp lst)
+  "Remove items that do not meet CONDP from LST."
+  (delq nil
+	(mapcar (lambda (x) (and (funcall condp x ) x)) lst)))
+
+(defun init/replace-file-name-extension (filename extension)
+  "Replace a FILENAME's extension with EXTENSION."
+  (if (string= "." (substring extension  0 1)) ; If user included "." in extension
+      (concat (file-name-sans-extension filename) extension)
+    (concat (file-name-sans-extension filename) "." extension)))
+
+(defun init/org/find-files-to-tangle (directory tangle-extension)
+  "Return the Org files in DIRECTORY older than corresponding files with TANGLE-EXTENSION."
+  (let ((org-files (directory-files-recursively directory "\.org$")))
+    (init/filter (lambda (org-file)
+		   (let ((tangle-file
+			  (init/replace-file-name-extension org-file tangle-extension)))
+		     (or (not (file-exists-p tangle-file))
+			 (file-newer-than-file-p org-file tangle-file))))
+		 org-files)))
+    #+END_SRC
+
+*** Determine Section State
+    To determine the state of the Org section containing a given source code block, the section header must be searched.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+;; The following function is based on GPLv2-licensed code by Holger Schurig:
+;; https://bitbucket.org/holgerschurig/dotfiles/overview
+;;
+;; As such, this code inherits the parent's GPLv2 license:
+;; https://www.gnu.org/licenses/gpl-2.0.html
+(defun init/org/is-section-state (state)
+  "Return t if the current section head is `state`, else return nil."
+  (save-excursion
+    (if (re-search-backward "^\\*+\\s-+\\(.*?\\)?\\s-*$" nil t)
+	(string-prefix-p state (match-string 1))
+      nil)))
+    #+END_SRC
+
+*** Tangle a Single Org File
+    The process for untangling a given Org file is:
+    1. Disable garbage collection by setting its threshold unreasonably high.
+    2. Search the Org file for source code blocks.  For every source block found:
+       1. Check that the source block is active.
+	  - =tangle: no= is not set
+	  - The block's header state is not TODO or CANCELED.
+       2. If the block is active, write it to =body-list=.
+    3. Create a Emacs Lisp file corresponding to the Org file.
+    4. Write the collected source to the Lisp file by reversing =body-list=.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+;; This code is derived from Holger Schurig's =my-tangle-config-org=.
+;; As such, it inherits that code's GPLv3 license:
+;; https://www.gnu.org/licenses/gpl-3.0.en.html
+(defun init/org/tangle-org-file (org-file src-language lang-extension)
+  "Tangle the active emacs-lisp code in ORG-FILE.
+
+      Code is active if is is:
+      - not marked as no tangle
+      - not inside a section whose state is TODO or CANCELED"
+  (let ((body-list ())
+	(gc-cons-threshold most-positive-fixnum)
+	(org-babel-src-block-regexp ; identify src blocks (verbatim from ob-core.el)
+	 (concat "^\\([ \t]*\\)"    ; indentation (1)
+		 "#\\+begin_src[ \t]+"	       ; begin code block
+		 "\\([^ \f\t\n\r\v]+\\)[ \t]*" ; language (2)
+		 "\\([^\":\n]*\"[^\"\n*]*\"[^\":\n]*\\|[^\":\n]*\\)" ; switches (3)
+		 "\\([^\n]*\\)\n"	     ; header arguments (4)
+		 "\\([^\000]*?\n\\)??[ \t]*" ; body (5)
+		 "#\\+end_src"		     ; end code block
+		 )))
+    (with-temp-buffer
+      (insert-file-contents org-file)
+      (goto-char (point-min))
+      (while (re-search-forward org-babel-src-block-regexp nil t)
+	(let ((lang (match-string 2))
+	      (args (match-string 4))
+	      (body (match-string 5))
+	      (cncl (init/org/is-section-state "CANCELED"))
+	      (todo (init/org/is-section-state "TODO")))
+	  (when (and (string= lang src-language)
+		     (not (string-match-p ":tangle\\s-+no" args))
+		     (not cncl)
+		     (not todo))
+	    (add-to-list 'body-list body)))))
+    (with-temp-file (init/replace-file-name-extension org-file lang-extension)
+      (insert ";; Changes to this file will not persist.\n\n")
+      (apply 'insert (reverse body-list))) ; write code blocks to file
+    ))
+    #+END_SRC
+
+** Load =config/=
+*** Tangle Code from =config/= Recursively
+    The bulk of my configuration is in Org files in the =config/= subdirectory.
+    Now the above functions are be employed to tangle the Emacs Lisp from the Org files.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(mapcar (lambda (org-file)
+	  (message "Found " org-file " for tangling.")
+	  (init/org/tangle-org-file org-file "emacs-lisp" ".el"))
+	(init/org/find-files-to-tangle
+	 (concat (file-name-as-directory user-emacs-directory) "config")
+	 ".el"))
+    #+END_SRC
+
+*** Load Emacs Lisp
+    The previous tangling should have extracted all active Emacs Lisp code from those Org files.
+    =config/= should therefore be search for Emacs Lisp files, which are those ending in =.el=.
+    Because the task of marking code inactive is performed in Org files and that code has already been filtered out, all of the code in =config/= should be loaded.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(defun init/load-directory-recursively (directory)
+  "Recurse through DIRECTORY and load all Emacs Lisp files found."
+  (dolist (elisp-file (directory-files-recursively directory "^[^.].*\.el$"))
+    (load (file-name-sans-extension elisp-file))))
+
+(init/load-directory-recursively
+ (concat (file-name-as-directory user-emacs-directory) "config"))
+    #+END_SRC
