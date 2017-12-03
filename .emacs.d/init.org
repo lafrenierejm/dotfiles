@@ -1,5 +1,7 @@
-#+TITLE: Initialization File
+#+TITLE: Initialization
 #+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
 
 * License
   All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -14,19 +16,46 @@
 (toggle-debug-on-error)
   #+END_SRC
 
-* Load =package-config.el=
-  =package-config.el=, which is part of =Package.el=, must be loaded prior to the configuration of any installed packages:
+* Package Management with =straight.el=
+  =[[https://github.com/raxod502/straight.el][straight.el]]= is a "next-generation, purely functional package manager".
+  The following code installs =straight.el=.
+  If =./straight/bootstrap.e.= does not exist, then it is automatically downloaded.
 
   #+BEGIN_SRC emacs-lisp :tangle yes
-(package-initialize)
-(load (expand-file-name "package-config.el" user-emacs-directory))
+;; Bootstrap straight.el, a purely functional package manager.
+(setq straight-recipe-overrides
+      '((nil . ((straight :type git :host github
+                             :repo "raxod502/straight.el"
+                             :branch "develop"
+                             :files ("straight.el"))))))
+
+(let ((bootstrap-file (concat user-emacs-directory "straight/bootstrap.el"))
+      (bootstrap-version 2))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
   #+END_SRC
+
+** Integration with =use-package=
+   =straight.el= provides native support for jwiegley's =[[https://github.com/jwiegley/use-package][use-package]]=.
+   To begin, =use-package= is installed with =straight.el=:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;; Enable straight.el's integration with use-package.
+(straight-use-package 'use-package)
+(straight-use-package 'diminish)
+   #+END_SRC
+   Now =use-package= will use =straight.el= to automatically install missing packages when =:ensure t= is specified.
 
 * Extracting Emacs Lisp from Org
 ** Extracting =init.org=
    An Emacs configuration written in Org-mode is not in a form that is able to be directly evaluated by Emacs.
    The Emacs Lisp components must be extracted and collated apart from the surrounding markup.
-   Org-mode has the built-in =org-babel-load-file= which accomplishes this.
+   Org-mode has the built-in =org-babel-tangle= which accomplishes this.
 
 ** Extracting Remaining Configuration
    Running =org-babel-load-file= requires the evaluation of a significant amount of Org-mode's source;
