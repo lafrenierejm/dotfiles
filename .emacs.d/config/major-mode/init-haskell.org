@@ -1,0 +1,42 @@
+#+TITLE: Haskell Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for working with Haskell.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-haskell.el --- Configuration for working with Haskell
+
+;;; Commentary:
+;; This file is tangled from init-haskell.org.
+;; Changes made here will be overwritten by changes to that Org file.
+
+;;; Code:
+   #+END_SRC
+
+** Load =[[https://haskell.github.io/haskell-mode/][haskell-mode]]= and =[[https://commercialhaskell.github.io/intero/][intero]]=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package haskell-mode
+  :defer t)
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package intero
+  :after haskell-mode
+  :config
+  (add-hook 'haskell-mode-hook 'intero-mode) )
+   #+END_SRC
+
+** Ending Boilerplate
+  #+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-haskell)
+;;; init-haskell.el ends here
+  #+END_SRC
