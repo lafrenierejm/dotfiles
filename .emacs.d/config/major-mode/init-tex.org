@@ -1,0 +1,105 @@
+#+TITLE: TeX Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for working with {La,Lua,Xe}TeX.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-tex.el --- Configuration for TeX
+
+;;; Commentary:
+;; This file is tangled from init-tex.org.
+;; Changes made here will be overwritten by changes to that Org file.
+
+;;; Code:
+   #+END_SRC
+
+** Load =auctex=
+   =auctex= adds advice to Emacs's existing TeX modes.
+   As such, =auctex= cannot be loaded with =use-package= directly.
+   Instead we can hook onto =tex-site= and specify a custom package with =:straight=.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package tex-site
+  :straight (auctex :host github
+		    :repo "emacsmirror/auctex"
+		    :files (:defaults (:exclude "*.el.in")))
+  :defer t
+  :defines (LaTeX-csquotes-close-quote
+	    LaTeX-csquotes-open-quote
+	    TeX-auto-save
+	    TeX-electric-math
+	    TeX-electric-sub-and-superscript
+	    TeX-parse-self)
+  :commands (LaTeX-math-mode
+	     TeX-electric-math)
+  :init
+  (setq TeX-auto-save t) ; parse on load
+  (setq TeX-parse-self t) ; parse on save
+  (setq-default TeX-master nil) ; ask for file's master
+  :config
+  (add-hook 'plain-TeX-mode-hook
+	    (lambda ()
+	      ;; Set "`" to a prefix for typing mathematic symbols
+	      (LaTeX-math-mode)
+	      ;; Automatically insert a matching "$" for math mode
+	      (set (make-variable-buffer-local 'TeX-electric-math)
+		   (cons "$" "$"))
+	      ;; Autmatically add braces after "^" or "_" in a math environment
+	      (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
+		   t)
+	      ;; Enable spellchecking
+	      (setq ispell-parser 'tex)
+	      (flyspell-mode 1)))
+  (add-hook 'LaTeX-mode-hook
+	    (lambda ()
+	      ;; Automatically convert "$" to math environment delimeters
+	      (set (make-variable-buffer-local 'TeX-electric-math)
+		   (cons "\\(" "\\)"))
+	      ;; Autmatically add braces after "^" or "_" in a math environment
+	      (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
+		   t)
+	      ;; Set "`" to a prefix for typing mathematic symbols
+	      (LaTeX-math-mode)
+	      ;; Double quotes are replaced with use of `\enquote{}`
+	      (setq LaTeX-csquotes-open-quote "\\enquote{"
+		    LaTeX-csquotes-close-quote "}")
+	      ;; Enable spellchecking
+	      (setq ispell-parser 'tex)
+	      (flyspell-mode 1)))
+  ;; Use RefTeX
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (setq reftex-plug-into-AUCTeX t) )
+   #+END_SRC
+
+** Load =auctex-latexmk=
+   Something about the interactions between =use-package=, =straight.el=, and =auctex= make it such that =use-package='s =:after= macro cannot be used to load =auctex-latemk=.
+   To work around this, a hook is added to =LaTeX-mode= that calls =auctex-latexmk-setup=.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package auctex-latexmk
+  :defines auctex-latexmk-inherit-TeX-PDF-mode
+  :commands (auctex-latexmk-setup)
+  :init
+  ;; Use the =-pdf= flag when TeX-PDF-mode is active.
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t)
+  ;; Workaround for a MikTeX bug.
+  (setq TeX-file-line-error nil)
+  ;; Workaround for not being able to =:after auctex=.
+  (add-hook 'LaTeX-mode-hook 'auctex-latexmk-setup) )
+   #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-tex.el)
+;;; init-tex.el ends here
+   #+END_SRC
