@@ -1,0 +1,75 @@
+#+TITLE: Magit Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for DocView mode.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-magit.el --- Configuration for Magit
+
+;;; Commentary:
+;; This file is tangled from init-magit.org.
+;; Changes made here will be overwritten by changes to that Org file.
+
+;;; Code:
+   #+END_SRC
+   
+** Load Magit with =use-package=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package magit
+   #+END_SRC
+
+*** Keybindings
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  :bind
+  ("C-x g" . magit-status)
+    #+END_SRC
+
+*** Post-Load Execution
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  :config
+  ;; Close commit message buffer after commit.
+  (defadvice git-commit-commit (after delete-window active)
+    (delete-window))
+  ;; Close commit message buffer after abort.
+  (defadvice git-commit-abort (after delete-window active)
+    (delete-window))
+    #+END_SRC
+
+*** Close the =use-package= sexp
+    The downside to balancing all of the previous level 3 headers is that =use-package= sexp itself has yet to be closed.
+    The following source block closes it, making for a cleaner literate document at the cost of uglier tangled source code.
+
+    #+BEGIN_SRC emacs-lisp
+  )
+    #+END_SRC
+
+** Load =evil-magit=
+   =[[https://github.com/emacs-evil/evil-magit][evil-magit]]= configures Evil and Magit to play well together.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-magit
+  :after
+  (evil magit)
+  :init
+  ;; Enable Evil's horizontal movement in evil-magit's keybindings.
+  (setq evil-magit-want-horizontal-movement t)
+  :config
+  ;; Ensure that Evil is enabled in Magit buffers.
+  (add-hook 'magit-mode-hook 'evil-local-mode) )
+   #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-magit.el)
+;;; init-magit.el ends here
+   #+END_SRC
