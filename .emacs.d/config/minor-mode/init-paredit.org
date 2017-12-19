@@ -1,0 +1,64 @@
+#+TITLE: ParEdit Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for working with ParEdit.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-paredit.el --- Configuration for working with Paredit
+
+;;; Commentary:
+;; This file is tangled from init-paredit.org.
+;; Changes made here will be overwritten by changes to that Org file.
+
+;;; Code:
+   #+END_SRC
+
+** Load =paredit=
+   From the Emacs Wiki's [[https://www.emacswiki.org/emacs/ParEdit][article on ParEdit]]:
+   #+BEGIN_QUOTE
+   ParEdit (=paredit.el=) is a minor mode for performing structured editing of S-expression data.   
+   The typical example of this would be Lisp or Scheme source code.
+   #+END_QUOTE
+
+   I want =paredit= enabled in all Lisp major mode buffers.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package paredit
+  :config
+  (autoload 'enable-paredit-mode "paredit"
+    "Turn on pseudo-structural editing of Lisp code."
+    t)
+  (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'racket-mode-hook           #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook           #'enable-paredit-mode) )
+   #+END_SRC
+
+** Load =evil-paredit=
+   =[[https://github.com/roman/evil-paredit][evil-paredit]]= is a minor mode that replaces some of Evil's verbs, e.g. =d=, with "safe" versions provided by =paredit=.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-paredit
+  :after
+  (paredit)
+  :config
+  (add-hook 'paredit-mode-hook 'evil-paredit-mode))
+   #+END_SRC
+
+** Ending Boilerplate
+  #+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-paredit)
+;;; init-paredit.el ends here
+  #+END_SRC
