@@ -1,0 +1,258 @@
+#+TITLE: Evil Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for Evil.
+  Evil is the "extensible vi layer" for Emacs.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-evil.el --- Configuration for evil
+
+;;; Commentary:
+;; This file is tangled from init-evil.org.
+;; Changes made here will be overwritten by changes to that Org file.
+
+;;; Code:
+   #+END_SRC
+
+** Semantic Movement Within Lines
+*** Define =beginning-of-maybe-line=
+    =beginning-of-maybe-line= moves =point= toward the beginning of the current line incrementally by semantic region.
+    The following semantic elements are considered:
+    1. Comment
+    2. Source code
+    3. Indentation (leading whitespace)
+      
+    The following code is based on [[https://stackoverflow.com/a/145359/8468492][a StackOverflow answer]] by user [[https://stackoverflow.com/users/8355/cjm][cjm]].
+    All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
+   
+    #+BEGIN_SRC emacs-lisp :tangle yes
+;;; The following code is derived from code published by user cjm on
+;;; StackOverflow.com (http://stackoverflow.com/a/145359).  It
+;;; inherits the parent work's CC BY-SA 3.0 license.
+
+(defun init/beginning-of-maybe-line ()
+  "Move point to first non-whitespace character or beginning of the line.
+Move point to the first non-whitespace character on the line.  If the
+point was already at that position, move point to the beginning of the
+line."
+  (interactive)
+  (let ((old-point (point)))		; current position
+    ;; Go to the beginning of a comment.  If there is not comment or
+    ;; if point is already at or to the left of the comment...
+    (when (or (not (init/back-to-comment))
+	      (<= old-point (point))) 
+      ;; Go to the first non-whitespace column.
+      (back-to-indentation)
+      ;; If already at or to the left of the first non-whitespace character...
+      (when (<= old-point (point))
+	;; Go to the beginning of the line.
+	(beginning-of-line) ))))
+
+;;; This is the end of the CC BY-SA 3.0-licensed code.
+    #+END_SRC
+   
+*** Define =end-of-maybe-line=
+    =end-of-maybe-line= incrementally moves =point= to the right within a line by semantic region.
+    The following semantic elements are considered in =end-of-maybe-line='s movement:
+    1. Source code
+    2. Comments
+    3. Trailing whitespace
+      
+    The following code is based on [[http://stackoverflow.com/a/14245964%0A][a StackOverflow answer]] by user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
+    All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
+   
+    #+BEGIN_SRC emacs-lisp :tangle yes
+;;; The following code is derived from code published by user Gilles
+;;; on StackOverflow.com (http://stackoverflow.com/a/14245964).  It
+;;; inherits the parent work's CC BY-SA 3.0 license.
+
+(defun init/end-of-maybe-line ()
+  "Incrementally move point to the ends of syntactic blocks within the line.
+The syntactic blocks are as follows, ordered from right to left:
+1. Source code
+2. Inline comment"
+  (interactive "^")
+  ;; Record point's current position.
+  (let ((old-point (point)))
+    ;; Go to the beginning of an inline comment (if any).
+    (init/back-to-comment)
+    ;; If already at or after the start of the comment...
+    (when (>= old-point (point))
+      ;; ...then go to the beginning of trailing whitespace.
+      (init/back-to-text))))
+
+;;; This is the end of the CC BY-SA 3.0-licensed code.
+    #+END_SRC
+   
+*** Define Helper Functions
+**** Define =back-to-comment=
+     The following code is based on [[http://stackoverflow.com/a/14245964%0A][a StackOverflow answer]] by user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
+     All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
+   
+    #+BEGIN_SRC emacs-lisp :tangle yes
+;;; The following code is derived from code published by user Gilles
+;;; on StackOverflow.com (http://stackoverflow.com/a/14245964).  It
+;;; inherits the parent work's CC BY-SA 3.0 license.
+
+(defun init/back-to-comment ()
+  "Move point to the beginning of the comment in the current line.
+If the current line does not contain a comment, then point will stay
+in place and the function will return nil.  Otherwise the function
+will return t."
+  (interactive "^")
+  (save-match-data
+    ;; Record the position of the beginning of the line.
+    (let ((old-point (point))
+	  (bol (progn
+		 (beginning-of-line)
+		 (point))))
+      ;; Go to the end of the line.
+      (end-of-line)
+      ;; Look backward from there for a comment.
+      (if (and comment-start-skip
+	       (comment-search-backward bol 'noerror))
+	  (progn
+	    (message "Comment found")
+	    ;; Go to the start of the comment's delimeter.
+	    (search-backward-regexp comment-start-skip bol 'noerror)
+	    ;; Go the start of any immediately prior whitespace.
+	    (skip-syntax-backward " \t" bol)
+	    ;; Return t.
+	    t)
+	;; Return point to its previous location.
+	(goto-char old-point)
+	;; Return nil.
+	nil))))
+
+;;; This is the end of the CC BY-SA 3.0-licensed code.
+    #+END_SRC
+    
+**** Define =init/back-to-text=
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(defun init/back-to-text ()
+  "Move point to the last non-whitespace character on this line."
+  (interactive)
+  ;; Move point to the last character on this line.
+  (move-end-of-line nil)
+  ;; Move backward for non-whitesapce character.
+  (re-search-backward "^\\|[^[:space:]]")
+  ;; Move forward one character.
+  (forward-char))
+    #+END_SRC
+    
+** Define =evil-yank-to-end-of-line=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(defun init/evil-yank-to-end-of-line ()
+  "Yank the characters from point to the end of the current line."
+  (interactive)
+  (evil-yank (point) (point-at-eol)))
+   #+END_SRC
+   
+** Load =evil=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil
+   #+END_SRC
+
+*** Dummy Variables
+    =use-package= allows one to introduced dummy variables to silence warnings from the byte-compiler.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  :defines
+  (evil-default-cursor)
+    #+END_SRC
+
+*** Pre-Load Execution
+    Code following the =init= macro will be executed before the parent package is loaded.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  :init
+    #+END_SRC
+
+    I do not want Evil to modify the cursor color.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Do not overwrite cursor color
+  (setq evil-default-cursor t)
+    #+END_SRC
+
+*** Post-Load Execution
+    Code following the =config= macro will not be executed until the parent package has been loaded.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  :config
+    #+END_SRC
+
+    The following keybindings are set globally across Evil, but may be overwritten by other modes' keybindings.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (evil-global-set-key 'motion "H" 'init/beginning-of-maybe-line)
+  (evil-global-set-key 'motion "L" 'init/end-of-maybe-line)
+  (evil-global-set-key 'motion (kbd "SPC") 'evil-toggle-fold)
+  (evil-global-set-key 'normal "Y" 'init/evil-yank-to-end-of-line)
+    #+END_SRC
+
+    I want Evil to be enabled by default in all modes.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Enable Evil mode by default
+  (evil-mode 1)
+    #+END_SRC
+
+*** Close the =use-package= sexp
+    The downside to balancing all of the previous level 3 headers is that =use-package= sexp itself has yet to be closed.
+    The following source block closes it, making for a cleaner literate document at the cost of uglier tangled source code.
+
+    #+BEGIN_SRC emacs-lisp
+  )
+    #+END_SRC
+   
+** Load Additional Packages
+*** =evil-matchit=
+    =[[https://github.com/redguardtoo/evil-matchit][evil-matchit]]= is a port of [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] to Evil.
+    It enables jumping between matched tags, e.g. =<div>= and =</div>=.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-matchit
+  :after evil
+  :config
+  (global-evil-matchit-mode 1)
+  (add-hook 'evil-matchit-mode-hook
+	    (lambda ()
+	      (evil-global-set-key 'motion (kbd "TAB") 'evilmi-jump-items) )))
+    #+END_SRC
+
+*** =evil-surround=
+    =[[https://github.com/emacs-evil/evil-surround][evil-surround]]= is a port of [[https://github.com/tpope/vim-surround][vim-surround]] to Evil.
+    It adds a "surround" verb to Evil's modal editing.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+    #+END_SRC
+
+*** =evil-indent-plus=
+    =[[https://github.com/TheBB/evil-indent-plus]]= adds indentation levels as a text object for Evil.
+
+    - =i= is same or higher indentation.
+    - =I= is same or higher indentation, including the first line above with less indentation.
+    - =J= is same or higher indentation, including the first line above and below with less indentation.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-indent-plus
+  :after evil
+  :config
+  (evil-indent-plus-default-bindings))
+   #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-evil.el)
+;;; init-evil.el ends here
+   #+END_SRC
