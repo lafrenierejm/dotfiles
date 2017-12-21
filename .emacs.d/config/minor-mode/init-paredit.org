@@ -52,7 +52,7 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-paredit
   :after
-  (paredit)
+  (evil paredit)
   :config
   (add-hook 'paredit-mode-hook 'evil-paredit-mode))
    #+END_SRC
