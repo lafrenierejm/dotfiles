@@ -1,0 +1,54 @@
+#+TITLE: Flycheck Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+  
+* About This File
+  This file contains my configuration for Flycheck minor mode.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+  
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-flycheck.el --- Configuration for Flycheck
+
+;;; Commentary:
+;; This file is tangled from init-flycheck.org.
+;; Changes made here will be overwritten by changes to that Org file.
+
+;;; Code:
+   #+END_SRC
+   
+** Load Flycheck with =use-package=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package flycheck
+   #+END_SRC
+
+*** Post-Load Execution
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      :config
+    #+END_SRC
+    
+    Globally enable Flycheck.
+    
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (global-flycheck-mode)
+    #+END_SRC
+    
+*** Close the =use-package= sexp
+    The downside to balancing all of the previous level 3 headers is that =use-package= sexp itself has yet to be closed.
+    The following source block closes it, making for a cleaner literate document at the cost of uglier tangled source code.
+    
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      )
+    #+END_SRC
+    
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-flycheck.el)
+     ;;; init-flycheck.el ends here
+   #+END_SRC
