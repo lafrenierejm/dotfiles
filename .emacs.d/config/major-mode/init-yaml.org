@@ -1,0 +1,59 @@
+#+TITLE: YAML Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+  
+* About This File
+  This file contains my configuration for YAML mode.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+  
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-yaml.el --- Configuration for YAML mode
+
+;;; Commentary:
+;; This file is tangled from init-yaml.org.
+;; Changes made here will be overwritten by changes to that Org file.
+
+;;; Code:
+   #+END_SRC
+   
+** Load =yaml-mode= with =use-package=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package yaml-mode
+   #+END_SRC
+
+*** Define Commands
+    The =commands= macro takes a list of commands provided by the parent package and used in the =use-package= declaration.
+    
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      :commands
+      (yaml-mode)
+    #+END_SRC
+    
+*** Major Modes
+    Establish deferred binding within =auto-mode-alist=.
+    
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      :mode
+      (("\\.yml\\'" . yaml-mode))
+    #+END_SRC
+    
+*** Close the =use-package= sexp
+    The downside to balancing all of the previous level 3 headers is that =use-package= sexp itself has yet to be closed.
+    The following source block closes it, making for a cleaner literate document at the cost of uglier tangled source code.
+    
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      )
+    #+END_SRC
+    
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-yaml.el)
+     ;;; init-yaml.el ends here
+   #+END_SRC
