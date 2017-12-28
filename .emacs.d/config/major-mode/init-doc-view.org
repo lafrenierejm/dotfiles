@@ -35,7 +35,7 @@
   :config
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   (add-hook 'doc-view-mode-hook (lambda ()
-				  (linum-mode "disable") )))
+				  (linum-mode -1) )))
     #+END_SRC
 
 ** Ending Boilerplate
