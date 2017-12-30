@@ -1,0 +1,128 @@
+#+TITLE: Org-mode Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][the ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+  
+* About This File
+  This file contains my configuration for [[http://orgmode.org/][Org-mode]].
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-org.el --- Configuration for Org-mode
+
+;;; Commentary:
+;; This file is tangled from init-org.org.
+;; Changes made here will be overwritten by changes to that Org-mode file.
+
+;;; Code:
+   #+END_SRC
+  
+** Load =org= with =use-package=
+   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+(use-package org
+  :straight nil			   ; do not download using straight.el
+
+  :defines    ; variables provded by the parent package and used below
+  (org-export-default-language
+   org-highlight-latex-and-related
+   org-mode-hook)
+
+  :commands   ; commmands provded by the parent package and used below
+  (org-mode)
+
+  :mode		 ; establish deferred binding within `auto-mode-alist'
+  (("\\.org\\'" . org-mode))
+
+  :init		   ; code to execute before loading the parent package
+  <<init>>
+
+  :config   ; code to execute after the parent package has been loaded
+  <<config>>
+  )
+   #+END_SRC
+
+*** Pre-Load Execution
+    :PROPERTIES:
+    :noweb-ref: init
+    :END:
+
+   #+BEGIN_SRC emacs-lisp
+;; Visually distinguish inline LaTeX.
+(setq org-highlight-latex-and-related '(latex))
+;; Specify English as the default langauge for exported files.
+(setq org-export-default-language "en")
+   #+END_SRC
+
+**** Workflow States
+     The corresponding page in the Org guide is "[[http://orgmode.org/guide/Multi_002dstate-workflows.html][multi-state workflows]]".
+     
+     Each item has one of three different types of state.
+     Any given item may
+     1. need further attention,
+     2. be complete (as far as I am concerned), or
+     3. be canceled.
+      
+     Org allows for multiple keywords within each state.
+     States are delimited in =org-todo-keywords= with a pipe character.
+   
+   #+BEGIN_SRC emacs-lisp
+;; Set the workflow states.
+(setq org-todo-keywords
+      '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DELEGATED" "DONE" "|" "CANCELED")))
+   #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: config
+    :END:
+    
+    After =org= has been loaded, I want to add hooks to enable various following minor modes.
+    - =flyspell-mode= to perform spellcheck.
+    - =visual-line-mode= to prevent long lines from wrapping.
+      I find that prose is most well-suited for version control when it is formatted as one dependent clause per line.
+      That tends to result in long lines of text, which is inconvenient if I have to scroll my buffer to view the entire line.
+
+    #+BEGIN_SRC emacs-lisp
+;; Add minor modes to `org-mode-hook'
+(dolist (minor-mode (list
+		     'flyspell-mode
+		     'visual-line-mode))
+  (add-hook 'org-mode-hook minor-mode))
+    #+END_SRC
+
+** Load =evil-org= using =use-package=
+   =[[https://github.com/Somelauw/evil-org-mode][evil-org]]= is a minor mode to add Evil keybindings for Org-mode.
+
+  #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-org
+  :after	; load the parent package after the following packages
+  (org)
+
+  :diminish			      ; hide this text in the modeline
+  evil-org-mode
+
+  :config
+  (setf evil-org-key-theme '(navigation
+			     insert
+			     textobjects
+			     additional
+			     shift
+			     return))
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+	    (lambda ()
+	      (evil-org-set-key-theme))) )
+  #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-coq.el)
+;;; init-coq.el ends here
+   #+END_SRC
