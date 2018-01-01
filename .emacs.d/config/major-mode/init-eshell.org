@@ -108,6 +108,9 @@
      (use-package eshell
        :straight nil                         ; do not download using straight.el
 
+       :after        ; load the parent package after the following packages
+       (evil)
+
        :defines    ; variables provded by the parent package and used below
        (eshell-cmpl-cycle-completions
         eshell-mode-hook)
