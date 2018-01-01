@@ -1,38 +1,61 @@
 #+TITLE: Haskell Configuration
 #+AUTHOR: Joseph LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+LaTeX_header: \usepackage[margin=1in]{geometry}
 
 * License
   All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
 
 * About This File
-  This file contains my configuration for working with Haskell.
+  This file contains my configuration for working with [[https://www.haskell.org/][Haskell]].
   This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
 
 * Code
 ** Introductory Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-haskell.el --- Configuration for working with Haskell
+     ;;; init-haskell.el --- Configuration for working with Haskell
 
-;;; Commentary:
-;; This file is tangled from init-haskell.org.
-;; Changes made here will be overwritten by changes to that Org file.
+     ;;; Commentary:
+     ;; This file is tangled from init-haskell.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
 
-;;; Code:
+     ;;; Code:
    #+END_SRC
 
-** Load =[[https://haskell.github.io/haskell-mode/][haskell-mode]]= and =[[https://commercialhaskell.github.io/intero/][intero]]=
-   #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package haskell-mode
-  :defer t)
+** Load =[[https://haskell.github.io/haskell-mode/][haskell-mode]]= with =use-package=
+   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
+   
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package haskell-mode
+       :commands   ; commmands provded by the parent package and used below
+       (haskell-mode)
+       
+       :mode          ; establish deferred binding within `auto-mode-alist'
+       (("\\.hs\\'" . haskell-mode)          ; Haskell files
+        ("\\.lhs\\'" . haskell-mode)         ; Literate Haskell files
+        ;; Haskell interfaces to C code used by hsc2hs pre-processor.
+        ("\\.hsc\\'" . haskell-mode)
+        ;; Haskell source with CPP pragmas used with cpphs pre-processor.
+        ("\\.cpphs\\'" . haskell-mode)
+        ;; Haskell FFI bindings to C libraries used with c2hs pre-processor.
+        ("\\.c2hs\\'" . haskell-mode))
+       )
    #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package intero
-  :after haskell-mode
-  :config
-  (add-hook 'haskell-mode-hook 'intero-mode) )
+** Load Intero with =use-package=
+   [[https://commercialhaskell.github.io/intero/][Intero]] is a "complete interactive development program for Haskell".
+   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
+   
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package intero
+       :disabled
+       
+       :after
+       (haskell-mode)
+
+       :config   ; code to execute after the parent package has been loaded
+       (add-hook 'haskell-mode-hook 'intero-mode)
+       )
    #+END_SRC
 
 ** Ending Boilerplate
