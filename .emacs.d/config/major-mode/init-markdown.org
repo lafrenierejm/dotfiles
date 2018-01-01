@@ -1,78 +1,44 @@
 #+TITLE: Markdown Configuration
 #+AUTHOR: Joseph LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+LaTeX_header: \usepackage[margin=1in]{geometry}
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
   All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
-  
+
 * About This File
   This file contains my configuration for Markdown mode.
   This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
-  
+
 * Code
 ** Introductory Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-markdown.el --- Configuration for Markdown mode
+     ;;; init-markdown.el --- Configuration for Markdown mode
 
-;;; Commentary:
-;; This file is tangled from init-markdown.org.
-;; Changes made here will be overwritten by changes to that Org file.
+     ;;; Commentary:
+     ;; This file is tangled from init-markdown.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
 
-;;; Code:
+     ;;; Code:
    #+END_SRC
-   
+
 ** Load markdown with =use-package=
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package markdown-mode
+       :commands    ; commands provded by the parent package and used below
+       (shell-script-mode)
+
+       :mode          ; establish deferred binding within `auto-mode-alist'
+       (("README\\.md\\'" . gfm-mode)
+        ("\\.md\\'" . markdown-mode)
+        ("\\.markdown\\'" . markdown-mode))
+
+       :config   ; code to execute after the parent package has been loaded
+       (add-hook 'markdown-mode-hook
+                 (lambda ()
+                   (setq indent-tabs-mode nil))))
    #+END_SRC
 
-*** Define Commands
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      :commands
-    #+END_SRC
-    
-    The following commands are provided by the parent package and are used in the package's =use-package= declaration.
-    
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (shell-script-mode)
-    #+END_SRC
-    
-*** Major Modes
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      :mode
-    #+END_SRC
-    
-    Establish deferred binding within =auto-mode-alist= of the following pairs.
-    
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (("README\\.md\\'" . gfm-mode)
-       ("\\.md\\'" . markdown-mode)
-       ("\\.markdown\\'" . markdown-mode))
-    #+END_SRC
-    
-*** Post-Load Execution
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      :config
-    #+END_SRC
-    
-    Only indent markdown files with spaces.
-    
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (add-hook 'markdown-mode-hook
-                (lambda ()
-                  (setq indent-tabs-mode nil)))
-    #+END_SRC
-    
-*** Close the =use-package= sexp
-    The downside to balancing all of the previous level 3 headers is that =use-package= sexp itself has yet to be closed.
-    The following source block closes it, making for a cleaner literate document at the cost of uglier tangled source code.
-    
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      )
-    #+END_SRC
-    
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'init-markdown.el)
