@@ -1,0 +1,159 @@
+#+TITLE: Eshell Initialization
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains configuration for [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html][Eshell]].
+  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Eshell Configuration
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;;; init-eshell.el --- Customization for Eshell
+
+     ;;; Commentary:
+     ;; This file is tangled from init-eshell.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Set =$PAGER=
+   The fact that Eshell runs entirely within an Emacs buffer negates the need for any external pager.
+   All text can instead be dumped directly into the Eshell buffer.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;; Set $PAGER to cat.
+     (setenv "PAGER" "cat")
+   #+END_SRC
+
+** Only Write the Current Command
+   Because I am not interested in changing history, the only valid position where I want to insert text in an Eshell buffer is when composing the current command.
+   The composition of the current command takes place in the last line of the buffer past Eshell's prompt.
+   The following algorithm ensures that I am inserting in a valid position when added as a hook on entering insert mode:
+
+   1. If =point= is not on the last line of the buffer then move =point= to =point-max=.
+      In Eshell =point-max= is always part of the current command.
+   2. Otherwise if the text at =point= is read-only then move =point= to the character where that text property changes.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;; I posted the following code as an answer on StackOverflow:
+     ;; https://stackoverflow.com/a/46937891/8468492.
+     ;; As such, this code is licensed under CC BY-SA 3.0 with attribution
+     ;; required (https://creativecommons.org/licenses/by-sa/3.0/).
+
+     (defun init/eshell/move-point-to-command ()
+       "Move point to the current command.
+     If point is not on the last line, move point to the maximum position
+     in the buffer.  Else if point is in the Eshell prompt, move it to the
+     start of the command."
+       (interactive)
+       (let ((curline (line-number-at-pos))
+             (endline (line-number-at-pos (point-max))))
+         (if (= curline endline)
+             (if (not (eobp))
+                 (let ((old (point)))        ; Get the current position as OLD.
+                   (eshell-bol)              ; Move to beginning of current command.
+                   (if (<= (point) old)      ; If point now before OLD...
+                       (goto-char old)       ; ...move it back to OLD.
+                     nil)))                  ; Otherwise keep as is.
+           (goto-char (point-max)))))
+
+     (defun init/eshell/move-point-on-insert-to-command ()
+       "Move point to edit the current command when insert mode is entered."
+       (add-hook 'evil-insert-state-entry-hook
+                 'init/eshell/move-point-to-command
+                 nil
+                 t))
+
+     ;; End of CC BY-SA 3.0-licensed code.
+   #+END_SRC
+
+** Semantic Movement Within Lines
+*** Define Eshell-Specific =beginning-of-maybe-line=
+    [[../minor-mode/init-evil.org][init-evil.org]] defines =init/beginning-of-maybe-line=.
+    That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
+
+    =init/eshell/beginning-of-maybe-line= moves =point= toward the beginning of the current line incrementally by semantic region.
+    1. If point is in the text of a command, point will be moved to the beginning of the command.
+    2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
+    3. Point will be moved to the beginning of the line.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun init/eshell/beginning-of-maybe-line ()
+        "Move point to the start of the command beginning of the line."
+        (interactive)
+        (let ((old-point (point)))   ; Get current position.
+          (eshell-bol)               ; Move to beginning of current command.
+          (when (or (<= old-point (point))
+                    (= (point-at-bol) (point)))
+            (back-to-indentation) ; Go to the first significant column
+            (when (<= old-point (point)) ; If already at/before first signficant column...
+              (beginning-of-line))))) ; then go to the beginning of the line
+    #+END_SRC
+
+*** TODO Intelligent =evil-delete-whole-line=
+    If point is on a line with a prompt, the standard =evil-delete-whole-line= will fail to delete any text because it is impeded by the prompt's read-only text property.
+    =eshell/evil-delete-whole-line= works around this by deleting everything after the prompt (i.e., the command text) if point is on a line that represents an eshell prompt.
+    On non-prompt lines =eshell/evil-delete-whole-line= works exactly like =evil-delete-whole-line=.
+
+** Load Eshell with =use-package=
+   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package eshell
+       :straight nil                         ; do not download using straight.el
+
+       :defines    ; variables provded by the parent package and used below
+       (eshell-cmpl-cycle-completions
+        eshell-mode-hook)
+
+       :init            ; code to execute before loading the parent package
+       <<init>>
+
+       :config   ; code to execute after the parent package has been loaded
+       <<config>>)
+   #+END_SRC
+
+*** Pre-Load Execution
+    :PROPERTIES:
+    :noweb-ref: init
+    :END:
+
+    Use zsh-like TAB completion.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq eshell-cmpl-cycle-completions nil)
+    #+END_SRC
+
+    Add to the list of commands to run in a term buffer.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'eshell-mode-hook
+                 (lambda ()
+                   (add-to-list 'eshell-visual-commands "ssh")
+                   (add-to-list 'eshell-visual-commands "tail")
+                   (add-to-list 'eshell-visual-commands "top")))
+     #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: config
+    :END:
+
+    #+BEGIN_SRC emacs-lisp
+      ;; Only write into the current command.
+      (add-hook 'eshell-mode-hook 'init/eshell/move-point-on-insert-to-command)
+      ;; Account for the read-only prompt text when moving to the beginning of the line.
+      (evil-define-key 'motion eshell-mode-map "H" 'init/eshell/beginning-of-maybe-line)
+    #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-eshell)
+     ;;; init-eshell.el ends here
+   #+END_SRC
