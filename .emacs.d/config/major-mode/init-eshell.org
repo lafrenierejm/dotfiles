@@ -102,8 +102,6 @@
     On non-prompt lines =eshell/evil-delete-whole-line= works exactly like =evil-delete-whole-line=.
 
 ** Load Eshell with =use-package=
-   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
-
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
        :straight nil                    ; do not download using straight.el

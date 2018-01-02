@@ -23,8 +23,6 @@
    #+END_SRC
 
 ** Load DocView with =use-package=
-   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
-
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package doc-view
        :straight nil                    ; do not download using straight.el

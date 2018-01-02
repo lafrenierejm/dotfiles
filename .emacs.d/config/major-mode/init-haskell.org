@@ -42,7 +42,6 @@
 
 ** Load Intero with =use-package=
    [[https://commercialhaskell.github.io/intero/][Intero]] is a "complete interactive development program for Haskell".
-   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package intero

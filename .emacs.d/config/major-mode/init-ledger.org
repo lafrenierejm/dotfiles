@@ -23,8 +23,6 @@
    #+END_SRC
 
 ** Load =[[https://github.com/ledger/ledger-mode][ledger-mode]]= with =use-package=
-   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
-
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package ledger-mode
        :commands   ; commands provided by the parent package and used below
@@ -41,8 +39,6 @@
    It allows you to treat transactions as text objects while in evil-mode --- selecting, deleting, and changing around and inside them as a unit.
    #+END_QUOTE
    The above quote is copyright (c) https://github.com/atheriel and licensed under GPLv3.
-
-   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-ledger
