@@ -36,8 +36,7 @@
         ;; Haskell source with CPP pragmas used with cpphs pre-processor.
         ("\\.cpphs\\'" . haskell-mode)
         ;; Haskell FFI bindings to C libraries used with c2hs pre-processor.
-        ("\\.c2hs\\'" . haskell-mode))
-       )
+        ("\\.c2hs\\'" . haskell-mode)))
    #+END_SRC
 
 ** Load Intero with =use-package=
