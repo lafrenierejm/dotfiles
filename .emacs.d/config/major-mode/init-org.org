@@ -23,8 +23,6 @@
    #+END_SRC
 
 ** Load =org= with =use-package=
-   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
-
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package org
        :straight nil                    ; do not download using straight.el
@@ -34,7 +32,7 @@
         org-highlight-latex-and-related
         org-mode-hook)
 
-       :commands   ; commmands provded by the parent package and used below
+       :commands    ; commands provded by the parent package and used below
        (org-mode)
 
        :mode          ; establish deferred binding within `auto-mode-alist'
@@ -99,7 +97,7 @@
         (add-hook 'org-mode-hook minor-mode))
     #+END_SRC
 
-** Load =evil-org= using =use-package=
+** Load =evil-org= with =use-package=
    =[[https://github.com/Somelauw/evil-org-mode][evil-org]]= is a minor mode to add Evil keybindings for Org-mode.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
@@ -110,7 +108,7 @@
        :diminish                           ; hide this text in the modeline
        evil-org-mode
 
-       :config
+       :config   ; code to execute after the parent package has been loaded
        (setf evil-org-key-theme '(calendar
                                   navigation
                                   additional
