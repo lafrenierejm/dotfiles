@@ -8,7 +8,7 @@
 
 * About This File
   This file contains configuration for [[http://www.djcbsoftware.nl/code/mu/mu4e.html][mu4e]].
-  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Code
 ** Introductory Boilerplate
@@ -17,7 +17,7 @@
 
 ;;; Commentary:
 ;; This file is tangled from init-mu4e.org.
-;; Changes made here will be overwritten by changes to that Org file.
+;; Changes made here will be overwritten by changes to that Org-mode file.
 
 ;;; Code:
    #+END_SRC

@@ -7,8 +7,8 @@
   All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
 
 * About This File
-  This file contains my configuration for Ledger mode.
-  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+  This file contains my configuration for [[https://github.com/ledger/ledger-mode][Ledger mode]], a major mode for the Ledger accounting system.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Code
 ** Introductory Boilerplate
@@ -17,7 +17,7 @@
 
      ;;; Commentary:
      ;; This file is tangled from init-ledger.org.
-     ;; Changes made here will be overwritten by changes to that Org file.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
 
      ;;; Code:
    #+END_SRC

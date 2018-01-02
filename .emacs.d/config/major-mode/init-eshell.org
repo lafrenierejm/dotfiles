@@ -8,7 +8,7 @@
 
 * About This File
   This file contains configuration for [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html][Eshell]].
-  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Eshell Configuration
 ** Introductory Boilerplate

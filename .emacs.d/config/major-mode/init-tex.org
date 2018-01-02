@@ -8,7 +8,7 @@
 
 * About This File
   This file contains my configuration for working with {La,Lua,Xe}TeX.
-  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Code
 ** Introductory Boilerplate
