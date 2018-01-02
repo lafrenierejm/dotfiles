@@ -27,7 +27,7 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package ledger-mode
-       :commands   ; commmands provded by the parent package and used below
+       :commands   ; commands provided by the parent package and used below
        (ledger-mode)
 
        :mode          ; establish deferred binding within `auto-mode-alist'
@@ -50,7 +50,7 @@
        (evil
         ledger-mode)
 
-       :commands   ; commmands provded by the parent package and used below
+       :commands  ; commmands provided by the parent package and used below
        (evil-ledger-mode)
 
        :config   ; code to execute after the parent package has been loaded

@@ -27,12 +27,12 @@
      (use-package org
        :straight nil                    ; do not download using straight.el
 
-       :defines    ; variables provded by the parent package and used below
+       :defines   ; variables provided by the parent package and used below
        (org-export-default-language
         org-highlight-latex-and-related
         org-mode-hook)
 
-       :commands    ; commands provded by the parent package and used below
+       :commands   ; commands provided by the parent package and used below
        (org-mode)
 
        :mode          ; establish deferred binding within `auto-mode-alist'

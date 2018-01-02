@@ -30,7 +30,7 @@
        :after        ; load the parent package after the following packages
        (anaphora)
 
-       :defines
+       :defines   ; variables provided by the parent package and used below
        (mu4e-compose-signature
         mu4e-compose-signature-auto-include
         mu4e-user-mail-address-list
@@ -47,7 +47,7 @@
         mu4e-user-mail-address-list
         mu4e-view-show-addresses)
 
-       :commands
+       :commands   ; commands provided by the parent package and used below
        (mu4e-message-field
         make-mu4e-context)
 

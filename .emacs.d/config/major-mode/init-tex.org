@@ -36,7 +36,7 @@
 
        :defer t                              ; defer loading auctex
 
-       :defines    ; variables provded by the parent package and used below
+       :defines   ; variables provided by the parent package and used below
        (LaTeX-csquotes-close-quote
         LaTeX-csquotes-open-quote
         LaTeX-mode-hook
@@ -47,7 +47,7 @@
         plain-TeX-mode-hook
         reftex-plug-into-AUCTeX)
 
-       :commands    ; commands provded by the parent package and used below
+       :commands   ; commands provided by the parent package and used below
        (LaTeX-math-mode)
 
        :init            ; code to execute before loading the parent package
@@ -118,10 +118,10 @@
        :after        ; load the parent package after the following packages
        (tex-site)
 
-       :defines    ; variables provded by the parent package and used below
+       :defines   ; variables provided by the parent package and used below
        (auctex-latexmk-inherit-TeX-PDF-mode)
 
-       :commands    ; commands provded by the parent package and used below
+       :commands   ; commands provided by the parent package and used below
        (auctex-latexmk-setup)
 
        :init            ; code to execute before loading the parent package

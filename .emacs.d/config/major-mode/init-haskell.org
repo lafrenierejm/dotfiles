@@ -23,11 +23,9 @@
    #+END_SRC
 
 ** Load =[[https://haskell.github.io/haskell-mode/][haskell-mode]]= with =use-package=
-   =[[https://github.com/jwiegley/use-package][use-package]]= is a macro to isolate package configuration.
-
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package haskell-mode
-       :commands   ; commmands provded by the parent package and used below
+       :commands   ; commands provided by the parent package and used below
        (haskell-mode)
 
        :mode          ; establish deferred binding within `auto-mode-alist'
