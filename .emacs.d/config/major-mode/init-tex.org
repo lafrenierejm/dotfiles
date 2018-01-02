@@ -135,6 +135,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-tex.el)
+     (provide 'init-tex)
      ;;; init-tex.el ends here
    #+END_SRC

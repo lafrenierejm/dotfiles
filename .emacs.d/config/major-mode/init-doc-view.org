@@ -48,6 +48,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-doc-view.el)
-;;; init-doc-view.el ends here
+     (provide 'init-doc-view)
+     ;;; init-doc-view.el ends here
    #+END_SRC

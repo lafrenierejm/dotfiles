@@ -41,6 +41,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-markdown.el)
+     (provide 'init-markdown)
      ;;; init-markdown.el ends here
    #+END_SRC

@@ -58,6 +58,6 @@
 
 ** Ending Boilerplate
   #+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-haskell)
-;;; init-haskell.el ends here
+    (provide 'init-haskell)
+    ;;; init-haskell.el ends here
   #+END_SRC

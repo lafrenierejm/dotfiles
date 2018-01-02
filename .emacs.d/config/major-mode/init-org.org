@@ -123,6 +123,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-coq.el)
-     ;;; init-coq.el ends here
+     (provide 'init-org)
+     ;;; init-org.el ends here
    #+END_SRC

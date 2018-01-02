@@ -70,6 +70,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-magit.el)
-;;; init-magit.el ends here
+     (provide 'init-magit)
+     ;;; init-magit.el ends here
    #+END_SRC

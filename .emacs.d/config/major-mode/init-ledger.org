@@ -59,6 +59,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-ledger.el)
+     (provide 'init-ledger)
      ;;; init-ledger.el ends here
    #+END_SRC
