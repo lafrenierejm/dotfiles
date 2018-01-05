@@ -8,6 +8,7 @@
 
 * About This File
   This file contains my configuration for [[http://orgmode.org/][Org-mode]].
+  Org-mode itself is loaded in =[[file:~/.emacs.d/init.org][init.org]]= because =org-babel-tangle= was required to tangle this file.
   This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Code
@@ -22,91 +23,23 @@
      ;;; Code:
    #+END_SRC
 
-** Load =org= with =use-package=
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package org
-       :straight nil                    ; do not download using straight.el
-
-       :defines   ; variables provided by the parent package and used below
-       (org-export-default-language
-        org-highlight-latex-and-related
-        org-mode-hook)
-
-       :commands   ; commands provided by the parent package and used below
-       (org-mode)
-
-       :mode          ; establish deferred binding within `auto-mode-alist'
-       (("\\.org\\'" . org-mode))
-
-       :init            ; code to execute before loading the parent package
-       <<init>>
-
-       :config   ; code to execute after the parent package has been loaded
-       <<config>>)
-   #+END_SRC
-
-*** Pre-Load Execution
-    :PROPERTIES:
-    :noweb-ref: init
-    :END:
-
-    #+BEGIN_SRC emacs-lisp
-      ;; Visually distinguish inline LaTeX.
-      (setq org-highlight-latex-and-related '(latex))
-      ;; Specify English as the default langauge for exported files.
-      (setq org-export-default-language "en")
-    #+END_SRC
-
-**** Workflow States
-     The corresponding page in the Org guide is "[[http://orgmode.org/guide/Multi_002dstate-workflows.html][multi-state workflows]]".
-
-     Each item has one of three different types of state.
-     Any given item may
-     1. need further attention,
-     2. be complete (as far as I am concerned), or
-     3. be canceled.
-
-     Org allows for multiple keywords within each state.
-     States are delimited in =org-todo-keywords= with a pipe character.
-
-     #+BEGIN_SRC emacs-lisp
-       ;; Set the workflow states.
-       (setq org-todo-keywords
-             '((sequence
-                "TODO" "FEEDBACK" "VERIFY" "|"
-                "DELEGATED" "DONE" "|"
-                "CANCELED")))
-     #+END_SRC
-
-*** Post-Load Execution
-    :PROPERTIES:
-    :noweb-ref: config
-    :END:
-
-    After =org= has been loaded, I want to add hooks to enable various following minor modes.
-    - =flyspell-mode= to perform spellcheck.
-    - =visual-line-mode= to prevent long lines from wrapping.
-      I find that prose is most well-suited for version control when it is formatted as one dependent clause per line.
-      That tends to result in long lines of text, which is inconvenient if I have to scroll my buffer to view the entire line.
-
-    #+BEGIN_SRC emacs-lisp
-      ;; Add minor modes to `org-mode-hook'
-      (dolist (minor-mode (list
-                           'flyspell-mode
-                           'visual-line-mode))
-        (add-hook 'org-mode-hook minor-mode))
-    #+END_SRC
-
 ** Load =evil-org= with =use-package=
    =[[https://github.com/Somelauw/evil-org-mode][evil-org]]= is a minor mode to add Evil keybindings for Org-mode.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-org
        :after        ; load the parent package after the following packages
-       (org)
+       (evil org)
 
-       :diminish                           ; hide this text in the modeline
+       :diminish                  ; hide the following text in the modeline
        evil-org-mode
+
+       :defines
+       (evil-org-key-theme
+        evil-org-mode-hook)
+
+       :hook             ; hooks are added according to the following alist
+       ((org-mode) . evil-org-mode)
 
        :config   ; code to execute after the parent package has been loaded
        (setf evil-org-key-theme '(calendar
@@ -115,7 +48,6 @@
                                   insert
                                   return
                                   textobjects))
-       (add-hook 'org-mode-hook 'evil-org-mode)
        (add-hook 'evil-org-mode-hook
                  (lambda ()
                    (evil-org-set-key-theme))))
