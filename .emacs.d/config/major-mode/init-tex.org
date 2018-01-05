@@ -130,7 +130,9 @@
        ;; Workaround for a MikTeX bug.
        (setq TeX-file-line-error nil)
        ;; =:config= is never run, so add the hook here.
-       (add-hook 'LaTeX-mode-hook 'auctex-latexmk-setup))
+       (add-hook 'LaTeX-mode-hook 'auctex-latexmk-setup)
+       ;; Set LatexMK as the default compilation command.
+       (setq TeX-command-default "LatexMk"))
    #+END_SRC
 
 ** Ending Boilerplate
