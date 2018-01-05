@@ -1,0 +1,106 @@
+#+TITLE: Interface Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains generic interface configurations.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;;; init-interface.el --- Configuration of Emacs's interface
+
+     ;;; Commentary:
+     ;; This file is tangled from init-coq.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Disable Defaults
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq inhibit-splash-screen t
+           inhibit-startup-message t
+           initial-major-mode #'fundamental-mode
+           initial-scratch-message nil)      ; do not pre-populate scratch
+   #+END_SRC
+
+** Load =monokai-theme= with =use-package=
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package monokai-theme
+       :demand                               ; do not defer loading
+
+       :defines   ; variables provided by the parent package and used below
+       (monokai-height-minus-1
+        monokai-height-plus-1
+        monokai-height-plus-2
+        monokai-height-plus-3
+        monokai-height-plus-4)
+
+       :init            ; code to execute before loading the parent package
+       (setq monokai-height-minus-1 1.0
+             monokai-height-plus-1 1.0
+             monokai-height-plus-2 1.0
+             monokai-height-plus-3 1.0
+             monokai-height-plus-4 1.0)
+
+       :config   ; code to execute after the parent package has been loaded
+       (if (daemonp)
+           (add-hook 'after-make-frame-functions
+                     (lambda (frame)
+                       (when (eq (length (frame-list)) 2)
+                         (progn
+                           (select-frame frame)
+                           (load-theme 'monokai t)))))
+         (if window-system
+             (load-theme 'monokai t))))
+   #+END_SRC
+
+** Display Modes
+   #+BEGIN_SRC emacs-lisp
+     (tool-bar-mode -1)
+     (scroll-bar-mode -1)
+     (show-parent-mode +1)
+   #+END_SRC
+
+*** Line Numbers
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      ;; Always display line numbers.
+      (global-linum-mode +1)
+    #+END_SRC
+
+    Previously I had used a function to format the line numbers.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ;; Line numbering
+      (if window-system
+          (add-hook 'linum-before-numbering-hook
+                    (lambda ()
+                      (setq-local linum-format-fmt
+                                  (let ((w (length (number-to-string
+                                                    (count-lines (point-min) (point-max))))))
+                                    (concat " %" (number-to-string w) "d"))))))
+    #+END_SRC
+
+** Interactive
+   #+BEGIN_SRC emacs-lisp
+     ;; Let 'y' and 'n' suffice for "yes\n" and "no\n", respectively.
+     (defalias 'yes-or-no-p 'y-or-n-p)
+   #+END_SRC
+
+** Set Font
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'default-frame-alist
+                  '(font . "Hasklig-16"))
+   #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-interface)
+     ;;; init-interface.el ends here
+   #+END_SRC
