@@ -73,28 +73,27 @@
      ;; End of CC BY-SA 3.0-licensed code.
    #+END_SRC
 
-** Semantic Movement Within Lines
-*** Define Eshell-Specific =beginning-of-maybe-line=
-    [[../minor-mode/init-evil.org][init-evil.org]] defines =init/beginning-of-maybe-line=.
-    That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
+** Define Eshell-Specific =beginning-of-maybe-line=
+   [[../minor-mode/init-evil.org][init-evil.org]] defines =init/beginning-of-maybe-line=.
+   That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
 
-    =init/eshell/beginning-of-maybe-line= moves =point= toward the beginning of the current line incrementally by semantic region.
-    1. If point is in the text of a command, point will be moved to the beginning of the command.
-    2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
-    3. Point will be moved to the beginning of the line.
+   =init/eshell/beginning-of-maybe-line= moves =point= toward the beginning of the current line incrementally by semantic region.
+   1. If point is in the text of a command, point will be moved to the beginning of the command.
+   2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
+   3. Point will be moved to the beginning of the line.
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun init/eshell/beginning-of-maybe-line ()
-        "Move point to the start of the command beginning of the line."
-        (interactive)
-        (let ((old-point (point)))   ; Get current position.
-          (eshell-bol)               ; Move to beginning of current command.
-          (when (or (<= old-point (point))
-                    (= (point-at-bol) (point)))
-            (back-to-indentation) ; Go to the first significant column
-            (when (<= old-point (point)) ; If already at/before first signficant column...
-              (beginning-of-line))))) ; then go to the beginning of the line
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun init/eshell/beginning-of-maybe-line ()
+       "Move point to the start of the command beginning of the line."
+       (interactive)
+       (let ((old-point (point)))   ; Get current position.
+         (eshell-bol)               ; Move to beginning of current command.
+         (when (or (<= old-point (point))
+                   (= (point-at-bol) (point)))
+           (back-to-indentation) ; Go to the first significant column
+           (when (<= old-point (point)) ; If already at/before first signficant column...
+             (beginning-of-line))))) ; then go to the beginning of the line
+   #+END_SRC
 
 *** TODO Intelligent =evil-delete-whole-line=
     If point is on a line with a prompt, the standard =evil-delete-whole-line= will fail to delete any text because it is impeded by the prompt's read-only text property.
@@ -104,25 +103,30 @@
 ** Load Eshell with =use-package=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
+       :demand                               ; do not defer loading
+
        :straight nil                    ; do not download using straight.el
 
        :after        ; load the parent package after the following packages
        (evil)
 
        :defines   ; variables provided by the parent package and used below
-       (eshell-cmpl-cycle-completions
-        eshell-mode-hook)
+       (eshell-banner
+        eshell-cmpl-cycle-completions
+        eshell-mode-hook
+        eshell-modules-list)
 
        :init            ; code to execute before loading the parent package
-       <<init>>
+       <<eshell-init>>
 
        :config   ; code to execute after the parent package has been loaded
-       <<config>>)
+       <<eshell-config>>
+       )
    #+END_SRC
 
 *** Pre-Load Execution
     :PROPERTIES:
-    :noweb-ref: init
+    :noweb-ref: eshell-init
     :END:
 
     Use zsh-like TAB completion.
@@ -143,7 +147,7 @@
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: config
+    :noweb-ref: eshell-config
     :END:
 
     #+BEGIN_SRC emacs-lisp
@@ -151,6 +155,13 @@
       (add-hook 'eshell-mode-hook 'init/eshell/move-point-on-insert-to-command)
       ;; Account for the read-only prompt text when moving to the beginning of the line.
       (evil-define-key 'motion eshell-mode-map "H" 'init/eshell/beginning-of-maybe-line)
+    #+END_SRC
+
+    Disable Eshell's greeting banner.
+    This is done by removing the banner module from =eshell-modules-list=.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
     #+END_SRC
 
 ** Ending Boilerplate
