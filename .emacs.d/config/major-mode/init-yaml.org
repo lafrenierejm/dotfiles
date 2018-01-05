@@ -25,9 +25,6 @@
 ** Load =yaml-mode= with =use-package=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package yaml-mode
-       :commands   ; commands provided by the parent package and used below
-       (yaml-mode)
-
        :mode          ; establish deferred binding within `auto-mode-alist'
        (("\\.yml\\'" . yaml-mode)))
    #+END_SRC
