@@ -25,10 +25,12 @@
 ** Load =mu4e= with =use-package=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package mu4e
+       :demand                               ; do not defer loading
+
        :straight nil                    ; do not download using straight.el
 
-       :after        ; load the parent package after the following packages
-       (anaphora)
+       :load-path            ; add the following directories to `load-path'
+       ("site-lisp/mu4e")
 
        :defines   ; variables provided by the parent package and used below
        (mu4e-compose-signature
@@ -52,12 +54,16 @@
         make-mu4e-context)
 
        :init            ; code to execute before loading the parent package
-       <<init>>)
+       <<mu4e-init>>
+
+       :config
+       <<mu4e-config>>
+       )
    #+END_SRC
 
 *** Pre-Load Execution
     :PROPERTIES:
-    :noweb-ref: init
+    :noweb-ref: mu4e-init
     :END:
 
 **** Fetching Mail
@@ -67,30 +73,31 @@
 
 **** Composing Mail
      #+BEGIN_SRC emacs-lisp
-      (setq
-       ;; Use format=flowed (https://joeclark.org/ffaq.html)
-       mu4e-compose-format-flowed t
-       ;; Open a new frame for composing mail.
-       mu4e-compose-in-new-frame t
-       ;; Automatically include a signature, if one is set.
-       mu4e-compose-signature-auto-include t)
+       (setq
+        ;; Use format=flowed (https://joeclark.org/ffaq.html)
+        mu4e-compose-format-flowed t
+        ;; Open a new frame for composing mail.
+        mu4e-compose-in-new-frame t
+        ;; Automatically include a signature, if one is set.
+        mu4e-compose-signature-auto-include t)
      #+END_SRC
 
 **** Mail Headers
-   #+BEGIN_SRC emacs-lisp
-     (setq
-      ;; Use ISO-esque timestamps in the header.
-      mu4e-headers-date-format "%Y-%m-%d %H:%M"
-      ;; Show senders' full addresses in message view.
-      mu4e-view-show-addresses t)
-   #+END_SRC
+     #+BEGIN_SRC emacs-lisp
+       (setq
+        ;; Use ISO-esque timestamps in the header.
+        mu4e-headers-date-format "%Y-%m-%d %H:%M"
+        ;; Show senders' full addresses in message view.
+        mu4e-view-show-addresses t)
+     #+END_SRC
 
 **** Mail Directory
      Set the path to my mail directory.
 
      #+BEGIN_SRC emacs-lisp
-       (awhen (getenv "MAILDIR")
-         (setq mu4e-maildir it))
+       (let ((maildir (getenv "MAILDIR")))
+         (when maildir
+           (setq mu4e-maildir maildir)))
      #+END_SRC
 
 **** Sending Mail
@@ -102,6 +109,24 @@
         smtpmail-stream-type 'starttls)        ; type of connection
      #+END_SRC
 
+**** My Addresses
+     mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
+     In such cases, display the To address(es).
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-user-mail-address-list '("admin@lafreniere.xyz"
+                                           "jml140230@utdallas.edu"
+                                           "joseph.lafreniere@utdallas.edu"
+                                           "joseph@lafreniere.xyz"
+                                           "lafrenierejm@gmail.com"
+                                           "lafrenierejm@utdallas.edu"))
+     #+END_SRC
+
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: mu4e-config
+    :END:
 **** Multiple Accounts
      #+BEGIN_SRC emacs-lisp
        (setq mu4e-contexts
@@ -127,7 +152,7 @@
                                 (when msg
                                   (mu4e-message-field msg :maildir)
                                   (string-prefix-p "/edu.utdallas.jml140230"
-                                                   (mu4e-message-field msg :maildir)) )))
+                                                   (mu4e-message-field msg :maildir)))))
                 ,(make-mu4e-context
                   ;; Name of the context
                   :name "xyz.lafreniere@joseph"
@@ -152,25 +177,16 @@
                                 (when msg
                                   (mu4e-message-field msg :maildir)
                                   (string-prefix-p "/xyz.lafreniere.joseph"
-                                                   (mu4e-message-field msg :maildir)) )))))
+                                                   (mu4e-message-field msg :maildir)))))))
      #+END_SRC
 
-**** My Addresses
-     mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
-     In such cases, display the To address(es).
 
-     #+BEGIN_SRC emacs-lisp
-       (setq mu4e-user-mail-address-list '("admin@lafreniere.xyz"
-                                           "jml140230@utdallas.edu"
-                                           "joseph.lafreniere@utdallas.edu"
-                                           "joseph@lafreniere.xyz"
-                                           "lafrenierejm@gmail.com"
-                                           "lafrenierejm@utdallas.edu"))
-     #+END_SRC
 
-** Evil Integration
+** Evil Integration with =evil-mu4e=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-mu4e
+       :demand                      ; do not defer loading
+
        :after        ; load the parent package after the following packages
        (evil mu4e))
    #+END_SRC
@@ -199,7 +215,7 @@
            (widen)
            (goto-char (point-min))
            (when (search-forward "<#part" nil t)
-             t) )))
+             t))))
 
      (defcustom mbork/message-attachment-intent-re
        (regexp-opt '("attachment"
@@ -219,7 +235,7 @@
                       (re-search-forward mbork/message-attachment-intent-re nil t)))
                   (not (mbork/message-attachment-present-p)))
          (unless (y-or-n-p mbork/message-attachment-reminder)
-           (keyboard-quit)) ))
+           (keyboard-quit))))
 
      (add-hook 'message-send-hook #'mbork/message-warn-if-no-attachments)
 
@@ -258,6 +274,6 @@
 
 ** Ending Boilerplate
   #+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-mu4e)
-;;; init-mu4e.el ends here
+    (provide 'init-mu4e)
+    ;;; init-mu4e.el ends here
   #+END_SRC

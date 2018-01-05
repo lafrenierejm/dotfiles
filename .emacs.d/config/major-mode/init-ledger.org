@@ -25,9 +25,6 @@
 ** Load =[[https://github.com/ledger/ledger-mode][ledger-mode]]= with =use-package=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package ledger-mode
-       :commands   ; commands provided by the parent package and used below
-       (ledger-mode)
-
        :mode          ; establish deferred binding within `auto-mode-alist'
        (("\\.ledger\\'" . ledger-mode)))
    #+END_SRC
@@ -43,14 +40,10 @@
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-ledger
        :after        ; load the parent package after the following packages
-       (evil
-        ledger-mode)
+       (evil ledger-mode)
 
-       :commands  ; commmands provided by the parent package and used below
-       (evil-ledger-mode)
-
-       :config   ; code to execute after the parent package has been loaded
-       (add-hook 'ledger-mode-hook #'evil-ledger-mode))
+       :hook
+       ((ledger-mode) . evil-ledger-mode))
    #+END_SRC
 
 ** Ending Boilerplate

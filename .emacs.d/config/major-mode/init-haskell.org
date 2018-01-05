@@ -25,9 +25,6 @@
 ** Load =[[https://haskell.github.io/haskell-mode/][haskell-mode]]= with =use-package=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package haskell-mode
-       :commands   ; commands provided by the parent package and used below
-       (haskell-mode)
-
        :mode          ; establish deferred binding within `auto-mode-alist'
        (("\\.hs\\'" . haskell-mode)          ; Haskell files
         ("\\.lhs\\'" . haskell-mode)         ; Literate Haskell files
@@ -49,8 +46,8 @@
        :after        ; load the parent package after the following packages
        (haskell-mode)
 
-       :config   ; code to execute after the parent package has been loaded
-       (add-hook 'haskell-mode-hook 'intero-mode))
+       :hook
+       ((haskell-mode) . intero-mode))
    #+END_SRC
 
 ** Ending Boilerplate

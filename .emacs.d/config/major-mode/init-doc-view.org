@@ -27,13 +27,20 @@
      (use-package doc-view
        :straight nil                    ; do not download using straight.el
 
+       :defines
+       (doc-view-mode-hook)
+
+       :mode
+       (("\\.pdf\\'" . doc-view-mode))
+
        :config   ; code to execute after the parent package has been loaded
-       <<config>>)
+       <<doc-view-config>>
+       )
    #+END_SRC
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: config
+    :noweb-ref: doc-view-config
     :END:
 
     Because DocView is used to render binary files, I want DocView buffers to automatically refresh when the contents of their corresponding files are changed.
