@@ -93,11 +93,12 @@
    An Emacs configuration written in Org-mode is not in a form that is able to be directly evaluated by Emacs.
    The Emacs Lisp components must be extracted and collated apart from the surrounding markup (this process is referred to as tangling).
    The function =org-babel-tangle= exists to do this.
-   
-*** Loading Org-mode with =use-package=
-    However, =org-babel-tangle= is provided Org-mode.
+
+*** Load Org-mode
+    =org-babel-tangle= is provided by the =org= package.
     So in order to tangle the rest of the configuration, Org-mode must be loaded.
-    
+    This definitely has a startup time cost, but because I daemonize Emacs that cost is incurred only once per login.
+
     #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
       (use-package org
         :demand                               ; do not defer loading
@@ -105,30 +106,24 @@
         :straight nil                    ; do not download using straight.el
 
         :defines   ; variables provided by the parent package and used below
-        (org-export-default-language
-         org-highlight-latex-and-related
+        (org-highlight-latex-and-related
          org-mode-hook)
 
         :mode          ; establish deferred binding within `auto-mode-alist'
         (("\\.org\\'" . org-mode))
 
-        :init            ; code to execute before loading the parent package
-        <<org-init>>
-
         :config   ; code to execute after the parent package has been loaded
         <<org-config>>)
     #+END_SRC
 
-**** Pre-Load Execution
+**** Post-Load Execution
      :PROPERTIES:
-     :noweb-ref: org-init
+     :noweb-ref: org-config
      :END:
 
      #+BEGIN_SRC emacs-lisp
        ;; Visually distinguish inline LaTeX.
-       (setq org-highlight-latex-and-related '(latex))
-       ;; Specify English as the default langauge for exported files.
-       (setq org-export-default-language "en")
+       (validate-setq org-highlight-latex-and-related '(latex))
      #+END_SRC
 
 ***** Workflow States
@@ -144,33 +139,30 @@
       States are delimited in =org-todo-keywords= with a pipe character.
 
       #+BEGIN_SRC emacs-lisp
-       	;; Set the workflow states.
-       	(setq org-todo-keywords
-              '((sequence
-                 "TODO" "FEEDBACK" "VERIFY" "|"
-                 "DELEGATED" "DONE" "|"
-                 "CANCELED")))
+        ;; Set the workflow states.
+        ;; https://github.com/Malabarba/validate.el/issues/5 prevents using
+        ;; `validate-setq' to set the value.
+        (setq org-todo-keywords
+                       '((sequence
+                          "TODO" "FEEDBACK" "VERIFY" "|"
+                          "DELEGATED" "DONE" "|"
+                          "CANCELED")))
       #+END_SRC
 
-**** Post-Load Execution
-     :PROPERTIES:
-     :noweb-ref: org-config
-     :END:
+***** Minor Modes
+      After =org= has been loaded, I want to add hooks to enable various following minor modes.
+      - =flyspell-mode= to perform spellcheck.
+      - =visual-line-mode= to prevent long lines from wrapping.
+        I find that prose is most well-suited for version control when it is formatted as one dependent clause per line.
+        That tends to result in long lines of text, which is inconvenient if I have to scroll my buffer to view the entire line.
 
-     After =org= has been loaded, I want to add hooks to enable various following minor modes.
-     - =flyspell-mode= to perform spellcheck.
-     - =visual-line-mode= to prevent long lines from wrapping.
-       I find that prose is most well-suited for version control when it is formatted as one dependent clause per line.
-       That tends to result in long lines of text, which is inconvenient if I have to scroll my buffer to view the entire line.
-
-     #+BEGIN_SRC emacs-lisp
-       ;; Add minor modes to `org-mode-hook'
-       (dolist (minor-mode (list
-                            'flyspell-mode
-                            'visual-line-mode))
-         (add-hook 'org-mode-hook minor-mode))
-     #+END_SRC
-
+      #+BEGIN_SRC emacs-lisp
+        ;; Add minor modes to `org-mode-hook'
+        (dolist (minor-mode (list
+                             'flyspell-mode
+                             'visual-line-mode))
+          (add-hook 'org-mode-hook minor-mode))
+      #+END_SRC
 
 *** Extracting Remaining Configuration
     Babel provides the function =org-babel-load-file= to load Emacs Lisp source code blocks from Org-mode a given file.
