@@ -75,7 +75,21 @@
 
     Now =use-package= will use =straight.el= to automatically install missing packages.
 
-** Extracting Emacs Lisp from Org
+*** Load validate
+    [[https://github.com/Malabarba/validate.el][validate]] provides functions to perform schema validation.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package validate
+        :demand                               ; do not defer loading
+
+        :straight                             ; recipe for straight.el
+        (validate :type git :host github :repo "Malabarba/validate.el")
+
+        :commands   ; commands provided by the parent package and used below
+        (validate-setq))
+    #+END_SRC
+
+** Extract Emacs Lisp from Org-mode Files
    An Emacs configuration written in Org-mode is not in a form that is able to be directly evaluated by Emacs.
    The Emacs Lisp components must be extracted and collated apart from the surrounding markup (this process is referred to as tangling).
    The function =org-babel-tangle= exists to do this.
