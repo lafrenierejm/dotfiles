@@ -46,11 +46,8 @@
                                   navigation
                                   additional
                                   insert
-                                  return
                                   textobjects))
-       (add-hook 'evil-org-mode-hook
-                 (lambda ()
-                   (evil-org-set-key-theme))))
+       (add-hook 'evil-org-mode-hook 'evil-org-set-key-theme))
    #+END_SRC
 
 ** Ending Boilerplate
