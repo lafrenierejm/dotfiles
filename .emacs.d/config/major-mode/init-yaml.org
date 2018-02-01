@@ -1,5 +1,5 @@
 #+TITLE: YAML Configuration
-#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
 * License

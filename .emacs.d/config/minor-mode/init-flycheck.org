@@ -1,5 +1,5 @@
 #+TITLE: Flycheck Configuration
-#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 #+LaTeX_header: \usepackage[margin=1in]{geometry}
 
