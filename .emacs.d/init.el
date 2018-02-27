@@ -68,6 +68,9 @@
 
   :straight nil                    ; do not download using straight.el
 
+  :after        ; load the parent package after the following packages
+  (validate)
+
   :defines   ; variables provided by the parent package and used below
   (org-highlight-latex-and-related
    org-mode-hook)
@@ -76,8 +79,10 @@
   (("\\.org\\'" . org-mode))
 
   :config   ; code to execute after the parent package has been loaded
-  ;; Visually distinguish inline LaTeX.
-  (validate-setq org-highlight-latex-and-related '(latex))
+  (validate-setq org-highlight-latex-and-related '(latex)
+                 org-return-follows-link t
+                 org-src-fontify-natively t
+                 org-confirm-babel-evaluate nil)
   ;; Set the workflow states.
   ;; https://github.com/Malabarba/validate.el/issues/5 prevents using
   ;; `validate-setq' to set the value.
