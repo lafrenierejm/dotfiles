@@ -12,7 +12,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-paredit.el --- Configuration for working with Paredit
 
      ;;; Commentary:
@@ -20,6 +20,11 @@
      ;; Changes made here will be overwritten by changes to that Org file.
 
      ;;; Code:
+   #+END_SRC
+
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
    #+END_SRC
 
 ** Load ParEdit
@@ -45,8 +50,8 @@
          scheme-mode) . paredit-mode))
    #+END_SRC
 
-** Load =evil-paredit=
-   =[[https://github.com/roman/evil-paredit][evil-paredit]]= is a minor mode that replaces some of Evil's verbs, e.g. =d=, with "safe" versions provided by =paredit=.
+** Load evil-paredit
+   [[https://github.com/roman/evil-paredit][evil-paredit]] is a minor mode that replaces some of Evil's verbs, e.g. =d=, with "safe" versions provided by =paredit=.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-paredit
