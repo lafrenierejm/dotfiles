@@ -1,5 +1,5 @@
 #+TITLE: Interface Configuration
-#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
 * License
@@ -12,7 +12,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-interface.el --- Configuration of Emacs's interface
 
      ;;; Commentary:
@@ -22,7 +22,12 @@
      ;;; Code:
    #+END_SRC
 
-** Disable Defaults
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Startup
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq inhibit-splash-screen t
            inhibit-startup-message t
@@ -30,7 +35,7 @@
            initial-scratch-message nil)      ; do not pre-populate scratch
    #+END_SRC
 
-** Load =monokai-theme= with =use-package=
+** Load =monokai-theme=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package monokai-theme
        :demand                               ; do not defer loading
@@ -42,61 +47,119 @@
         monokai-height-plus-3
         monokai-height-plus-4)
 
-       :init            ; code to execute before loading the parent package
-       (setq monokai-height-minus-1 1.0
-             monokai-height-plus-1 1.0
-             monokai-height-plus-2 1.0
-             monokai-height-plus-3 1.0
-             monokai-height-plus-4 1.0)
+       :init
+       <<monokai-theme-init>>
 
        :config   ; code to execute after the parent package has been loaded
-       (if (daemonp)
-           (add-hook 'after-make-frame-functions
-                     (lambda (frame)
-                       (when (eq (length (frame-list)) 2)
-                         (progn
-                           (select-frame frame)
-                           (load-theme 'monokai t)))))
-         (if window-system
-             (load-theme 'monokai t))))
+       <<monokai-theme-config>>)
    #+END_SRC
 
-** Display Modes
-   #+BEGIN_SRC emacs-lisp
+*** Pre-Load Execution
+    :PROPERTIES:
+    :noweb-ref: monokai-theme-init
+    :END:
+
+    Do not change font sizes.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq monokai-height-minus-1 1.0
+            monokai-height-plus-1 1.0
+            monokai-height-plus-2 1.0
+            monokai-height-plus-3 1.0
+            monokai-height-plus-4 1.0)
+    #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: monokai-theme-config
+    :END:
+
+    Apply the theme when Emacs is run as a daemon.
+
+    #+BEGIN_SRC emacs-lisp
+      (when window-system
+        (if (daemonp)
+            (add-hook 'after-make-frame-functions
+                      (lambda (frame)
+                        (when (eq (length (frame-list)) 2)
+                          (progn
+                            (select-frame frame)
+                            (load-theme 'monokai t)))))
+          (load-theme 'monokai t)))
+    #+END_SRC
+
+** Load rainbow-identifiers
+   The rainbow-identifiers package provides a minor mode that highlights identifiers based on their names.
+   The highlight color of each identifier is chosen based on the hash of the identifier's name.
+   The package's source is available at [[https://github.com/Fanael/rainbow-identifiers][github.com/Fanael/rainbow-identifiers]].
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package rainbow-identifiers
+       :demand                               ; do not defer loading
+
+       :after
+       (monokai-theme)
+
+       :hook
+       ((prog-mode) . rainbow-identifiers-mode)
+
+       :config
+       <<rainbow-identifiers-config>>
+       )
+   #+END_SRC
+
+*** Disable Keyword Highlighting
+    :PROPERTIES:
+    :noweb-ref: rainbow-identifiers-config
+    :END:
+
+    Disable highlighting of keywords that are not variable names.
+
+    #+BEGIN_SRC emacs-lisp :comments link
+      (validate-setq rainbow-identifiers-faces-to-override
+                     '(font-lock-constant-face
+                       font-lock-type-face
+                       font-lock-function-name-face
+                       font-lock-variable-name-face
+                       font-lock-keyword-face
+                       font-lock-builtin-face
+                       ;; font-lock-preprocessor-face
+                       ;; font-lock-warning-face
+                       ;; font-lock-doc-face
+                       ))
+    #+END_SRC
+
+** Load rainbow-delimeters
+   The rainbow-delimters package provides a minor mode that highlights delimeters such as parantheses basied on their depth.
+   The highlight color of each level is distinct.
+   The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimeters]].
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package rainbow-delimiters
+       :demand                               ; do not defer loading
+
+       :hook
+       ((prog-mode) . rainbow-delimiters-mode))
+   #+END_SRC
+
+** Built-In Modes
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (menu-bar-mode -1)
      (tool-bar-mode -1)
      (scroll-bar-mode -1)
-     (show-parent-mode +1)
+     (show-paren-mode 1)
+     (setq display-time-24hr-format t)
+     (display-time-mode 1)
    #+END_SRC
 
-*** Line Numbers
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      ;; Always display line numbers.
-      (global-linum-mode +1)
-    #+END_SRC
-
-    Previously I had used a function to format the line numbers.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      ;; Line numbering
-      (if window-system
-          (add-hook 'linum-before-numbering-hook
-                    (lambda ()
-                      (setq-local linum-format-fmt
-                                  (let ((w (length (number-to-string
-                                                    (count-lines (point-min) (point-max))))))
-                                    (concat " %" (number-to-string w) "d"))))))
-    #+END_SRC
-
-** Interactive
-   #+BEGIN_SRC emacs-lisp
-     ;; Let 'y' and 'n' suffice for "yes\n" and "no\n", respectively.
+** Interactive Prompts
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;; Let 'y' and 'n' suffice for "yes\y" and "no\n", respectively.
      (defalias 'yes-or-no-p 'y-or-n-p)
    #+END_SRC
 
-** Set Font
-   #+BEGIN_SRC emacs-lisp
-     (add-to-list 'default-frame-alist
-                  '(font . "Hasklig-16"))
+** Font
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (add-to-list 'default-frame-alist '(font . "Hasklig-16"))
    #+END_SRC
 
 ** Ending Boilerplate
