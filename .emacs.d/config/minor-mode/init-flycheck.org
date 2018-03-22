@@ -13,7 +13,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-flycheck.el --- Configuration for Flycheck
 
      ;;; Commentary:
@@ -23,13 +23,15 @@
      ;;; Code:
    #+END_SRC
 
-** Load Flycheck with =use-package=
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load flycheck
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package flycheck
        :demand                               ; do not defer loading
-
-       :commands
-       (global-flycheck-mode)
 
        :config
        ;; Enable flycheck-mode globally.
