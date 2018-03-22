@@ -12,14 +12,15 @@
   - Ivy, a generic completion mechanism for Emacs.
   - Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
   - Swiper, an incremental search built around Ivy.
+
+
   All three packages are published in author abo-abo's [[https://github.com/abo-abo/swiper/tree/master][swiper GitHub repository]].
 
   The file itself is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
 
 * Code
 ** Introductory Boilerplate
-
-  #+BEGIN_SRC emacs-lisp :tangle yes
+  #+BEGIN_SRC emacs-lisp :tangle yes :padline no
     ;;; init-ivy.el --- Minibuffer completion with Ivy, Counsel, and Swiper
 
     ;;; Commentary:
@@ -29,21 +30,28 @@
     ;;; Code:
   #+END_SRC
    
-** Load =flx=
-   =[[https://github.com/lewang/flx][flx]]= provides fuzzy searching algorithms.
-   Ivy's fuzzy finding will use =flx='s scoring mechanism if =flx= is loaded.
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load [[https://github.com/lewang/flx][flx]]
+   flx provides fuzzy searching algorithms.
+   Ivy's fuzzy finding will use flx's scoring mechanism if flx is loaded.
    
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package flx
        :demand                               ; do not defer loading
+
+       :after
+       (validate)
 
        :init            ; code to execute before loading the parent package
        ;; Run Emacs's garbage collector after no less than 20 MB allocated.
        ;; Doing so greatly improve's flx's performance when working with
        ;; large sets.
        (when (> 20000000 gc-cons-threshold)
-         (setq gc-cons-threshold 20000000))
-       )
+         (validate-setq gc-cons-threshold 20000000)))
    #+END_SRC
 
 ** Load Ivy
@@ -57,13 +65,9 @@
      (use-package ivy
        :demand                               ; do not defer loading
 
-       :defines   ; variables provided by the parent package and used below
-       (ivy-display-style
-        ivy-extra-directories
-        ivy-format-function
-        ivy-re-builders-alist
-        ivy-use-virtual-buffers)
-       
+       :after
+       (flx validate)
+
        :commands   ; commands provided by the parent package and used below
        (ivy-mode
         ivy-format-function-line)
@@ -77,22 +81,20 @@
        ;; Do not display "ivy" in the modeline.
        (ivy-mode . "")
 
-       :init
-
        :config   ; code to execute after the parent package has been loaded
        ;; Enable ivy-mode globally.
        (ivy-mode 1)
        ;; Do not switch to buffers matched by the any of the following regexps.
        (add-to-list 'ivy-ignore-buffers '"^\*tramp\/.*\*$")
        ;; Highlight the matching parts of the regexp in the minibuffer.
-       (setq ivy-display-style 'fancy)
+       (validate-setq ivy-display-style 'fancy)
        ;; Extend line highlighting to the right.
-       (setq ivy-format-function 'ivy-format-function-line)
+       (validate-setq ivy-format-function 'ivy-format-function-line)
        ;; Show recently killed buffers when calling `ivy-switch-buffer'.
-       (setq ivy-use-virtual-buffers t)
+       (validate-setq ivy-use-virtual-buffers t)
        ;; Perform fuzzy matching by default.
-       (setq ivy-re-builders-alist '((read-file-name-internal . ivy--regex-fuzzy)
-                                     (t . ivy--regex-plus)))
+       (validate-setq ivy-re-builders-alist '((read-file-name-internal . ivy--regex-fuzzy)
+                                              (t . ivy--regex-plus)))
        ;; Do not show "./" and "../" in the filename completion list.
        (setq ivy-extra-directories nil))
    #+END_SRC
@@ -107,8 +109,10 @@
        
        :bind                                 ; alist of keybindings
        (("M-x" . counsel-M-x)
+        ("C-h k" . counsel-descbinds)
         ("C-x f" . counsel-find-file)
-        ("C-x C-f" . counsel-find-file)))
+        ("C-x C-f" . counsel-find-file)
+        ("C-x C-4 C-f" . find-file-other-window)))
    #+END_SRC
 
 ** Load Swiper
