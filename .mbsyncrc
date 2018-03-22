@@ -92,6 +92,18 @@ MaildirStore local-edu.utdallas.jml140230
 	Inbox ~/mail/edu.utdallas.jml140230/inbox
 	Path  ~/mail/edu.utdallas.jml140230/
 
+Channel edu.utdallas.jml140230-cvcouncil
+	Master ":remote-edu.utdallas.jml140230:cvcouncil"
+	Slave  ":local-edu.utdallas.jml140230:cvcouncil"
+
+Channel edu.utdallas.jml140230-cs-4337-001
+	Master ":remote-edu.utdallas.jml140230:cs-4337-001"
+	Slave  ":local-edu.utdallas.jml140230:cs-4337-001"
+
+Channel edu.utdallas.jml140230-cs-4396-001
+	Master ":remote-edu.utdallas.jml140230:cs-4396-001"
+	Slave  ":local-edu.utdallas.jml140230:cs-4396-001"
+
 Channel edu.utdallas.jml140230-draft
 	Master ":remote-edu.utdallas.jml140230:Drafts"
 	Slave  ":local-edu.utdallas.jml140230:draft"
@@ -100,13 +112,36 @@ Channel edu.utdallas.jml140230-inbox
 	Master ":remote-edu.utdallas.jml140230:INBOX"
 	Slave  ":local-edu.utdallas.jml140230:INBOX"
 
+Channel edu.utdallas.jml140230-lug
+	Master ":remote-edu.utdallas.jml140230:lug"
+	Slave  ":local-edu.utdallas.jml140230:linux-users-group"
+
+Channel edu.utdallas.jml140230-se-4485-001
+	Master ":remote-edu.utdallas.jml140230:se-4485-001"
+	Slave  ":local-edu.utdallas.jml140230:se-4485-001"
+
+Channel edu.utdallas.jml140230-se-6367-001
+	Master ":remote-edu.utdallas.jml140230:se-6367-001"
+	Slave  ":local-edu.utdallas.jml140230:se-6367-001"
+
+Channel edu.utdallas.jml140230-se-6388-0w1
+	Master ":remote-edu.utdallas.jml140230:se-6388-0w1"
+	Slave  ":local-edu.utdallas.jml140230:se-6388-0w1"
+
 Channel edu.utdallas.jml140230-sent
 	Master ":remote-edu.utdallas.jml140230:Sent Items"
 	Slave  ":local-edu.utdallas.jml140230:sent"
 
 Group edu.utdallas.jml140230
+	Channel edu.utdallas.jml140230-cvcouncil
+	Channel edu.utdallas.jml140230-cs-4337-001
+	Channel edu.utdallas.jml140230-cs-4396-001
 	Channel edu.utdallas.jml140230-draft
 	Channel edu.utdallas.jml140230-inbox
+	Channel edu.utdallas.jml140230-lug
+	Channel edu.utdallas.jml140230-se-4485-001
+	Channel edu.utdallas.jml140230-se-6367-001
+	Channel edu.utdallas.jml140230-se-6388-0w1
 	Channel edu.utdallas.jml140230-sent
 
 ################################################################################
