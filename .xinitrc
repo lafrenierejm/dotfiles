@@ -21,9 +21,6 @@ if [ -f "${user_modmap}" ]; then
 	xmodmap "${user_modmap}"
 fi
 
-# Set the background color
-xsetroot -solid "#181818"
-# Start xautolock in the background with a 5 minute timer and i3lock
-xautolock -time 5 -locker i3lock-pixelate.sh &
-# Start i3wm
-exec i3
+# Daemonize Emacs and start EXWM
+emacs --daemon -f exwm-enable
+exec emacsclient --create-frame --eval '(eshell)'
