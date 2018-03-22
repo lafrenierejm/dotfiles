@@ -12,20 +12,28 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-mu4e.el --- mu4e initialization
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-mu4e.el --- mu4e initialization
 
-;;; Commentary:
-;; This file is tangled from init-mu4e.org.
-;; Changes made here will be overwritten by changes to that Org-mode file.
+     ;;; Commentary:
+     ;; This file is tangled from init-mu4e.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
 
-;;; Code:
+     ;;; Code:
    #+END_SRC
 
-** Load =mu4e= with =use-package=
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load mu4e
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package mu4e
        :demand                               ; do not defer loading
+
+       :after        ; load the parent package after the following packages
+       (flyspell ispell validate)
 
        :straight nil                    ; do not download using straight.el
 
@@ -34,6 +42,7 @@
 
        :defines   ; variables provided by the parent package and used below
        (mu4e-compose-signature
+        mu4e-compose-mode-hook
         mu4e-compose-signature-auto-include
         mu4e-user-mail-address-list
         mu4e-archive-folder
@@ -53,38 +62,35 @@
        (mu4e-message-field
         make-mu4e-context)
 
-       :init            ; code to execute before loading the parent package
-       <<mu4e-init>>
-
-       :config
-       <<mu4e-config>>
-       )
+       :config           ; code to execute after loading the parent package
+       <<mu4e-config>>)
    #+END_SRC
 
-*** Pre-Load Execution
+*** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: mu4e-init
+    :noweb-ref: mu4e-config
     :END:
 
 **** Fetching Mail
      #+BEGIN_SRC emacs-lisp
-       (setq mu4e-get-mail-command "mbsync -a")
+       (validate-setq mu4e-get-mail-command "mbsync -a")
+       (validate-setq mu4e-change-filenames-when-moving t)
      #+END_SRC
 
 **** Composing Mail
      #+BEGIN_SRC emacs-lisp
-       (setq
+       (validate-setq
         ;; Use format=flowed (https://joeclark.org/ffaq.html)
         mu4e-compose-format-flowed t
-        ;; Open a new frame for composing mail.
-        mu4e-compose-in-new-frame t
+        ;; Do not open a new frame for composing mail.
+        mu4e-compose-in-new-frame nil
         ;; Automatically include a signature, if one is set.
         mu4e-compose-signature-auto-include t)
      #+END_SRC
 
 **** Mail Headers
      #+BEGIN_SRC emacs-lisp
-       (setq
+       (validate-setq
         ;; Use ISO-esque timestamps in the header.
         mu4e-headers-date-format "%Y-%m-%d %H:%M"
         ;; Show senders' full addresses in message view.
@@ -97,12 +103,12 @@
      #+BEGIN_SRC emacs-lisp
        (let ((maildir (getenv "MAILDIR")))
          (when maildir
-           (setq mu4e-maildir maildir)))
+           (validate-setq mu4e-maildir maildir)))
      #+END_SRC
 
 **** Sending Mail
      #+BEGIN_SRC emacs-lisp
-       (setq
+       (validate-setq
         message-send-mail-function 'smtpmail-send-it
         send-mail-function 'smtpmail-send-it
         smtpmail-smtp-service 587              ; port number
@@ -114,81 +120,130 @@
      In such cases, display the To address(es).
 
      #+BEGIN_SRC emacs-lisp
-       (setq mu4e-user-mail-address-list '("admin@lafreniere.xyz"
-                                           "jml140230@utdallas.edu"
-                                           "joseph.lafreniere@utdallas.edu"
-                                           "joseph@lafreniere.xyz"
-                                           "lafrenierejm@gmail.com"
-                                           "lafrenierejm@utdallas.edu"))
+       (validate-setq mu4e-user-mail-address-list '("admin@lafreniere.xyz"
+                                                    "jml140230@utdallas.edu"
+                                                    "joseph.lafreniere@utdallas.edu"
+                                                    "joseph@lafreniere.xyz"
+                                                    "lafrenierejm@gmail.com"
+                                                    "lafrenierejm@utdallas.edu"))
      #+END_SRC
 
-
-*** Post-Load Execution
-    :PROPERTIES:
-    :noweb-ref: mu4e-config
-    :END:
 **** Multiple Accounts
      #+BEGIN_SRC emacs-lisp
-       (setq mu4e-contexts
-             `( ,(make-mu4e-context
-                  ;; Name of the context
-                  :name "edu.utdallas@jml140230"
-                  ;; alist of variables to set for this context.
-                  :vars '((user-full-name . "LaFreniere, Joseph")
-                          (user-mail-address . "jml140230@utdallas.edu")
-                          ;; SMTP
-                          (smtpmail-smtp-server . "smtp.office365.com") ; hostname
-                          (smtpmail-smtp-user . "jml140230@utdallas.edu") ; username
-                          ;; Signature
-                          (mu4e-compose-signature-auto-include . t)
-                          (mu4e-compose-signature . "Joseph LaFreniere")
-                          ;; Folders
-                          (mu4e-archive-folder . "/edu.utdallas.jml140230/archive")
-                          (mu4e-drafts-folder . "/edu.utdallas.jml140230/draft")
-                          (mu4e-sent-folder .  "/edu.utdallas.jml140230/sent")
-                          (mu4e-trash-folder . "/edu.utdallas.jml140230/trash"))
-                  ;; =match-func= returns true when the passed message matches this context.
-                  :match-func (lambda (msg)
-                                (when msg
-                                  (mu4e-message-field msg :maildir)
-                                  (string-prefix-p "/edu.utdallas.jml140230"
-                                                   (mu4e-message-field msg :maildir)))))
-                ,(make-mu4e-context
-                  ;; Name of the context
-                  :name "xyz.lafreniere@joseph"
-                  ;; alist of variables to set for this context.
-                  :vars '(
-                          ;; From
-                          (user-full-name . "LaFreniere, Joseph")
-                          (user-mail-address . "joseph@lafreniere.xyz")
-                          ;; Signature
-                          (mu4e-compose-signature-auto-include . t)
-                          (mu4e-compose-signature . "Joseph LaFreniere")
-                          ;; SMTP
-                          (smtpmail-smtp-server . "smtp.kolabnow.com") ; hostname
-                          (smtpmail-smtp-user . "joseph@lafreniere.xyz") ; username
-                          ;; Folders
-                          (mu4e-archive-folder . "/xyz.lafreniere.joseph/archive")
-                          (mu4e-drafts-folder . "/xyz.lafreniere.joseph/draft")
-                          (mu4e-sent-folder .  "/xyz.lafreniere.joseph/sent")
-                          (mu4e-trash-folder . "/xyz.lafreniere.joseph/trash"))
-                  ;; =match-func= returns true when the passed message matches this context.
-                  :match-func (lambda (msg)
-                                (when msg
-                                  (mu4e-message-field msg :maildir)
-                                  (string-prefix-p "/xyz.lafreniere.joseph"
-                                                   (mu4e-message-field msg :maildir)))))))
+       ;; Configure mu4e for multiple accounts.
+       (validate-setq
+        mu4e-contexts `( ,(make-mu4e-context
+                           ;; Name of the context
+                           :name "edu.utdallas@jml140230"
+                           ;; alist of variables to set for this context.
+                           :vars '((user-full-name . "LaFreniere, Joseph")
+                                   (user-mail-address . "jml140230@utdallas.edu")
+                                   ;; SMTP
+                                   (smtpmail-smtp-server . "smtp.office365.com") ; hostname
+                                   (smtpmail-smtp-user . "jml140230@utdallas.edu") ; username
+                                   ;; Signature
+                                   (mu4e-compose-signature-auto-include . t)
+                                   (mu4e-compose-signature . "Joseph LaFreniere")
+                                   ;; Folders
+                                   (mu4e-archive-folder . "/edu.utdallas.jml140230/archive")
+                                   (mu4e-drafts-folder . "/edu.utdallas.jml140230/draft")
+                                   (mu4e-sent-folder .  "/edu.utdallas.jml140230/sent")
+                                   (mu4e-trash-folder . "/edu.utdallas.jml140230/trash"))
+                           ;; =match-func= returns true when the passed message matches this context.
+                           :match-func (lambda (msg)
+                                         (when msg
+                                           (mu4e-message-field msg :maildir)
+                                           (string-prefix-p "/edu.utdallas.jml140230"
+                                                            (mu4e-message-field msg :maildir)))))
+                         ,(make-mu4e-context
+                           ;; Name of the context
+                           :name "xyz.lafreniere@joseph"
+                           ;; alist of variables to set for this context.
+                           :vars '(
+                                   ;; From
+                                   (user-full-name . "LaFreniere, Joseph")
+                                   (user-mail-address . "joseph@lafreniere.xyz")
+                                   ;; Signature
+                                   (mu4e-compose-signature-auto-include . t)
+                                   (mu4e-compose-signature . "Joseph LaFreniere")
+                                   ;; SMTP
+                                   (smtpmail-smtp-server . "smtp.kolabnow.com") ; hostname
+                                   (smtpmail-smtp-user . "joseph@lafreniere.xyz") ; username
+                                   ;; Folders
+                                   (mu4e-archive-folder . "/xyz.lafreniere.joseph/archive")
+                                   (mu4e-drafts-folder . "/xyz.lafreniere.joseph/draft")
+                                   (mu4e-sent-folder .  "/xyz.lafreniere.joseph/sent")
+                                   (mu4e-trash-folder . "/xyz.lafreniere.joseph/trash"))
+                           ;; =match-func= returns true when the passed message matches this context.
+                           :match-func (lambda (msg)
+                                         (when msg
+                                           (mu4e-message-field msg :maildir)
+                                           (string-prefix-p "/xyz.lafreniere.joseph"
+                                                            (mu4e-message-field msg :maildir)))))
+                         ,(make-mu4e-context
+                           ;; Name of the context
+                           :name "com.gmail@utdlug"
+                           ;; alist of variables to set for this context
+                           :vars '(
+                                   ;; From
+                                   (user-full-name . "LaFreniere, Joseph")
+                                   (user-mail-address . "utdlug@gmail.com")
+                                   ;; Signature
+                                   (mu4e-compose-signature-auto-include . t)
+                                   (mu4e-compose-signature . "Joseph LaFreniere\nLinux Users Group at UT Dallas")
+                                   ;; SMTP
+                                   (smtpmail-smtp-server . "smtp.gmail.com") ; hostname
+                                   (smtpmail-smtp-user . "utdlug@gmail.com")  ; username
+                                   ;; Folders
+                                   (mu4e-archive-folder . nil)
+                                   (mu4e-drafts-folder . "/com.gmail.utdlug/draft")
+                                   (mu4e-sent-folder . "/com.gmail.utdlug/sent")
+                                   (mu4e-trash-folder . nil))
+                           :match-func (lambda (msg)
+                                         (when msg
+                                           (mu4e-message-field msg :maildir)
+                                           (string-prefix-p "/com.gmail.utdlug"
+                                                            (mu4e-message-field msg :maildir)))))))
      #+END_SRC
 
+**** View Trailing Whitespace
+     Create a function to show trailing whitespace in the current buffer.
 
+     #+BEGIN_SRC emacs-lisp
+       ;; Show trailing whitespace in the current buffer.
+       (defun init-mu4e/show-trailing-whitespace ()
+         (validate-setq show-trailing-whitespace t))
+     #+END_SRC
 
-** Evil Integration with =evil-mu4e=
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'mu4e-compose-mode-hook 'init-mu4e/show-trailing-whitespace)
+     #+END_SRC
+
+**** Enable Spellcheck
+     If a spellcheck program is loaded then enable spellcheck when composing mail.
+
+     #+BEGIN_SRC emacs-lisp
+       ;; Enable `flyspell-mode' for spellchecking.
+       (defun init-mu4e/enable-flyspell-mode ()
+         (flyspell-mode 1))
+     #+END_SRC
+
+     #+BEGIN_SRC emacs-lisp
+       (when ispell-program-name
+         (add-hook 'mu4e-compose-mode-hook 'init-mu4e/enable-flyspell-mode))
+     #+END_SRC
+
+** Load evil-mu4e
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-mu4e
        :demand                      ; do not defer loading
 
        :after        ; load the parent package after the following packages
-       (evil mu4e))
+       (evil mu4e)
+
+       :config
+       ;; Mark messages for a later action.
+       (evil-define-key 'motion mu4e-headers-mode-map "*" 'mu4e-headers-mark-for-something))
    #+END_SRC
 
 ** Attachment Reminders
@@ -198,16 +253,6 @@
    Despite the attachment code never having (publically) been a part of mbork/message, I have decided to attribute it to Borkowsi under the same GPLv2 license as =mbork-message= given the blog's indication that the attachment code was /intended/ to have been included as part of =mbork-message=.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; The following code is derived from code written by Marcin
-     ;; Borkowski (alias mbork):
-     ;; http://mbork.pl/2016-02-06_An_attachment_reminder_in_mu4e.
-     ;;
-     ;; The above blog post indicates that Borkowski's code was intended to
-     ;; be included in the =mbork-message= package:
-     ;; https://github.com/mbork/message/blob/HEAD/mbork-message.el.  As
-     ;; such, the following code inherits =mbork-message='s GPLv2 license:
-     ;; https://www.gnu.org/licenses/gpl-2.0.html.
-
      (defun mbork/message-attachment-present-p ()
        "Return t if an attachment is found in the current message."
        (save-excursion
@@ -238,8 +283,6 @@
            (keyboard-quit))))
 
      (add-hook 'message-send-hook #'mbork/message-warn-if-no-attachments)
-
-     ;; End of GPLv2-licensed code copyright (c) Marcin Borkowsi.
    #+END_SRC
 
 ** Add Attachments at Ends of Buffers
@@ -253,12 +296,6 @@
    I have reached out to Borkowski asking about how he would like the code to be licensed.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; The following code is derived from code written by Marcin Borkowski
-     ;; (alias mbork):
-     ;; http://mbork.pl/2015-11-28_Fixing_mml-attach-file_using_advice.  I
-     ;; am assuming that the code is GPLv2-licensed, in keeping with
-     ;; https://github.com/mbork/message/blob/HEAD/mbork-message.el.
-
      (defun mml-attach-file--go-to-eob (orig-fun &rest args)
        "Go to the end of the buffer before attaching files."
        (save-excursion
@@ -268,8 +305,6 @@
            (apply orig-fun args))))
 
      (advice-add 'mml-attach-file :around #'mml-attach-file--go-to-eob)
-
-     ;; End of GPLv2-licensed code copyright (c) Marcin Borkowsi.
    #+END_SRC
 
 ** Ending Boilerplate
