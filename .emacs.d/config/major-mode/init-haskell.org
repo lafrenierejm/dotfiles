@@ -12,7 +12,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-haskell.el --- Configuration for working with Haskell
 
      ;;; Commentary:
@@ -22,7 +22,12 @@
      ;;; Code:
    #+END_SRC
 
-** Load =[[https://haskell.github.io/haskell-mode/][haskell-mode]]= with =use-package=
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load [[https://haskell.github.io/haskell-mode/][haskell-mode]]
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package haskell-mode
        :mode          ; establish deferred binding within `auto-mode-alist'
@@ -36,7 +41,7 @@
         ("\\.c2hs\\'" . haskell-mode)))
    #+END_SRC
 
-** Load Intero with =use-package=
+** Load Intero
    [[https://commercialhaskell.github.io/intero/][Intero]] is a "complete interactive development program for Haskell".
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
