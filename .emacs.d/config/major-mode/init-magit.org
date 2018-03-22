@@ -12,7 +12,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-magit.el --- Configuration for Magit
 
      ;;; Commentary:
@@ -20,6 +20,11 @@
      ;; Changes made here will be overwritten by changes to that Org-mode file.
 
      ;;; Code:
+   #+END_SRC
+
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
    #+END_SRC
 
 ** Load Magit with =use-package=
@@ -41,8 +46,7 @@
        (setq magit-no-message '("Turning on magit-auto-revert-mode..."))
 
        :config   ; code to execute after the parent package has been loaded
-       <<magit-config>>
-       )
+       <<magit-config>>)
    #+END_SRC
 
 *** Post-Load Execution
@@ -61,8 +65,44 @@
         (delete-window))
     #+END_SRC
 
-** Load =evil-magit= with =use-package=
-   =[[https://github.com/emacs-evil/evil-magit][evil-magit]]= configures Evil and Magit to play well together.
+**** Add a Section for Ignored Files
+     It is sometimes useful to be able to add ignored files (those that match a rule in =.gitignore=).
+     To this end, a new "Ignored files" section will be added to Magit's main status buffer.
+     The following code is derived from [[https://emacs.stackexchange.com/a/28506/17396][this answer]] by [[https://emacs.stackexchange.com/users/3889/xuchunyang][xuchunyang]] on emacs.stackexchange.com
+     As such, it is licensed under CC BY-SA 3.0.
+
+     Create a function to add get a list of the ignored files.
+     Each argument to =magit-git-items= will be passed as an argument to =git=.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-magit/ignored-files ()
+         (magit-git-items "ls-files"
+                          "--others"
+                          "--ignored"
+                          "--exclude-standard"
+                          "-z"
+                          "--directory"))
+     #+END_SRC
+
+     Create a function to add the "Ignored files" section in the status buffer.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-magit/insert-ignored-files ()
+         (awhen (init-magit/ignored-files)
+           (magit-insert-section (ignored)
+             (magit-insert-heading "Ignored files")
+             (magit-insert-un/tracked-files-1 it nil)
+             (insert ?\n))))
+     #+END_SRC
+
+     Add the above function to =magit-status-sections-hook=.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list 'magit-status-sections-hook 'init-magit/insert-ignored-files 'append)
+     #+END_SRC
+
+** Load [[https://github.com/emacs-evil/evil-magit][evil-magit]]
+    evil-magit configures Evil and Magit to play well together.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-magit
