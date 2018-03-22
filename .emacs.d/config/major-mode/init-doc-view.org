@@ -12,7 +12,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-doc-view.el --- Configuration for DocView
 
      ;;; Commentary:
@@ -22,20 +22,32 @@
      ;;; Code:
    #+END_SRC
 
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
 ** Load DocView with =use-package=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package doc-view
        :straight nil                    ; do not download using straight.el
 
-       :defines
-       (doc-view-mode-hook)
+       :after        ; load the parent package after the following packages
+       (autorevert)
 
        :mode
        (("\\.pdf\\'" . doc-view-mode))
 
+       :bind
+       (:map doc-view-mode-map
+        ("h" . image-backward-hscroll)
+        ("j" . doc-view-next-line-or-next-page)
+        ("k" . doc-view-previous-line-or-previous-page)
+        ("l" . image-forward-hscroll)
+        ("q" . nil))
+
        :config   ; code to execute after the parent package has been loaded
-       <<doc-view-config>>
-       )
+       <<doc-view-config>>)
    #+END_SRC
 
 *** Post-Load Execution
@@ -44,11 +56,8 @@
     :END:
 
     Because DocView is used to render binary files, I want DocView buffers to automatically refresh when the contents of their corresponding files are changed.
-    For the same reason there is no need to attempt to number the lines of DocView buffer.
     #+BEGIN_SRC emacs-lisp
       (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-      (add-hook 'doc-view-mode-hook (lambda ()
-                                      (linum-mode -1) ))
     #+END_SRC
 
 ** Ending Boilerplate
