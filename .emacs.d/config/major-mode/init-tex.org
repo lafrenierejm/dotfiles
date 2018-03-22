@@ -12,7 +12,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-tex.el --- Configuration for TeX
 
      ;;; Commentary:
@@ -22,10 +22,15 @@
      ;;; Code:
    #+END_SRC
 
-** Load =auctex= with =use-package=
-   =auctex= adds advice to Emacs's existing TeX modes.
-   As such, =auctex= cannot be loaded with =use-package= directly.
-   Instead we can hook onto =tex-site= and specify a custom package with =:straight=.
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load auctex
+   auctex adds advice to Emacs's existing TeX modes.
+   As such, auctex cannot be loaded with =use-package= directly.
+   Instead we can hook onto tex-site and specify a custom package with =:straight=.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package tex-site
@@ -34,7 +39,8 @@
                :repo "emacsmirror/auctex"
                :files (:defaults (:exclude "*.el.in")))
 
-       :defer t                              ; defer loading auctex
+       :after
+       (flyspell)
 
        :defines   ; variables provided by the parent package and used below
        (LaTeX-csquotes-close-quote
@@ -74,38 +80,52 @@
     :END:
 
     #+BEGIN_SRC emacs-lisp
+      ;; Configure `plain-TeX-mode'
       (add-hook 'plain-TeX-mode-hook
-                (lambda ()
-                  ;; Set "`" to a prefix for typing mathematic symbols
-                  (LaTeX-math-mode)
-                  ;; Automatically insert a matching "$" for math mode
-                  (set (make-variable-buffer-local 'TeX-electric-math)
-                       (cons "$" "$"))
-                  ;; Autmatically add braces after "^" or "_" in a math environment
-                  (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
-                       t)
-                  ;; Enable spellchecking
-                  (setq ispell-parser 'tex)
-                  (flyspell-mode 1)))
+                'init-tex/configure-plain-tex-mode)
+
+      (defun init-tex/configure-plain-tex ()
+        "Set variables and enable modes for `plain-TeX-mode'."
+        ;; Set "`" to a prefix for typing mathematic symbols.
+        (LaTeX-math-mode)
+        ;; Automatically insert a matching "$" for math mode.
+        (set (make-variable-buffer-local 'TeX-electric-math)
+             (cons "$" "$"))
+        ;; Autmatically add braces after "^" or "_" in a math environment.
+        (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
+             t)
+        ;; Enable spellchecking
+        (setq ispell-parser 'tex)
+        (flyspell-mode 1)
+        ;; Enable line numbers.
+        (linum-mode 1))
+
+      ;; Configure `LaTeX-mode'
       (add-hook 'LaTeX-mode-hook
-                (lambda ()
-                  ;; Automatically convert "$" to math environment delimeters
-                  (set (make-variable-buffer-local 'TeX-electric-math)
-                       (cons "\\(" "\\)"))
-                  ;; Autmatically add braces after "^" or "_" in a math environment
-                  (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
-                       t)
-                  ;; Set "`" to a prefix for typing mathematic symbols
-                  (LaTeX-math-mode)
-                  ;; Double quotes are replaced with use of `\enquote{}`
-                  (setq LaTeX-csquotes-open-quote "\\enquote{"
-                        LaTeX-csquotes-close-quote "}")
-                  ;; Enable spellchecking
-                  (setq ispell-parser 'tex)
-                  (flyspell-mode 1)))
-      (setq reftex-plug-into-AUCTeX t)
+                'init-tex/configure-latex-mode)
+
+      (defun init-tex/configure-latex-mode ()
+        "Set variables and enable modes for `LaTeX-mode'."
+        ;; Set "`" to a prefix for typing mathematic symbols.
+        (LaTeX-math-mode)
+        ;; Automatically convert "$" to math environment delimeters
+        (set (make-variable-buffer-local 'TeX-electric-math)
+             (cons "\\(" "\\)"))
+        ;; Autmatically add braces after "^" or "_" in a math environment
+        (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
+             t)
+        ;; Double quotes are replaced with use of `\enquote{}` if the
+        ;; csquotes package is loaded.
+        (setq LaTeX-csquotes-open-quote "\\enquote{"
+              LaTeX-csquotes-close-quote "}")
+        ;; Enable spellchecking.
+        (setq ispell-parser 'tex)
+        (flyspell-mode 1)
+        ;; Turn on line numbers.
+        (linum-mode 1))
 
       ;; Use RefTeX
+      (setq reftex-plug-into-AUCTeX t)
       (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
     #+END_SRC
 
