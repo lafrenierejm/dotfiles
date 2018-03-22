@@ -13,7 +13,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-org.el --- Configuration for Org-mode
 
      ;;; Commentary:
@@ -23,8 +23,13 @@
      ;;; Code:
    #+END_SRC
 
-** Load =evil-org= with =use-package=
-   =[[https://github.com/Somelauw/evil-org-mode][evil-org]]= is a minor mode to add Evil keybindings for Org-mode.
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load [[https://github.com/Somelauw/evil-org-mode][evil-org]]
+    evil-org is a minor mode to add Evil keybindings for Org-mode.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-org
