@@ -12,7 +12,7 @@
 
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-ledger.el --- Configuration for Ledger mode
 
      ;;; Commentary:
@@ -22,15 +22,20 @@
      ;;; Code:
    #+END_SRC
 
-** Load =[[https://github.com/ledger/ledger-mode][ledger-mode]]= with =use-package=
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load [[https://github.com/ledger/ledger-mode][ledger-mode]]
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package ledger-mode
        :mode          ; establish deferred binding within `auto-mode-alist'
        (("\\.ledger\\'" . ledger-mode)))
    #+END_SRC
 
-** Load =[[https://github.com/atheriel/evil-ledger][evil-ledger]]= with =use-package=
-   From =evil-ledger='s README:
+** Load [[https://github.com/atheriel/evil-ledger][evil-ledger]]
+   From the package's README:
    #+BEGIN_QUOTE
    The evil-ledger package provides a minor mode for Emacs that adds Evil motions and operators to ledger-mode buffers.
    It allows you to treat transactions as text objects while in evil-mode --- selecting, deleting, and changing around and inside them as a unit.
