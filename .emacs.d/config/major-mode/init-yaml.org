@@ -12,7 +12,7 @@
   
 * Code
 ** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-yaml.el --- Configuration for YAML mode
 
      ;;; Commentary:
@@ -20,6 +20,11 @@
      ;; Changes made here will be overwritten by changes to that Org file.
 
      ;;; Code:
+   #+END_SRC
+
+** Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
    #+END_SRC
    
 ** Load =yaml-mode= with =use-package=
