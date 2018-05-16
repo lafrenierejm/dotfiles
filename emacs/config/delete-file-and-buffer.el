@@ -26,7 +26,7 @@
 	  (message "Deleted file %s" filename)
 	  (kill-buffer))))))
 
-(global-set-key (kbd "C-c D") 'delete-file-and-buffer)
+(global-set-key (kbd "C-x D") 'delete-file-and-buffer)
 
 (provide 'delete-file-and-buffer)
 ;;; delete-file-and-buffer.el ends here
