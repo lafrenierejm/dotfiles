@@ -101,6 +101,19 @@
        (add-to-list 'magit-status-sections-hook 'init-magit/insert-ignored-files 'append)
      #+END_SRC
 
+** Load magithub
+   [[https://github.com/vermiculus/magithub][magithub]] provides Magit-based interfaces to GitHub's API.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package magithub
+       ;; Load the parent package after the following packages.
+       :after (magit validate)
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       (magithub-feature-autoinject t))
+   #+END_SRC
+
 ** Load [[https://github.com/emacs-evil/evil-magit][evil-magit]]
     evil-magit configures Evil and Magit to play well together.
 
