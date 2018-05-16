@@ -157,6 +157,13 @@
      (defalias 'yes-or-no-p 'y-or-n-p)
    #+END_SRC
 
+** Line Wrapping
+   Set the column at which line-wrapping should occur.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq-default fill-column 80)
+   #+END_SRC
+
 ** Font
    #+BEGIN_SRC emacs-lisp :tangle yes
      (add-to-list 'default-frame-alist '(font . "Hasklig-16"))
