@@ -29,7 +29,6 @@
 
 ** Load Magit with =use-package=
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     ;; (straight-use-package 'magit)
      (use-package magit
        :demand
 
