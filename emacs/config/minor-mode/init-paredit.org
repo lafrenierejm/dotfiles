@@ -63,7 +63,11 @@
        (evil paredit)
 
        :hook     ; add hooks for the left side to run the quoted right side
-       ((paredit-mode) . evil-paredit-mode))
+       ((paredit-mode) . evil-paredit-mode)
+
+       :config
+       (evil-define-key 'motion evil-paredit-mode-map (kbd "C-f") 'paredit-forward-slurp-sexp)
+       (evil-define-key 'motion evil-paredit-mode-map (kbd "C-d") 'paredit-forward-barf-sexp))
    #+END_SRC
 
 ** Ending Boilerplate
