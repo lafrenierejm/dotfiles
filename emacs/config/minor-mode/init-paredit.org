@@ -41,7 +41,9 @@
        :demand                               ; do not defer loading
 
        :hook     ; add hooks for the left side to run the quoted right side
-       ((emacs-lisp-mode
+       ((cider-repl-mode
+         clojure-mode
+	 emacs-lisp-mode
          eval-expression-minibuffer-setup
          ielm-mode
          lisp-mode
