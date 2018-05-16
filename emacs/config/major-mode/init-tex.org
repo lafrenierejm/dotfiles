@@ -33,127 +33,203 @@
    Instead we can hook onto tex-site and specify a custom package with =:straight=.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package tex-site
-       :straight                        ; do not download using straight.el
-       (auctex :host github
-               :repo "emacsmirror/auctex"
-               :files (:defaults (:exclude "*.el.in")))
+     (use-package tex
+       :straight (auctex :host github :repo "raxod502/auctex"
+                         :branch "fork/1"
+                         :files (:defaults (:exclude "doc/*.texi")))
 
-       :after
-       (flyspell)
+       ;; Load the parent package after the following packages have been loaded.
+       :after (validate)
 
-       :defines   ; variables provided by the parent package and used below
-       (LaTeX-csquotes-close-quote
-        LaTeX-csquotes-open-quote
-        LaTeX-mode-hook
-        TeX-auto-save
-        TeX-electric-math
-        TeX-electric-sub-and-superscript
-        TeX-parse-self
-        plain-TeX-mode-hook
-        reftex-plug-into-AUCTeX)
-
-       :commands   ; commands provided by the parent package and used below
-       (LaTeX-math-mode)
-
-       :init            ; code to execute before loading the parent package
-       <<init>>
-
-       :config   ; code to execute after the parent package has been loaded
-       <<config>>)
+       ;; Execute the following code after the parent package has been loaded.
+       :config
+       <<tex/config>>)
    #+END_SRC
-
-*** Pre-Load Execution
-    :PROPERTIES:
-    :noweb-ref: init
-    :END:
-
-    #+BEGIN_SRC emacs-lisp
-      (setq TeX-auto-save t) ; parse on load
-      (setq TeX-parse-self t) ; parse on save
-      (setq-default TeX-master nil) ; ask for file's master
-    #+END_SRC
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: config
+    :noweb-ref: tex/config
     :END:
 
+    Automatically save style information with the buffer.
+
     #+BEGIN_SRC emacs-lisp
-      ;; Configure `plain-TeX-mode'
-      (add-hook 'plain-TeX-mode-hook
-                'init-tex/configure-plain-tex-mode)
-
-      (defun init-tex/configure-plain-tex ()
-        "Set variables and enable modes for `plain-TeX-mode'."
-        ;; Set "`" to a prefix for typing mathematic symbols.
-        (LaTeX-math-mode)
-        ;; Automatically insert a matching "$" for math mode.
-        (set (make-variable-buffer-local 'TeX-electric-math)
-             (cons "$" "$"))
-        ;; Autmatically add braces after "^" or "_" in a math environment.
-        (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
-             t)
-        ;; Enable spellchecking
-        (setq ispell-parser 'tex)
-        (flyspell-mode 1)
-        ;; Enable line numbers.
-        (linum-mode 1))
-
-      ;; Configure `LaTeX-mode'
-      (add-hook 'LaTeX-mode-hook
-                'init-tex/configure-latex-mode)
-
-      (defun init-tex/configure-latex-mode ()
-        "Set variables and enable modes for `LaTeX-mode'."
-        ;; Set "`" to a prefix for typing mathematic symbols.
-        (LaTeX-math-mode)
-        ;; Automatically convert "$" to math environment delimeters
-        (set (make-variable-buffer-local 'TeX-electric-math)
-             (cons "\\(" "\\)"))
-        ;; Autmatically add braces after "^" or "_" in a math environment
-        (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript)
-             t)
-        ;; Double quotes are replaced with use of `\enquote{}` if the
-        ;; csquotes package is loaded.
-        (setq LaTeX-csquotes-open-quote "\\enquote{"
-              LaTeX-csquotes-close-quote "}")
-        ;; Enable spellchecking.
-        (setq ispell-parser 'tex)
-        (flyspell-mode 1)
-        ;; Turn on line numbers.
-        (linum-mode 1))
-
-      ;; Use RefTeX
-      (setq reftex-plug-into-AUCTeX t)
-      (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+      (validate-setq TeX-auto-save t)
     #+END_SRC
 
-** Load =auctex-latexmk=
-   =:config= is never called in the following =use-package= instance.
-   To work around this, the hook on =LaTeX-mode= that calls =auctex-latexmk-setup= is added to =:init= instead.
+    Parse files after loading them.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq TeX-parse-self t)
+    #+END_SRC
+
+    Query user for master file.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq-default TeX-master nil)
+    #+END_SRC
+
+    Use pdf-tools to view PDF outputs.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+    #+END_SRC
+
+    Automatically start the server for correlating allTeX's output back to the source.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq TeX-source-correlate-start-server t)
+    #+END_SRC
+
+    Update PDF buffers are successful compilation.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'TeX-after-compilation-finished-functions
+		'TeX-revert-document-buffer)
+    #+END_SRC
+
+    Use RefTeX.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq reftex-plug-into-AUCTeX t)
+    #+END_SRC
+
+    Apply (plain)TeX-specific settings.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-tex/config/plain-tex ()
+         "Configure `plain-tex-mode'."
+         <<tex/config/plain-tex>>)
+       (add-hook 'plain-TeX-mode-hook
+                 #'init-tex/config/plain-tex)
+     #+END_SRC
+
+    Apply LaTeX-specific settings.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun init-tex/configure-latex-mode ()
+        "Configure `LaTeX-mode'."
+        <<tex/config/latex>>)
+      (add-hook 'LaTeX-mode-hook
+                #'init-tex/configure-latex-mode)
+      (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+    #+END_SRC
+
+**** allTeX Configuration
+     :PROPERTIES:
+     :noweb-ref: tex/config/all-tex
+     :END:
+
+     Set "`" to a prefix for typing mathematics symbols.
+
+     #+BEGIN_SRC emacs-lisp
+       (LaTeX-math-mode)
+     #+END_SRC
+
+     Automatically add braces after "^" or "_" in a math environment.
+
+    #+BEGIN_SRC emacs-lisp
+      (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript) t)
+    #+END_SRC
+
+     Enable spellchecking.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq ispell-parser 'tex)
+       (flyspell-mode 1)
+     #+END_SRC
+
+**** (plain)TeX Configuration
+     :PROPERTIES:
+     :noweb-ref: tex/config/plain-tex
+     :END:
+
+     Include the allTeX configuration.
+
+     #+BEGIN_SRC emacs-lisp
+       <<tex/config/all-tex>>
+     #+END_SRC
+
+     Automatically insert a matching "$" to delimit math environments.
+
+     #+BEGIN_SRC emacs-lisp
+       (set (make-variable-buffer-local 'TeX-electric-math)
+            (cons "$" "$"))
+     #+END_SRC
+
+**** LaTeX Configuration
+     :PROPERTIES:
+     :noweb-ref: tex/config/latex
+     :END:
+
+     Include the allTeX configuration.
+
+     #+BEGIN_SRC emacs-lisp
+       <<tex/config/all-tex>>
+     #+END_SRC
+
+     Automatically convert "$" to LaTeX-style math environment delimeters.
+
+     #+BEGIN_SRC emacs-lisp
+       (set (make-variable-buffer-local 'TeX-electric-math)
+            (cons "\\(" "\\)"))
+     #+END_SRC
+
+     Replace double quotes with =\enquote{}= if the csquotes package is loaded.
+
+     #+BEGIN_SRC emacs-lisp
+	(validate-setq LaTeX-csquotes-open-quote "\\enquote{"
+		       LaTeX-csquotes-close-quote "}")
+     #+END_SRC
+
+** Load auctex-latexmk
+   Tomoya Tanjo (tom-tan)'s [[https://github.com/tom-tan/auctex-latexmk][auctex-latexmk]] package adds =latexmk= as a compilation target for AUCTeX.
+   =[[https://ctan.org/pkg/latexmk][latexmk]]= itself is a Perl script that automates the steps needed to fully compile a TeX document.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package auctex-latexmk
-       :after        ; load the parent package after the following packages
-       (tex-site)
+       ;; Only load the package if the following condition is met.
+       :if (executable-find "latemk")
 
-       :defines   ; variables provided by the parent package and used below
-       (auctex-latexmk-inherit-TeX-PDF-mode)
+       ;; Do not load this package lazily.
+       :demand t
 
-       :commands   ; commands provided by the parent package and used below
-       (auctex-latexmk-setup)
+       ;; Only load the parent package after the following packages.
+       :after (tex validate)
 
-       :init            ; code to execute before loading the parent package
-       ;; Use the =-pdf= flag when TeX-PDF-mode is active.
-       (setq auctex-latexmk-inherit-TeX-PDF-mode t)
-       ;; Workaround for a MikTeX bug.
-       (setq TeX-file-line-error nil)
-       ;; =:config= is never run, so add the hook here.
-       (add-hook 'LaTeX-mode-hook 'auctex-latexmk-setup)
-       ;; Set LatexMK as the default compilation command.
-       (setq TeX-command-default "LatexMk"))
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<auctex-latexmk/config>>)
    #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: auctex-latexmk/config
+    :END:
+
+    Run the package's setup.
+
+    #+BEGIN_SRC emacs-lisp
+       (auctex-latexmk-setup)
+    #+END_SRC
+
+    Use the =-pdf= flag when ~TeX-PDF-mode~ is active.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq auctex-latexmk-inherit-TeX-PDF-mode t)
+    #+END_SRC
+
+    Workaround a MikTeX bug by disabling ~TeX-file-line-error~.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq TeX-file-line-error nil)
+    #+END_SRC
+
+    Set =latexmk= as the default compilation command.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq TeX-command-default "LatexMk")
+    #+END_SRC
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
