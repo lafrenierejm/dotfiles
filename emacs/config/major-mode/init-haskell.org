@@ -39,6 +39,9 @@
         ("\\.cpphs\\'" . haskell-mode)
         ;; Haskell FFI bindings to C libraries used with c2hs pre-processor.
         ("\\.c2hs\\'" . haskell-mode))
+
+       :config
+       (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
    #+END_SRC
 
 ** Load Intero
