@@ -34,26 +34,48 @@
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-org
        :after        ; load the parent package after the following packages
-       (evil org)
+       (evil org validate)
 
        :diminish                  ; hide the following text in the modeline
        evil-org-mode
 
        :defines
        (evil-org-key-theme
-        evil-org-mode-hook)
+	evil-org-mode-hook)
 
        :hook             ; hooks are added according to the following alist
        ((org-mode) . evil-org-mode)
 
        :config   ; code to execute after the parent package has been loaded
-       (setf evil-org-key-theme '(calendar
-                                  navigation
-                                  additional
-                                  insert
-                                  textobjects))
-       (add-hook 'evil-org-mode-hook 'evil-org-set-key-theme))
+       <<evil-org/config>>)
    #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :NOWEB-ref: evil-org/config
+    :END:
+
+    Choose the key themes to enable.
+
+    #+BEGIN_SRC emacs-lisp
+      (setf evil-org-key-theme '(calendar
+				 navigation
+				 insert
+				 return
+				 textobjects))
+    #+END_SRC
+
+    Add a hook to enable the above key themes.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'evil-org-mode-hook 'evil-org-set-key-theme)
+    #+END_SRC
+
+    Retain selection after =<= or =>= in visual state.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq evil-org-retain-visual-state-on-shift t)
+    #+END_SRC
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
