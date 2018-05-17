@@ -1,0 +1,83 @@
+#+TITLE: diff-hl Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for Dmitry Gutov (dgutov)'s [[https://github.com/dgutov/diff-hl][diff-hl]] package.
+  diff-hl provides highlighting uncommitted changes to a buffer's file in the buffer's fringe.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-diff-hl.el --- Configuration for diff-hl
+
+     ;;; Commentary:
+     ;; This file is tangled from init-diff-hl.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load diff-hl
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package diff-hl
+       ;; Only load the package if the following condition is met.
+       :if (version<= "24.3" emacs-version)
+
+       ;; Do not load this package lazily.
+       :demand
+
+       ;; Only load the package after the following packages have been loaded.
+       :after (magit)
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<diff-hl/config>>)
+   #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: diff-hl/config
+    :DESCRIPTION: Code to be executed after diff-hl has been loaded
+    :END:
+
+    Enable diff-hl-mode by default.
+
+    #+BEGIN_SRC emacs-lisp
+      (global-diff-hl-mode 1)
+    #+END_SRC
+
+    Enable diff-hl in Dired buffers.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
+    #+END_SRC
+
+    Perform highlighting on-the-fly.
+
+    #+BEGIN_SRC emacs-lisp
+      (diff-hl-flydiff-mode 1)
+    #+END_SRC
+
+    Add a hook to update diff-hl's status when refreshing with modern versions of Magit.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+    #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :export no
+     (provide 'init-diff-hl)
+     ;;; init-diff-hl.el ends here
+   #+END_SRC
