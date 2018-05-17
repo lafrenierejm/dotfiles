@@ -1,0 +1,107 @@
+#+TITLE: Emacs Lisp Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains a configuration for working with Emacs Lisp.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-elisp.el --- Configuration for working with Emacs Lisp
+
+     ;;; Commentary:
+     ;; This file is tangled from init-elisp.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load elisp-mode
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package elisp-mode
+       :straight
+       <<elisp-mode/straight>>
+
+       :after
+       <<elisp-mode/after>>
+
+       :mode
+       <<elisp-mode/mode>>
+
+       :config
+       <<elisp-mode/config>>)
+   #+END_SRC
+
+*** Downloading with straight
+    :PROPERTIES:
+    :noweb-ref: elisp-mode/straight
+    :END:
+
+    elisp-mode is provided as a built-in package.
+    As such, there is no need to attempt to download it.
+
+    #+BEGIN_SRC emacs-lisp
+      nil
+    #+END_SRC
+
+*** Loading After Other Packages
+    :PROPERTIES:
+    :noweb-ref: elisp-mode/after
+    :END:
+
+    Some functions used to configure emacs-lisp are provided by the validate package.
+    As such, emacs-lisp should not be loaded until validate has been loaded.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate)
+    #+END_SRC
+
+*** Filename Mapping
+    :PROPERTIES:
+    :noweb-ref: elisp-mode/mode
+    :END:
+
+    Emacs Lisp files are designated by the filename extension "el".
+    Emacs uses the ~auto-mode-alist~ variable to maps filenames to major modes.
+    The key of each entry in ~auto-mode-alist~ is a regex describing a filename.
+    The value is a function, in our case a major mode.
+
+    ~rx~ provides a more readable syntax for assembling regexes.
+    It is used below to describe a string ending with =.el=.
+
+    #+BEGIN_SRC emacs-lisp
+      (rx ".el" string-end)
+    #+END_SRC
+
+*** Post-Load Configuration
+    :PROPERTIES:
+    :noweb-ref: elisp-mode/config
+    :END:
+
+    LISP code is typically written using only spaces for indentation.
+    By default, however, Emacs converts eight consecutive leading spaces to a tab character.
+    This behavior can be controlled via the value of ~indent-tabs-mode~.
+    The following code creates a function to set the value of ~indent-tabs-mode~ to ~nil~, then adds that function to a hook on ~emacs-lisp-mode~.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun init-elisp/use-spaces ()
+	(validate-setq indent-tabs-mode nil))
+      (add-hook 'emacs-lisp-mode-hook #'init-elisp/use-spaces)
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+  #+BEGIN_SRC emacs-lisp :tangle yes :export no
+    (provide 'init-elisp)
+    ;;; init-elisp.el ends here
+  #+END_SRC
