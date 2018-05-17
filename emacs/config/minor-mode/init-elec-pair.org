@@ -1,0 +1,45 @@
+#+TITLE: Electric Pair Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for Electric Pair Mode.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     ;;; init-elec-pair.el --- Configuration for elec-pair
+
+     ;;; Commentary:
+     ;; This file is tangled from init-elec-pair.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     (require 'use-package)
+   #+END_SRC
+
+** Load elec-pair
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package elec-pair
+       ;; Do not attempt to download using straight.
+       :straight nil
+
+       ;; For each element in the following list, hook the value on its key(s).
+       :hook ((prog-mode TeX-mode) . electric-pair-local-mode))
+   #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :export no
+     (provide 'init-elec-pair)
+     ;;; init-elec-pair.el ends here
+   #+END_SRC
