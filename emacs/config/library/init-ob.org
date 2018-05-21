@@ -1,0 +1,86 @@
+#+TITLE: Org Babel Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+  The source code blocks contain configuration relating to Babel.
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-ob.el --- Configure auto-save and backup settings.
+
+     ;;; Commentary:
+     ;; This file is tangled from init-ob.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies 					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load ob-prolog
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package ob-prolog
+       ;; Download this package using a custom recipe for straight.
+       :straight
+       (ob-prolog :type git :host github
+                  :repo "lafrenierejm/ob-prolog"
+                  :upstream (:host github
+                             :repo "ljos/ob-prolog"))
+
+       ;; Only load the package if a condition is met.
+       :if
+       <<ob-prolog/if>>
+
+       ;; Do not load this package lazily.
+       :demand
+
+       ;; Load the package after other packages.
+       :after
+       (prolog ob)
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<ob-prolog/config>>)
+   #+END_SRC
+
+*** Conditional Loading (~:if~)
+    :PROPERTIES:
+    :NOWEB-REF: ob-prolog/if
+    :DESCRIPTION: Only load ob-prolog if this condition is met.
+    :END:
+
+    Adding Babel support for Prolog is not helpful unless a Prolog interpreter is available.
+    Thus far, the only Prolog interpreter I have used is =swipl=.
+
+    #+BEGIN_SRC emacs-lisp
+      (executable-find "swipl")
+    #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :NOWEB-REF: ob-prolog/config
+    :DESCRIPTION: Code to be executed after ob-prolog has been loaded.
+    :END:
+
+    Add Prolog to the list of languages available to Babel.
+
+    #+BEGIN_SRC emacs-lisp
+      (org-babel-do-load-languages 'org-babel-load-languages
+                                   '((prolog .t )))
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-ob)
+     ;;; init-ob.el ends here
+   #+END_SRC
