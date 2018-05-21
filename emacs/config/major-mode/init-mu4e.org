@@ -52,10 +52,25 @@
     :noweb-ref: mu4e/config
     :END:
 
-**** Fetching Mail
+**** Fetching and Indexing Mail
+     If isync is installed, use =mbsync= to fetch all mail and rename filenames when moving mail.
+
      #+BEGIN_SRC emacs-lisp
-       (validate-setq mu4e-get-mail-command "mbsync -a")
-       (validate-setq mu4e-change-filenames-when-moving t)
+       (when (executable-find "mbsync")
+         (validate-setq mu4e-get-mail-command "mbsync -a")
+         (validate-setq mu4e-change-filenames-when-moving t))
+     #+END_SRC
+
+     Display the update status in the modeline.
+
+     #+BEGIN_SRC emacs-lisp
+       (validate-setq mu4e-display-update-status-in-modeline t)
+     #+END_SRC
+
+     Do not display messages related to updating or indexing.
+
+     #+BEGIN_SRC emacs-lisp
+       (validate-setq mu4e-hide-index-messages t)
      #+END_SRC
 
 **** Reading Mail
