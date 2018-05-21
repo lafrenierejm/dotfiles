@@ -1,0 +1,60 @@
+#+TITLE: Linum Mode Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* Copyright and Licensing					   :noexport:
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for Electric Pair Mode.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :noweb yes
+     ;;; init-linum-mode.el --- Configuration for linum-mode
+     ;;
+     ;; <<copyright>>
+     ;;
+     ;;; Commentary:
+     ;; This file is tangled from init-linum-mode.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load linum-mode
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package linum-mode
+       ;; Do not download with straight.
+       :straight nil
+
+       ;; Enable the package via hooks.
+       :hook
+       <<linum-mode/hook>>)
+   #+END_SRC
+
+*** Enabling via Hooks (~:hook~)
+    :PROPERTIES:
+    :noweb-ref: linum-mode/hook
+    :DESCRIPTION: Add hooks to enable ~linum-mode~.
+    :END:
+
+    ~use-package~ provides the ~:hook~ keyword for succinctly adding functions onto hooks.
+    One valid syntax for the ~:hook~ specifier is a list of modes to which the package being loaded will be hooked.
+
+    #+BEGIN_SRC emacs-lisp
+      (prog-mode TeX-mode)
+    #+END_SRC
+
+** Ending Boilerplate 						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-linum-mode)
+     ;;; init-linum-mode.el ends here
+   #+END_SRC
