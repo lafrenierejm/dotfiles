@@ -1,0 +1,65 @@
+#+TITLE: Spellcheck Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains configuration for Flyspell mode.
+  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+;;; init-spellcheck.el --- Configure spellchecking
+
+;;; Commentary:
+;; This file is tangled from init-spellcheck.org.
+;; Changes made here will be overwritten by changes to that Org-mode file.
+
+;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'use-package)
+   #+END_SRC
+
+** Load International Ispell
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package ispell
+       ;; Do not download with straight.
+       :straight nil
+
+       ;; Do not load the package lazily.
+       :demand
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<ispell/config>>)
+   #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :NOWEB-REF: ispell/config
+    :DESCRIPTION: Code to be executed after ispell has been loaded.
+    :END:
+
+    Set the executable to use for spellchecking.
+    If =aspell= is not available, disable ispell.
+
+    #+BEGIN_SRC emacs-lisp
+      (cond
+       ((executable-find "aspell")
+        (setq ispell-program-name "aspell"))
+       (t
+        (setq ispell-program-name nil)))
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (provide 'init-spellcheck)
+    ;;; init-spellcheck.el ends here
+  #+END_SRC
