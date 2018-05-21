@@ -1,0 +1,74 @@
+#+TITLE: Ediff Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for Ediff.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-ediff.el --- Configuration for Ediff
+
+     ;;; Commentary:
+     ;; This file is tangled from init-ediff.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'use-package)
+   #+END_SRC
+
+** Load Ediff
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package ediff
+       ;; Do not download with straight.
+       :straight nil
+
+       ;; Do not load the package lazily.
+       :demand
+
+       ;; Load the package after the following packages.
+       (validate)
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<ediff/config>>)
+   #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: ediff/config
+    :DESCRIPTION: Code to be executed after ediff has been loaded.
+    :END:
+
+    Use a single frame for all buffers including the control panel.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq ediff-window-setup-function 'ediff-setup-windows-plain)
+    #+END_SRC
+
+** Load evil-ediff
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package evil-ediff
+       ;; Do not load the package lazily.
+       :demand
+
+       ;; Load the package after the following packages.
+       :after
+       (ediff evil))
+   #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-ediff)
+     ;;; init-ediff.el ends here
+   #+END_SRC
