@@ -1,0 +1,60 @@
+#+TITLE: vc Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file loads and configures Emacs's built-in vc package.
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     ;;; init-vc.el --- Configuration for vc
+
+     ;;; Commentary:
+     ;; This file is tangled from init-vc.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     (require 'use-package)
+   #+END_SRC
+
+** Load vc
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package vc
+       ;; Do not download with straight.
+       :straight nil
+
+       ;; Do not load the package lazily.
+       :demand
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<vc/config>>)
+   #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: vc/config
+    :DESCRIPTION: Code to be executed after vc has been loaded.
+    :END:
+
+    If attempting to edit a version controlled file through a symlink, follow the link and visit the real file.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq vc-follow-symlinks t)
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-vc)
+     ;;; init-vc.el ends here
+   #+END_SRC
