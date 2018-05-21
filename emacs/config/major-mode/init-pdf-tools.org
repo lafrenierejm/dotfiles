@@ -1,0 +1,116 @@
+#+TITLE: PDF-Tools Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for PDF-Tools mode.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-pdf-tools.el --- Configuration for PDF-Tools
+
+     ;;; Commentary:
+     ;; This file is tangled from init-pdf-tools.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Dependencies							   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load pdf-tools
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package pdf-tools
+       ;; Load the package after the following packages.
+       :after
+       (autorevert)
+
+       ;; Establish deferred binding within `auto-mode-alist'.
+       :mode
+       (((rx ".pdf" string-end) . pdf-view-mode))
+
+       ;; Create key maps and, if necessary, autoloads.
+       :bind
+       <<pdf-tools/bind>>
+
+       ;; Execute the following code before the package has been loaded.
+       :init
+       <<pdf-tools/init>>
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<pdf-tools/config>>)
+   #+END_SRC
+
+*** Filename Mapping (~:mode~)
+    :PROPERTIES:
+    :DESCRIPTION: Values to be added to ~auto-mode-alist~.
+    :NOWEB-REF: pdf-tools/mode
+    :END:
+
+    #+NAME: pdf-view-mode-map
+    | Key | Action                      |
+    |-----+-----------------------------|
+    | =h= | scroll left                 |
+    | =j= | scroll down                 |
+    | =k= | scroll up                   |
+    | =l= | scroll right                |
+    | =q= | do nothing                  |
+    | =y= | yank selection to clipboard |
+
+    #+BEGIN_SRC emacs-lisp
+      (:map pdf-view-mode-map
+            ("h" . left-char)
+            ("j" . pdf-view-next-line-or-next-page)
+            ("k" . pdf-view-previous-line-or-previous-page)
+            ("l" . right-char)
+            ("q" . nil)
+            ("y" . kill-region))
+    #+END_SRC
+
+*** Pre-Load Execution (~:init~)
+    :PROPERTIES:
+    :NOWEB-REF: pdf-tools/init
+    :DESCRIPTION: Code to be executed before pdf-tools has been loaded.
+    :END:
+
+    Install PDF-Tools in all buffers (both current and future) without asking.
+    - Attempt to install system packages.
+    - Signal an error if the build fails.
+
+    #+BEGIN_SRC emacs-lisp
+      (pdf-tools-install 'no-query)
+    #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :NOWEB-REF: pdf-tools/config
+    :DESCRIPTION: Code to be executed after pdf-tools has been loaded.
+    :END:
+
+    Because PDF-Tools is used to render binary files, its buffers should automatically refresh when the contents of their corresponding files are changed.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'pdf-tools-mode-hook 'auto-revert-mode)
+    #+END_SRC
+
+    Use monokai colors for "midnight mode."
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq pdf-view-midnight-colors '("#F8F8F2" . "#272822"))
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-pdf-tools)
+     ;;; init-pdf-tools.el ends here
+   #+END_SRC
