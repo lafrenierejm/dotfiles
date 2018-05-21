@@ -1,0 +1,63 @@
+#+TITLE: Perl Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for working with Perl.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-perl.el --- Configuration for working with Perl
+
+     ;;; Commentary:
+     ;; This file is tangled from init-perl.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'use-package)
+   #+END_SRC
+
+** Load perl-mode
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package perl-mode
+       ;; Do not download with straight.
+       :straight nil
+
+       ;; Establish deferred binding within `auto-mode-alist'.
+       :mode
+       <<perl-mode/mode>>)
+   #+END_SRC
+
+*** Filename Mapping (~:mode~)
+    Emacs maps filenames to functions using the ~auto-mode-alist~ variable.
+    Each key in ~auto-mode-alist~ is a regex describing a filename;
+    Each value is a function, in most cases one that enables a major mode.
+
+    The ~:mode~ keyword in ~use-package~ adds to ~auto-mode-alist~.
+    One of the valid specifiers to the keyword is a list of regular expressions;
+    each regular expression will be paired with the function whose name is the package name.
+
+
+    =[[https://ctan.org/pkg/latexmk][latexmk]]= is a Perl script that automates the steps needed to fully compile a TeX document.
+    Its configuration files are Perl scripts and should be opened as such.
+
+    #+HEADER: noweb-ref: perl-mode/mode
+    #+BEGIN_SRC emacs-lisp
+      (rx "/latexmkrc" string-end)
+    #+END_SRC
+
+** Ending Boilerplate
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (provide 'init-perl)
+    ;;; init-perl.el ends here
+  #+END_SRC
