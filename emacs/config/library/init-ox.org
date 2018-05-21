@@ -1,0 +1,140 @@
+#+TITLE: Org-Mode Export (OX) Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][the ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for Org-mode exports.
+  Org-mode itself is loaded in =[[file:~/.emacs.d/init.org][init.org]]= because =org-babel-tangle= was required to tangle this file.
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-org.el --- Configuration for Org-mode exports
+
+     ;;; Commentary:
+     ;; This file is tangled from init-org.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Dependencies							   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+
+** Load ox
+   ox allows exporting (publishing) Org-mode documents such as this one.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package ox
+       ;; Load the package after the following packages.
+       :after
+       (validate)
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<ox/config>>)
+   #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :NOWEB-REF: ox/config
+    :DESCRIPTION: Code to be executed after ox has been loaded.
+    :END:
+
+    Allow =BIND= keywords to define local variable values.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq org-export-allow-bind-keywords t)
+    #+END_SRC
+
+** Load ox-latex
+   ox-latex provides settings for allTeX exports.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package ox-latex
+       ;; Do not download this package with straight.
+       :straight nil
+
+       ;; Load the package after the following packages.
+       :after
+       (ox validate)
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<ox-latex/config>>)
+   #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :NOWEB-REF: ox-latex/config
+    :DESCRIPTION: Code to be executed after ox-latex has been loaded.
+    :END:
+
+    Use the listings package to typeset source code.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq org-latex-listings t)
+    #+END_SRC
+
+    Use =latexmk= to compile allTeX exports.
+
+    #+BEGIN_SRC emacs-lisp
+      (when (executable-find "latexmk")
+        (validate-setq org-latex-pdf-process '("latexmk -lualatex -f %f")))
+    #+END_SRC
+
+    Add the following language mappings from code blocks to listings:
+    - =text= to ={}=
+      #+BEGIN_SRC emacs-lisp :noweb-ref map-text-{}
+        '(text "{}")
+      #+END_SRC
+
+
+    #+BEGIN_SRC emacs-lisp :noweb no-export
+       (add-to-list 'org-latex-listings-langs
+                    <<map-text-{}>>)
+    #+END_SRC
+
+** Load ox-beamer
+   ox-beamer provides settings for Beamer exports.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package ox-beamer
+       ;; Do not download this package with straight.
+       :straight nil
+
+       ;; Load the package after the following packages.
+       :after
+       (ox validate)
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<ox-beamer/config>>)
+   #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :NOWEB-REF: ox-beamer/config
+    :DESCRIPTION: Code to be executed after ox-beamer has been loaded.
+    :END:
+
+    Set the following default options to provide to the ~frame~ environment:
+    - ~allowframebreaks~
+
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq org-beamer-frame-default-options "allowframebreaks")
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-org)
+     ;;; init-org.el ends here
+   #+END_SRC
