@@ -1,0 +1,103 @@
+#+TITLE: Rename, Move, and Delete Visited Files and Their Buffers
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; buffer-with-visited-file.el --- {Rename,Move,Delete} the visited file and buffer
+
+     ;;; Commentary:
+     ;; This file is tangled from buffer-with-visited-file.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+NAME: dependencies
+   | Package Name |
+   |--------------|
+   | anaphora     |
+   | use-package  |
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'anaphora)
+     (require 'use-package)
+   #+END_SRC
+
+** Get the Buffer to Use
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun buffer-with-visited-file~get-buffer (&optional buffer)
+       "Get the buffer to use.
+
+     If BUFFER is nil, use the current buffer.
+     Else if BUFFER is a string, use that string as the name of the buffer.
+     Else throw an error."
+       (cond
+        ;; Else if no BUFFER was provided...
+        ((not buffer)
+         ;; Return the current buffer.
+         (get-buffer (buffer-name)))
+        ;; Else if BUFFER is an editor buffer...
+        ((bufferp buffer)
+         ;; Return BUFFER as-is.
+         buffer)
+        ;; Else if BUFFER is a string...
+        ((stringp buffer)
+         ;; Return the corresponding buffer object.
+         (get-buffer buffer))
+        ;; Else...
+        (t
+         ;; Throw an error.
+         (error "Invalid BUFFER argument %s of type %s passed"
+                buffer
+                (type-of buffer)))))
+   #+END_SRC
+
+** Define Deletion Function
+   :PROPERTIES:
+   :DESCRIPTION: Delete a buffer and its visited file, if any.
+   :END:
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun buffer-with-visited-file/delete (&optional buffer)
+       "Delete the file a buffer is visiting, if any, then kill the buffer.
+
+     If no optional BUFFER is provided, use the current buffer.
+     If the optional BUFFER is a string, use that string as the name of the buffer to use.
+     If the optional BUFFER is a symbol, prompt the user for the name of the buffer to use."
+       ;; If called interactively...
+       (interactive (list
+                     ;; If called with a prefix argument...
+                     (if current-prefix-arg
+                         ;; Prompt the user for the buffer.
+                         (get-buffer (read-buffer "Buffer to delete: "))
+                       ;; Else use the current buffer.
+                       nil)))
+       (let* ((buffer (buffer-with-visited-file~get-buffer buffer))
+              (file (buffer-file-name buffer)))
+         (when file
+           (cond
+            ;; If FILE is tracked in VC, delete it through VC.
+            ((vc-backend file)
+             (vc-delete-file file))
+            ;; Else if FILE exists, delete it normally.
+            ((file-exists-p file)
+             (delete-file file 'trash)))
+           (message "Deleted file %s" file))
+         (kill-buffer buffer)))
+   #+END_SRC
+
+** Ending Boilerplate 						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'buffer-with-visited-file)
+     ;;; buffer-with-visited-file.el ends here
+   #+END_SRC
