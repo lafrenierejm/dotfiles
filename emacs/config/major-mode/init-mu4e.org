@@ -254,6 +254,20 @@
 							    (mu4e-message-field msg :maildir)))))))
      #+END_SRC
 
+***** Contexts
+      Being in the proper context is unnecessary except when composing messages;
+      just select the first available context.
+
+      #+BEGIN_SRC emacs-lisp
+        (validate-setq mu4e-context-policy 'pick-first)
+      #+END_SRC
+
+      If no context matches (using its match function) when beginning to compose a message, prompt the user to manually select a context.
+
+      #+BEGIN_SRC emacs-lisp
+        (validate-setq mu4e-compose-context-policy 'ask)
+      #+END_SRC
+
 **** Composing Mail
 
      Use =[[https://joeclark.org/ffaq.html][format=flowed]]= for nicer viewing of plaintext mail.
