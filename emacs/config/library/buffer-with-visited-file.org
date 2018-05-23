@@ -21,18 +21,6 @@
      ;;; Code:
    #+END_SRC
 
-** Specify Dependencies						   :noexport:
-   #+NAME: dependencies
-   | Package Name |
-   |--------------|
-   | anaphora     |
-   | use-package  |
-
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     (require 'anaphora)
-     (require 'use-package)
-   #+END_SRC
-
 ** Get the Buffer to Use
    #+BEGIN_SRC emacs-lisp :tangle yes
      (defun buffer-with-visited-file~get-buffer (&optional buffer)
