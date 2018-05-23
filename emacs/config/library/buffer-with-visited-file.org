@@ -1,4 +1,4 @@
-#+TITLE: Rename, Move, and Delete Visited Files and Their Buffers
+#+TITLE: Rename, Copy, and Delete Visited Files and Their Buffers
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
@@ -176,6 +176,48 @@
              (delete-file file 'trash)))
            (message "Deleted file %s" file))
          (kill-buffer buffer)))
+   #+END_SRC
+
+** Define Copy Function
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (defun buffer-with-visited-file/copy (new-file-name &optional
+                                                         buffer
+                                                         overwrite-existing-file
+                                                         keep-time
+                                                         preserve-uid-gid
+                                                         perserve-permissions)
+       "Copy the file a buffer is visiting, if any, to NEW-FILE-NAME and open the copy in a new buffer.
+
+     If BUFFER is not provided, use the current buffer.
+     If BUFFER is a string, use that string as the name of the buffer to rename.
+     If BUFFER is a buffer object, use it as the subject of the rename.
+
+     If the specified buffer is not visiting a file, write the buffer's contents to NEW-FILE-NAME.
+
+     Signals a 'file-already-exists' error if new NEW-FILE-NAME already exists and OVERWRITE-EXISTING-FILE is nil.
+
+     KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS are passed directly to `copy-file' as KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS, respectively."
+       ;; If called interactively...
+       (interactive (let* ((buffer
+                            <<rename/interactive/buffer>>)
+                           (new-file-name
+                            ;; Read the new filename.
+                            <<rename/interactive/new-file-name>>))
+                      (list new-file-name buffer)))
+       (let* ((buffer (buffer-with-visited-file~get-buffer buffer))
+              (file (buffer-file-name buffer))
+              (new-buffer-name (buffer-name (buffer))))
+         (if (not (file-exists-p file))
+             (write-file new-file-name overwrite-existing-file)
+           (copy-file file
+                      new-file-name
+                      overwrite-existing-file
+                      keep-time
+                      preserve-uid-gid
+                      perserve-permissions)
+           (setq new-buffer-name (buffer-name (find-file-noselect new-file-name))))
+         (message "Wrote buffer %s as %s and opened the new file as %s."
+                  (buffer-name buffer) new-file-name new-buffer-name)))
    #+END_SRC
 
 ** Ending Boilerplate 						   :noexport:
