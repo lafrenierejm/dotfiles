@@ -201,6 +201,10 @@ Channel xyz.lafreniere.joseph-draft
 	Master ":remote-xyz.lafreniere.joseph:Drafts"
 	Slave  ":local-xyz.lafreniere.joseph:draft"
 
+Channel xyz.lafreniere.joseph-housing
+	Master ":remote-xyz.lafreniere.joseph:housing"
+	Slave  ":local-xyz.lafreniere.joseph:housing"
+
 Channel xyz.lafreniere.joseph-inbox
 	Master ":remote-xyz.lafreniere.joseph:INBOX"
 	Slave  ":local-xyz.lafreniere.joseph:INBOX"
@@ -215,6 +219,7 @@ Channel xyz.lafreniere.joseph-sent
 
 Group xyz.lafreniere.joseph
 	Channel xyz.lafreniere.joseph-draft
+	Channel xyz.lafreniere.joseph-housing
 	Channel xyz.lafreniere.joseph-inbox
 	Channel xyz.lafreniere.joseph-nixers
 	Channel xyz.lafreniere.joseph-sent
