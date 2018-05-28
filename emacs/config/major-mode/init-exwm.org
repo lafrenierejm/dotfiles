@@ -1,0 +1,139 @@
+#+TITLE: EXWM Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains configuration for [[https://github.com/ch11ng/exwm][Emacs X Window Manager (EXWM)]].
+  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;;; init-exwm.el --- Customization for EXWM
+
+     ;;; Commentary:
+     ;; This file is tangled from init-exwm.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'use-package)
+   #+END_SRC
+
+** Load EXWM
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package exwm
+       ;; Do not load the package lazily.
+       :demand
+
+       ;; Recipe for straight
+       :straight
+       (exwm :type git :host github :repo "ch11ng/exwm")
+
+       ;; Execute the following code after the package has been loaded.
+       :config
+       <<exwm/config>>)
+   #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :noweb-ref: exwm/config
+    :END:
+
+    Only enable a single workspace.
+    Buffer switching with [[https://github.com/abo-abo/swiper][Ivy]] is preferred to using multiple workspaces.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq exwm-workspace-number 1)
+    #+END_SRC
+
+    Hide the modeline in floating X windows.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
+      (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
+    #+END_SRC
+
+**** Buffer Names
+     All buffers created in EXWM mode are named =*EXWM*=.
+     This can be changed via ~exwm-update-class-hook~ or ~exwm-update-title-hook~.
+     EXWM's wiki provides the following advice:
+     - Use ~exwm-workspace-rename-buffer~ to avoid name conflicts.
+     - Only rename buffers with one of the above hooks;
+       there is no guaranteed order in which the hooks will be run, so renaming in both creates a race condition.
+     - For applications with multiple windows (e.g. GIMP), the class names of all windows are usually the same.
+       In such cases, differentiate using window titles rather than class names.
+     - Some applications (e.g. web browsers) change their titles frequently.
+       Identifying windows based on class names may be more appropriate for such applications.
+
+
+     All windows shall be named by their class names except for Java applications and GIMP.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'exwm-update-class-hook
+		 (lambda ()
+		   (unless (or (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+			       (string= "gimp" exwm-instance-name))
+		     (exwm-workspace-rename-buffer exwm-class-name))))
+     #+END_SRC
+
+**** Keybindings
+     Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
+     This will be performed with =M-r=.
+
+     #+BEGIN_SRC emacs-lisp
+       ;; Return to `line-mode'.
+       (exwm-input-set-key (kbd "M-r") #'exwm-reset)
+     #+END_SRC
+
+     From any window, regardless of its buffer contents/mode, I want to be able to
+     - move focus to a different window,
+     - close the current window and kill its buffer,
+     - close the current window without killing its buffer, and
+     - run a shell command.
+
+
+     Because Chromebooks have neither Super nor Hyper meta keys, the above keybindings shall use Meta prefixes.
+     Keybindings using Meta are allowed by convention to be rebound by major and minor modes.
+     The keybindings for the above actions must not be overridden, so they are added to ~overriding-local-map~.
+
+     #+BEGIN_SRC emacs-lisp
+       ;; Move between windows.
+       (exwm-input-set-key (kbd "M-j") 'windmove-down)
+       (exwm-input-set-key (kbd "M-h") 'windmove-left)
+       (exwm-input-set-key (kbd "M-l") 'windmove-right)
+       (exwm-input-set-key (kbd "M-k") 'windmove-up)
+       ;; Close the current window and kill its buffer.
+       (exwm-input-set-key (kbd "M-Q") 'kill-buffer-and-window)
+       ;; Close the current window, leaving its buffer open.
+       (exwm-input-set-key (kbd "M-q") 'delete-window)
+       ;; Close other windows.
+       (exwm-input-set-key (kbd "M-o") 'delete-other-windows)
+       ;; Run a shell command.
+       (exwm-input-set-key (kbd "M-d") 'init-exwm/start-process)
+       ;; Open Eshell in the current directory.
+       (exwm-input-set-key (kbd "C-z") 'init-eshell/here)
+     #+END_SRC emacs-lisp
+
+     Launching applications is performed by calling =start-process-shell-command=.
+
+     #+BEGIN_SRC emacs-lisp
+       ;; Launch applications.
+       (defun init-exwm/start-process (command)
+	 "Start a process via a shell command."
+	 (interactive (list (read-shell-command "$ ")))
+	 (start-process-shell-command command nil command))
+     #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-exwm)
+     ;;; init-exwm.el ends here
+   #+END_SRC
