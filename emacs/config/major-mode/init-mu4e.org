@@ -209,20 +209,6 @@
 	 smtpmail-stream-type 'starttls)
       #+END_SRC
 
-**** My Addresses
-     mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
-     In such cases, display the To address(es).
-
-     #+BEGIN_SRC emacs-lisp
-       (validate-setq
-	mu4e-user-mail-address-list '("admin@lafreniere.xyz"
-				      "jml140230@utdallas.edu"
-				      "joseph.lafreniere@utdallas.edu"
-				      "joseph@lafreniere.xyz"
-				      "lafrenierejm@gmail.com"
-				      "lafrenierejm@utdallas.edu"))
-     #+END_SRC
-
 **** Multiple Accounts
      #+BEGIN_SRC emacs-lisp
        ;; Configure mu4e for multiple accounts.
@@ -300,6 +286,20 @@
 					   (string-prefix-p "/com.gmail.utdlug"
 							    (mu4e-message-field msg :maildir)))))))
      #+END_SRC
+
+***** My Addresses
+      mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
+      In such cases, display the To address(es).
+
+      #+BEGIN_SRC emacs-lisp
+       	(validate-setq
+	 mu4e-user-mail-address-list '("admin@lafreniere.xyz"
+				       "jml140230@utdallas.edu"
+				       "joseph.lafreniere@utdallas.edu"
+				       "joseph@lafreniere.xyz"
+				       "lafrenierejm@gmail.com"
+				       "lafrenierejm@utdallas.edu"))
+      #+END_SRC
 
 ***** Contexts
       Being in the proper context is unnecessary except when composing messages;
