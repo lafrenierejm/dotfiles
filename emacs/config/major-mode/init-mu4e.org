@@ -39,6 +39,10 @@
        ;; Load the parent package after the following packages.
        :after (anaphora flyspell ispell s validate)
 
+       ;; Add keybindings according to the following alist.
+       :bind
+       (("C-x m" . mu4e-compose-new))
+
        ;; Add the following directories to `load-path'.
        :load-path ("site-lisp/mu4e")
 
