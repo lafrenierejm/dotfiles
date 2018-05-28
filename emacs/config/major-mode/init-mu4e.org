@@ -77,18 +77,61 @@
        (validate-setq mu4e-hide-index-messages t)
      #+END_SRC
 
-**** Reading Mail
-     Use ISO-esque timestamps in the header.
-
-     #+BEGIN_SRC emacs-lisp
-       (validate-setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
-     #+END_SRC
-
+**** Message View
      Show senders' full addresses in message view.
 
      #+BEGIN_SRC emacs-lisp
        (validate-setq mu4e-view-show-addresses t)
      #+END_SRC
+
+     View messages in their own window.
+
+     #+BEGIN_SRC emacs-lisp
+       (validate-setq mu4e-split-view 'single-window)
+     #+END_SRC
+
+**** Header View
+     Display the following fields in the headers buffer:
+     - date
+     - mailing list
+     - =FROM:= or =TO:= address
+     - subject
+
+
+     #+BEGIN_SRC emacs-lisp
+       (validate-setq mu4e-headers-fields
+		      '((:human-date . 16)
+			(:flags . 8)
+			(:mailing-list . 10)
+			(:from-or-to . 20)
+			(:subject . nil)))
+     #+END_SRC
+
+     Use ISO-esque timestamps for ~:human-date~.
+
+     #+BEGIN_SRC emacs-lisp
+       (validate-setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
+     #+END_SRC
+
+     Use Unicode box-drawing characters for the prefixes.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-headers-has-child-prefix '("-" . "─"))
+       (setq mu4e-headers-empty-parent-prefix '("-" . "─"))
+       (setq mu4e-headers-first-child-prefix '("-" . "─"))
+       (setq mu4e-headers-duplicate-prefix '("=" . "═"))
+       (setq mu4e-headers-default-prefix '("-" . "─"))
+     #+END_SRC
+
+***** Monokai
+      Customize colors and faces when using the monokai theme.
+
+      #+BEGIN_SRC emacs-lisp
+        (custom-theme-set-faces
+         'monokai
+         '(mu4e-unread-face ((t)))
+         '(mu4e-header-highlight-face ((t :underline nil))))
+      #+END_SRC
 
 **** Mail Directory
      Set the path to my mail directory.
