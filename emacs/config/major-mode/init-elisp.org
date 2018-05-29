@@ -68,10 +68,6 @@
     #+END_SRC
 
 *** Filename Mapping
-    :PROPERTIES:
-    :noweb-ref: elisp-mode/mode
-    :END:
-
     Emacs Lisp files are designated by the filename extension "el".
     Emacs uses the ~auto-mode-alist~ variable to maps filenames to major modes.
     The key of each entry in ~auto-mode-alist~ is a regex describing a filename.
@@ -80,8 +76,22 @@
     ~rx~ provides a more readable syntax for assembling regexes.
     It is used below to describe a string ending with =.el=.
 
+    #+HEADER: :results code
     #+BEGIN_SRC emacs-lisp
       (rx ".el" string-end)
+    #+END_SRC
+
+    #+RESULTS:
+    #+HEADER: :noweb-ref regexp-el
+    #+BEGIN_SRC emacs-lisp
+    "\\.el\\'"
+    #+END_SRC
+
+    Finally the above regexp is used to bind ~emacs-lisp-mode~.
+
+    #+HEADER: :noweb-ref elisp-mode/mode
+    #+BEGIN_SRC emacs-lisp
+      (<<regexp-el>> . emacs-lisp-mode)
     #+END_SRC
 
 *** Post-Load Configuration
