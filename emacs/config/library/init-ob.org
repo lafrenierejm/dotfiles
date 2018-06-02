@@ -41,9 +41,6 @@
        :if
        <<ob-prolog/if>>
 
-       ;; Do not load this package lazily.
-       :demand
-
        ;; Load the package after other packages.
        :after
        (prolog ob)
