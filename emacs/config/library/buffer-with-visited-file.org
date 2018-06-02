@@ -219,7 +219,7 @@
                        (list new-file-name buffer)))
        	(let* ((buffer (buffer-with-visited-file~get-buffer buffer))
                (file (buffer-file-name buffer))
-               (new-buffer-name (buffer-name (buffer))))
+               (new-buffer-name (buffer-name buffer)))
           (if (not (file-exists-p file))
               (write-file new-file-name overwrite-existing-file)
             (copy-file file
