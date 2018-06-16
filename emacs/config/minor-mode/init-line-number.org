@@ -1,4 +1,4 @@
-#+TITLE: Linum Mode Configuration
+#+TITLE: Line Number Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
@@ -29,26 +29,43 @@
      (require 'use-package)
    #+END_SRC
 
-** Load linum-mode
+** Load linum-mode for Version < 26
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package linum-mode
+       ;; Only load linum-mode if the following condition is met.
+       :if
+       <<linum-mode/if>>
+
        ;; Do not download with straight.
        :straight nil
 
-       ;; Enable the package via hooks.
+       ;; Enable linum-mode via hooks.
        :hook
        <<linum-mode/hook>>)
    #+END_SRC
 
+*** Conditional Loading (~:if~)
+    :PROPERTIES:
+    :DESCRIPTION: Define condition for loading ~linum-mode~.
+    :END:
+
+    Starting in Emacs 26.1, linum-mode has been deprecated in favor of display-line-numbers-mode.
+    As such, linum-mode should only be loaded when the version is older than 26.1
+
+    #+NAME: linum-mode/if
+    #+BEGIN_SRC emacs-lisp
+      (version< emacs-version "26.1")
+    #+END_SRC
+
 *** Enabling via Hooks (~:hook~)
     :PROPERTIES:
-    :noweb-ref: linum-mode/hook
     :DESCRIPTION: Add hooks to enable ~linum-mode~.
     :END:
 
     ~use-package~ provides the ~:hook~ keyword for succinctly adding functions onto hooks.
     One valid syntax for the ~:hook~ specifier is a list of modes to which the package being loaded will be hooked.
 
+    #+NAME: linum-mode/hook
     #+BEGIN_SRC emacs-lisp
       (prog-mode TeX-mode)
     #+END_SRC
