@@ -27,6 +27,7 @@
 ** Specify Dependencies						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      (require 'use-package)
+     (require 'validate)
    #+END_SRC
 
 ** Load linum-mode for Version < 26
@@ -49,8 +50,8 @@
     :DESCRIPTION: Define condition for loading ~linum-mode~.
     :END:
 
-    Starting in Emacs 26.1, linum-mode has been deprecated in favor of display-line-numbers-mode.
-    As such, linum-mode should only be loaded when the version is older than 26.1
+    Starting in Emacs 26.1, ~linum-mode~ has been deprecated in favor of ~display-line-numbers-mode~.
+    As such, ~linum-mode~ should only be loaded when running a version of Emacs older than 26.1
 
     #+NAME: linum-mode/if
     #+BEGIN_SRC emacs-lisp
@@ -70,7 +71,77 @@
       (prog-mode TeX-mode)
     #+END_SRC
 
-** Ending Boilerplate 						   :noexport:
+** Load ~display-line-numbers~ for Version >= 26.1
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package display-line-numbers
+       ;; Only load display-line-numbers if the following condition is met.
+       :if
+       <<display-line-numbers/if>>
+
+       ;; Do not download with straight.
+       :straight nil
+
+       ;; Load `display-line-numbers' after the following packages.
+       :after
+       (validate)
+
+       ;; Enable display-line-numbers via hooks.
+       :hook
+       <<display-line-numbers/hook>>
+
+       :config
+       <<display-line-numbers/config>>)
+   #+END_SRC
+
+*** Conditional Loading (~:if~)
+    :PROPERTIES:
+    :DESCRIPTION: Define condition for loading ~display-line-numbers~.
+    :END:
+
+    ~display-line-numbers~ is the alternative to ~linum-mode~ and is preferred when available.
+    It shall therefore be used in all cases except in those that necessitate using ~linum-mode~.
+
+    #+NAME: display-line-numbers/if
+    #+BEGIN_SRC emacs-lisp :noweb no-export
+      (not <<linum-mode/if>>)
+    #+END_SRC
+
+*** Enabling via Hooks (~:hook~)
+    :PROPERTIES:
+    :DESCRIPTION: Add hooks to enable ~display-line-numbers~.
+    :END:
+
+    ~display-line-numbers-mode~ shall be active in all of the same buffers as ~linum-mode~.
+
+    #+NAME: display-line-numbers/hook
+    #+BEGIN_SRC emacs-lisp :noweb no-export
+      (<<linum-mode/hook>> . display-line-numbers-mode)
+    #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref display-line-numbers/config
+    :END:
+
+    Display relative line numbers for all lines except the current line.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq display-line-numbers-type 'relative)
+    #+END_SRC
+
+    Display the absolute line number of the current line.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq display-line-numbers-current-absolute t)
+    #+END_SRC
+
+    Do not shrink line number width.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq display-line-numbers-grow-only t)
+    #+END_SRC
+
+** Ending Boilerplate                                              :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'init-linum-mode)
      ;;; init-linum-mode.el ends here
