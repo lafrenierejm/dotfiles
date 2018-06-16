@@ -1,0 +1,146 @@
+#+TITLE: UNIX Shell Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+LaTeX_header: \usepackage[margin=1in]{geometry}
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains my configuration for working with UNIX shells.
+  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-unix-shell.el --- Configuration for UNIX shells
+
+     ;;; Commentary:
+     ;; This file is tangled from init-unix-shell.org.
+     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'use-package)
+   #+END_SRC
+
+** Load ~sh-script~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package sh-script
+       ;; Evaluate the following code before everything except `:disabled'.
+       :preface
+       <<sh-script/preface>>
+
+       ;; Do not download `sh-script' using straight.
+       :straight nil
+
+       ;; Establish deferred binding within `auto-mode-alist'.
+       :mode
+       <<sh-script/mode>>
+
+       ;; Evaluate the following code after loading `shell-script-mode'.
+       :config
+       <<sh-script/config>>)
+   #+END_SRC
+
+*** Pre-Evaluation Configuration (~:preface~)
+    Define regexps for Zsh dotfiles and scripts.
+    Then create a list containing those regexps.
+
+    #+NAME: sh-script/preface
+    #+BEGIN_SRC emacs-lisp :noweb no-export
+      <<list-regexp-zsh>>
+    #+END_SRC
+
+**** Define Regexp for Zsh Dotfiles
+     :PROPERTIES:
+     :DESCRIPTION: Define a regexp for matching Zsh dotfile filenames.
+     :END:
+
+     #+NAME: rx-zsh-dotfile
+     #+HEADER: :results value scalar
+     #+BEGIN_SRC emacs-lisp
+       (rx "/.z"
+           (one-or-more (not (any ".")))
+           string-end)
+     #+END_SRC
+
+**** Define Regexp for Zsh Scripts
+     :PROPERTIES:
+     :DESCRIPTION: Define a regexp for matching Zsh script filenames.
+     :END:
+
+     #+NAME: rx-zsh-script
+     #+HEADER: :results value scalar
+     #+BEGIN_SRC emacs-lisp
+       (rx ".zsh" string-end)
+     #+END_SRC
+
+**** Define List of Zsh Regexps
+     :PROPERTIES:
+     :DESCRIPTION: Define a list of the regexps that match Zsh filenames.
+     :END:
+
+     #+NAME: list-regexp-zsh
+     #+BEGIN_SRC emacs-lisp :noweb no-export
+       (defconst init-unix-shell/regexps-zsh
+         (list '<<rx-zsh-dotfile()>>
+               '<<rx-zsh-script()>>)
+         "A list of regexps describing known Zsh filenames.")
+     #+END_SRC
+
+*** Deferred Binding within ~auto-mode-alist~
+    Create an alist where each element looks like ~(REGEXP . FUNCTION)~, where ~REGEXP~ is a regular expression matching a filename.
+    The elements of the alist will be added to ~auto-mode-alist~ upon loading the parent package.
+
+    #+NAME: sh-script/mode
+    #+BEGIN_SRC emacs-lisp :noweb no-export
+      ((<<rx-zsh-dotfile()>> . shell-script-mode)
+       (<<rx-zsh-script()>> . shell-script-mode))
+    #+END_SRC
+
+*** Post-Load Execution
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref sh-script/config
+    :END:
+
+**** Set Shell Type
+     First define a function that sets the shell type to Zsh when working with a Zsh file.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-unix-shell/set-shell-type ()
+         "Set the shell type based on variable `buffer-file-name'."
+         ;; Loop over the list of Zsh filenames.
+         (dolist (regexp init-unix-shell/regexps-zsh)
+           ;; If the regexp matches the name of the file the buffer is visiting...
+           (when (string-match regexp buffer-file-name)
+             ;; Then set the shell type to Zsh.
+             (sh-set-shell "zsh"))))
+     #+END_SRC
+
+    Then evaluate the function on a hook on ~shell-script-mode~.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'shell-script-mode #'init-unix-shell/config/set-shell-type)
+    #+END_SRC
+
+**** Enable flyspell
+     :PROPERTIES:
+     :DESCRIPTION: Enable flyspell for ~shell-script-mode~.
+     :END:
+
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'shell-script-mode
+                 (lambda ()
+                   (flyspell-prog-mode 1)))
+     #+END_SRC
+
+** Ending Boilerplate
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-unix-shell)
+     ;;; init-unix-shell.el ends here
+   #+END_SRC
