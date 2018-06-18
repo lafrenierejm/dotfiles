@@ -53,10 +53,7 @@
   :demand                               ; do not defer loading
 
   :straight                             ; recipe for straight.el
-  (validate :type git :host github :repo "Malabarba/validate.el")
-
-  :commands   ; commands provided by the parent package and used below
-  (validate-setq))
+  (validate :type git :host github :repo "Malabarba/validate.el"))
 
 ;;; Load Org-mode
 ;; `org-babel-tangle' is provided by the org package.
