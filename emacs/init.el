@@ -94,56 +94,13 @@
                        'visual-line-mode))
     (add-hook 'org-mode-hook minor-mode)))
 
-;;; Build the List of Files to Load
-;; 1. The given directory (passed as an argument) is searched recursively for Org mode files ("org" filename extension).
-;;    Each Org file found is added to a list.
-;; 2. For each Org file in the list, look for a corresponding Emacs Lisp file ("el" filename extension).
-;;    "Correspondence" is determined by the Org and Lisp filenames matching until the extension.
-;; 3. If the Emacs Lisp file has been modified more recently than its corresponding Org file, remove the Org file from the list.
-
-(defun init/filter (condp lst)
-  "Remove items that do not meet CONDP from LST."
-  (delq nil
-        (mapcar (lambda (x) (and (funcall condp x ) x)) lst)))
-
-(defun init/replace-file-name-extension (filename extension)
-  "Replace a FILENAME's extension with EXTENSION."
-  (if (string= "." (substring extension  0 1)) ; If user included "." in extension
-      (concat (file-name-sans-extension filename) extension)
-    (concat (file-name-sans-extension filename) "." extension)))
-
-(defun init/org/find-files-to-tangle (directory tangle-extension)
-  "Return the Org files in DIRECTORY older than corresponding files with TANGLE-EXTENSION."
-  (let ((org-files (directory-files-recursively directory "\.org$")))
-    (init/filter (lambda (org-file)
-                   (let ((tangle-file
-                          (init/replace-file-name-extension org-file tangle-extension)))
-                     (file-newer-than-file-p org-file tangle-file)))
-                 org-files)))
-
-;;; Tangle Code from config/ Recursively
-;; The bulk of my configuration is in Org files in the config/ subdirectory.
-;; Now the above functions are be employed to tangle the Emacs Lisp from the Org files.
-
-(mapcar (lambda (org-file)
-          (message "Tangling and compiling " org-file ".")
-          ;; (byte-compile-file (car (org-babel-tangle-file org-file)))
-          (org-babel-tangle-file org-file))
-        (init/org/find-files-to-tangle
-         (concat (file-name-as-directory user-emacs-directory) "config")
-         ".el"))
-
-;;; Load Compiled Emacs Lisp
-;; The previous tangling extracted all Emacs Lisp code from Org-mode files in config/.
-;; Now config/ is searched for Emacs Lisp files which have the filename extension "el".
-
 (defun init/load-directory-recursively (directory)
-  "Recurse through DIRECTORY and load all compiled Emacs Lisp files found."
-  (dolist (elisp-file (directory-files-recursively directory "^[^.]+\.el$"))
-    (load-file elisp-file)))
+  "Tangle, compile, and load the Org-mode files in DIRECTORY."
+  (dolist (org-file (directory-files-recursively directory
+                                                 (rx ".org" string-end)))
+    (org-babel-load-file org-file 'compile-before-loading)))
 
-(init/load-directory-recursively
- (concat (file-name-as-directory user-emacs-directory) "config"))
+(init/load-directory-recursively "~/.emacs.d/config/")
 
 (provide 'init)
 ;;; init.el ends here
