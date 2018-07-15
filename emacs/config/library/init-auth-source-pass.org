@@ -44,13 +44,13 @@
        <<auth-source-pass/config>>)
    #+END_SRC
 
-*** Conditional Loading
+*** Conditional Loading (~:if~)
     :PROPERTIES:
-    :DESCRIPTION: Only load the package if this condition is met
-    :noweb-ref: auth-source-pass/if
+    :DESCRIPTION: Only load ~auth-source-pass~ if this condition is met.
+    :HEADER-ARGS: :noweb-ref auth-source-pass/if
     :END:
 
-    auth-source-pass is only usable if pass is installed and =pass= is available in the user's =$PATH=.
+    ~auth-source-pass~ is only usable if =pass= is available in the user's =$PATH=.
 
     #+BEGIN_SRC emacs-lisp
       (executable-find "pass")
@@ -58,7 +58,7 @@
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: auth-source-pass/config
+    :HEADER-ARGS: :noweb-ref auth-source-pass/config
     :DESCRIPTION: Code to execute after the parent package has been loaded
     :END:
 
