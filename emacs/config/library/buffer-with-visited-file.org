@@ -20,133 +20,105 @@
 
      ;;; Code:
    #+END_SRC
-
-** Get the Buffer to Use
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (defun buffer-with-visited-file~get-buffer (&optional buffer)
-       "Get the buffer to use.
-
-     If BUFFER is nil, use the current buffer.
-     Else if BUFFER is a string, use that string as the name of the buffer.
-     Else throw an error."
-       (cond
-        ;; Else if no BUFFER was provided...
-        ((not buffer)
-         ;; Return the current buffer.
-         (get-buffer (buffer-name)))
-        ;; Else if BUFFER is an editor buffer...
-        ((bufferp buffer)
-         ;; Return BUFFER as-is.
-         buffer)
-        ;; Else if BUFFER is a string...
-        ((stringp buffer)
-         ;; Return the corresponding buffer object.
-         (get-buffer buffer))
-        ;; Else...
-        (t
-         ;; Throw an error.
-         (error "Invalid BUFFER argument %s of type %s passed"
-                buffer
-                (type-of buffer)))))
+** Required Packages
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 's)
    #+END_SRC
+** Get Arguments for Interactive Call
+*** Get a Buffer to Use
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun buffer-with-visited-file~obj-to-buffer (&optional buffer)
+	"Get the buffer to use.
 
+      If BUFFER is nil, use the current buffer.
+      Else if BUFFER is a string, use that string as the name of the buffer.
+      Else throw an error."
+	(cond
+         ;; Else if no BUFFER was provided...
+         ((not buffer)
+          ;; Return the current buffer.
+          (get-buffer (buffer-name)))
+         ;; Else if BUFFER is an editor buffer...
+         ((bufferp buffer)
+          ;; Return BUFFER as-is.
+          buffer)
+         ;; Else if BUFFER is a string...
+         ((stringp buffer)
+          ;; Return the corresponding buffer object.
+          (get-buffer buffer))
+         ;; Else...
+         (t
+          ;; Throw an error.
+          (error "Invalid BUFFER argument %s of type %s passed"
+                 buffer
+                 (type-of buffer)))))
+    #+END_SRC
+*** Buffer to Rename
+    If called as part of an interactive function with a prefix argument, prompt the user to provide a buffer.
+    Otherwise use the current buffer.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun buffer-with-visited-file~get-buffer (verb)
+	(if current-prefix-arg
+	    (get-buffer (read-buffer (format "Buffer to %s with visiting file: "
+					     (s-downcase verb))
+	  (get-buffer (buffer-name))))))
+    #+END_SRC
+*** New File Name
+    The user shall be prompted for the new file path.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun buffer-with-visited-file~read-file-name (verb buffer-name)
+	"Prompt the user for the destination of applying VERB to BUFFER-NAME's visiting file."
+	(read-file-name (format "%s the file visited by buffer %s to: "
+				(s-capitalize verb)
+				buffer-name)))
+    #+END_SRC
 ** Rename
 *** Define Function
     :PROPERTIES:
     :DESCRIPTION: Rename a buffer and its visited file, if any.
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (defun buffer-with-visited-file/rename (new-file-name &optional buffer ok-if-already-exists)
-       	"Rename the file a buffer is visiting, if any, to NEW-FILE-NAME and rename the buffer accordingly.
+	"Rename a buffer and the file it's visiting, if any, to NEW-FILE-NAME.
 
       If BUFFER is not provided, use the current buffer.
       If BUFFER is a string, use that string as the name of the buffer to rename.
       If BUFFER is a buffer object, use it as the subject of the rename.
 
       OK-IF-ALREADY-EXISTS is passed directly to `rename-file'."
-       	;; If called interactively...
-       	(interactive (let* ((buffer
-                             <<rename/interactive/buffer>>)
-                            (new-file-name
-                             ;; Read the new filename.
-                             <<rename/interactive/new-file-name>>))
-                       (list new-file-name buffer)))
-       	(let* ((buffer (buffer-with-visited-file~get-buffer buffer))
-               (file (buffer-file-name buffer))
-               (orig-buffer-name (buffer-name buffer))
-               (new-buffer-name nil))
-          (cond
-           ;; If FILE is tracked in VC...
-           ((vc-backend file)
-            ;; Rename FILE through VC.
-            (vc-rename-file file new-file-name))
-           ;; Else if FILE exists...
-           ((file-exists-p file)
-            <<rename/non-vc>>))
-          ;; Rename BUFFER, using `generate-new-buffer-name' if necessary.
-          ;; Record the name actually assigned.
-          (setq new-buffer-name (rename-buffer new-file-name t))
-          (set-visited-file-name new-file-name t t)
-          (message "Renamed buffer %s to %s and its file to %s."
-                   orig-buffer-name new-buffer-name
-                   new-file-name)))
+	;; If called interactively...
+	(interactive (let* ((buffer (buffer-with-visited-file~get-buffer "rename"))
+			    (new-file-name
+			     (buffer-with-visited-file~read-file-name "rename"
+								      (buffer-name buffer)))
+			    (ok-if-already-exists 1)) ; Request confirmation before overwrite.
+		       (list new-file-name buffer ok-if-already-exists)))
+	(let* ((buffer (buffer-with-visited-file~obj-to-buffer buffer))
+	       (file (buffer-file-name buffer))
+	       (orig-buffer-name (buffer-name buffer))
+	       (new-buffer-name nil))
+	  (cond
+	   ;; If FILE is tracked in VC...
+	   ((vc-backend file)
+	    ;; Rename FILE through VC.
+	    (vc-rename-file file new-file-name))
+	   ;; Else if FILE exists at all...
+	   ((file-exists-p file)
+	    ;; Rename FILE normally.
+	    (rename-file file new-file-name ok-if-already-exists)))
+	  ;; Rename BUFFER, using `generate-new-buffer-name' if necessary.
+	  ;; Record the name actually assigned.
+	  (setq new-buffer-name (rename-buffer new-file-name t))
+	  (set-visited-file-name new-file-name t t)
+	  (message "Renamed buffer %s to %s and its file to %s."
+		   orig-buffer-name new-buffer-name
+		   new-file-name)))
     #+END_SRC
-
-**** Get Arguments Interactively
-***** Buffer to Rename
-      If the function was called with a prefix argument, the user shall be prompted to choose which buffer to rename.
-
-      #+BEGIN_SRC emacs-lisp :noweb-ref rename/interactive/buffer-choose
-       	(get-buffer (read-buffer "Buffer whose file to rename: "))
-      #+END_SRC
-
-      Otherwise (for non-prefixed calls) the current buffer shall be used.
-
-      #+BEGIN_SRC emacs-lisp :noweb-ref rename/interactive/buffer-default
-       	(get-buffer (buffer-name))
-      #+END_SRC
-
-      The resulting ~if~ function:
-
-      #+BEGIN_SRC emacs-lisp :noweb-ref rename/interactive/buffer :noweb no-export
-       	(if current-prefix-arg
-            <<rename/interactive/buffer-choose>>
-          <<rename/interactive/buffer-default>>)
-      #+END_SRC
-
-***** New File Name
-      The function shall prompt for the new file name.
-
-      #+BEGIN_SRC emacs-lisp :noweb-ref rename/interactive/new-file-name
-       	(read-file-name (format "Rename the file visited by buffer %s to: "
-                               	(buffer-name buffer)))
-      #+END_SRC
-
-**** Rename Outside of VC
-     If the function was called interactively, the user shall be prompted before renaming the file over an existing file.
-     This reflects the behavior of ~rename-file~ when called interactively directly.
-
-     #+BEGIN_SRC emacs-lisp :noweb-ref rename/non-vc/interactive
-       (rename-file file new-file-name 1)
-     #+END_SRC
-
-     Otherwise (for non-interactive calls), the value of the optional ~ok-if-already-exists~ argument shall be passed directly to ~rename-file~.
-
-     #+BEGIN_SRC emacs-lisp :noweb-ref rename/non-vc/non-interactive
-       (rename-file file new-file-name ok-if-already-exists)
-     #+END_SRC
-
-     The resulting ~if~ function uses the value of ~real-this-command~ to determine whether or not the function was called interactively.
-
-     #+BEGIN_SRC emacs-lisp :noweb-ref rename/non-vc :noweb no-export
-       (if (equal real-this-command 'buffer-with-visited-file/rename)
-           <<rename/non-vc/interactive>>
-         <<rename/non-vc/non-interactive>>)
-     #+END_SRC
-
 *** Bind Function
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (global-set-key (kbd "C-x C-r") #'buffer-with-visited-file/rename)
     #+END_SRC
 
@@ -158,48 +130,42 @@
 
     #+BEGIN_SRC emacs-lisp :tangle yes
       (defun buffer-with-visited-file/delete (&optional buffer)
-       	"Delete the file a buffer is visiting, if any, then kill the buffer.
+	"Delete the file a buffer is visiting, if any, then kill the buffer.
 
       If no optional BUFFER is provided, use the current buffer.
       If the optional BUFFER is a string, use that string as the name of the buffer to use.
       If the optional BUFFER is a symbol, prompt the user for the name of the buffer to use."
-       	;; If called interactively...
-       	(interactive (list
-                      ;; If called with a prefix argument...
-                      (if current-prefix-arg
-                          ;; Prompt the user for the buffer.
-                          (get-buffer (read-buffer "Buffer to delete: "))
-                       	;; Else use the current buffer.
-                       	nil)))
-       	(let* ((buffer (buffer-with-visited-file~get-buffer buffer))
-               (file (buffer-file-name buffer)))
-          (when file
-            (cond
-             ;; If FILE is tracked in VC, delete it through VC.
-             ((vc-backend file)
-              (vc-delete-file file))
-             ;; Else if FILE exists, delete it normally.
-             ((file-exists-p file)
-              (delete-file file 'trash)))
-            (message "Deleted file %s" file))
-          (kill-buffer buffer)))
+	;; If called interactively...
+	(interactive (list (buffer-with-visited-file~get-buffer "delete")))
+	(let* ((buffer (buffer-with-visited-file~obj-to-buffer buffer))
+	       (file (buffer-file-name buffer)))
+	  (when file
+	    (cond
+	     ;; If FILE is tracked in VC, delete it through VC.
+	     ((vc-backend file)
+	      (vc-delete-file file))
+	     ;; Else if FILE exists, delete it normally.
+	     ((file-exists-p file)
+	      (delete-file file 'trash)))
+	    (message "Deleted file %s" file))
+	  (kill-buffer buffer)))
     #+END_SRC
 
 *** Bind Function
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (global-set-key (kbd "C-x C-d") #'buffer-with-visited-file/delete)
     #+END_SRC
 
 ** Copy
 *** Define Copy Function
-    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (defun buffer-with-visited-file/copy (new-file-name &optional
-                                                          buffer
-                                                          overwrite-existing-file
-                                                          keep-time
-                                                          preserve-uid-gid
-                                                          perserve-permissions)
-       	"Copy the file a buffer is visiting, if any, to NEW-FILE-NAME and open the copy in a new buffer.
+							  buffer
+							  overwrite-existing-file
+							  keep-time
+							  preserve-uid-gid
+							  perserve-permissions)
+	"Copy the file a buffer is visiting, if any, to NEW-FILE-NAME and open the copy in a new buffer.
 
       If BUFFER is not provided, use the current buffer.
       If BUFFER is a string, use that string as the name of the buffer to rename.
@@ -210,31 +176,31 @@
       Signals a 'file-already-exists' error if new NEW-FILE-NAME already exists and OVERWRITE-EXISTING-FILE is nil.
 
       KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS are passed directly to `copy-file' as KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS, respectively."
-       	;; If called interactively...
-       	(interactive (let* ((buffer
-                             <<rename/interactive/buffer>>)
-                            (new-file-name
-                             ;; Read the new filename.
-                             <<rename/interactive/new-file-name>>))
-                       (list new-file-name buffer)))
-       	(let* ((buffer (buffer-with-visited-file~get-buffer buffer))
-               (file (buffer-file-name buffer))
-               (new-buffer-name (buffer-name buffer)))
-          (if (not (file-exists-p file))
-              (write-file new-file-name overwrite-existing-file)
-            (copy-file file
-                       new-file-name
-                       overwrite-existing-file
-                       keep-time
-                       preserve-uid-gid
-                       perserve-permissions)
-            (setq new-buffer-name (buffer-name (find-file-noselect new-file-name))))
-          (message "Wrote buffer %s as %s and opened the new file as %s."
-                   (buffer-name buffer) new-file-name new-buffer-name)))
+	;; If called interactively...
+	(interactive (let* ((buffer (buffer-with-visited-file~get-buffer "copy"))
+			    (new-file-name
+			     (buffer-with-visited-file~read-file-name "copy"
+								      (buffer-name buffer)))
+			    (overwrite-existing-file 1)) ; Request confirmation before overwrite.
+		       (list new-file-name buffer overwrite-existing-file)))
+	(let* ((buffer (buffer-with-visited-file~obj-to-buffer buffer))
+	       (file (buffer-file-name buffer))
+	       (new-buffer-name (buffer-name buffer)))
+	  (if (not (file-exists-p file))
+	      (write-file new-file-name overwrite-existing-file)
+	    (copy-file file
+		       new-file-name
+		       overwrite-existing-file
+		       keep-time
+		       preserve-uid-gid
+		       perserve-permissions)
+	    (setq new-buffer-name (buffer-name (find-file-noselect new-file-name))))
+	  (message "Wrote buffer %s as %s and opened the new file as %s."
+		   (buffer-name buffer) new-file-name new-buffer-name)))
     #+END_SRC
 
 *** Bind Function
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (global-set-key (kbd "C-x C-c") #'buffer-with-visited-file/copy)
     #+END_SRC
 
