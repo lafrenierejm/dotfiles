@@ -25,56 +25,209 @@
 
 ** Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'evil)
      (require 'use-package)
+     (require 'validate)
    #+END_SRC
 
-** Load [[https://github.com/Somelauw/evil-org-mode][evil-org]]
-    evil-org is a minor mode to add Evil keybindings for Org-mode.
-
+** Load ~org~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package org
+       ;; Load `org' after the following packages.
+       :after (validate)
+
+       ;; Evaluate the following sexps after loading `org'.
+       :config
+       <<org/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref org/config
+    :END:
+    Edit source blocks in the current window.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq org-src-window-setup 'current-window)
+    #+END_SRC
+
+    Settings.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq org-highlight-latex-and-related '(latex)
+                     org-return-follows-link t
+                     org-src-fontify-natively t
+                     org-confirm-babel-evaluate nil)
+    #+END_SRC
+
+    Set the workflow states.
+    Unfortunately, [[https://github.com/Malabarba/validate.el/issues/5][an issue]] with ~validate~ prevents using ~validate-setq~ to set the states.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
+                                          "DELEGATED" "DONE(d!/!)" "|"
+                                          "CANCELED")))
+    #+END_SRC
+
+    Enable minor modes in all ~org~ buffers.
+
+    #+BEGIN_SRC emacs-lisp
+      (dolist (minor-mode (list
+                           'flyspell-mode
+                           'visual-line-mode))
+        (add-hook 'org-mode-hook minor-mode))
+    #+END_SRC
+
+** Load ~ox~
+   ~ox~ (short for Org eXport) allows exporting (publishing) Org-mode documents such as this one.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package ox
+       ;; `ox' is included in `org'.
+       :ensure org
+
+       ;; Load `ox' after the following packages.
+       :after (validate)
+
+       ;; Evlauate the following sexps after loading `ox'.
+       <<ox/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ox/config
+    :END:
+
+    Allow =BIND= keywords to define local variable values at the time of export.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq org-export-allow-bind-keywords t)
+    #+END_SRC
+
+** Load ~ox-latex~
+   ~ox-latex~ is a library used by ~ox~ that provides exporting to TeX.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package ox-latex
+       ;; `ox-latex' is included in `org'.
+       :ensure org
+
+       ;; Load `ox' after the following packages.
+       :after (validate)
+
+       ;; Evaluate the following sexps after loading `ox'.
+       :config
+       <<ox-latex/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ox-latex/config
+    :END:
+    Use the =listings= LaTeX package to typeset source code.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq org-latex-listings t)
+    #+END_SRC
+
+    Use =latexmk= with a LuaLaTeX backend to compile TeX exports if =latexmk= and its runtime dependencies are installed.
+
+    #+BEGIN_SRC emacs-lisp
+      (when (and (executable-find "latexmk")
+                 (executable-find "perl"))
+        (validate-setq org-latex-pdf-process '("latexmk -lualatex -f %f")))
+    #+END_SRC
+
+** Load ~ob-prolog~
+   ~[[https://github.com/ljos/ob-prolog][ob-prolog]]~ by Bjarte Johansen (ljos) <[[mailto:Bjarte.Johansen@gmail.com][Bjarte.Johansen@gmail.com]]> as Org-babel support for Prolog.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package ob-prolog
+       ;; Download from MELPA.
+       :pin melpa
+
+       ;; Only load `ob-prolog' if the following sexp's Boolean evaulation is t.
+       :if
+       <<ob-prolog/if>>
+
+       ;; Evaluate the following sexps after loading `ob-prolog'.
+       :config
+       <<ob-prolog/config>>)
+   #+END_SRC
+
+*** Conditional Loading (~:if~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ob-prolog/if
+    :DESCRIPTION: Only load ~ob-prolog~ if this condition is met.
+    :END:
+
+    Adding Babel support for Prolog is useless unless a Prolog interpreter is available on the user's =$PATH=.
+    Thus far, the only Prolog interpreter I have used is =swipl=.
+
+    #+BEGIN_SRC emacs-lisp
+      (executable-find "swipl")
+    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ob-prolog/config
+    :DESCRIPTION: Code to be executed after ob-prolog has been loaded.
+    :END:
+
+    Add Prolog to the list of languages available to Babel.
+
+    #+BEGIN_SRC emacs-lisp
+      (org-babel-do-load-languages 'org-babel-load-languages
+                                   '((prolog .t )))
+    #+END_SRC
+
+** Load [[https://github.com/Somelauw/evil-org-mode][evil-org]]
+    ~evil-org~ provides a minor mode to add Evil keybindings for Org-mode.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package evil-org
-       :after        ; load the parent package after the following packages
-       (evil org validate)
+       ;; Load `evil-org' after the following packages.
+       :after (validate)
 
-       :diminish                  ; hide the following text in the modeline
-       evil-org-mode
+       ;; Hide the following text in the modeline.
+       :diminish evil-org-mode
 
-       :defines
-       (evil-org-key-theme
-	evil-org-mode-hook)
-
-       :hook             ; hooks are added according to the following alist
-       ((org-mode) . evil-org-mode)
-
-       :config   ; code to execute after the parent package has been loaded
+       ;; Evaluate the following sexps after loading `evil-org'.
+       :config
        <<evil-org/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :NOWEB-ref: evil-org/config
+    :HEADER-ARGS: :noweb-ref evil-org/config
     :END:
-
-    Choose the key themes to enable.
+    Choose the keybinding themes to enable.
 
     #+BEGIN_SRC emacs-lisp
       (setf evil-org-key-theme '(calendar
-				 navigation
-				 insert
-				 return
-				 textobjects))
+                                 navigation
+                                 insert
+                                 return
+                                 textobjects))
     #+END_SRC
 
-    Add a hook to enable the above key themes.
+    Enable the above keybinding themes.
 
     #+BEGIN_SRC emacs-lisp
-      (add-hook 'evil-org-mode-hook 'evil-org-set-key-theme)
+      ;; (add-hook 'evil-org-mode-hook #'evil-org-set-key-theme)
+      (evil-org-set-key-theme)
     #+END_SRC
 
-    Retain selection after =<= or =>= in visual state.
+    Retain selection after typing =<= or =>= in visual state.
 
     #+BEGIN_SRC emacs-lisp
       (validate-setq evil-org-retain-visual-state-on-shift t)
+    #+END_SRC
+
+    Enable ~evil-org~ in all ~org~ buffers.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'org-mode-hook #'evil-org-mode)
     #+END_SRC
 
 ** Ending Boilerplate
