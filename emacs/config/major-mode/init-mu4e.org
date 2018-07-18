@@ -27,17 +27,14 @@
      (require 'use-package)
    #+END_SRC
 
-** Load mu4e
+** Load ~mu4e~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package mu4e
-       ;; Do not defer loading.
-       :demand
+       ;; mu4e is included with the binary package mu, so do not attempt to download mu4e directly.
+       :ensure nil
 
-       ;; Do not download using straight.el
-       :straight nil
-
-       ;; Load the parent package after the following packages.
-       :after (anaphora flyspell ispell s validate)
+       ;; Load `mu4e' after the following packages.
+       :after (flyspell ispell s validate)
 
        ;; Add keybindings according to the following alist.
        :bind
@@ -46,14 +43,14 @@
        ;; Add the following directories to `load-path'.
        :load-path ("site-lisp/mu4e")
 
-       ;; Execute the following code after loading the package.
+       ;; Evaluate the following code after loading `mu4e'.
        :config
        <<mu4e/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :noweb-ref: mu4e/config
+    :HEADER-ARGS: :noweb-ref mu4e/config
     :END:
 
 **** Fetching and Indexing Mail
@@ -123,32 +120,23 @@
        (setq mu4e-headers-default-prefix '("-" . "─"))
      #+END_SRC
 
-***** Monokai
-      Customize colors and faces when using the monokai theme.
-
-      #+BEGIN_SRC emacs-lisp
-        (custom-theme-set-faces
-         'monokai
-         '(mu4e-unread-face ((t)))
-         '(mu4e-header-highlight-face ((t :underline nil))))
-      #+END_SRC
-
 **** Mail Directory
      Set the path to my mail directory.
 
      #+BEGIN_SRC emacs-lisp
-       (awhen (getenv "MAILDIR")
-	 (validate-setq mu4e-maildir it))
+       (let ((maildir (getenv "MAILDIR")))
+	 (when maildir
+	   (validate-setq mu4e-maildir maildir)))
      #+END_SRC
 
 **** Sending Mail
      Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
 
      #+BEGIN_SRC emacs-lisp :noweb yes
-       (acond ((executable-find "msmtp")
-	       <<mu4e/config/sending/msmtp>>)
-	      (t
-	       <<mu4e/config/sending/smtpmail-send-it>>))
+       (cond ((executable-find "msmtp")
+	      <<mu4e/config/sending/msmtp>>)
+	     (t
+	      <<mu4e/config/sending/smtpmail-send-it>>))
      #+END_SRC
 
      Use the value from the mail's header as the FROM field.
@@ -163,19 +151,17 @@
        (validate-setq message-kill-buffer-on-exit t)
      #+END_SRC
 
-***** msmtp Configuration
+***** =msmtp= Configuration
       :PROPERTIES:
-      :noweb-ref: mu4e/config/sending/msmtp
+      :HEADER-ARGS: :noweb-ref mu4e/config/sending/msmtp
       :END:
 
-      Provide settings for using =msmtp= to send mail.
-      ~it~ is inherited from the reference of this expression in an ~acond~'s body;
-      the value of ~it~ will be the full path to the =msmtp= executable.
+      Use =msmtp= as the sender.
 
       #+BEGIN_SRC emacs-lisp
 	(validate-setq
-	 message-send-mail-function 'message-send-mail-with-sendmail
-	 sendmail-program it)
+	 sendmail-program (executable-find "msmtp")
+	 message-send-mail-function #'message-send-mail-with-sendmail)
       #+END_SRC
 
       Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
@@ -189,12 +175,13 @@
 		  (s-replace "@" "." (mu4e-context-name (mu4e-context-current)))))
 	     (validate-setq
 	      message-sendmail-extra-arguments (list '"-a" account-name)))))
-       (add-hook 'message-send-mail-hook 'init-mu4e/choose-msmtp-account)
+       (add-hook 'message-send-mail-hook #'init-mu4e/choose-msmtp-account)
      #+END_SRC
 
 ***** ~smtpmail-send-it~ Configuration
       :PROPERTIES:
-      :noweb-ref: mu4e/config/sending/smtpmail-send-it
+      :HEADER-ARGS: :noweb-ref mu4e/config/sending/smtpmail-send-it
+      :HEADER-ARGS: :tangle no
       :END:
 
       Provide settings for using ~smtpmail-send-it~ to send mail.
@@ -211,7 +198,6 @@
 
 **** Multiple Accounts
      #+BEGIN_SRC emacs-lisp
-       ;; Configure mu4e for multiple accounts.
        (validate-setq
 	mu4e-contexts `( ,(make-mu4e-context
 			   ;; Name of the context
@@ -240,9 +226,7 @@
 			   ;; Name of the context
 			   :name "xyz.lafreniere@joseph"
 			   ;; alist of variables to set for this context.
-			   :vars '(
-				   ;; From
-				   (user-full-name . "LaFreniere, Joseph")
+			   :vars '((user-full-name . "LaFreniere, Joseph")
 				   (user-mail-address . "joseph@lafreniere.xyz")
 				   ;; Signature
 				   (mu4e-compose-signature-auto-include . t)
@@ -260,6 +244,29 @@
 					 (when msg
 					   (mu4e-message-field msg :maildir)
 					   (string-prefix-p "/xyz.lafreniere.joseph"
+							    (mu4e-message-field msg :maildir)))))
+			 ,(make-mu4e-context
+			   ;; Name of the context
+			   :name "com.gmail@lafrenierejm"
+			   ;; alist of variables to set for this context.
+			   :vars '((user-full-name . "LaFreniere, Joseph")
+				   (user-mail-address . "lafrenierejm@gmail.com")
+				   ;; Signature
+				   (mu4e-compose-signature-auto-include . t)
+				   (mu4e-compose-signature . "Joseph LaFreniere")
+				   ;; SMTP
+				   (smtpmail-smtp-server . "smtp.gmail.com") ; hostname
+				   (smtpmail-smtp-user . "lafrenierejm@gmail.com") ; username
+				   ;; Folders
+				   (mu4e-archive-folder . "/com.gmail.lafrenierejm/archive")
+				   (mu4e-drafts-folder . "/com.gmail.lafrenierejm/draft")
+				   (mu4e-sent-folder .  "/com.gmail.lafrenierejm/sent")
+				   (mu4e-trash-folder . "/com.gmail.lafrenierejm/trash"))
+			   ;; =match-func= returns true when the passed message matches this context.
+			   :match-func (lambda (msg)
+					 (when msg
+					   (mu4e-message-field msg :maildir)
+					   (string-prefix-p "/com.gmail.lafrenierejm"
 							    (mu4e-message-field msg :maildir)))))
 			 ,(make-mu4e-context
 			   ;; Name of the context
@@ -341,6 +348,7 @@
      #+BEGIN_SRC emacs-lisp
        ;; Show trailing whitespace in the current buffer.
        (defun init-mu4e/show-trailing-whitespace ()
+	 "Highlight trailing whitespace with face `trailing-whitespace'."
 	 (validate-setq show-trailing-whitespace t))
        (add-hook 'mu4e-compose-mode-hook #'init-mu4e/show-trailing-whitespace)
      #+END_SRC
@@ -349,22 +357,18 @@
 
      #+BEGIN_SRC emacs-lisp
        (defun init-mu4e/enable-flyspell-mode ()
+         "Enable `flyspell-mode'."
          (flyspell-mode 1))
        (when ispell-program-name
          (add-hook 'mu4e-compose-mode-hook #'init-mu4e/enable-flyspell-mode))
      #+END_SRC
 
-** Load evil-mu4e
+** Load ~evil-mu4e~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-mu4e
-       :demand                      ; do not defer loading
-
-       :after        ; load the parent package after the following packages
-       (evil mu4e)
-
        :config
        ;; Mark messages for a later action.
-       (evil-define-key 'motion mu4e-headers-mode-map "*" 'mu4e-headers-mark-for-something))
+       (evil-define-key 'motion mu4e-headers-mode-map "*" #'mu4e-headers-mark-for-something))
    #+END_SRC
 
 ** Attachment Reminders
