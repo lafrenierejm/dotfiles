@@ -30,21 +30,21 @@
 ** Load vc
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package vc
-       ;; Do not download with straight.
-       :straight nil
+       ;; `vc' is included in Emacs, so it does not need to be downloaded.
+       :ensure nil
 
-       ;; Do not load the package lazily.
+       ;; Load `vc' eagerly.
        :demand
 
-       ;; Execute the following code after the package has been loaded.
+       ;; Evaluate the following code after loading `vc'.
        :config
        <<vc/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :noweb-ref: vc/config
-    :DESCRIPTION: Code to be executed after vc has been loaded.
+    :DESCRIPTION: Code to be evaluated after ~vc~ has been loaded.
+    :HEADER-ARGS: :noweb-ref vc/config
     :END:
 
     If attempting to edit a version controlled file through a symlink, follow the link and visit the real file.
