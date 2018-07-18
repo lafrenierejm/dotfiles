@@ -27,32 +27,52 @@
      (require 'use-package)
    #+END_SRC
 
-** Load Magit with =use-package=
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Load ~magit~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package magit
-       :demand
+       ;; Only load `magit' if the following sexp's Boolean evaulation is t.
+       :if
+       <<magit/if>>
 
-       :commands   ; commands provided by the parent package and used below
-       (magit-dispatch-popup
-        magit-status)
+       ;; Load `magit' after the following packages.
+       :after (validate)
 
-       :bind                                ; add the following keybindings
-       (("C-x g" . magit-status)
-        ("C-x M-g" . magit-dispatch-popup))
+       ;; Add the following keybindings.
+       :bind
+       ("C-x g" . magit-status)
 
-       :init
-       ;; Suppress the message about `magit-auto-revert-mode'.
-       (setq magit-no-message '("Turning on magit-auto-revert-mode..."))
-
-       :config   ; code to execute after the parent package has been loaded
-       <<magit-config>>)
+       ;; Evaluate the following code after loading `magit'.
+       :config
+       <<magit/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Conditional Loading (~:if~)
     :PROPERTIES:
-    :noweb-ref: magit-config
+    :DESCRIPTION: Only load ~magit~ if this code evaluates to non-~nil~.
+    :HEADER-ARGS: :noweb-ref magit/if
     :END:
 
+    ~magit~ is an interface for Git.
+    As such, it is worthless if =git= is not in the user's ~$PATH~.
+
+    #+BEGIN_SRC emacs-lisp
+      (executable-find "git")
+    #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref magit/config
+    :DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
+    :END:
+
+**** Suppress Messages
+    Suppress the message about ~magit-auto-revert-mode~.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq magit-no-message '("Turning on magit-auto-revert-mode..."))
+    #+END_SRC
+
+**** Return After Commit
     Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
 
     #+BEGIN_SRC emacs-lisp
@@ -64,40 +84,24 @@
         (delete-window))
     #+END_SRC
 
+**** Comparable Version Number
+     The function ~magit-version~ provided by Magit does not return a version string that is comparable using Emacs's built-in ~version<~.
+     However, Magit's semver is /par/ of the string returned by ~magit-version~;
+     it is everything before the first hyphen.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-magit/version ()
+         "Return Magit's version for use in comparisons."
+         (car (split-string (magit-version) "-")))
+     #+END_SRC
+
 **** Add a Section for Ignored Files
      It is sometimes useful to be able to add ignored files (those that match a rule in =.gitignore=).
-     To this end, a new "Ignored files" section will be added to Magit's main status buffer.
-     The following code is derived from [[https://emacs.stackexchange.com/a/28506/17396][this answer]] by [[https://emacs.stackexchange.com/users/3889/xuchunyang][xuchunyang]] on emacs.stackexchange.com
-     As such, it is licensed under CC BY-SA 3.0.
-
-     Create a function to add get a list of the ignored files.
-     Each argument to =magit-git-items= will be passed as an argument to =git=.
+     To this end, a new section adding ignored files will be added to Magit's main status buffer.
+     Starting in release 2.12.2, Magit includes a built-in function to add such a section
 
      #+BEGIN_SRC emacs-lisp
-       (defun init-magit/ignored-files ()
-         (magit-git-items "ls-files"
-                          "--others"
-                          "--ignored"
-                          "--exclude-standard"
-                          "-z"
-                          "--directory"))
-     #+END_SRC
-
-     Create a function to add the "Ignored files" section in the status buffer.
-
-     #+BEGIN_SRC emacs-lisp
-       (defun init-magit/insert-ignored-files ()
-         (awhen (init-magit/ignored-files)
-           (magit-insert-section (ignored)
-             (magit-insert-heading "Ignored files")
-             (magit-insert-un/tracked-files-1 it nil)
-             (insert ?\n))))
-     #+END_SRC
-
-     Add the above function to =magit-status-sections-hook=.
-
-     #+BEGIN_SRC emacs-lisp
-       (add-to-list 'magit-status-sections-hook 'init-magit/insert-ignored-files 'append)
+       (push #'magit-insert-ignored-files magit-status-sections-hook)
      #+END_SRC
 
 ** Load magithub
@@ -105,10 +109,7 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package magithub
-       ;; Load the parent package after the following packages.
-       :after (magit validate)
-
-       ;; Execute the following code after the package has been loaded.
+       ;; Execute the following code after loading `magithub'.
        :config
        (magithub-feature-autoinject t))
    #+END_SRC
@@ -118,21 +119,16 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-magit
-       :demand                               ; do not defer loading
+       :after (validate)
 
-       :after        ; load the parent package after the following packages
-       (evil magit)
-
-       :defines   ; variables provided by the parent package and used below
-       (evil-magit-want-horizontal-movement)
-
-       :init            ; code to execute before loading the parent package
-       ;; Enable Evil's horizontal movement in evil-magit's keybindings.
+       ;; Evaluate the following code after loading `evil-magit'.
+       :config
+       ;; Start `evil-magit' in the motion state.
+       (validate-setq evil-magit-state 'motion)
+       ;; Enable Evil's horizontal movement in magit buffers.
        (setq evil-magit-want-horizontal-movement t)
-
-       :config   ; code to execute after the parent package has been loaded
        ;; Ensure that Evil is enabled in Magit buffers.
-       (add-hook 'magit-mode-hook 'evil-local-mode))
+       (add-hook 'magit-mode-hook #'evil-local-mode))
    #+END_SRC
 
 ** Ending Boilerplate
