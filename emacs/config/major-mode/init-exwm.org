@@ -38,11 +38,10 @@
        <<exwm/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :noweb-ref: exwm/config
+    :HEADER-ARGS: :noweb-ref exwm/config
     :END:
-
     Only enable a single workspace.
     Buffer switching with [[https://github.com/abo-abo/swiper][Ivy]] is preferred to using multiple workspaces.
 
@@ -116,7 +115,7 @@
        (exwm-input-set-key (kbd "M-d") 'init-exwm/start-process)
        ;; Open Eshell in the current directory.
        (exwm-input-set-key (kbd "C-z") 'init-eshell/here)
-     #+END_SRC emacs-lisp
+     #+END_SRC
 
      Launching applications is performed by calling =start-process-shell-command=.
 
