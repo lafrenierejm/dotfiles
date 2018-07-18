@@ -59,7 +59,7 @@
     Enable ws-butler globally.
 
     #+BEGIN_SRC emacs-lisp
-      (ws-butler-global-mode 1)
+      (ws-butler-global-mode)
     #+END_SRC
 
 ** Ending Boilerplate						   :noexport:
