@@ -27,28 +27,52 @@
      (require 'use-package)
    #+END_SRC
 
+** Load ~flyspell~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package flyspell
+       :hook
+       ((prog-mode) . flyspell-prog-mode))
+   #+END_SRC
+
 ** Load International Ispell
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ispell
-       ;; Do not download with straight.
-       :straight nil
+       ;; `ispell' is included in Emacs, so it does not need to be downloaded.
+       :ensure nil
 
-       ;; Do not load the package lazily.
+       ;; Only load `ispell' if the Boolean evaluation of the following code is t.
+       :if
+       <<ispell/if>>
+
+       ;; Load `ispell' eagerly.
        :demand
 
-       ;; Execute the following code after the package has been loaded.
+       ;; Evaluate the following code after loading `ispell'.
        :config
        <<ispell/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Conditional Loading (~:if~)
     :PROPERTIES:
-    :NOWEB-REF: ispell/config
-    :DESCRIPTION: Code to be executed after ispell has been loaded.
+    :HEADER-ARGS: :noweb-ref ispell/if
+    :DESCRIPTION: Define condition for loading ~ispell~.
+    :END:
+
+    ~ispell~ provides interfaces for third-party spellchecking binaries.
+    If no such binaries exist, ~ispell~ does not need to be downloaded.
+
+    #+BEGIN_SRC emacs-lisp
+      (executable-find "aspell")
+    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ispell/config
+    :DESCRIPTION: Code to be evaluated after ~ispell~ has been loaded.
     :END:
 
     Set the executable to use for spellchecking.
-    If =aspell= is not available, disable ispell.
+    If =aspell= is not available, disable ~ispell~.
 
     #+BEGIN_SRC emacs-lisp
       (cond
