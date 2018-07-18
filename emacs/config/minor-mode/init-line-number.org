@@ -15,8 +15,6 @@
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no :noweb yes
      ;;; init-linum-mode.el --- Configuration for linum-mode
      ;;
-     ;; <<copyright>>
-     ;;
      ;;; Commentary:
      ;; This file is tangled from init-linum-mode.org.
      ;; Changes made here will be overwritten by changes to that Org file.
@@ -30,17 +28,17 @@
      (require 'validate)
    #+END_SRC
 
-** Load linum-mode for Version < 26
+** Load ~linum-mode~ for Version < 26
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package linum-mode
-       ;; Only load linum-mode if the following condition is met.
+       ;; Only load `linum-mode' if the following condition is met.
        :if
        <<linum-mode/if>>
 
        ;; Do not download.
        :ensure nil
 
-       ;; Enable linum-mode via hooks.
+       ;; Enable `linum-mode' via hooks.
        :hook
        <<linum-mode/hook>>)
    #+END_SRC
@@ -61,14 +59,15 @@
 *** Enabling via Hooks (~:hook~)
     :PROPERTIES:
     :DESCRIPTION: Add hooks to enable ~linum-mode~.
+    :HEADER-ARGS: :noweb-ref linum-mode/hook
     :END:
 
     ~use-package~ provides the ~:hook~ keyword for succinctly adding functions onto hooks.
     One valid syntax for the ~:hook~ specifier is a list of modes to which the package being loaded will be hooked.
 
-    #+NAME: linum-mode/hook
+    #+NAME: modes-to-hook
     #+BEGIN_SRC emacs-lisp
-      (prog-mode TeX-mode)
+      (prog-mode)
     #+END_SRC
 
 ** Load ~display-line-numbers~ for Version >= 26.1
@@ -109,13 +108,13 @@
 *** Enabling via Hooks (~:hook~)
     :PROPERTIES:
     :DESCRIPTION: Add hooks to enable ~display-line-numbers~.
+    :HEADER-ARGS: :noweb-ref display-line-numbers/hook
     :END:
 
-    ~display-line-numbers-mode~ shall be active in all of the same buffers as ~linum-mode~.
+    ~display-line-numbers-mode~ shall be active in all ~prog-mode~-derived buffers.
 
-    #+NAME: display-line-numbers/hook
     #+BEGIN_SRC emacs-lisp :noweb no-export
-      (<<linum-mode/hook>> . display-line-numbers-mode)
+      (prog-mode . display-line-numbers-mode)
     #+END_SRC
 
 *** Post-Load Execution (~:config~)
@@ -132,13 +131,7 @@
     Display the absolute line number of the current line.
 
     #+BEGIN_SRC emacs-lisp
-      (validate-setq display-line-numbers-current-absolute t)
-    #+END_SRC
-
-    Do not shrink line number width.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq display-line-numbers-grow-only t)
+      (setq display-line-numbers-current-absolute t)
     #+END_SRC
 
 ** Ending Boilerplate                                              :noexport:
