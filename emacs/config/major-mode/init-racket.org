@@ -27,15 +27,9 @@
      (require 'use-package)
    #+END_SRC
 
-** Load racket-mode
+** Load ~racket-mode~
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package racket-mode
-       ;; The following commands are provided by the package and used to load it.
-       :commands (racket-mode)
-
-       ;; Add each element in the following list to `auto-mode-alist'.
-       :mode
-       (("\\.rkt\\'" . racket-mode)))
+     (use-package racket-mode)
    #+END_SRC
 
 ** Ending Boilerplate
