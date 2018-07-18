@@ -31,6 +31,10 @@
 ** Load dtrt-indent
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package dtrt-indent
+       ;; Download `strt-indent' from the melpa-stable repository.
+       :pin melpa-stable
+
+       ;; Hook `dtrt-indent-mode' into every mode in the following alist's key.
        :hook
        ((c-mode-common shell-mode) . dtrt-indent-mode))
    #+END_SRC
