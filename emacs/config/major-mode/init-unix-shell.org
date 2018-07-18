@@ -12,7 +12,7 @@
   This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Code
-** Introductory Boilerplate
+** Introductory Boilerplate                                        :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-unix-shell.el --- Configuration for UNIX shells
 
@@ -35,8 +35,8 @@
        :preface
        <<sh-script/preface>>
 
-       ;; Do not download `sh-script' using straight.
-       :straight nil
+       ;; `sh-script' is included with Emacs, so it does not need to be downloaded separately.
+       :ensure nil
 
        ;; Establish deferred binding within `auto-mode-alist'.
        :mode
@@ -48,18 +48,19 @@
    #+END_SRC
 
 *** Pre-Evaluation Configuration (~:preface~)
-    Define regexps for Zsh dotfiles and scripts.
-    Then create a list containing those regexps.
+    Define a list of regexps that match Zsh dotfiles and script filenames.
 
-    #+NAME: sh-script/preface
+    #+HEADER: :noweb-ref sh-script/preface
+    #+HEADER: :noweb no-export
     #+BEGIN_SRC emacs-lisp :noweb no-export
-      <<list-regexp-zsh>>
-    #+END_SRC
+      (defconst init-unix-shell/regexps-zsh
+        (list '<<rx-zsh-dotfile()>>
+              '<<rx-zsh-script()>>)
+        "A list of regexps describing known Zsh filenames.")
+   #+END_SRC
 
-**** Define Regexp for Zsh Dotfiles
-     :PROPERTIES:
-     :DESCRIPTION: Define a regexp for matching Zsh dotfile filenames.
-     :END:
+**** Regexp for Zsh Dotfiles
+     Describe a regexp that matches Zsh dotfile filenames.
 
      #+NAME: rx-zsh-dotfile
      #+HEADER: :results value scalar
@@ -69,10 +70,8 @@
            string-end)
      #+END_SRC
 
-**** Define Regexp for Zsh Scripts
-     :PROPERTIES:
-     :DESCRIPTION: Define a regexp for matching Zsh script filenames.
-     :END:
+**** Regexp for Zsh Scripts
+     Describe a regexp that matches Zsh script filenames.
 
      #+NAME: rx-zsh-script
      #+HEADER: :results value scalar
@@ -80,30 +79,17 @@
        (rx ".zsh" string-end)
      #+END_SRC
 
-**** Define List of Zsh Regexps
-     :PROPERTIES:
-     :DESCRIPTION: Define a list of the regexps that match Zsh filenames.
-     :END:
+*** Deferred Binding within ~auto-mode-alist~ (~:mode~)
+    Create a list of cons cells whose keys are regexps matching filenames and whose values are the function that enables ~shell-script-mode~.
 
-     #+NAME: list-regexp-zsh
-     #+BEGIN_SRC emacs-lisp :noweb no-export
-       (defconst init-unix-shell/regexps-zsh
-         (list '<<rx-zsh-dotfile()>>
-               '<<rx-zsh-script()>>)
-         "A list of regexps describing known Zsh filenames.")
-     #+END_SRC
-
-*** Deferred Binding within ~auto-mode-alist~
-    Create an alist where each element looks like ~(REGEXP . FUNCTION)~, where ~REGEXP~ is a regular expression matching a filename.
-    The elements of the alist will be added to ~auto-mode-alist~ upon loading the parent package.
-
-    #+NAME: sh-script/mode
-    #+BEGIN_SRC emacs-lisp :noweb no-export
-      ((<<rx-zsh-dotfile()>> . shell-script-mode)
-       (<<rx-zsh-script()>> . shell-script-mode))
+    #+HEADER: :noweb no-export
+    #+HEADER: :noweb-ref sh-script/mode
+    #+BEGIN_SRC emacs-lisp
+      ((<<rx-zsh-dotfile()>> . sh-script-mode)
+       (<<rx-zsh-script()>> . sh-script-mode))
     #+END_SRC
 
-*** Post-Load Execution
+*** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref sh-script/config
     :END:
@@ -125,21 +111,10 @@
     Then evaluate the function on a hook on ~shell-script-mode~.
 
     #+BEGIN_SRC emacs-lisp
-      (add-hook 'shell-script-mode #'init-unix-shell/config/set-shell-type)
+      (add-hook 'shell-script-mode #'init-unix-shell/set-shell-type)
     #+END_SRC
 
-**** Enable flyspell
-     :PROPERTIES:
-     :DESCRIPTION: Enable flyspell for ~shell-script-mode~.
-     :END:
-
-     #+BEGIN_SRC emacs-lisp
-       (add-hook 'shell-script-mode
-                 (lambda ()
-                   (flyspell-prog-mode 1)))
-     #+END_SRC
-
-** Ending Boilerplate
+** Ending Boilerplate                                              :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'init-unix-shell)
      ;;; init-unix-shell.el ends here
