@@ -30,16 +30,13 @@
 ** Load Ediff
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package ediff
-       ;; Do not download with straight.
-       :straight nil
+       ;; `ediff' is included in Emacs, so it does not need to be downloaded.
+       :ensure nil
 
-       ;; Do not load the package lazily.
-       :demand
-
-       ;; Load the package after the following packages.
+       ;; Load `ediff' after the following packages.
        (validate)
 
-       ;; Execute the following code after the package has been loaded.
+       ;; Evaluate the following code after loading `ediff'.
        :config
        <<ediff/config>>)
    #+END_SRC
@@ -58,13 +55,7 @@
 
 ** Load evil-ediff
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package evil-ediff
-       ;; Do not load the package lazily.
-       :demand
-
-       ;; Load the package after the following packages.
-       :after
-       (ediff evil))
+     (use-package evil-ediff)
    #+END_SRC
 
 ** Ending Boilerplate
