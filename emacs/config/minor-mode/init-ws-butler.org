@@ -44,16 +44,14 @@
        :diminish
        (ws-butler-mode . "")
 
-       ;; Execute the following code after the package has been loaded.
-       :config   ; code to execute after the parent package has been loaded
-       ;; Enable ws-butler globally.
+       ;; Evaluate the following code after loading `ws-butler'.
+       :config
        <<ws-butler/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :NOWEB-REF: ws-butler/config
-    :DESCRIPTION: Code to be executed after ws-butler has been loaded.
+    :HEADER-ARGS: :noweb-ref ws-butler/config
     :END:
 
     Enable ws-butler globally.
