@@ -46,8 +46,8 @@
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: ediff/config
     :DESCRIPTION: Code to be executed after ediff has been loaded.
+    :HEADER-ARGS: :noweb-ref ediff/config
     :END:
 
     Use a single frame for all buffers including the control panel.
