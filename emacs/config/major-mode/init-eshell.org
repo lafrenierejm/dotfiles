@@ -3,7 +3,7 @@
 #+EMAIL: joseph@lafreniere.xyz
 
 * License
-  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
   All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
 
 * About This File
@@ -11,7 +11,7 @@
   It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Eshell Configuration
-** Introductory Boilerplate
+** Introductory Boilerplate					   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      ;;; init-eshell.el --- Customization for Eshell
 
@@ -22,53 +22,30 @@
      ;;; Code:
    #+END_SRC
 
-** Specify Dependencies
+** Specify Dependencies						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'evil)
+     (require 'ivy)
+     (require 'magit)
      (require 'use-package)
    #+END_SRC
 
-** Set =$PAGER=
-   The fact that Eshell runs entirely within an Emacs buffer negates the need for any external pager.
-   All text can instead be dumped directly into the Eshell buffer.
-
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; Set $PAGER to cat.
-     (setenv "PAGER" "cat")
-   #+END_SRC
-
-** Load esh-module
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package esh-module
-       :demand                               ; do not defer loading
-
-       :straight nil                    ; do not download using straight.el
-
-       :after        ; load the parent package after the following packages
-       (eshell validate)
-
-       :config
-       ;; Disable the greeting banner.
-       (setq eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
-   #+END_SRC
-
-** Load esh-mode
+** Load ~esh-mode~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package esh-mode
-       :demand
+       :ensure nil
 
-       :straight nil
-
-       :after
-       (esh-util esh-module esh-cmd esh-io esh-var)
+       :bind
+       (:map eshell-mode-map
+	("C-d" . bury-buffer))
 
        :config
-       <<esh-mode-config>>
-       )
+       <<esh-mode/config>>)
    #+END_SRC
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: esh-mode-config
+    :HEADER-ARGS: :noweb-ref esh-mode/config
     :END:
 
 **** Only Write the Current Command
@@ -109,7 +86,7 @@
 		   t))
      #+END_SRC
 
-**** Define Eshell-Specific ~beginninG-of-maybe-line~
+**** Define Eshell-Specific ~beginning-of-maybe-line~
      [[../minor-mode/init-evil.org][init-evil.org]] defines ~init/beginning-of-maybe-line~.
      That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
 
@@ -118,7 +95,7 @@
      2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
      3. Point will be moved to the beginning of the line.
 
-     #+BEGIN_SRC emacs-lisp :tangle yes
+     #+BEGIN_SRC emacs-lisp :noweb-ref esh-mode/config
        (defun init-eshell/beginning-of-maybe-line ()
          "Move point to the start of the command beginning of the line."
          (interactive)
@@ -133,30 +110,40 @@
                (beginning-of-line)))))
      #+END_SRC
 
-** Load eshell
+** Load ~eshell~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
-       :demand                               ; do not defer loading
+       :ensure nil
 
-       :straight                        ; recipe for straight.el
-       nil
+       ;; Load eshell after the following packages.
+       :after (evil ivy magit)
 
-       :after        ; load the parent package after the following packages
-       (esh-mode evil ivy)
+       ;; Execute the following code before eshell has been loaded.
+       :init
+       <<eshell/init>>
 
-       :defines   ; variables provided by the parent package and used below
-       (eshell-banner
-        eshell-cmpl-cycle-completions
-        eshell-mode-hook
-        eshell-modules-list)
-
-       :config   ; code to execute after the parent package has been loaded
+       ;; Execute the following code after eshell has been loaded.
+       :config
        <<eshell/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Pre-Load Execution (~:init~)
     :PROPERTIES:
-    :noweb-ref: eshell/config
+    :HEADER-ARGS: :noweb-ref eshell/init
+    :END:
+
+**** Set =$PAGER=
+     Because Eshell runs entirely within an Emacs buffer it does not need any external pager.
+     Instead, all text can be dumped directly into the Eshell buffer.
+     This is accomplished by setting the value of =$PAGER= to =cat=.
+
+     #+BEGIN_SRC emacs-lisp
+       (setenv "PAGER" "cat")
+     #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref eshell/config
     :END:
 
     Add to the list of commands to run in a term buffer.
@@ -181,37 +168,84 @@
         "H" #'init-eshell/beginning-of-maybe-line)
     #+END_SRC
 
-    Define a function to open an Eshell instance in the current directory.
-    If an Eshell instance already exists in that directory, switch to its buffer.
+**** Keybinding
+     Have to rebind in hooks.
 
-    #+BEGIN_SRC emacs-lisp
-      (defun init-eshell/here ()
-        "Open an eshell in the current working directory.
-      If an eshell instance for the directory already exists, switch to it.
-      If no such buffer exists, start a new eshell and rename its buffer to include the directory."
-        (interactive)
-        (let* ((cwd (abbreviate-file-name (if (buffer-file-name)
+***** Bury Eshell Buffer
+      Bury the current buffer with =C-d=.
+
+      #+BEGIN_SRC emacs-lisp
+	(defun init-eshell/keybinding/bury-buffer ()
+	  (define-key eshell-mode-map (kbd "C-d") #'bury-buffer))
+      #+END_SRC
+
+      #+BEGIN_SRC emacs-lisp
+	(add-hook 'eshell-mode-hook #'init-eshell/keybinding/bury-buffer)
+      #+END_SRC
+
+**** Open Eshell in a Given Directory
+     Define a function to start an Eshell instance in a given directory.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-eshell/find-eshell (directory)
+         "Open Eshell in DIRECTORY.
+
+       If an Eshell instance for the directory already exists, switch to it.
+       If no such instance exists, start a new instance whose name includes the directory."
+         (interactive
+          (let ((cwd (if (buffer-file-name)
+                         (file-name-directory (buffer-file-name))
+                       default-directory))
+                (must-exist t))
+            (list (read-directory-name "Open Eshell in: " cwd cwd must-exist))))
+         ;; Set the directory to open Eshell in.
+         (let ((eshell-buffer-name (concat "*eshell: "
+                                           (abbreviate-file-name directory)
+                                           "*"))
+               (default-directory directory))
+           ;; Start Eshell.
+           (eshell)))
+     #+END_SRC
+
+     Map the above function to =C-x z=.
+     This keybinding mirrors the defaults for ~find-file~ and ~dired~.
+
+     #+BEGIN_SRC emacs-lisp
+       (global-set-key (kbd "C-x z") #'init-eshell/find-eshell)
+     #+END_SRC
+
+**** Open Eshell in the Current Directory
+     Define a function to open an Eshell instance in the current directory.
+     If an Eshell instance already exists in that directory, switch to its buffer.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-eshell/find-eshell-here ()
+         "Open Eshell in the current working directory.
+
+       If an Eshell instance for the directory already exists, switch to it.
+       If no such instance exists, start a new instance whose name includes the directory."
+         (interactive)
+         (let ((cwd (abbreviate-file-name (if (buffer-file-name)
                                               (file-name-directory (buffer-file-name))
-                                            default-directory)))
-               (eshell-buffer-name (concat "*eshell: " cwd "*")))
-          (eshell)))
-    #+END_SRC
+                                            default-directory))))
+           (init-eshell/find-eshell cwd)))
+     #+END_SRC
 
-    Map the above ~init-eshell/here~ function to =C-z=.
-    This imitates the behavior of terminal usage, where =C-z= is the key combination to suspend the current process, usually resulting in the user being returned to their shell.
+     Map the above ~init-eshell/find-eshell-here~ function to =C-z=.
+     This imitates the behavior of terminal usage, where =C-z= is the key combination to suspend the current process, usually resulting in the user being returned to their shell.
 
-    #+BEGIN_SRC emacs-lisp
-      (let ((states (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)))
-        (dolist (state states)
-          (evil-global-set-key state (kbd "C-z") #'init-eshell/here)))
-    #+END_SRC
+     #+BEGIN_SRC emacs-lisp
+       (let ((states (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)))
+         (dolist (state states)
+           (evil-global-set-key state (kbd "C-z") #'init-eshell/find-eshell-here)))
+     #+END_SRC
 
 **** Advise ~eshell/cd~ to Rename Buffer
      ~eshell/cd~ is advised to rename the buffer.
      The new name contains the abbreviated path of the new directory.
 
      This is useful in distinguishing multiple Eshell buffers, e.g. when switching buffers.
-     It also works in tandem with ~init-eshell/here~ to prefer existing Eshell instances over creating new buffers.
+     It also works in tandem with ~init-eshell/find-eshell-here~ to prefer existing Eshell instances over creating new buffers.
 
      #+BEGIN_SRC emacs-lisp
        (defadvice eshell/cd (after init-eshell-cd-rename-buffer)
@@ -221,7 +255,7 @@
      #+END_SRC
 
 **** Use Magit for Some ~git~ Commands
-     The code in this section is copyright Gergely Nagy <algernon@bonehunter.rulez.org> and shared under GPLv3.
+     The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.rulez.org][<algernon@bonehunter.rulez.org>]] and shared under GPLv3.
 
      #+BEGIN_SRC emacs-lisp
        (defun eshell/git (command &rest args)
@@ -242,54 +276,69 @@
 
      #+BEGIN_SRC emacs-lisp
        (defun algernon/git-log (&rest args)
-         (let* ((branch-or-file (car args))
-                (file-list (if (and branch-or-file (f-file-p branch-or-file))
-                               args
-                             (cdr args)))
-                (branch (if (and branch-or-file (f-file-p branch-or-file))
-                            "HEAD"
-                          branch-or-file)))
-           (message branch-or-file)
-           (if branch-or-file
-               (magit-log (list branch)
-                          '()
-                          (mapcar
-                           (lambda (f) (concat (file-name-as-directory (eshell/pwd)) f))
-                           file-list))
-             (magit-log-head)))
-         (eshell/echo))
+	 (let* ((branch-or-file (car args))
+		(file-list (if (and branch-or-file (f-file-p branch-or-file))
+			       args
+			     (cdr args)))
+		(branch (if (and branch-or-file (f-file-p branch-or-file))
+			    "HEAD"
+			  branch-or-file)))
+	   (message branch-or-file)
+	   (if branch-or-file
+	       (magit-log (list branch)
+			  '()
+			  (mapcar
+			   (lambda (f) (concat (file-name-as-directory (eshell/pwd)) f))
+			   file-list))
+	     (magit-log-head)))
+	 (eshell/echo))
      #+END_SRC
 
-** Load em-tramp
-   em-tramp provides Eshell features that require TRAMP.
+** Load ~esh-module~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package esh-module
+       :ensure nil
+
+       ;; Load `esh-module' after the following packages.
+       :after
+       (validate)
+
+       :config
+       <<esh-module/config>>)
+   #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref esh-module/config
+    :END:
+    
+    Disable the greeting banner.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
+    #+END_SRC
+
+** Load ~em-tramp~
+   ~em-tramp~ provides Eshell features that require TRAMP.
 
    #+BEGIN_SRC emacs-lisp :tangle no
      (use-package em-tramp
-       :demand                               ; do not defer loading
-
-       :straight nil                    ; do not download using straight.el
-
-       :after        ; load the parent package after the following packages
-       (eshell tramp)
-
+       :ensure nil
+  
        :config
-       (add-to-list 'eshell-modules-list 'eshell-tramp))
+       (push 'eshell-tramp eshell-modules-list))
    #+END_SRC
 
 ** Load em-cmpl
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package em-cmpl
-       :demand                               ; do not defer loading
+       :ensure nil
 
-       :straight nil                       ; do not manage with straight.el
+       ;; Load `em-cmpl' after the following packages.
+       :after (validate)
 
-       :after        ; load the parent package after the following packages
-       (eshell validate)
-
-       ;; :defines        ; variables used below defined by the parent package
-       ;; (eshell-cmpl-cycle-completions)
-
-       :config           ; code to execute after loading the parent package
+       ;; Evaluate the following code after loading `em-cmpl'.
+       :config
        ;; Use zsh-like completion.
        (validate-setq eshell-cmpl-cycle-completions nil))
    #+END_SRC
@@ -297,22 +346,18 @@
 ** Load em-hist
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package em-hist
-       :demand                               ; do not defer loading
+       :ensure nil
 
-       :straight nil             ; included as part of the ~eshell' package
+       ;; Load `em-hist' after the following packages.
+       :after (validate)
 
-       :after        ; load the parent package after the following packages
-       (eshell validate)
-
-       ;; :defines        ; variables used below defined by the parent package
-       ;; (eshell-hist-ignoredups)
-
-       :config          ; code to execute after loading the parent package
+       ;; Evaluate the following code after loading `em-hist'.
+       :config
        ;; Skip duplicates when traversing command history.
        (validate-setq eshell-hist-ignoredups t))
    #+END_SRC
 
-** Ending Boilerplate
+** Ending Boilerplate						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'init-eshell)
      ;;; init-eshell.el ends here
