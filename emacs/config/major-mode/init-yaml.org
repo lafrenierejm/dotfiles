@@ -27,11 +27,9 @@
      (require 'use-package)
    #+END_SRC
    
-** Load =yaml-mode= with =use-package=
+** Load ~yaml-mode~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package yaml-mode
-       :mode          ; establish deferred binding within `auto-mode-alist'
-       (("\\.yml\\'" . yaml-mode)))
+     (use-package yaml-mode)
    #+END_SRC
 
 ** Ending Boilerplate
