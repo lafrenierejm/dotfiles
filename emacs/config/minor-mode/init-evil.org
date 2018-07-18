@@ -59,8 +59,7 @@
     Enable Evil by default in all modes.
 
     #+BEGIN_SRC emacs-lisp
-      ;; Enable Evil mode by default
-      (evil-mode 1)
+      (evil-mode)
     #+END_SRC
 
 **** Define =evil-yank-to-end-of-line=
