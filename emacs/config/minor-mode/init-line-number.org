@@ -37,8 +37,8 @@
        :if
        <<linum-mode/if>>
 
-       ;; Do not download with straight.
-       :straight nil
+       ;; Do not download.
+       :ensure nil
 
        ;; Enable linum-mode via hooks.
        :hook
@@ -78,8 +78,8 @@
        :if
        <<display-line-numbers/if>>
 
-       ;; Do not download with straight.
-       :straight nil
+       ;; `display-line-numbers' is included in Emacs.
+       :ensure nil
 
        ;; Load `display-line-numbers' after the following packages.
        :after
