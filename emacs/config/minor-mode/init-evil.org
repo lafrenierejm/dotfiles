@@ -27,10 +27,11 @@
      (require 'use-package)
    #+END_SRC
 
-** Load =evil=
+** Load ~evil~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil
-       :demand                               ; do not defer loading
+       ;; `evil' is installed from GNU ELPA.
+       :pin gnu
 
        :defines   ; variables provided by the parent package and used below
        (evil-default-cursor)
@@ -39,15 +40,16 @@
        (setq evil-default-cursor t) ;; Do not modify the cursor color.
 
        :config   ; code to execute after the parent package has been loaded
-       <<evil-config>>)
+       <<evil/config>>)
    #+END_SRC
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: evil-config
+    :HEADER-ARGS: :noweb-ref evil/config
     :END:
 
-    The following keybindings are set globally across Evil, but may be overwritten by other modes' keybindings.
+    Set the following keybindings globally across Evil.
+    They may be overwritten by other modes' keybindings.
 
     #+BEGIN_SRC emacs-lisp
       (evil-global-set-key 'motion "H" 'init-evil/beginning-of-maybe-line)
@@ -70,8 +72,8 @@
          (evil-yank (point) (point-at-eol)))
      #+END_SRC
 
-**** Define Helper Functions
-***** Define =back-to-comment=
+**** Semantic Movement Within Lines
+***** Define ~back-to-comment~
       The following code is based on [[http://stackoverflow.com/a/14245964%0A][a StackOverflow answer]] by user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
       All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
@@ -107,7 +109,7 @@
                 nil))))
       #+END_SRC
 
-***** Define =init-evil/back-totext=
+***** Define ~init-evil/back-totext~
       #+BEGIN_SRC emacs-lisp
         (defun init-evil/back-totext ()
           "Move point to the last non-whitespace character on this line."
@@ -120,9 +122,8 @@
           (forward-char))
       #+END_SRC
 
-**** Semantic Movement Within Lines
-***** Define =beginning-of-maybe-line=
-      =beginning-of-maybe-line= moves =point= toward the beginning of the current line incrementally by semantic region.
+***** Define ~beginning-of-maybe-line~
+      ~beginning-of-maybe-line~ moves ~point~ toward the beginning of the current line incrementally by semantic region.
       The following semantic elements are considered:
       1. Comment
       2. Source code
@@ -151,15 +152,16 @@
                 (beginning-of-line)))))
       #+END_SRC
 
-***** Define =end-of-maybe-line=
-      =end-of-maybe-line= incrementally moves =point= to the right within a line by semantic region.
-      The following semantic elements are considered in =end-of-maybe-line='s movement:
+***** Define ~end-of-maybe-line~
+      ~end-of-maybe-line~ incrementally moves ~point~ to the right within a line by semantic region.
+      The following semantic elements are considered in ~end-of-maybe-line~'s movement:
       1. Source code
       2. Comments
       3. Trailing whitespace
 
-      The following code is based on [[http://stackoverflow.com/a/14245964%0A][a StackOverflow answer]] by user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
-      All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
+
+      The following is licensed CC BY-SA 3.0-licensed by StackOverflow user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
+      It is based on [[http://stackoverflow.com/a/14245964][Gilles's StackOverflow answer]].
 
       #+BEGIN_SRC emacs-lisp
         (defun init-evil/end-of-maybe-line ()
@@ -179,49 +181,35 @@
       #+END_SRC
 
 ** Load [[https://github.com/redguardtoo/evil-matchit][evil-matchit]]
-   evil-matchit is a port of Tim Pope's [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] to Evil.
-   It enables jumping between matched tags, e.g. =<div>= and =</div>=.
+   ~evil-matchit~ is a port of Tim Pope's [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] to Evil.
+   It enables jumping between matched tags, e.g. ~<div>~ and ~</div>~.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-matchit
-       :demand                               ; do not defer loading
-
-       :after
-       (evil)
-
-       :defines
-       (evil-matchit-mode-hook)
-
-       :commands
-       (evilmi-jump-items
-        global-evil-matchit-mode)
+       ;; Install `evil-matchit' from MELPA Stable.
+       :pin melpa-stable
 
        :config
        (global-evil-matchit-mode 1)
        (add-hook 'evil-matchit-mode-hook
                  (lambda ()
-                   (evil-global-set-key 'motion (kbd "%") 'evilmi-jump-items))))
+                   (evil-global-set-key 'motion (kbd "%") #'evilmi-jump-items))))
    #+END_SRC
 
-** Load =evil-surround= with =use-package=
-   =[[https://github.com/emacs-evil/evil-surround][evil-surround]]= is a port of [[https://github.com/tpope/vim-surround][vim-surround]] to Evil.
+** Load ~evil-surround~
+   ~[[https://github.com/emacs-evil/evil-surround][evil-surround]]~ is a port of [[https://github.com/tpope/vim-surround][vim-surround]] to Evil.
    It adds a "surround" verb to Evil's modal editing.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-surround
-       :demand                               ; do not defer loading
-
-       :after
-       (evil)
-
-       :commands
-       (global-evil-surround-mode)
+       ;; Install `evil-surround' from MELPA Stable.
+       :pin melpa-stable
 
        :config
        (global-evil-surround-mode 1))
    #+END_SRC
 
-** Load =evil-indent-plus= with =use-package=
+** Load ~evil-indent-plus~
    =[[https://github.com/TheBB/evil-indent-plus]]= adds indentation levels as a text object for Evil.
 
    - =i= is same or higher indentation.
@@ -230,10 +218,8 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-indent-plus
-       :demand                               ; do not defer loading
-
-       :after
-       (evil)
+       ;; Install `evil-indent-plus' from MELPA.
+       :pin melpa
 
        :config
        (evil-indent-plus-default-bindings))
