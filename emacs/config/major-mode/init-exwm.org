@@ -33,10 +33,6 @@
        ;; Do not load the package lazily.
        :demand
 
-       ;; Recipe for straight
-       :straight
-       (exwm :type git :host github :repo "ch11ng/exwm")
-
        ;; Execute the following code after the package has been loaded.
        :config
        <<exwm/config>>)
