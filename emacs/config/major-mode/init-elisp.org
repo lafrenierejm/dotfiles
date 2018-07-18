@@ -33,59 +33,17 @@
        ;; `elisp-mode' is included with Emacs, so it does not need to be downloaded.
        :ensure nil
 
-       :after
-       <<elisp-mode/after>>
-
-       :mode
-       <<elisp-mode/mode>>
+       ;; Load `elisp-mode' after the following packages.
+       :after (validate)
 
        :config
        <<elisp-mode/config>>)
    #+END_SRC
 
+*** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-*** Loading After Other Packages
-    :PROPERTIES:
-    :noweb-ref: elisp-mode/after
-    :END:
-
-    Some functions used to configure emacs-lisp are provided by the validate package.
-    As such, emacs-lisp should not be loaded until validate has been loaded.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate)
-    #+END_SRC
-
-*** Filename Mapping
-    Emacs Lisp files are designated by the filename extension "el".
-    Emacs uses the ~auto-mode-alist~ variable to maps filenames to major modes.
-    The key of each entry in ~auto-mode-alist~ is a regex describing a filename.
-    The value is a function, in our case a major mode.
-
-    ~rx~ provides a more readable syntax for assembling regexes.
-    It is used below to describe a string ending with =.el=.
-
-    #+HEADER: :results code
-    #+BEGIN_SRC emacs-lisp
-      (rx ".el" string-end)
-    #+END_SRC
-
-    #+RESULTS:
-    #+HEADER: :noweb-ref regexp-el
-    #+BEGIN_SRC emacs-lisp
-    "\\.el\\'"
-    #+END_SRC
-
-    Finally the above regexp is used to bind ~emacs-lisp-mode~.
-
-    #+HEADER: :noweb-ref elisp-mode/mode
-    #+BEGIN_SRC emacs-lisp
-      (<<regexp-el>> . emacs-lisp-mode)
-    #+END_SRC
-
-*** Post-Load Configuration
-    :PROPERTIES:
-    :noweb-ref: elisp-mode/config
+    :DESCRIPTION: Code to evaluate after ~elisp-mode~ has been loaded.
+    :HEADER-ARGS: :noweb-ref elisp-mode/config
     :END:
 
     LISP code is typically written using only spaces for indentation.
