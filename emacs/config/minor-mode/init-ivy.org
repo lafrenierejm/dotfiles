@@ -122,12 +122,14 @@
 ** Load Swiper
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package swiper
-       :demand                               ; do not defer loading
-       
-       :commands   ; commands provided by the parent package and used below
-       (swiper)
+       ;; Load this package eagerly.
+       :demand
 
-       :bind                                 ; alist of keybindings
+       ;; Load this package after the following packages.
+       :after (ivy)
+
+       ;; Add the following keybindings.
+       :bind
        (("C-s" . swiper)))
    #+END_SRC
 
