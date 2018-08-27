@@ -24,9 +24,6 @@
 
 ** Specify Dependencies						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'evil)
-     (require 'ivy)
-     (require 'magit)
      (require 'use-package)
    #+END_SRC
 
@@ -36,9 +33,8 @@
        ;; This package is included in Emacs.
        :straight nil
 
-       :bind
-       (:map eshell-mode-map
-	("C-d" . bury-buffer))
+       ;; Load this package eagerly.
+       :demand
 
        :config
        <<esh-mode/config>>)
@@ -111,19 +107,45 @@
                (beginning-of-line)))))
      #+END_SRC
 
+**** Search History with Ivy
+
+     The following code is copied from https://github.com/samrayleung/emacs.d/blob/master/lisp/init-eshell.el.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-esh-mode/ivy-esh-history ()
+	 "Interactively search eshell's history."
+	 (interactive)
+	 (save-excursion
+	   (let* ((start-pos (eshell-beginning-of-input))
+		  (input (eshell-get-old-input))
+		  (esh-history (when (> (ring-size eshell-history-ring) 0)
+			     (ring-elements eshell-history-ring)))
+		  (command (ivy-read "Command: "
+				     (delete-dups esh-history)
+				     :initial-input input
+				     :require-match nil
+				     :action #'ivy-completion-in-region-action)))
+	     (eshell-kill-input)
+	     (insert command)))
+	 (end-of-line))
+     #+END_SRC
+
 ** Load ~eshell~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
        :straight nil
 
-       ;; Load eshell after the following packages.
-       :after (evil ivy magit)
+       ;; Load this package eagerly.
+       :demand
 
-       ;; Execute the following code before eshell has been loaded.
+       ;; Load after the following packages.
+       :after (em-hist evil ivy magit)
+
+       ;; Execute the following code before loading.
        :init
        <<eshell/init>>
 
-       ;; Execute the following code after eshell has been loaded.
+       ;; Execute the following code after loading.
        :config
        <<eshell/config>>)
    #+END_SRC
@@ -147,27 +169,36 @@
     :HEADER-ARGS: :noweb-ref eshell/config
     :END:
 
-    Add to the list of commands to run in a term buffer.
+**** Add Keybindings to ~eshell-mode-map~
+     Eshell binds keys differently, for reasons beyond me.
 
      #+BEGIN_SRC emacs-lisp
-       (defun init-eshell/add-visual-commands ()
-         "Add commands to `eshell-visual-commands'."
-         (let ((commands (list "alsamixer" "ssh" "top" "tail")))
-           (dolist (command commands)
-                   (add-to-list 'eshell-visual-commands command))))
-       (add-hook 'eshell-mode-hook
-                 #'init-eshell/add-visual-commands)
+       (add-hook 'eshell-mode-hook 'init-eshell/move-point-on-insert-to-command)
+       ;; (add-hook 'eshell-mode-hook (lambda ()
+       ;;                               (define-key eshell-mode-map (kbd "<tab>") 'completion-at-point)))
+       ;; Account for the read-only prompt text when moving to the beginning of the line.
+       (evil-define-key 'motion eshell-mode-map
+	 "H" #'init-eshell/beginning-of-maybe-line)
      #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      ;; Only write into the current command.
-      (add-hook 'eshell-mode-hook 'init-eshell/move-point-on-insert-to-command)
-      (add-hook 'eshell-mode-hook (lambda ()
-                                    (define-key eshell-mode-map (kbd "<tab>") 'completion-at-point)))
-      ;; Account for the read-only prompt text when moving to the beginning of the line.
-      (evil-define-key 'motion eshell-mode-map
-        "H" #'init-eshell/beginning-of-maybe-line)
-    #+END_SRC
+**** "Visual" Commands
+     Run the following commands in a =term= buffer:
+     #+NAME: visual-commands
+     - alsamixer
+     - ssh
+     - top
+     - tail
+
+
+      #+BEGIN_SRC emacs-lisp
+	(defun init-eshell/add-visual-commands ()
+          "Add commands to `eshell-visual-commands'."
+          (let ((commands (list "alsamixer" "ssh" "top" "tail")))
+            (dolist (command commands)
+                    (add-to-list 'eshell-visual-commands command))))
+	(add-hook 'eshell-mode-hook
+                  #'init-eshell/add-visual-commands)
+      #+END_SRC
 
 **** Keybinding
      Have to rebind in hooks.
@@ -301,10 +332,13 @@
        ;; This package is included in Emacs.
        :straight nil
 
-       ;; Load `esh-module' after the following packages.
-       :after
-       (validate)
+       ;; Load this package eagerly.
+       :demand
 
+       ;; Load this package after the following packages.
+       :after (validate)
+
+       ;; Evaluate the following code after loading this package.
        :config
        <<esh-module/config>>)
    #+END_SRC
@@ -320,6 +354,18 @@
       (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
     #+END_SRC
 
+    Rebind keys dynamically when at an input prompt.
+
+    #+BEGIN_SRC text
+      (add-to-list 'em-rebind 'eshell-modules-list)
+    #+END_SRC
+
+    Use TRAMP.
+
+    #+BEGIN_SRC text
+      (add-to-list 'em-tramp 'eshell-modules-list)
+    #+END_SRC
+
 ** Load ~em-tramp~
    ~em-tramp~ provides Eshell features that require TRAMP.
 
@@ -327,13 +373,45 @@
      (use-package em-tramp
        ;; This package is included in Emacs.
        :straight nil
+
+       ;; Load this package eagerly.
+       :demand)
    #+END_SRC
 
-** Load em-cmpl
+** Load ~em-rebind~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package em-rebind
+       ;; This package is included in Emacs.
+       :straight nil
+
+       ;; Load this package eagerly.
+       :demand
+
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<em-rebind/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref em-rebind/config
+    :DESCRIPTION: The code to be evaluated after ~em-rebind~ has been loaded.
+    :END:
+
+    Rebind Emacs's vertical movement keys to search through history.
+    Normal buffer movement is performed using keybindings provided by ~evil~.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list '([(control ?n)] . init-esh-mode/ivy-esh-history) 'eshell-rebind-keys-alist)
+    #+END_SRC
+
+** Load ~em-cmpl~
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package em-cmpl
        ;; This package is included in Emacs.
        :straight nil
+
+       :demand
 
        ;; Load `em-cmpl' after the following packages.
        :after (validate)
@@ -344,20 +422,34 @@
        (validate-setq eshell-cmpl-cycle-completions nil))
    #+END_SRC
 
-** Load em-hist
-   #+BEGIN_SRC emacs-lisp :tangle yes
+** Load ~em-hist~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package em-hist
        ;; This package is included in Emacs.
        :straight nil
 
-       ;; Load `em-hist' after the following packages.
-       :after (validate)
+       ;; Load eagerly.
+       :demand
 
-       ;; Evaluate the following code after loading `em-hist'.
+       ;; Load after the following packages.
+       :after (ivy validate)
+
+       ;; Evaluate the following code after loading.
        :config
-       ;; Skip duplicates when traversing command history.
-       (validate-setq eshell-hist-ignoredups t))
+       <<em-hist/config>>)
    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref em-hist/config
+    :DESCRIPTION: The code to be evaluated after ~em-hist~ has been loaded.
+    :END:
+
+    Skip duplicates when traversing command history.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq eshell-hist-ignoredups t)
+    #+END_SRC
 
 ** Ending Boilerplate						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
