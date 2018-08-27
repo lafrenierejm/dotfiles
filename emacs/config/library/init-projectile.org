@@ -1,0 +1,88 @@
+#+TITLE: Projectile Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file loads and configures Emacs's built-in projectile package.
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     ;;; init-projectile.el --- Configuration for projectile
+
+     ;;; Commentary:
+     ;; This file is tangled from init-projectile.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     (require 'use-package)
+   #+END_SRC
+
+** Load ~projectile~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package projectile
+       ;; Load this package eagerly.
+       :demand
+
+       ;; Add the following keybindings.
+       :bind
+       (:map projectile-mode-map
+	("C-c p" . projectile-command-map))
+
+       ;; Evaluate the following code after loading `projectile'.
+       :config
+       <<projectile/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :DESCRIPTION: Code to be evaluated after ~projectile~ has been loaded.
+    :HEADER-ARGS: :noweb-ref projectile/config
+    :END:
+
+    Enable ~projectile-mode~ globally.
+
+    #+BEGIN_SRC emacs-lisp
+      (projectile-mode +1)
+    #+END_SRC
+
+** Load ~counsel-projectile~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package counsel-projectile
+       ;; Load eagerly.
+       :demand
+
+       ;; Load after the following packages.
+       :after (counsel projectile)
+
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<counsel-projectile/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :DESCRIPTION: Code to be evaluated after ~counsel-projectile~ has been loaded.
+    :HEADER-ARGS: :noweb-ref counsel-projectile/config
+    :END:
+
+    Enable ~counsel-projectile-mode~ globally.
+
+    #+BEGIN_SRC emacs-lisp
+      (counsel-projectile-mode +1)
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-projectile)
+     ;;; init-projectile.el ends here
+   #+END_SRC
