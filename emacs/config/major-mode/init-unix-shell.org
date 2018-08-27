@@ -35,8 +35,8 @@
        :preface
        <<sh-script/preface>>
 
-       ;; `sh-script' is included with Emacs, so it does not need to be downloaded separately.
-       :ensure nil
+       ;; This package is included with Emacs, so it does not need to be downloaded separately.
+       :straight nil
 
        ;; Establish deferred binding within `auto-mode-alist'.
        :mode

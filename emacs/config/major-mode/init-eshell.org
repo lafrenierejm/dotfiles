@@ -33,7 +33,8 @@
 ** Load ~esh-mode~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package esh-mode
-       :ensure nil
+       ;; This package is included in Emacs.
+       :straight nil
 
        :bind
        (:map eshell-mode-map
@@ -113,7 +114,7 @@
 ** Load ~eshell~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
-       :ensure nil
+       :straight nil
 
        ;; Load eshell after the following packages.
        :after (evil ivy magit)
@@ -297,7 +298,8 @@
 ** Load ~esh-module~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package esh-module
-       :ensure nil
+       ;; This package is included in Emacs.
+       :straight nil
 
        ;; Load `esh-module' after the following packages.
        :after
@@ -323,16 +325,15 @@
 
    #+BEGIN_SRC emacs-lisp :tangle no
      (use-package em-tramp
-       :ensure nil
-  
-       :config
-       (push 'eshell-tramp eshell-modules-list))
+       ;; This package is included in Emacs.
+       :straight nil
    #+END_SRC
 
 ** Load em-cmpl
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package em-cmpl
-       :ensure nil
+       ;; This package is included in Emacs.
+       :straight nil
 
        ;; Load `em-cmpl' after the following packages.
        :after (validate)
@@ -346,7 +347,8 @@
 ** Load em-hist
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package em-hist
-       :ensure nil
+       ;; This package is included in Emacs.
+       :straight nil
 
        ;; Load `em-hist' after the following packages.
        :after (validate)

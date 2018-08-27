@@ -31,7 +31,9 @@
 ** Load ~org~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package org
-       ;; Load `org' after the following packages.
+       ;; This package is included in GNU Emacs.
+       :straight nil
+
        :after (validate)
 
        ;; Evaluate the following sexps after loading `org'.
@@ -81,8 +83,8 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package ox
-       ;; `ox' is included in `org'.
-       :ensure org
+       ;; This package is included in the following package.
+       :straight nil ;; org
 
        ;; Load `ox' after the following packages.
        :after (validate)
@@ -107,8 +109,8 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ox-latex
-       ;; `ox-latex' is included in `org'.
-       :ensure org
+       ;; This package is included in the following package.
+       :straight nil ; org
 
        ;; Load `ox' after the following packages.
        :after (validate)

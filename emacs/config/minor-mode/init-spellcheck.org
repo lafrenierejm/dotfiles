@@ -37,8 +37,8 @@
 ** Load International Ispell
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ispell
-       ;; `ispell' is included in Emacs, so it does not need to be downloaded.
-       :ensure nil
+       ;; This package is included in Emacs.
+       :straight nil
 
        ;; Only load `ispell' if the Boolean evaluation of the following code is t.
        :if

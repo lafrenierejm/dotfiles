@@ -29,8 +29,8 @@
 ** Load ~tramp~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package tramp
-       ;; `tramp' is included in Emacs, so it does not need to be downloaded.
-       :ensure nil
+       ;; This package is included in Emacs, so it does not need to be downloaded.
+       :straight nil
 
        ;; Load `tramp' eagerly.
        :demand

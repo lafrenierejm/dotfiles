@@ -31,8 +31,8 @@
 ** Load elec-pair
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package elec-pair
-       ;; `elec-pair' is included in Emacs, so it does not need to be downloaded.
-       :ensure nil
+       ;; This package is included in Emacs.
+       :straight nil
 
        ;; For each element in the following list, hook the value on its key(s).
        :hook ((prog-mode TeX-mode) . electric-pair-local-mode))

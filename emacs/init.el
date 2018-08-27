@@ -5,23 +5,30 @@
 ;; All prose in this file is is copyright Joseph M LaFreniere and licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
 
 ;;; Code:
+;; Bootstrap straight.el.
+(defvar bootstrap-version)
+(setq straight-repository-branch "develop")
 
-(require 'package)
-(push '("melpa" . "https://melpa.org/packages/") package-archives)
-(push '("melpa-stable" . "https://stable.melpa.org/packages/") package-archives)
-(push '("org" . "https://orgmode.org/elpa") package-archives)
-(package-refresh-contents)
-(package-initialize)
-(package-install 'use-package)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         (format
+          "https://raw.githubusercontent.com/raxod502/straight.el/%s/install.el"
+          straight-repository-branch)
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
+;; Install and configure use-package.
+(straight-use-package 'use-package)
 (require 'use-package)
-(setq use-package-always-ensure t)
+(setq straight-use-package-by-default t) ; Download packages with straight by default.
+(setq use-package-always-defer t)       ; Lazy-load packages by default.
 
-
-;; Default to loading lazily.
-;; This behavior makes it more explicit when a package will be loaded.
-;; It can be overridden with the `:demand' macro.
-(setq use-package-always-defer t)
 
 ;;; Load validate.el
 ;; [[https://github.com/Malabarba/validate.el][validate.el]] provides functions to perform schema validation.

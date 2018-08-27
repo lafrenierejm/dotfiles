@@ -30,8 +30,8 @@
 ** Load elisp-mode
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package elisp-mode
-       ;; `elisp-mode' is included with Emacs, so it does not need to be downloaded.
-       :ensure nil
+       ;; This package is included with Emacs.
+       :straight nil
 
        ;; Load `elisp-mode' after the following packages.
        :after (validate)

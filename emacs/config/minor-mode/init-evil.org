@@ -30,14 +30,8 @@
 ** Load ~evil~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil
-       ;; `evil' is installed from GNU ELPA.
-       :pin gnu
-
-       :defines   ; variables provided by the parent package and used below
-       (evil-default-cursor)
-
-       :init            ; code to execute before loading the parent package
-       (setq evil-default-cursor t) ;; Do not modify the cursor color.
+       ;; Load eagerly.
+       :demand
 
        :config   ; code to execute after the parent package has been loaded
        <<evil/config>>)
@@ -186,14 +180,14 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-matchit
-       ;; Install `evil-matchit' from MELPA Stable.
-       :pin melpa-stable
+       ;; Load eagerly.
+       :demand
 
        :config
        (global-evil-matchit-mode 1)
        (add-hook 'evil-matchit-mode-hook
-                 (lambda ()
-                   (evil-global-set-key 'motion (kbd "%") #'evilmi-jump-items))))
+		 (lambda ()
+		   (evil-global-set-key 'motion (kbd "%") #'evilmi-jump-items))))
    #+END_SRC
 
 ** Load ~evil-surround~
@@ -202,8 +196,8 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-surround
-       ;; Install `evil-surround' from MELPA Stable.
-       :pin melpa-stable
+       ;; Load eagerly.
+       :demand
 
        :config
        (global-evil-surround-mode 1))
@@ -218,8 +212,8 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-indent-plus
-       ;; Install `evil-indent-plus' from MELPA.
-       :pin melpa
+       ;; Load eagerly.
+       :demand
 
        :config
        (evil-indent-plus-default-bindings))
