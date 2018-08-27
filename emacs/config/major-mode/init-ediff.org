@@ -41,9 +41,9 @@
        <<ediff/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :DESCRIPTION: Code to be executed after ediff has been loaded.
+    :DESCRIPTION: Code to be evaluated after ~ediff~ has been loaded.
     :HEADER-ARGS: :noweb-ref ediff/config
     :END:
 
