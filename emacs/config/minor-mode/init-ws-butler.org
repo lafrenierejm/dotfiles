@@ -37,14 +37,14 @@
 ** Load ws-butler
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ws-butler
-       ;; Do not load the package lazily.
+       ;; Load this package eagerly.
        :demand
 
        ;; Do not display "wb" in the modeline.
        :diminish
        (ws-butler-mode . "")
 
-       ;; Evaluate the following code after loading `ws-butler'.
+       ;; Evaluate the following code after loading this package.
        :config
        <<ws-butler/config>>)
    #+END_SRC
@@ -52,6 +52,7 @@
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref ws-butler/config
+    :DESCRIPTION: Code to be evaluated after loading ~ws-butler~.
     :END:
 
     Enable ws-butler globally.
