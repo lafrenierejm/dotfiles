@@ -1,0 +1,60 @@
+#+TITLE: Company Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file loads and configures Emacs's built-in company package.
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     ;;; init-company.el --- Configuration for company
+
+     ;;; Commentary:
+     ;; This file is tangled from init-company.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     (require 'use-package)
+   #+END_SRC
+
+** Load ~company~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package company
+       ;; Eagerly load this package.
+       :demand
+
+       ;; Do not modify the modeline.
+       :diminish
+
+       ;; Evaluate the following code after loading.
+       :config
+       <<company/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :DESCRIPTION: Code to be evaluated after ~company~ has been loaded.
+    :HEADER-ARGS: :noweb-ref company/config
+    :END:
+
+    Enable ~company-mode~ globally.
+
+    #+BEGIN_SRC emacs-lisp
+      (global-company-mode)
+    #+END_SRC
+
+** Ending Boilerplate						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-company)
+     ;;; init-company.el ends here
+   #+END_SRC
