@@ -31,9 +31,10 @@
 ** Load flycheck
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package flycheck
-       ;; Load eagerly.
+       ;; Load this package eagerly.
        :demand
 
+       ;; Evaluate the following code after loading this package.
        :config
        ;; Enable `flycheck-mode' globally.
        (global-flycheck-mode))
