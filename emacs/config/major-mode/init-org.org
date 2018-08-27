@@ -25,9 +25,7 @@
 
 ** Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     (require 'evil)
      (require 'use-package)
-     (require 'validate)
    #+END_SRC
 
 ** Load ~org~
