@@ -114,21 +114,26 @@
        (magithub-feature-autoinject t))
    #+END_SRC
 
-** Load [[https://github.com/emacs-evil/evil-magit][evil-magit]]
-    evil-magit configures Evil and Magit to play well together.
+** Load ~evil-magit~
+    ~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures Evil and Magit to play well together.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-magit
-       :after (validate)
+       ;; Load this package eagerly.
+       :demand
 
-       ;; Evaluate the following code after loading `evil-magit'.
+       ;; Load this package after the following packages.
+       :after (evil magit validate)
+
+       :hook
+       ((magit-mode) . evil-local-mode)
+
+       ;; Evaluate the following code after loading this package.
        :config
        ;; Start `evil-magit' in the motion state.
        (validate-setq evil-magit-state 'motion)
        ;; Enable Evil's horizontal movement in magit buffers.
-       (setq evil-magit-want-horizontal-movement t)
-       ;; Ensure that Evil is enabled in Magit buffers.
-       (add-hook 'magit-mode-hook #'evil-local-mode))
+       (setq evil-magit-want-horizontal-movement t))
    #+END_SRC
 
 ** Ending Boilerplate
