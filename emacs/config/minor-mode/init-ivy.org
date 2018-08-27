@@ -131,6 +131,45 @@
        (("C-s" . swiper)))
    #+END_SRC
 
+** Load ~ivy-rich~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package ivy-rich
+       ;; Load this package after the following packages.
+       :after (ivy validate)
+
+       ;; Load this package eagerly.
+       :demand
+
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<ivy-rich/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
+    :HEADER-ARGS: :noweb-ref ivy-rich/config
+    :END:
+
+    Enable ~ivy-rich-mode~ globally.
+
+    #+BEGIN_SRC emacs-lisp
+      (ivy-rich-mode 1)
+    #+END_SRC
+
+    Align the virtual buffers.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq ivy-virtual-abbreviate 'full
+		     ivy-rich-switch-buffer-align-virtual-buffer t)
+    #+END_SRC
+
+    Abbreviate paths using ~abbreviate-file-name~.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq ivy-rich-path-style 'abbrev)
+    #+END_SRC
+
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'init-ivy)
