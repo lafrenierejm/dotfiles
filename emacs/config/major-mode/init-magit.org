@@ -109,7 +109,13 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package magithub
-       ;; Execute the following code after loading `magithub'.
+       ;; Load this package eagerly.
+       :demand
+
+       ;; Load this package after the following packages.
+       :after (magit)
+
+       ;; Evaluate the following code after loading this package.
        :config
        (magithub-feature-autoinject t))
    #+END_SRC
