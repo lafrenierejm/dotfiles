@@ -57,10 +57,11 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package evil-paredit
-       :demand                               ; do not defer loading
+       ;; Load this package eagerly.
+       :demand
 
-       :after        ; load the parent package after the following packages
-       (evil paredit)
+       ;; Load this package after the following packages.
+       :after (evil paredit)
 
        :hook     ; add hooks for the left side to run the quoted right side
        ((paredit-mode) . evil-paredit-mode)
