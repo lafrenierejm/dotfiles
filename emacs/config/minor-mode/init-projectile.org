@@ -2,7 +2,7 @@
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
-* License							   :noexport:
+* License                                                          :noexport:
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
   All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
 
@@ -11,7 +11,7 @@
   This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
 
 * Code
-** Introductory Boilerplate					   :noexport:
+** Introductory Boilerplate                                        :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
      ;;; init-projectile.el --- Configuration for projectile
 
@@ -22,7 +22,7 @@
      ;;; Code:
    #+END_SRC
 
-** Specify Dependencies						   :noexport:
+** Specify Dependencies                                            :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
      (require 'use-package)
    #+END_SRC
@@ -36,7 +36,7 @@
        ;; Add the following keybindings.
        :bind
        (:map projectile-mode-map
-	("C-c p" . projectile-command-map))
+        ("C-c p" . projectile-command-map))
 
        ;; Evaluate the following code after loading `projectile'.
        :config
@@ -81,7 +81,7 @@
       (counsel-projectile-mode +1)
     #+END_SRC
 
-** Ending Boilerplate						   :noexport:
+** Ending Boilerplate                                              :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'init-projectile)
      ;;; init-projectile.el ends here
