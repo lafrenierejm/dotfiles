@@ -73,43 +73,86 @@
    While it operates similarly to other completion schemes such as =icomplete-mode=, Ivy aims to be more efficient, smaller, simpler, and smoother to use yet highly customizable.
    #+END_QUOTE
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ivy
-       :demand                               ; do not defer loading
+       ;; Load this package eagerly.
+       :demand
 
-       :after
-       (flx validate)
+       ;; Load this package after the following packages.
+       :after (cl-lib flx validate)
 
-       :commands   ; commands provided by the parent package and used below
-       (ivy-mode
-        ivy-format-function-line)
+       ;; Inform the byte-code compiler of the existence of the following functions.
+       :commands (ivy-mode ivy-format-function-line)
 
-       :bind
-       (("C-x C-b" . ivy-switch-buffer)
-        :map ivy-minibuffer-map
-        ("<C-return>" . ivy-immediate-done))
+       ;; Add the following keybindings.
+       :bind (("C-x C-b" . ivy-switch-buffer)
+              :map ivy-minibuffer-map
+              ("<C-return>" . ivy-immediate-done))
 
-       :diminish                   ; invoke `diminish'
-       ;; Do not display "ivy" in the modeline.
-       (ivy-mode . "")
+       ;; Hide the lighter text provided by this package.
+       :diminish
 
-       :config   ; code to execute after the parent package has been loaded
-       ;; Enable ivy-mode globally.
-       (ivy-mode 1)
-       ;; Do not switch to buffers matched by the any of the following regexps.
-       (add-to-list 'ivy-ignore-buffers '"^\*tramp\/.*\*$")
-       ;; Highlight the matching parts of the regexp in the minibuffer.
-       (validate-setq ivy-display-style 'fancy)
-       ;; Extend line highlighting to the right.
-       (validate-setq ivy-format-function 'ivy-format-function-line)
-       ;; Show recently killed buffers when calling `ivy-switch-buffer'.
-       (validate-setq ivy-use-virtual-buffers t)
-       ;; Perform fuzzy matching by default.
-       (validate-setq ivy-re-builders-alist '((read-file-name-internal . ivy--regex-fuzzy)
-                                              (t . ivy--regex-plus)))
-       ;; Do not show "./" and "../" in the filename completion list.
-       (setq ivy-extra-directories nil))
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<ivy/config>>)
    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :DESCRIPTION: Code to evaluate after ~ivy~ has been loaded.
+    :HEADER-ARGS: :noweb-ref ivy/config
+    :END:
+
+    Enable ~ivy-mode~ globally.
+
+    #+BEGIN_SRC emacs-lisp
+      (ivy-mode +1)
+    #+END_SRC
+
+    Highlight the matching parts of the regexp in the minibuffer.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq ivy-display-style 'fancy)
+    #+END_SRC
+
+    Extend line highlighting to the right.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq ivy-format-function 'ivy-format-function-line)
+    #+END_SRC
+
+    Show recently killed buffers when calling `ivy-switch-buffer'.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq ivy-use-virtual-buffers t)
+    #+END_SRC
+
+    Use ~ivy--regex-plus~ as the default matching function.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq ivy-re-builders-alist '((t . ivy--regex-plus)))
+    #+END_SRC
+
+    Do not show =./= or =../= in the filename completion list.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq ivy-extra-directories nil)
+    #+END_SRC
+
+**** Ignore Buffers by Regexp
+     :PROPERTIES:
+     :DESCRIPTION: Do not list buffers matched by certain regexps.
+     :END:
+
+     Ignore TRAMP buffers.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list 'ivy-ignore-buffers (rx line-start "*tramp/"
+                                            (one-or-more (not whitespace))
+                                            whitespace
+                                            (one-or-more anything)
+                                            "*" line-end))
+     #+END_SRC
 
 ** Load Counsel
    #+BEGIN_SRC emacs-lisp :tangle yes
