@@ -29,17 +29,17 @@
      (require 'use-package)
    #+END_SRC
 
-** Load auth-source-pass
+** Load ~auth-source-pass~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package auth-source-pass
-       ;; Only load the package if the following condition is met.
+       ;; Only load this package if the following code evaluates to non-nil.
        :if
        <<auth-source-pass/if>>
 
-       ;; Do not lazily load.
+       ;; Load this package eagerly.
        :demand
 
-       ;; Execute the following code after the package has been loaded.
+       ;; Evaluate the following code after loading this package.
        :config
        <<auth-source-pass/config>>)
    #+END_SRC
