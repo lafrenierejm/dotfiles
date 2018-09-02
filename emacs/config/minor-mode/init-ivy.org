@@ -157,10 +157,7 @@
 ** Load Counsel
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package counsel
-       ;; Do not load the package lazily.
-       :demand                               ; do not defer loading
-
-       ;; Load the parent package after the following packages.
+       ;; Load this package after the following packages.
        :after (ivy)
 
        ;; Add keybindings according to the following alist.
