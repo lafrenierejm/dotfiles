@@ -27,15 +27,16 @@
      (require 'use-package)
    #+END_SRC
 
-** Load elisp-mode
+** Load ~elisp-mode~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package elisp-mode
        ;; This package is included with Emacs.
        :straight nil
 
-       ;; Load `elisp-mode' after the following packages.
+       ;; Load this package after the following packages.
        :after (validate)
 
+       ;; Evaluate the following code after loading this package.
        :config
        <<elisp-mode/config>>)
    #+END_SRC
