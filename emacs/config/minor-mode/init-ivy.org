@@ -35,23 +35,35 @@
      (require 'use-package)
    #+END_SRC
 
-** Load [[https://github.com/lewang/flx][flx]]
-   flx provides fuzzy searching algorithms.
+** Load ~flx~
+   ~[[https://github.com/lewang/flx][flx]]~ provides fuzzy searching algorithms.
    Ivy's fuzzy finding will use flx's scoring mechanism if flx is loaded.
-   
-   #+BEGIN_SRC emacs-lisp :tangle yes
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package flx
-       :demand                               ; do not defer loading
+       ;; Load this package eagerly.
+       :demand
 
-       :after
-       (validate)
+       ;; Load this package after the following packages.
+       :after (validate)
 
-       :init            ; code to execute before loading the parent package
-       ;; Run Emacs's garbage collector after no less than 20 MB allocated.
-       ;; Doing so greatly improve's flx's performance when working with
-       ;; large sets.
+       ;; Evaluate the following code before loading this package.
+       :init
+       <<flx/config>>)
+   #+END_SRC
+
+** Post-Load Evaluation (~:config~)
+   :PROPERTIES:
+   :HEADER-ARGS: :noweb-ref flx/config
+   :DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
+   :END:
+
+   Run Emacs's garbage collector only when at least 20 MB have been allocated.
+   Doing so greatly improves ~flx~'s performance when working with large sets.
+
+   #+BEGIN_SRC emacs-lisp
        (when (> 20000000 gc-cons-threshold)
-         (validate-setq gc-cons-threshold 20000000)))
+         (validate-setq gc-cons-threshold 20000000))
    #+END_SRC
 
 ** Load Ivy
