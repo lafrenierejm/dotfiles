@@ -215,7 +215,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (validate-setq ivy-virtual-abbreviate 'full
-		     ivy-rich-switch-buffer-align-virtual-buffer t)
+                     ivy-rich-switch-buffer-align-virtual-buffer t)
     #+END_SRC
 
     Abbreviate paths using ~abbreviate-file-name~.
