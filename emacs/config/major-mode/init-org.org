@@ -138,6 +138,25 @@
         (validate-setq org-latex-pdf-process '("latexmk -lualatex -f %f")))
     #+END_SRC
 
+** Load ~ox-moderncv~
+   From the [[https://titan-c.gitlab.io/org-cv/][the package's website]]:
+   #+BEGIN_QUOTE
+   This project aims to generate from an org-mode file with reasonably ordered items a latex file which compiles into a reasonably nice CV.
+   In the same spirit[,] the org-mode file must export to markdown so that it can be use[d] for web based CV.
+   #+END_QUOTE
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package ox-moderncv
+       :straight (ox-moderncv :type git :host gitlab :repo "lafrenierejm/org-cv"
+			      :upstream (:host gitlab :repo "Titan-C/org-cv"))
+
+       ;; Load this package eagerly.
+       :demand
+
+       ;; Load this package after the following packages.
+       :after (ox-latex))
+   #+END_SRC
+
 ** Load ~ob-prolog~
    ~[[https://github.com/ljos/ob-prolog][ob-prolog]]~ by Bjarte Johansen (ljos) <[[mailto:Bjarte.Johansen@gmail.com][Bjarte.Johansen@gmail.com]]> as Org-babel support for Prolog.
 
