@@ -181,18 +181,25 @@
                                    '((prolog .t )))
     #+END_SRC
 
-** Load [[https://github.com/Somelauw/evil-org-mode][evil-org]]
-    ~evil-org~ provides a minor mode to add Evil keybindings for Org-mode.
+** Load ~evil-org~
+   [[https://github.com/Somelauw/evil-org-mode][Evil Org mode]] is a minor mode that provides Evil keybindings for common Org mode actions.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package evil-org
-       ;; Load `evil-org' after the following packages.
-       :after (validate)
+       ;; Load this package after the following packages.
+       :after (evil org validate)
 
        ;; Hide the following text in the modeline.
        :diminish evil-org-mode
 
-       ;; Evaluate the following sexps after loading `evil-org'.
+       ;; Add the following values onto their keys' hooks.
+       :hook ((org-mode . evil-org-mode)
+	      (evil-org-mode . evil-org-set-key-theme))
+
+       ;; Inform the bytecode compiler of the following functions.
+       :commands (evil-org-set-key-theme)
+
+       ;; Evaluate the following sexps after loading this package.
        :config
        <<evil-org/config>>)
    #+END_SRC
@@ -201,33 +208,21 @@
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref evil-org/config
     :END:
+
     Choose the keybinding themes to enable.
 
     #+BEGIN_SRC emacs-lisp
-      (setf evil-org-key-theme '(calendar
-                                 navigation
-                                 insert
-                                 return
-                                 textobjects))
-    #+END_SRC
-
-    Enable the above keybinding themes.
-
-    #+BEGIN_SRC emacs-lisp
-      ;; (add-hook 'evil-org-mode-hook #'evil-org-set-key-theme)
-      (evil-org-set-key-theme)
+      (validate-setq evil-org-key-theme '(calendar
+					  navigation
+					  insert
+					  return
+					  textobjects))
     #+END_SRC
 
     Retain selection after typing =<= or =>= in visual state.
 
     #+BEGIN_SRC emacs-lisp
       (validate-setq evil-org-retain-visual-state-on-shift t)
-    #+END_SRC
-
-    Enable ~evil-org~ in all ~org~ buffers.
-
-    #+BEGIN_SRC emacs-lisp
-      (add-hook 'org-mode-hook #'evil-org-mode)
     #+END_SRC
 
 ** Ending Boilerplate
