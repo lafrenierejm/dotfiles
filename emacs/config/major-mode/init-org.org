@@ -34,9 +34,10 @@
        ;; This package is included in GNU Emacs.
        :straight nil
 
+       ;; Load this package after the following packages.
        :after (validate)
 
-       ;; Evaluate the following sexps after loading `org'.
+       ;; Evaluate the following sexps after loading this package.
        :config
        <<org/config>>)
    #+END_SRC
