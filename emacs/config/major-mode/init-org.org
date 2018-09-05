@@ -162,10 +162,7 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ob-prolog
-       ;; Download from MELPA.
-       :pin melpa
-
-       ;; Only load `ob-prolog' if the following sexp's Boolean evaulation is t.
+       ;; Only load this package if the following code evaluates to non-nil.
        :if
        <<ob-prolog/if>>
 
