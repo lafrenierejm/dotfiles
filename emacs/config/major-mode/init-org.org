@@ -1,4 +1,4 @@
-#+TITLE: Org-mode Configuration
+#+TITLE: Org mode Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
@@ -7,7 +7,7 @@
   All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
 
 * About This File
-  This file contains my configuration for [[http://orgmode.org/][Org-mode]].
+  This file contains my configuration for [[http://orgmode.org/][Org mode]].
   Org-mode itself is loaded in =[[file:~/.emacs.d/init.org][init.org]]= because =org-babel-tangle= was required to tangle this file.
   This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
