@@ -212,6 +212,10 @@
        ;; Add the following values onto their keys' hooks.
        :hook ((org-mode . evil-org-mode))
 
+       :bind (:map org-mode-map
+		   ("M-h" . nil)
+		   ("M-l" . nil))
+
        ;; Inform the bytecode compiler of the following functions.
        :commands (evil-org-set-key-theme)
 
