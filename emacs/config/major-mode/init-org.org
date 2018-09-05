@@ -210,8 +210,7 @@
        :diminish evil-org-mode
 
        ;; Add the following values onto their keys' hooks.
-       :hook ((org-mode . evil-org-mode)
-	      (evil-org-mode . evil-org-set-key-theme))
+       :hook ((org-mode . evil-org-mode))
 
        ;; Inform the bytecode compiler of the following functions.
        :commands (evil-org-set-key-theme)
@@ -234,6 +233,12 @@
 					  insert
 					  return
 					  textobjects))
+    #+END_SRC
+
+    Apply the above bindings.
+
+    #+BEGIN_SRC emacs-lisp
+      (evil-org-set-key-theme)
     #+END_SRC
 
     Retain selection after typing =<= or =>= in visual state.
