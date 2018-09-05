@@ -81,15 +81,15 @@
 ** Load ~ox~
    ~ox~ (short for Org eXport) allows exporting (publishing) Org-mode documents such as this one.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ox
        ;; This package is included in the following package.
        :straight nil ;; org
 
-       ;; Load `ox' after the following packages.
+       ;; Load this package after the following packages.
        :after (validate)
 
-       ;; Evlauate the following sexps after loading `ox'.
+       ;; Evlauate the following sexps after loading this package.
        <<ox/config>>)
    #+END_SRC
 
