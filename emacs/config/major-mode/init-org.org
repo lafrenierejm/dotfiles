@@ -113,10 +113,10 @@
        ;; This package is included in the following package.
        :straight nil ; org
 
-       ;; Load `ox' after the following packages.
-       :after (validate)
+       ;; Load this package after the following packages.
+       :after (validate ox)
 
-       ;; Evaluate the following sexps after loading `ox'.
+       ;; Evaluate the following sexps after loading this package.
        :config
        <<ox-latex/config>>)
    #+END_SRC
