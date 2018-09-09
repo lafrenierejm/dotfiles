@@ -1,0 +1,148 @@
+#+TITLE: Smartparens Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License                                                          :noexport:
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file loads and configures Emacs's built-in smartparens package.
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate                                        :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     ;;; init-smartparens.el --- Configuration for smartparens
+
+     ;;; Commentary:
+     ;; This file is tangled from init-smartparens.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+
+** Specify Dependencies                                            :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     (require 'use-package)
+   #+END_SRC
+
+** Load ~smartparens~
+   [[https://github.com/Fuco1/smartparens][Matus Goljer (Fuco1)'s package]] provides a minor mode "that deals with parens pairs and tries to be smart about it".
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package smartparens
+       ;; Load this package eagerly.
+       :demand
+
+       ;; Hide this package's lighter.
+       :diminish smartparens-mode
+
+       ;; Inform the bytecode compiler of the following functions.
+       :commands (smartparens-global-mode)
+
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<smartparens/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :DESCRIPTION: Code to be evaluated after ~smartparens~ has been loaded.
+    :HEADER-ARGS: :noweb-ref smartparens/config
+    :END:
+
+    Enable ~smartparens-mode~ globally.
+
+    #+BEGIN_SRC emacs-lisp
+      (smartparens-global-mode +1)
+    #+END_SRC
+
+** Load ~smartparens-config~
+   ~smartparens-config~ configues ~smartparens~ for various programming languages.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package smartparens-config
+       ;; This package is provided as part of the following package.
+       :straight smartparens
+
+       ;; Load this package eagerly.
+       :demand
+
+       ;; Load this package after the following packages.
+       :after (smartparens))
+   #+END_SRC
+
+** Load ~evil-cleverparens~
+   [[https://github.com/luxbock/evil-cleverparens][Llli Pieponnen (luxbock)'s package]] provides an "Evil normal-state minor-mode for editing lisp-like languages".
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package evil-cleverparens
+       ;; Load this package after the following packages.
+       :after (evil smartparens)
+
+       ;; Inform the bytecode compiler of the following functions.
+       :commands (init-smartparens/evil-move-beyond-eol)
+
+       ;; Hook each of the following item's values to its corresponding keys.
+       :hook
+       <<evil-cleverparens/hook>>
+
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<evil-cleverparens/config>>)
+   #+END_SRC
+
+*** Hooks to Add (~:hook~)
+    :PROPERTIES:
+    :DESCRIPTION: Add hooks related to ~evil-cleverparens~.
+    :END:
+
+    ~evil-cleverparens~ is useful when writing in LISPs:
+
+    #+HEADER: :noweb-ref evil-cleverparens/hook/modes-to-hook
+    #+BEGIN_SRC emacs-lisp
+      (clojure-mode ielm-mode lisp-mode scheme-mode emacs-lisp-mode)
+    #+END_SRC
+
+    Enable ~evil-cleverparens-mode~.
+
+    #+HEADER: :noweb-ref evil-cleverparens/hook/evil-cleverparens-mode
+    #+HEADER: :noweb no-export
+    #+BEGIN_SRC emacs-lisp
+      (<<evil-cleverparens/hook/modes-to-hook>> . evil-cleverparens-mode)
+    #+END_SRC
+
+    Let the cursor move past the end of lines.
+
+    #+HEADER: :noweb-ref evil-cleverparens/hook/evil-move-beyond-eol
+    #+HEADER: :noweb no-export
+    #+BEGIN_SRC emacs-lisp
+      (<<evil-cleverparens/hook/modes-to-hook>> . init-smartparens/evil-move-beyond-eol)
+    #+END_SRC
+
+    #+HEADER: :noweb-ref evil-cleverparens/hook
+    #+BEGIN_SRC emacs-lisp :noweb no-export
+      (<<evil-cleverparens/hook/evil-cleverparens-mode>>
+       <<evil-cleverparens/hook/evil-move-beyond-eol>>)
+    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref evil-cleverparens/config
+    :DESCRIPTION: Code to be evaluated after ~evil-cleverparens~ has been loaded.
+    :END:
+
+    Allow the cursor to move past the end of lines to avoid [[https://github.com/luxbock/evil-cleverparens/issues/29][breaking "certain movement commands"]].
+
+    #+BEGIN_SRC emacs-lisp
+      (defun init-smartparens/evil-move-beyond-eol ()
+	"Enable EVIL-MOVE-BEYOND-EOL."
+	(setq evil-move-beyond-eol t))
+    #+END_SRC
+
+** Ending Boilerplate                                              :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-smartparens)
+     ;;; init-smartparens.el ends here
+   #+END_SRC
