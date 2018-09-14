@@ -64,16 +64,11 @@
        ;; Load after the following packages.
        :after (counsel projectile)
 
-       ;; The following commands are provided below.
-       :commands (counsel-projectile-find-file-dwim
-                  init-projectile/find-file
-                  init-projectile/switch-buffer)
 
        ;; Add the following keybindings.
-       :bind (("C-x f" . init-projectile/find-file)
-              ("C-x F" . counsel-find-file)
-              ("C-x b" . init-projectile/switch-buffer)
-              ("C-x B" . ivy-switch-buffer))
+       :bind (("C-x C-f" . counsel-projectile-find-file-dwim)
+	      ("C-x C-b" . counsel-projectile-switch-to-buffer)
+	      ("C-x C-d" . counsel-projectile-find-dir))
 
        ;; Evaluate the following code after loading this package.
        :config
@@ -92,27 +87,8 @@
       (counsel-projectile-mode +1)
     #+END_SRC
 
-**** Project-Aware Functions
-     :PROPERTIES:
-     :DESCRIPTION: Functions that are aware of whether they are being called from within a project.
-     :END:
 
-     #+BEGIN_SRC emacs-lisp
-       (defun init-projectile/find-file ()
-         (interactive)
-         (call-interactively (if (projectile-project-p)
-                                 #'counsel-projectile-find-file-dwim
-                               #'counsel-find-file)))
-     #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp
-       (defun init-projectile/switch-buffer ()
-         (interactive)
-         (call-interactively
-          (if (projectile-project-p)
-              #'counsel-projectile-switch-to-buffer
-            #'ivy-switch-buffer)))
-     #+END_SRC
 
 ** Ending Boilerplate                                              :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
