@@ -34,9 +34,7 @@
        :demand
 
        ;; Add the following keybindings.
-       :bind
-       (:map projectile-mode-map
-        ("C-c p" . projectile-command-map))
+       :bind (("C-c p" . projectile-command-map))
 
        ;; Evaluate the following code after loading `projectile'.
        :config
