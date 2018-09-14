@@ -33,6 +33,9 @@
        ;; Load this package eagerly.
        :demand
 
+       ;; Load this package after the following packages.
+       :after (validate)
+
        ;; Add the following keybindings.
        :bind (("C-c p" . projectile-command-map))
 
@@ -53,6 +56,12 @@
       (projectile-mode +1)
     #+END_SRC
 
+    When switching projects, default to opening the ~vc-dir~ at the root of the project.
+
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq projectile-switch-project-action 'projectile-vc)
+    #+END_SRC
+
 ** Load ~counsel-projectile~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package counsel-projectile
@@ -60,8 +69,10 @@
        :demand
 
        ;; Load after the following packages.
-       :after (counsel projectile)
+       :after (counsel projectile validate)
 
+       ;; Add hooks.
+       :hook ((projectile-mode) . counsel-projectile-mode)
 
        ;; Add the following keybindings.
        :bind (("C-x C-f" . counsel-projectile-find-file-dwim)
@@ -82,10 +93,15 @@
     Enable ~counsel-projectile-mode~ globally.
 
     #+BEGIN_SRC emacs-lisp
-      (counsel-projectile-mode +1)
+      (counsel-projectile-mode)
     #+END_SRC
 
+    When switching projects, default to opening the ~vc-dir~ at the root of the project.
 
+    #+BEGIN_SRC emacs-lisp
+      (validate-setq projectile-switch-project-action #'counsel-projectile-switch-project-action-vc
+		     counsel-projectile-switch-project-action #'counsel-projectile-switch-project-action-vc)
+    #+END_SRC
 
 
 ** Ending Boilerplate                                              :noexport:
