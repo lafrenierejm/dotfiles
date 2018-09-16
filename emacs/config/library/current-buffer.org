@@ -1,4 +1,4 @@
-#+TITLE: Rename, Copy, and Delete Visited Files and Their Buffers
+#+TITLE: Operate on the Current Buffer
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
@@ -12,10 +12,10 @@
 * Code
 ** Introductory Boilerplate					   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     ;;; buffer-with-visited-file.el --- {Rename,Move,Delete} the visited file and buffer
+     ;;; current-buffer.el --- Perform actions on the current buffer and visited file.
 
      ;;; Commentary:
-     ;; This file is tangled from buffer-with-visited-file.org.
+     ;; This file is tangled from current-buffer.org.
      ;; Changes made here will be overwritten by changes to that Org file.
 
      ;;; Code:
@@ -23,11 +23,12 @@
 ** Required Packages
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      (require 's)
+     (require 'files)
    #+END_SRC
 ** Get Arguments for Interactive Call
 *** Get a Buffer to Use
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun buffer-with-visited-file~obj-to-buffer (&optional buffer)
+      (defun current-buffer~obj-to-buffer (&optional buffer)
 	"Get the buffer to use.
 
       If BUFFER is nil, use the current buffer.
@@ -58,7 +59,7 @@
     Otherwise use the current buffer.
 
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun buffer-with-visited-file~get-buffer (verb)
+      (defun current-buffer~get-buffer (verb)
 	(if current-prefix-arg
 	    (get-buffer (read-buffer (format "Buffer to %s with visiting file: "
 					     (s-downcase verb))
@@ -68,7 +69,7 @@
     The user shall be prompted for the new file path.
 
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun buffer-with-visited-file~read-file-name (verb buffer-name)
+      (defun current-buffer~read-file-name (verb buffer-name)
 	"Prompt the user for the destination of applying VERB to BUFFER-NAME's visiting file."
 	(read-file-name (format "%s the file visited by buffer %s to: "
 				(s-capitalize verb)
@@ -81,7 +82,7 @@
     :END:
 
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun buffer-with-visited-file/rename (new-file-name &optional buffer ok-if-already-exists)
+      (defun current-buffer/rename (new-file-name &optional buffer ok-if-already-exists)
 	"Rename a buffer and the file it's visiting, if any, to NEW-FILE-NAME.
 
       If BUFFER is not provided, use the current buffer.
@@ -90,13 +91,13 @@
 
       OK-IF-ALREADY-EXISTS is passed directly to `rename-file'."
 	;; If called interactively...
-	(interactive (let* ((buffer (buffer-with-visited-file~get-buffer "rename"))
+	(interactive (let* ((buffer (current-buffer~get-buffer "rename"))
 			    (new-file-name
-			     (buffer-with-visited-file~read-file-name "rename"
+			     (current-buffer~read-file-name "rename"
 								      (buffer-name buffer)))
 			    (ok-if-already-exists 1)) ; Request confirmation before overwrite.
 		       (list new-file-name buffer ok-if-already-exists)))
-	(let* ((buffer (buffer-with-visited-file~obj-to-buffer buffer))
+	(let* ((buffer (current-buffer~obj-to-buffer buffer))
 	       (file (buffer-file-name buffer))
 	       (orig-buffer-name (buffer-name buffer))
 	       (new-buffer-name nil))
@@ -119,7 +120,7 @@
     #+END_SRC
 *** Bind Function
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (global-set-key (kbd "C-x C-r") #'buffer-with-visited-file/rename)
+      (global-set-key (kbd "C-x C-r") #'current-buffer/rename)
     #+END_SRC
 
 ** Delete
@@ -129,15 +130,15 @@
     :END:
 
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun buffer-with-visited-file/delete (&optional buffer)
+      (defun current-buffer/delete (&optional buffer)
 	"Delete the file a buffer is visiting, if any, then kill the buffer.
 
       If no optional BUFFER is provided, use the current buffer.
       If the optional BUFFER is a string, use that string as the name of the buffer to use.
       If the optional BUFFER is a symbol, prompt the user for the name of the buffer to use."
 	;; If called interactively...
-	(interactive (list (buffer-with-visited-file~get-buffer "delete")))
-	(let* ((buffer (buffer-with-visited-file~obj-to-buffer buffer))
+	(interactive (list (current-buffer~get-buffer "delete")))
+	(let* ((buffer (current-buffer~obj-to-buffer buffer))
 	       (file (buffer-file-name buffer)))
 	  (when file
 	    (cond
@@ -153,15 +154,15 @@
 
 *** Bind Function
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (global-set-key (kbd "C-x C-d") #'buffer-with-visited-file/delete)
+      (global-set-key (kbd "C-x C-d") #'current-buffer/delete)
     #+END_SRC
 
 ** Copy
 *** Define Copy Function
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun buffer-with-visited-file/copy (new-file-name &optional
+      (defun current-buffer/copy (new-file-name &optional
 							  buffer
-							  overwrite-existing-file
+							  confirm-overwrite
 							  keep-time
 							  preserve-uid-gid
 							  perserve-permissions)
@@ -173,39 +174,85 @@
 
       If the specified buffer is not visiting a file, write the buffer's contents to NEW-FILE-NAME.
 
-      Signals a 'file-already-exists' error if new NEW-FILE-NAME already exists and OVERWRITE-EXISTING-FILE is nil.
+      If CONFIRM-OVERWRITE is non-nil, this function asks for confirmation before overwiting an existing file at NEW-FILE-NAME.
+      Interactively, confirmation is required unless a prefix argument is supplied.
 
-      KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS are passed directly to `copy-file' as KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS, respectively."
+      KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS are passed directly to `copy-file'."
 	;; If called interactively...
-	(interactive (let* ((buffer (buffer-with-visited-file~get-buffer "copy"))
-			    (new-file-name
-			     (buffer-with-visited-file~read-file-name "copy"
-								      (buffer-name buffer)))
-			    (overwrite-existing-file 1)) ; Request confirmation before overwrite.
-		       (list new-file-name buffer overwrite-existing-file)))
-	(let* ((buffer (buffer-with-visited-file~obj-to-buffer buffer))
+	(interactive (let* ((buffer (current-buffer~get-buffer "copy"))
+			    (new-file-name (current-buffer~read-file-name "copy" (buffer-name buffer)))
+			    ;; Request confirmation before overwriting an existing file, unless called with a prefix argument.
+			    (confirm-overwrite (if current-prefix-arg t 1)))
+		       (list new-file-name buffer confirm-overwrite)))
+	(let* ((buffer (current-buffer~obj-to-buffer buffer))
 	       (file (buffer-file-name buffer))
 	       (new-buffer-name (buffer-name buffer)))
+	  ;; If BUFFER is not visiting a file...
 	  (if (not (file-exists-p file))
-	      (write-file new-file-name overwrite-existing-file)
+	      ;; Write the content of BUFFER to NEW-FILE-NAME.
+	      (write-file new-file-name confirm-overwrite)
+	    ;; Else...
+	    ;; Copy the visited file FILE to NEW-FILE-NAME.
 	    (copy-file file
 		       new-file-name
-		       overwrite-existing-file
+		       ;; If CONFIRM-OVERWRITE is non-nil...
+		       (if confirm-overwrite
+			   ;; Ask for confirmation before overwriting.
+			   1
+			 ;; Else overwrite without prompting.
+			 t)
 		       keep-time
 		       preserve-uid-gid
 		       perserve-permissions)
+	    ;; Open NEW-FILE-NAME in a separate buffer.
 	    (setq new-buffer-name (buffer-name (find-file-noselect new-file-name))))
-	  (message "Wrote buffer %s as %s and opened the new file as %s."
+	  (message "Wrote buffer %s to %s and opened the new file as %s."
 		   (buffer-name buffer) new-file-name new-buffer-name)))
     #+END_SRC
 
 *** Bind Function
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (global-set-key (kbd "C-x C-c") #'buffer-with-visited-file/copy)
+      (global-set-key (kbd "C-x C-c") #'current-buffer/copy)
     #+END_SRC
 
+** Revert
+*** Define Revert Function
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun current-buffer/revert (&optional noconfirm)
+	"Replace current buffer text with the text of the visited file on disk.
+
+      If NOCONFIRM is nil, prompt the user before reverting a modified buffer.
+      NOCONFIRM is set to t when called interactively with a prefix argument."
+	(interactive (list current-prefix-arg))
+	(revert-buffer :ignore-auto (or noconfirm (not (buffer-modified-p)))))
+    #+END_SRC
+*** Bind Function
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (global-set-key (kbd "C-x C-g") #'current-buffer/revert)
+    #+END_SRC
+** Kill
+*** Define Function
+    :PROPERTIES:
+    :DESCRIPTION: Kill the current buffer.
+    :END:
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun current-buffer/kill (&optional ignore-buffer-modified-p)
+	"Kill the current buffer.
+
+      If IGNORE-BUFFER-MODIFIED-P is nil, prompt the user before killing a modified buffer.
+      IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a prefix argument."
+	(interactive (list current-prefix-arg))
+	(when ignore-buffer-modified-p
+	  (set-buffer-modified-p nil))
+	(kill-this-buffer))
+    #+END_SRC
+*** Bind Function
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (global-set-key (kbd "C-x C-k") #'current-buffer/kill)
+    #+END_SRC
 ** Ending Boilerplate 						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'buffer-with-visited-file)
-     ;;; buffer-with-visited-file.el ends here
+     (provide 'current-buffer)
+     ;;; current-buffer.el ends here
    #+END_SRC
