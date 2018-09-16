@@ -1,0 +1,37 @@
+#+TITLE: Configure Diminish
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License
+  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     ;;; init-diminish.el --- Perform actions on the current buffer and visited file.
+
+     ;;; Commentary:
+     ;; This file is tangled from init-diminish.org.
+     ;; Changes made here will be overwritten by changes to that Org file.
+
+     ;;; Code:
+   #+END_SRC
+** Required Packages
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'use-package)
+   #+END_SRC
+** Load ~dminish~
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package diminish
+       ;; Load this package eagerly.
+       :demand)
+   #+END_SRC
+** Ending Boilerplate                                              :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (provide 'init-diminish)
+     ;;; init-diminish.el ends here
+   #+END_SRC
