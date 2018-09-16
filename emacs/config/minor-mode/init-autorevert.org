@@ -1,0 +1,48 @@
+#+TITLE: Autorevert Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+* License							   :noexport:
+  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
+  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+
+* About This File
+  This file contains configuration for Flyspell mode.
+  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+
+* Code
+** Introductory Boilerplate					   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+;;; init-autorevert.el --- Configure autoreverting
+
+;;; Commentary:
+;; This file is tangled from init-autorevert.org.
+;; Changes made here will be overwritten by changes to that Org-mode file.
+
+;;; Code:
+   #+END_SRC
+
+** Specify Dependencies						   :noexport:
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'use-package)
+   #+END_SRC
+
+** Load ~autorevert~
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+     (use-package autorevert
+       ;; Use the built-in version of this package.
+       :straight nil
+
+       ;; Hide the lighter provided by this package.
+       :diminish auto-revert-mode
+
+       ;; Customize the following variables.
+       :custom
+       (auto-revert-verbose nil "Do not display messages when buffers are reverted."))
+   #+END_SRC
+
+** Ending Boilerplate                                              :noexport:
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (provide 'init-autorevert)
+    ;;; init-autorevert.el ends here
+  #+END_SRC
