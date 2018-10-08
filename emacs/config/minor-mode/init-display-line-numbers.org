@@ -56,7 +56,7 @@
 
     ~display-line-numbers~ was added in GNU Emacs 26.1.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (not (version< "26.1" emacs-version))
     #+END_SRC
 
@@ -67,13 +67,13 @@
 
     Display relative line numbers for all lines except the current line.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq display-line-numbers-type 'relative)
     #+END_SRC
 
     Display the absolute line number of the current line.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (setq display-line-numbers-current-absolute t)
     #+END_SRC
 

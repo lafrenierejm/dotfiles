@@ -52,7 +52,7 @@
     This behavior can be controlled via the value of ~indent-tabs-mode~.
     The following code creates a function to set the value of ~indent-tabs-mode~ to ~nil~, then adds that function to a hook on ~emacs-lisp-mode~.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (defun init-elisp/use-spaces ()
 	(validate-setq indent-tabs-mode nil))
       (add-hook 'emacs-lisp-mode-hook #'init-elisp/use-spaces)

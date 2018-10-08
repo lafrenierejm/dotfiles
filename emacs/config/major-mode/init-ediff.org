@@ -49,7 +49,7 @@
 
     Use a single frame for all buffers including the control panel.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq ediff-window-setup-function 'ediff-setup-windows-plain)
     #+END_SRC
 

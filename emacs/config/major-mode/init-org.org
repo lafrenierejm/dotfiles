@@ -48,13 +48,13 @@
     :END:
     Edit source blocks in the current window.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq org-src-window-setup 'current-window)
     #+END_SRC
 
     Settings.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq org-highlight-latex-and-related '(latex)
                      org-return-follows-link t
                      org-src-fontify-natively t
@@ -64,7 +64,7 @@
     Set the workflow states.
     Unfortunately, [[https://github.com/Malabarba/validate.el/issues/5][an issue]] with ~validate~ prevents using ~validate-setq~ to set the states.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (setq org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
                                           "DELEGATED" "DONE(d!/!)" "|"
                                           "CANCELED")))
@@ -72,7 +72,7 @@
 
     Enable minor modes in all ~org~ buffers.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (dolist (minor-mode (list
                            'flyspell-mode
                            'visual-line-mode))
@@ -101,7 +101,7 @@
 
     Allow =BIND= keywords to define local variable values at the time of export.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq org-export-allow-bind-keywords t)
     #+END_SRC
 
@@ -127,13 +127,13 @@
     :END:
     Use the =listings= LaTeX package to typeset source code.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq org-latex-listings t)
     #+END_SRC
 
     Use =latexmk= with a LuaLaTeX backend to compile TeX exports if =latexmk= and its runtime dependencies are installed.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (when (and (executable-find "latexmk")
                  (executable-find "perl"))
         (validate-setq org-latex-pdf-process '("latexmk -lualatex -f %f")))
@@ -181,7 +181,7 @@
     Adding Babel support for Prolog is useless unless a Prolog interpreter is available on the user's =$PATH=.
     Thus far, the only Prolog interpreter I have used is =swipl=.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (executable-find "swipl")
     #+END_SRC
 
@@ -193,7 +193,7 @@
 
     Add Prolog to the list of languages available to Babel.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (org-babel-do-load-languages 'org-babel-load-languages
                                    '((prolog .t )))
     #+END_SRC
@@ -231,7 +231,7 @@
 
     Choose the keybinding themes to enable.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq evil-org-key-theme '(calendar
 					  navigation
 					  insert
@@ -241,13 +241,13 @@
 
     Apply the above bindings.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (evil-org-set-key-theme)
     #+END_SRC
 
     Retain selection after typing =<= or =>= in visual state.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq evil-org-retain-visual-state-on-shift t)
     #+END_SRC
 

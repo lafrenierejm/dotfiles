@@ -54,8 +54,7 @@
     Create an alist whose keys are regexps matching filenames and whose values are the function to enable ~pdf-view-mode~.
 
     #+HEADER: :noweb-ref pdf-tools/mode
-    #+HEADER: :noweb no-export
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+BEGIN_SRC emacs-lisp :tangle no :noweb yes
       ((<<rx-pdf-file()>> . pdf-view-mode))
     #+END_SRC
 
@@ -64,7 +63,7 @@
 
      #+NAME: rx-pdf-file
      #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (rx ".pdf" string-end)
      #+END_SRC
 
@@ -83,7 +82,7 @@
     | =q= | do nothing                  |
     | =y= | yank selection to clipboard |
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (:map pdf-view-mode-map
             ("h" . left-char)
             ("j" . pdf-view-next-line-or-next-page)
@@ -103,7 +102,7 @@
     - Attempt to install system packages.
     - Signal an error if the build fails.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (pdf-tools-install 'no-query)
     #+END_SRC
 
@@ -115,13 +114,13 @@
 
     Because PDF-Tools is used to render binary files, its buffers should automatically refresh when the contents of their corresponding files are changed.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (add-hook 'pdf-tools-mode-hook 'auto-revert-mode)
     #+END_SRC
 
     Use monokai colors for "midnight mode."
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq pdf-view-midnight-colors '("#F8F8F2" . "#272822"))
     #+END_SRC
 

@@ -55,7 +55,7 @@
     ~magit~ is an interface for Git.
     As such, it is worthless if =git= is not in the user's ~$PATH~.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (executable-find "git")
     #+END_SRC
 
@@ -68,14 +68,14 @@
 **** Suppress Messages
     Suppress the message about ~magit-auto-revert-mode~.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq magit-no-message '("Turning on magit-auto-revert-mode..."))
     #+END_SRC
 
 **** Return After Commit
     Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       ;; Close commit message buffer after commit.
       (defadvice git-commit-commit (after move-to-magit-buffer activate)
         (delete-window))
@@ -89,7 +89,7 @@
      However, Magit's semver is /par/ of the string returned by ~magit-version~;
      it is everything before the first hyphen.
 
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (defun init-magit/version ()
          "Return Magit's version for use in comparisons."
          (car (split-string (magit-version) "-")))

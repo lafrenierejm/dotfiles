@@ -45,13 +45,13 @@
     Only enable a single workspace.
     Buffer switching with [[https://github.com/abo-abo/swiper][Ivy]] is preferred to using multiple workspaces.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (setq exwm-workspace-number 1)
     #+END_SRC
 
     Hide the modeline in floating X windows.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
       (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
     #+END_SRC
@@ -99,7 +99,7 @@
      Keybindings using Meta are allowed by convention to be rebound by major and minor modes.
      The keybindings for the above actions must not be overridden, so they are added to ~overriding-local-map~.
 
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        ;; Move between windows.
        (exwm-input-set-key (kbd "M-j") 'windmove-down)
        (exwm-input-set-key (kbd "M-h") 'windmove-left)
@@ -119,7 +119,7 @@
 
      Launching applications is performed by calling =start-process-shell-command=.
 
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        ;; Launch applications.
        (defun init-exwm/start-process (command)
 	 "Start a process via a shell command."

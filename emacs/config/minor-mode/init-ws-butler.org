@@ -57,7 +57,7 @@
 
     Enable ws-butler globally.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (ws-butler-global-mode)
     #+END_SRC
 

@@ -114,7 +114,7 @@
 
     Disable highlighting of keywords that are not variable names.
 
-    #+BEGIN_SRC emacs-lisp :comments link
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq rainbow-identifiers-faces-to-override
                      '(font-lock-constant-face
                        font-lock-type-face

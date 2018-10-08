@@ -49,7 +49,7 @@
 
     Enable ~company-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (global-company-mode)
     #+END_SRC
 

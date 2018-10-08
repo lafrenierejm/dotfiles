@@ -54,25 +54,25 @@
 
     Enable diff-hl-mode by default.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (global-diff-hl-mode 1)
     #+END_SRC
 
     Enable diff-hl in Dired buffers.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
     #+END_SRC
 
     Perform highlighting on-the-fly.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (diff-hl-flydiff-mode 1)
     #+END_SRC
 
     Add a hook to update diff-hl's status when refreshing with modern versions of Magit.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
     #+END_SRC
 

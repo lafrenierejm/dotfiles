@@ -61,7 +61,7 @@
    Run Emacs's garbage collector only when at least 20 MB have been allocated.
    Doing so greatly improves ~flx~'s performance when working with large sets.
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
        (when (> 20000000 gc-cons-threshold)
          (validate-setq gc-cons-threshold 20000000))
    #+END_SRC
@@ -105,37 +105,37 @@
 
     Enable ~ivy-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (ivy-mode +1)
     #+END_SRC
 
     Highlight the matching parts of the regexp in the minibuffer.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq ivy-display-style 'fancy)
     #+END_SRC
 
     Extend line highlighting to the right.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq ivy-format-function 'ivy-format-function-line)
     #+END_SRC
 
     Show recently killed buffers when calling `ivy-switch-buffer'.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq ivy-use-virtual-buffers t)
     #+END_SRC
 
     Use ~ivy--regex-plus~ as the default matching function.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq ivy-re-builders-alist '((t . ivy--regex-plus)))
     #+END_SRC
 
     Do not show =./= or =../= in the filename completion list.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (setq ivy-extra-directories nil)
     #+END_SRC
 
@@ -146,7 +146,7 @@
 
      Ignore TRAMP buffers.
 
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (add-to-list 'ivy-ignore-buffers (rx line-start "*tramp/"
                                             (one-or-more (not whitespace))
                                             whitespace
@@ -207,20 +207,20 @@
 
     Enable ~ivy-rich-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (ivy-rich-mode 1)
     #+END_SRC
 
     Align the virtual buffers.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq ivy-virtual-abbreviate 'full
                      ivy-rich-switch-buffer-align-virtual-buffer t)
     #+END_SRC
 
     Abbreviate paths using ~abbreviate-file-name~.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq ivy-rich-path-style 'abbrev)
     #+END_SRC
 

@@ -45,7 +45,7 @@
 
     Precede inline (i.e. end-of-line) comments with two spaces, per PEP 8.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (defun init-python/set-comment-inline-offset ()
 	(set (make-local-variable 'comment-inline-offset) 2))
       (add-hook 'python-mode-hook #'init-python/set-comment-inline-offset)

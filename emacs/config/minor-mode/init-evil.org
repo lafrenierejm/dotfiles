@@ -45,7 +45,7 @@
     Set the following keybindings globally across Evil.
     They may be overwritten by other modes' keybindings.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (evil-global-set-key 'motion "H" 'init-evil/beginning-of-maybe-line)
       (evil-global-set-key 'motion "L" 'init-evil/end-of-maybe-line)
       (evil-global-set-key 'motion (kbd "SPC") 'evil-toggle-fold)
@@ -54,12 +54,12 @@
 
     Enable Evil by default in all modes.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (evil-mode)
     #+END_SRC
 
 **** Define =evil-yank-to-end-of-line=
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (defun init-evil/evil-yank-to-end-of-line ()
          "Yank the characters from point to the end of the current line."
          (interactive)
@@ -71,7 +71,7 @@
       The following code is based on [[http://stackoverflow.com/a/14245964%0A][a StackOverflow answer]] by user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
       All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
-      #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp :tangle no
         (defun init-evil/back-to-comment ()
           "Move point to the beginning of the comment in the current line.
         If the current line does not contain a comment, then point will stay
@@ -104,7 +104,7 @@
       #+END_SRC
 
 ***** Define ~init-evil/back-totext~
-      #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp :tangle no
         (defun init-evil/back-totext ()
           "Move point to the last non-whitespace character on this line."
           (interactive)
@@ -126,7 +126,7 @@
       The following code is based on [[https://stackoverflow.com/a/145359/8468492][a StackOverflow answer]] by user [[https://stackoverflow.com/users/8355/cjm][cjm]].
       All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
-      #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp :tangle no
         (defun init-evil/beginning-of-maybe-line ()
           "Move point to first non-whitespace character or beginning of the line.
         Move point to the first non-whitespace character on the line.  If the
@@ -157,7 +157,7 @@
       The following is licensed CC BY-SA 3.0-licensed by StackOverflow user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
       It is based on [[http://stackoverflow.com/a/14245964][Gilles's StackOverflow answer]].
 
-      #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp :tangle no
         (defun init-evil/end-of-maybe-line ()
           "Incrementally move point to the ends of syntactic blocks within the line.
         The syntactic blocks are as follows, ordered from right to left:

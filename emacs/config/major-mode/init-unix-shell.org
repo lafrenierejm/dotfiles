@@ -64,7 +64,7 @@
 
      #+NAME: rx-zsh-dotfile
      #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (rx "/.z"
            (one-or-more (not (any ".")))
            string-end)
@@ -75,7 +75,7 @@
 
      #+NAME: rx-zsh-script
      #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (rx ".zsh" string-end)
      #+END_SRC
 
@@ -84,7 +84,7 @@
 
     #+HEADER: :noweb no-export
     #+HEADER: :noweb-ref sh-script/mode
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       ((<<rx-zsh-dotfile()>> . sh-script-mode)
        (<<rx-zsh-script()>> . sh-script-mode))
     #+END_SRC
@@ -97,7 +97,7 @@
 **** Set Shell Type
      First define a function that sets the shell type to Zsh when working with a Zsh file.
 
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (defun init-unix-shell/set-shell-type ()
          "Set the shell type based on variable `buffer-file-name'."
          ;; Loop over the list of Zsh filenames.
@@ -110,7 +110,7 @@
 
     Then evaluate the function on a hook on ~shell-script-mode~.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (add-hook 'shell-script-mode #'init-unix-shell/set-shell-type)
     #+END_SRC
 

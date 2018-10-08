@@ -54,7 +54,7 @@
 
     Enable ~smartparens-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (smartparens-global-mode +1)
     #+END_SRC
 
@@ -122,9 +122,9 @@
     #+END_SRC
 
     #+HEADER: :noweb-ref evil-cleverparens/hook
-    #+BEGIN_SRC emacs-lisp :noweb no-export
       (<<evil-cleverparens/hook/evil-cleverparens-mode>>
        <<evil-cleverparens/hook/evil-move-beyond-eol>>)
+    #+BEGIN_SRC emacs-lisp :noweb yes
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
@@ -135,7 +135,7 @@
 
     Allow the cursor to move past the end of lines to avoid [[https://github.com/luxbock/evil-cleverparens/issues/29][breaking "certain movement commands"]].
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (defun init-smartparens/evil-move-beyond-eol ()
 	"Enable EVIL-MOVE-BEYOND-EOL."
 	(setq evil-move-beyond-eol t))

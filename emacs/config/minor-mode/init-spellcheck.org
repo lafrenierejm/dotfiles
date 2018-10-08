@@ -61,7 +61,7 @@
     ~ispell~ provides interfaces for third-party spellchecking binaries.
     If no such binaries exist, ~ispell~ does not need to be downloaded.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (executable-find "aspell")
     #+END_SRC
 
@@ -74,7 +74,7 @@
     Set the executable to use for spellchecking.
     If =aspell= is not available, disable ~ispell~.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (cond
        ((executable-find "aspell")
         (setq ispell-program-name "aspell"))

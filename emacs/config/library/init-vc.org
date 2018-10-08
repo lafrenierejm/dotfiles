@@ -49,7 +49,7 @@
 
     If attempting to edit a version controlled file through a symlink, follow the link and visit the real file.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq vc-follow-symlinks t)
     #+END_SRC
 

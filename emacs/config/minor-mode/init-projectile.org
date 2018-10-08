@@ -52,13 +52,13 @@
 
     Enable ~projectile-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (projectile-mode +1)
     #+END_SRC
 
     When switching projects, default to opening the ~vc-dir~ at the root of the project.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq projectile-switch-project-action 'projectile-vc)
     #+END_SRC
 
@@ -92,13 +92,13 @@
 
     Enable ~counsel-projectile-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (counsel-projectile-mode)
     #+END_SRC
 
     When switching projects, default to opening the ~vc-dir~ at the root of the project.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq projectile-switch-project-action #'counsel-projectile-switch-project-action-vc
 		     counsel-projectile-switch-project-action #'counsel-projectile-switch-project-action-vc)
     #+END_SRC

@@ -53,44 +53,44 @@
 
     Automatically save style information with the buffer.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq TeX-auto-save t)
     #+END_SRC
 
     Parse files after loading them.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq TeX-parse-self t)
     #+END_SRC
 
     Query user for master file.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (setq-default TeX-master nil)
     #+END_SRC
 
     Use pdf-tools to view PDF outputs.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq TeX-view-program-selection '((output-pdf "PDF Tools")))
     #+END_SRC
 
     Automatically start the server for correlating allTeX's output back to the source.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq TeX-source-correlate-start-server t)
     #+END_SRC
 
     Update PDF buffers are successful compilation.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (add-hook 'TeX-after-compilation-finished-functions
 		'TeX-revert-document-buffer)
     #+END_SRC
 
     Use RefTeX.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (setq reftex-plug-into-AUCTeX t)
     #+END_SRC
 
@@ -113,6 +113,8 @@
       (add-hook 'LaTeX-mode-hook
                 #'init-tex/configure-latex-mode)
       (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (latex-math-mode)
     #+END_SRC
 
 **** allTeX Configuration
@@ -209,25 +211,25 @@
 
     Run the package's setup.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
        (auctex-latexmk-setup)
     #+END_SRC
 
     Use the =-pdf= flag when ~TeX-PDF-mode~ is active.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq auctex-latexmk-inherit-TeX-PDF-mode t)
     #+END_SRC
 
     Workaround a MikTeX bug by disabling ~TeX-file-line-error~.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq TeX-file-line-error nil)
     #+END_SRC
 
     Set =latexmk= as the default compilation command.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq TeX-command-default "LatexMk")
     #+END_SRC
 
