@@ -34,15 +34,14 @@
      (require 'use-package)
    #+END_SRC
 
-** Load ws-butler
+** Load ~ws-butler~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ws-butler
        ;; Load this package eagerly.
        :demand
 
-       ;; Do not display "wb" in the modeline.
+       ;; Hide this package's lighter.
        :diminish
-       (ws-butler-mode . "")
 
        ;; Evaluate the following code after loading this package.
        :config
