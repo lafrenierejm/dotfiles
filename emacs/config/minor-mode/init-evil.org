@@ -24,33 +24,53 @@
 
 ** Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
 ** Load ~evil~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil
-       ;; Load eagerly.
+       ;; Load this package eagerly.
        :demand
 
-       :config   ; code to execute after the parent package has been loaded
+       ;; Set the following keybindings.
+       :general
+       <<evil/general>>
+
+       ;; Evaluate the following code after loading this package.
+       :config
        <<evil/config>>)
    #+END_SRC
 
-*** Post-Load Execution
+*** Set Keybindings (~:general~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref evil/general
+    :END:
+
+    Do not allow =C-z= to enter Emacs mode.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (:states (list 'normal 'insert 'visual 'replace 'operator 'motion)
+	       "C-z" nil)
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (:states 'motion
+               "H" #'init-evil/beginning-of-maybe-line
+               "L" #'init-evil/end-of-maybe-line
+	       (kbd "SPC") 'evil-toggle-fold)
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (:states 'normal
+	       "Y" #'init-evil/evil-yank-to-end-of-line)
+    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref evil/config
     :END:
-
-    Set the following keybindings globally across Evil.
-    They may be overwritten by other modes' keybindings.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (evil-global-set-key 'motion "H" 'init-evil/beginning-of-maybe-line)
-      (evil-global-set-key 'motion "L" 'init-evil/end-of-maybe-line)
-      (evil-global-set-key 'motion (kbd "SPC") 'evil-toggle-fold)
-      (evil-global-set-key 'normal "Y" 'init-evil/evil-yank-to-end-of-line)
-    #+END_SRC
 
     Enable Evil by default in all modes.
 

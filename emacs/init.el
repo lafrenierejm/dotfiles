@@ -29,6 +29,10 @@
 (setq straight-use-package-by-default t) ; Download packages with straight by default.
 (setq use-package-always-defer t)       ; Lazy-load packages by default.
 
+;; Load general, which provides convenience wrappers for setting keybindings.
+(use-package general
+  ;; Load this package eagerly.
+  :demand)
 
 ;;; Load validate.el
 ;; [[https://github.com/Malabarba/validate.el][validate.el]] provides functions to perform schema validation.
