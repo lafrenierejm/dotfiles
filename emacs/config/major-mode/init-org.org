@@ -25,6 +25,7 @@
 
 ** Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -37,15 +38,32 @@
        ;; Load this package after the following packages.
        :after (validate)
 
+       ;; Add the following non-autoloading hooks.
+       :gfhook
+       <<org/gfhook>>
+
        ;; Evaluate the following sexps after loading this package.
        :config
        <<org/config>>)
    #+END_SRC
 
+*** Add Non-Autoloading Hooks (~:general~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref org/gfhook
+    :END:
+
+    Enable minor modes in all ~org~ buffers.
+    ~nil~ is used to infer the name of the hook.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (nil (list #'flyspell-mode #'visual-line-mode))
+    #+END_SRC
+
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref org/config
     :END:
+
     Edit source blocks in the current window.
 
     #+BEGIN_SRC emacs-lisp :tangle no
@@ -68,15 +86,6 @@
       (setq org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
                                           "DELEGATED" "DONE(d!/!)" "|"
                                           "CANCELED")))
-    #+END_SRC
-
-    Enable minor modes in all ~org~ buffers.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (dolist (minor-mode (list
-                           'flyspell-mode
-                           'visual-line-mode))
-        (add-hook 'org-mode-hook minor-mode))
     #+END_SRC
 
 ** Load ~ox~
@@ -209,12 +218,13 @@
        ;; Hide the following text in the modeline.
        :diminish evil-org-mode
 
-       ;; Add the following values onto their keys' hooks.
-       :hook ((org-mode . evil-org-mode))
+       ;; Add hooks.
+       :ghook
+       <<evil-org/ghook>>
 
-       :bind (:map org-mode-map
-		   ("M-h" . nil)
-		   ("M-l" . nil))
+       ;; Add keybindings.
+       :general
+       <<evil-org/general>>
 
        ;; Inform the bytecode compiler of the following functions.
        :commands (evil-org-set-key-theme)
@@ -223,6 +233,30 @@
        :config
        <<evil-org/config>>)
    #+END_SRC
+
+*** Add Hooks (~:ghook~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref evil-org/ghook
+    :END:
+
+    Enable Evil Org mode in all Org mode buffers.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('org-mode-hook #'evil-org-mode)
+    #+END_SRC
+
+*** Modify Keybindings (~:general~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref evil-org/general
+    :END:
+
+    Unbind =M-h= and =M-l= in ~org-mode-map~.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (:keymaps 'org-mode-map
+                "M-h" nil
+                "M-l" nil)
+    #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
