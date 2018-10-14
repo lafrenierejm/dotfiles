@@ -24,6 +24,7 @@
 
 ** Specify Dependencies                                            :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -36,7 +37,7 @@
        :demand
 
        ;; Hide this package's lighter.
-       :diminish smartparens-mode
+       :diminish
 
        ;; Inform the bytecode compiler of the following functions.
        :commands (smartparens-global-mode)
@@ -44,6 +45,33 @@
        ;; Evaluate the following code after loading this package.
        :config
        <<smartparens/config>>)
+   #+END_SRC
+
+   It is desirable to have slightly different Smartparens behavior when editing LISPs.
+   The following is a list of the LISP modes I edit in.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defconst init-smartparens-lisp-modes
+       '(cider-repl-mode
+	 clojure-mode
+	 emacs-lisp-mode
+	 ielm-mode
+	 lisp-mode
+	 scheme-mode)
+       "A list of LISP major modes.")
+   #+END_SRC
+
+   And the above modes' hooks:
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defconst init-smartparens-lisp-mode-hooks
+       '(cider-repl-mode-hook
+	 clojure-mode-hook
+	 emacs-lisp-mode-hook
+	 ielm-mode-hook
+	 lisp-mode-hook
+	 scheme-mode-hook)
+       "A list of LISP major mode hooks.")
    #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
@@ -59,19 +87,30 @@
     #+END_SRC
 
 ** Load ~smartparens-config~
-   ~smartparens-config~ configues ~smartparens~ for various programming languages.
+   ~smartparens-config~ configures ~smartparens~ for various programming languages.
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package smartparens-config
        ;; This package is provided as part of the following package.
        :straight smartparens
 
-       ;; Load this package eagerly.
-       :demand
-
        ;; Load this package after the following packages.
-       :after (smartparens))
+       :after (smartparens)
+
+       ;; Load this package eagerly.
+       :demand)
    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref smartparens-config/config
+    :END:
+
+    Remove the single quote (') from the list of auto-paired character in LISPs.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (sp-local-pair init-smartparens-lisps "'" nil :actions :rem)
+    #+END_SRC
 
 ** Load ~evil-cleverparens~
    [[https://github.com/luxbock/evil-cleverparens][Llli Pieponnen (luxbock)'s package]] provides an "Evil normal-state minor-mode for editing lisp-like languages".
@@ -84,47 +123,31 @@
        ;; Inform the bytecode compiler of the following functions.
        :commands (init-smartparens/evil-move-beyond-eol)
 
-       ;; Hook each of the following item's values to its corresponding keys.
-       :hook
-       <<evil-cleverparens/hook>>
+       ;; Add the following hooks.
+       :ghook
+       <<evil-cleverparens/ghook>>
 
        ;; Evaluate the following code after loading this package.
        :config
        <<evil-cleverparens/config>>)
    #+END_SRC
 
-*** Hooks to Add (~:hook~)
+*** Add Hooks (~:ghook~)
     :PROPERTIES:
     :DESCRIPTION: Add hooks related to ~evil-cleverparens~.
+    :HEADER-ARGS: :noweb-ref evil-cleverparens/ghook
     :END:
 
-    ~evil-cleverparens~ is useful when writing in LISPs:
+    Enable ~evil-cleverparens-mode~ for LISPs.
 
-    #+HEADER: :noweb-ref evil-cleverparens/hook/modes-to-hook
-    #+BEGIN_SRC emacs-lisp
-      (clojure-mode ielm-mode lisp-mode scheme-mode emacs-lisp-mode)
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (init-smartparens-lisp-mode-hooks #'evil-cleverparens-mode)
     #+END_SRC
 
-    Enable ~evil-cleverparens-mode~.
+    Let the cursor move past the end of lines in LISPs.
 
-    #+HEADER: :noweb-ref evil-cleverparens/hook/evil-cleverparens-mode
-    #+HEADER: :noweb no-export
-    #+BEGIN_SRC emacs-lisp
-      (<<evil-cleverparens/hook/modes-to-hook>> . evil-cleverparens-mode)
-    #+END_SRC
-
-    Let the cursor move past the end of lines.
-
-    #+HEADER: :noweb-ref evil-cleverparens/hook/evil-move-beyond-eol
-    #+HEADER: :noweb no-export
-    #+BEGIN_SRC emacs-lisp
-      (<<evil-cleverparens/hook/modes-to-hook>> . init-smartparens/evil-move-beyond-eol)
-    #+END_SRC
-
-    #+HEADER: :noweb-ref evil-cleverparens/hook
-      (<<evil-cleverparens/hook/evil-cleverparens-mode>>
-       <<evil-cleverparens/hook/evil-move-beyond-eol>>)
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (init-smartparens-lisp-mode-hooks #'init-smartparens/evil-move-beyond-eol)
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
