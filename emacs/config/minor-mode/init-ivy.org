@@ -32,6 +32,7 @@
    
 ** Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -75,27 +76,84 @@
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ivy
+       ;; Load this package after the following packages.
+       :after (cl-lib flx validate)
+
        ;; Load this package eagerly.
        :demand
 
-       ;; Load this package after the following packages.
-       :after (cl-lib flx validate)
+       ;; Hide the lighter text provided by this package.
+       :diminish ivy-mode
 
        ;; Inform the byte-code compiler of the existence of the following functions.
        :commands (ivy-mode ivy-format-function-line)
 
        ;; Add the following keybindings.
-       :bind (("C-x C-b" . ivy-switch-buffer)
-              :map ivy-minibuffer-map
-              ("<C-return>" . ivy-immediate-done))
+       :general
+       <<ivy/general>>
 
-       ;; Hide the lighter text provided by this package.
-       :diminish
+       ;; Apply the following customizations.
+       :custom
+       <<ivy/custom>>
 
        ;; Evaluate the following code after loading this package.
        :config
        <<ivy/config>>)
    #+END_SRC
+
+*** Keybindings (~:general~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ivy/general
+    :END:
+
+    Shadow ~switch-to-buffer~ with ~ivy-switch-buffer~.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ("C-x C-b" #'ivy-switch-buffer)
+    #+END_SRC
+
+    When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (:keymaps 'ivy-minibuffer-map
+                "<C-return>" #'ivy-immediate-done)
+    #+END_SRC
+
+*** Variable Customizations (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ivy/custom
+    :END:
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-display-style 'fancy "Highlight the matching parts of the regexp in the minibuffer.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-format-function #'ivy-format-function-line "Extend line highlighting to the right.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-use-virtual-buffers t "Show recently killed buffers when calling `ivy-switch-buffer'.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-re-builders-alist '((t . ivy--regex-plus)) "Use `ivy--regex-plus' as the default matching function.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-ignore-buffers
+       (cons (rx line-start "*tramp/"
+		 (one-or-more (not whitespace))
+		 whitespace
+		 (one-or-more anything)
+		 "*" line-end)
+	     ivy-ignore-buffers)
+       "Ignore TRAMP buffers.")
+    #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
@@ -109,66 +167,24 @@
       (ivy-mode +1)
     #+END_SRC
 
-    Highlight the matching parts of the regexp in the minibuffer.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq ivy-display-style 'fancy)
-    #+END_SRC
-
-    Extend line highlighting to the right.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq ivy-format-function 'ivy-format-function-line)
-    #+END_SRC
-
-    Show recently killed buffers when calling `ivy-switch-buffer'.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq ivy-use-virtual-buffers t)
-    #+END_SRC
-
-    Use ~ivy--regex-plus~ as the default matching function.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq ivy-re-builders-alist '((t . ivy--regex-plus)))
-    #+END_SRC
-
-    Do not show =./= or =../= in the filename completion list.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (setq ivy-extra-directories nil)
-    #+END_SRC
-
-**** Ignore Buffers by Regexp
-     :PROPERTIES:
-     :DESCRIPTION: Do not list buffers matched by certain regexps.
-     :END:
-
-     Ignore TRAMP buffers.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (add-to-list 'ivy-ignore-buffers (rx line-start "*tramp/"
-                                            (one-or-more (not whitespace))
-                                            whitespace
-                                            (one-or-more anything)
-                                            "*" line-end))
-     #+END_SRC
-
 ** Load Counsel
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package counsel
        ;; Load this package after the following packages.
        :after (ivy)
 
+       ;; Load this package eagerly.
+       :demand
+
        ;; Add keybindings according to the following alist.
        :bind
        (("M-x" . counsel-M-x)
-        ("C-h k" . counsel-descbinds)
-        ("C-x f" . counsel-find-file)
-        ("C-x C-f" . counsel-find-file)
-        ("C-x C-4 C-f" . find-file-other-window)
-        ("C-x C-4 b" . switch-to-buffer-other-window)
-        ("C-x C-4 C-b" . switch-to-buffer-other-window)))
+	("C-h k" . counsel-descbinds)
+	("C-x f" . counsel-find-file)
+	("C-x C-f" . counsel-find-file)
+	("C-x C-4 C-f" . find-file-other-window)
+	("C-x C-4 b" . switch-to-buffer-other-window)
+	("C-x C-4 C-b" . switch-to-buffer-other-window)))
    #+END_SRC
 
 ** Load Swiper
@@ -194,10 +210,36 @@
        ;; Load this package eagerly.
        :demand
 
+       ;; Apply the following customizations.
+       :custom
+       <<ivy-rich/custom>>
+
        ;; Evaluate the following code after loading this package.
        :config
        <<ivy-rich/config>>)
    #+END_SRC
+
+*** Variable Customization (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref ivy-rich/custom
+    :END:
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-virtual-abbreviate 'abbreviate "Abbreviate virtual buffer names.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-rich-path-style 'relative "Show paths relative their the project home.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (ivy-rich--display-transformers-list
+       (plist-put
+	ivy-rich--display-transformers-list
+	'counsel-projectile-switch-to-buffer
+	(plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer))
+       "Add support for `counsel-projectile-switch-to-buffer', mirroring that of `ivy-switch-buffer'.")
+    #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
@@ -209,19 +251,6 @@
 
     #+BEGIN_SRC emacs-lisp :tangle no
       (ivy-rich-mode 1)
-    #+END_SRC
-
-    Align the virtual buffers.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq ivy-virtual-abbreviate 'full
-                     ivy-rich-switch-buffer-align-virtual-buffer t)
-    #+END_SRC
-
-    Abbreviate paths using ~abbreviate-file-name~.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq ivy-rich-path-style 'abbrev)
     #+END_SRC
 
 ** Ending Boilerplate
