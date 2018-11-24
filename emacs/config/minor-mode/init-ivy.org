@@ -53,19 +53,19 @@
        <<flx/config>>)
    #+END_SRC
 
-** Post-Load Evaluation (~:config~)
-   :PROPERTIES:
-   :HEADER-ARGS: :noweb-ref flx/config
-   :DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
-   :END:
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref flx/config
+    :DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
+    :END:
 
-   Run Emacs's garbage collector only when at least 20 MB have been allocated.
-   Doing so greatly improves ~flx~'s performance when working with large sets.
+    Run Emacs's garbage collector only when at least 20 MB have been allocated.
+    Doing so greatly improves ~flx~'s performance when working with large sets.
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-       (when (> 20000000 gc-cons-threshold)
-         (validate-setq gc-cons-threshold 20000000))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (when (> 20000000 gc-cons-threshold)
+	(validate-setq gc-cons-threshold 20000000))
+    #+END_SRC
 
 ** Load Ivy
    From the project's README:
