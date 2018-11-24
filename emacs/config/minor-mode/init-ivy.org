@@ -77,7 +77,7 @@
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package ivy
        ;; Load this package after the following packages.
-       :after (cl-lib flx validate)
+       :after (flx)
 
        ;; Load this package eagerly.
        :demand
