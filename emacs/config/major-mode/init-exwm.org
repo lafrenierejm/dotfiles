@@ -122,20 +122,20 @@
 
      #+BEGIN_SRC emacs-lisp :tangle no
        ;; Move between windows.
-       (exwm-input-set-key (kbd "M-j") 'windmove-down)
-       (exwm-input-set-key (kbd "M-h") 'windmove-left)
-       (exwm-input-set-key (kbd "M-l") 'windmove-right)
-       (exwm-input-set-key (kbd "M-k") 'windmove-up)
+       (exwm-input-set-key (kbd "M-j") #'windmove-down)
+       (exwm-input-set-key (kbd "M-h") #'windmove-left)
+       (exwm-input-set-key (kbd "M-l") #'windmove-right)
+       (exwm-input-set-key (kbd "M-k") #'windmove-up)
        ;; Close the current window and kill its buffer.
-       (exwm-input-set-key (kbd "M-Q") 'kill-buffer-and-window)
+       (exwm-input-set-key (kbd "M-Q") #'kill-buffer-and-window)
        ;; Close the current window, leaving its buffer open.
-       (exwm-input-set-key (kbd "M-q") 'delete-window)
+       (exwm-input-set-key (kbd "M-q") #'delete-window)
        ;; Close other windows.
-       (exwm-input-set-key (kbd "M-o") 'delete-other-windows)
+       (exwm-input-set-key (kbd "M-o") #'delete-other-windows)
        ;; Run a shell command.
-       (exwm-input-set-key (kbd "M-d") 'init-exwm/start-process)
+       (exwm-input-set-key (kbd "M-d") #'init-exwm/start-process)
        ;; Open Eshell in the current directory.
-       (exwm-input-set-key (kbd "C-z") 'init-eshell/here)
+       (exwm-input-set-key (kbd "C-z") #'init-eshell/find-eshell-here)
      #+END_SRC
 
      Launching applications is performed by calling =start-process-shell-command=.
