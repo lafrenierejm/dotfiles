@@ -24,6 +24,7 @@
 
 ** Specify Dependencies						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -33,10 +34,53 @@
        ;; Do not load the package lazily.
        :demand
 
+       ;; Add the following function hooks.
+       :gfhook
+       <<exwm/gfhook>>
+
        ;; Execute the following code after the package has been loaded.
        :config
        <<exwm/config>>)
    #+END_SRC
+
+*** Non-Auto-Loading Hooks (~:gfhook~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref exwm/gfhook
+    :END:
+
+    Hide the mode line for these classes:
+    - Firefox
+
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('exwm-manage-finish-hook
+       (defun init-exwm/hide-mode-line ()
+	 "Hide the mode line in special buffers"
+	 (when (string-match "Firefox" exwm-class-name)
+	   (exwm-layout-hide-mode-line))))
+    #+END_SRC
+
+    Use the window names of the application as its buffers' names for these application classes:
+    - Firefox
+
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('exwm-update-title-hook
+       (defun init-exwm/update-title ()
+	 (when (string-match "Firefox" exwm-class-name)
+	   (exwm-workspace-rename-buffer exwm-title))))
+    #+END_SRC
+
+    Add simulation keys for Firefox windows.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('exwm-manage-finish-hook
+       (defun init-exwm/set-firefox-simulation-keys ()
+	 (when (and exwm-class-name (string= exwm-class-name "Firefox"))
+	   (exwm-input-set-local-simulation-keys
+	    '(([\?C-t] . [\?C-n])
+	      ([\?C-q] . [\?C-w]))))))
+    #+END_SRC
 
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
@@ -55,29 +99,6 @@
       (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
       (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
     #+END_SRC
-
-**** Buffer Names
-     All buffers created in EXWM mode are named =*EXWM*=.
-     This can be changed via ~exwm-update-class-hook~ or ~exwm-update-title-hook~.
-     EXWM's wiki provides the following advice:
-     - Use ~exwm-workspace-rename-buffer~ to avoid name conflicts.
-     - Only rename buffers with one of the above hooks;
-       there is no guaranteed order in which the hooks will be run, so renaming in both creates a race condition.
-     - For applications with multiple windows (e.g. GIMP), the class names of all windows are usually the same.
-       In such cases, differentiate using window titles rather than class names.
-     - Some applications (e.g. web browsers) change their titles frequently.
-       Identifying windows based on class names may be more appropriate for such applications.
-
-
-     All windows shall be named by their class names except for Java applications and GIMP.
-
-     #+BEGIN_SRC emacs-lisp
-       (add-hook 'exwm-update-class-hook
-		 (lambda ()
-		   (unless (or (string-prefix-p "sun-awt-X11-" exwm-instance-name)
-			       (string= "gimp" exwm-instance-name))
-		     (exwm-workspace-rename-buffer exwm-class-name))))
-     #+END_SRC
 
 **** Keybindings
      Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
