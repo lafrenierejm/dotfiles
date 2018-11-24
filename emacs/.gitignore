@@ -1,5 +1,6 @@
 !.gitignore
 elpa/
+straight/
 *.el
 *.elc
 *#
