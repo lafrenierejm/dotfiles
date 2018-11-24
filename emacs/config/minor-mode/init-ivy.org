@@ -144,17 +144,6 @@
       (ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (ivy-ignore-buffers
-       (cons (rx line-start "*tramp/"
-		 (one-or-more (not whitespace))
-		 whitespace
-		 (one-or-more anything)
-		 "*" line-end)
-	     ivy-ignore-buffers)
-       "Ignore TRAMP buffers.")
-    #+END_SRC
-
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to evaluate after ~ivy~ has been loaded.
@@ -167,6 +156,18 @@
       (ivy-mode +1)
     #+END_SRC
 
+    Do not include TRAMP buffers in Ivy's buffer lists.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq ivy-ignore-buffers
+	    (cons (rx line-start "*tramp/"
+		      (one-or-more (not whitespace))
+		      whitespace
+		      (one-or-more anything)
+		      "*" line-end)
+		  ivy-ignore-buffers))
+    #+END_SRC
+
 ** Load Counsel
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package counsel
@@ -176,15 +177,15 @@
        ;; Load this package eagerly.
        :demand
 
-       ;; Add keybindings according to the following alist.
-       :bind
-       (("M-x" . counsel-M-x)
-	("C-h k" . counsel-descbinds)
-	("C-x f" . counsel-find-file)
-	("C-x C-f" . counsel-find-file)
-	("C-x C-4 C-f" . find-file-other-window)
-	("C-x C-4 b" . switch-to-buffer-other-window)
-	("C-x C-4 C-b" . switch-to-buffer-other-window)))
+       ;; Perform the following keybindings.
+       :general
+       ("C-h k" #'counsel-descbinds)
+       ("C-x C-4 C-b" #'switch-to-buffer-other-window)
+       ("C-x C-4 C-f" #'find-file-other-window)
+       ("C-x C-4 b" #'switch-to-buffer-other-window)
+       ("C-x C-f" #'counsel-find-file)
+       ("C-x f" #'counsel-find-file)
+       ("M-x" #'counsel-M-x))
    #+END_SRC
 
 ** Load Swiper
@@ -196,12 +197,12 @@
        ;; Load this package after the following packages.
        :after (ivy)
 
-       ;; Add the following keybindings.
-       :bind
-       (("C-s" . swiper)))
+       ;; Perform the following keybindings.
+       :general
+       ("C-s" #'swiper))
    #+END_SRC
 
-** Load ~ivy-rich~
+** Load Ivy Rich
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package ivy-rich
        ;; Load this package after the following packages.
@@ -232,15 +233,6 @@
       (ivy-rich-path-style 'relative "Show paths relative their the project home.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (ivy-rich--display-transformers-list
-       (plist-put
-	ivy-rich--display-transformers-list
-	'counsel-projectile-switch-to-buffer
-	(plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer))
-       "Add support for `counsel-projectile-switch-to-buffer', mirroring that of `ivy-switch-buffer'.")
-    #+END_SRC
-
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
@@ -251,6 +243,16 @@
 
     #+BEGIN_SRC emacs-lisp :tangle no
       (ivy-rich-mode 1)
+    #+END_SRC
+
+    Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-switch-buffer~.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq ivy-rich--display-transformers-list
+	    (plist-put
+	     ivy-rich--display-transformers-list
+	     'counsel-projectile-switch-to-buffer
+	     (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
     #+END_SRC
 
 ** Ending Boilerplate
