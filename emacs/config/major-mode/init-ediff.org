@@ -33,24 +33,18 @@
        ;; This package is included in Emacs.
        :straight nil
 
-       ;; Load `ediff' after the following packages.
-       (validate)
-
-       ;; Evaluate the following code after loading `ediff'.
-       :config
-       <<ediff/config>>)
+       ;; Evaluate the following code after loading this package.
+       :custom
+       <<ediff/custom>>)
    #+END_SRC
 
-*** Post-Load Evaluation (~:config~)
+*** Customize Variables (~:custom~)
     :PROPERTIES:
-    :DESCRIPTION: Code to be evaluated after ~ediff~ has been loaded.
-    :HEADER-ARGS: :noweb-ref ediff/config
+    :HEADER-ARGS: :noweb-ref ediff/custom
     :END:
 
-    Use a single frame for all buffers including the control panel.
-
     #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq ediff-window-setup-function 'ediff-setup-windows-plain)
+      (ediff-window-setup-function #'ediff-setup-windows-plain "Use a single frame for all buffers including the control panel.")
     #+END_SRC
 
 ** Load evil-ediff
