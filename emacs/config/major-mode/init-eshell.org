@@ -24,6 +24,7 @@
 
 ** Specify Dependencies						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -115,18 +116,95 @@
        ;; Load this package eagerly.
        :demand
 
-       ;; Load after the following packages.
+       ;; Load this package after the following packages.
        :after (em-hist evil ivy magit)
 
-       ;; Execute the following code before loading.
+       ;; Inform the bytecode compiler of the following functions.
+       :commands
+       (init-eshell/add-visual-commands
+	init-eshell/beginning-of-maybe-line
+	init-eshell/find-eshell
+	init-eshell/find-eshell-here
+	init-eshell/move-point-on-insert-to-command)
+
+       ;; Add the following keybindings.
+       :general
+       <<eshell/general>>
+
+       ;; Add the following non-autoloading hooks.
+       :gfhook
+       <<eshell/gfhook>>
+
+       ;; Execute the following code before loading this package.
        :init
        <<eshell/init>>
 
-       ;; Execute the following code after loading.
+       ;; Execute the following code after loading this package.
        :config
        <<eshell/config>>)
    #+END_SRC
 
+*** Keybindings (~:general~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref eshell/general
+    :END:
+
+    Map the opening an Eshell buffer to =C-x z=.
+    This keybinding mirrors the defaults for ~find-file~ and ~dired~.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ("C-x z" #'init-eshell/find-eshell)
+    #+END_SRC
+
+    Map ~init-eshell/find-eshell-here~ to =C-z=.
+    This imitates the behavior of *NIX terminal applications.
+    In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ("C-z" #'init-eshell/find-eshell-here)
+    #+END_SRC
+
+    Account for the prompt's read-only text when moving the point to the beginning of the line.
+
+    #+BEGIN_SRC text :tangle no
+      (:keymaps 'eshell-mode-map :state 'motion
+		"H" #'init-eshell/beginning-of-maybe-line)
+    #+END_SRC
+
+    Unbind =C-d= to make room for ~bury-buffer~.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (:keymaps 'eshell-mode-map :state (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)
+		"C-d" #'bury-buffer)
+    #+END_SRC
+
+*** Non-Autoloading Hooks (~:gfhook~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref eshell/gfhook
+    :END:
+
+    Enable ~init-eshell/move-point-on-insert-to-command~.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (nil #'init-eshell/move-point-on-insert-to-command)
+    #+END_SRC
+
+    Make the list of commands to be run in Term mode buffers.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (nil #'init-eshell/add-visual-commands)
+    #+END_SRC
+
+    Bury the Eshell buffer with =C-d=.
+    This is reminiscent of how terminal applications respond to =sigkill=
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (nil '(lambda ()
+	      (general-define-key
+	       :keymaps 'eshell-mode-map
+	       :state (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)
+	       "C-d" #'bury-buffer)))
+    #+END_SRC
 *** Pre-Load Execution (~:init~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref eshell/init
@@ -146,18 +224,6 @@
     :HEADER-ARGS: :noweb-ref eshell/config
     :END:
 
-**** Add Keybindings to ~eshell-mode-map~
-     Eshell binds keys differently, for reasons beyond me.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (add-hook 'eshell-mode-hook 'init-eshell/move-point-on-insert-to-command)
-       ;; (add-hook 'eshell-mode-hook (lambda ()
-       ;;                               (define-key eshell-mode-map (kbd "<tab>") 'completion-at-point)))
-       ;; Account for the read-only prompt text when moving to the beginning of the line.
-       (evil-define-key 'motion eshell-mode-map
-	 "H" #'init-eshell/beginning-of-maybe-line)
-     #+END_SRC
-
 **** "Visual" Commands
      Run the following commands in a =term= buffer:
      #+NAME: visual-commands
@@ -166,20 +232,12 @@
      - top
      - tail
 
-
       #+BEGIN_SRC emacs-lisp :tangle no
 	(defun init-eshell/add-visual-commands ()
           "Add commands to `eshell-visual-commands'."
           (let ((commands (list "alsamixer" "ssh" "top" "tail")))
             (dolist (command commands)
                     (add-to-list 'eshell-visual-commands command))))
-	(add-hook 'eshell-mode-hook
-                  #'init-eshell/add-visual-commands)
-      #+END_SRC
-
-**** Keybinding
-     Have to rebind in hooks.
-
       #+END_SRC
 
 **** Open Eshell in a Given Directory
@@ -206,13 +264,6 @@
            (eshell)))
      #+END_SRC
 
-     Map the above function to =C-x z=.
-     This keybinding mirrors the defaults for ~find-file~ and ~dired~.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (global-set-key (kbd "C-x z") #'init-eshell/find-eshell)
-     #+END_SRC
-
 **** Open Eshell in the Current Directory
      Define a function to open an Eshell instance in the current directory.
      If an Eshell instance already exists in that directory, switch to its buffer.
@@ -228,15 +279,6 @@
                                               (file-name-directory (buffer-file-name))
                                             default-directory))))
            (init-eshell/find-eshell cwd)))
-     #+END_SRC
-
-     Map the above ~init-eshell/find-eshell-here~ function to =C-z=.
-     This imitates the behavior of terminal usage, where =C-z= is the key combination to suspend the current process, usually resulting in the user being returned to their shell.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (let ((states (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)))
-         (dolist (state states)
-           (evil-global-set-key state (kbd "C-z") #'init-eshell/find-eshell-here)))
      #+END_SRC
 
 **** Advise ~eshell/cd~ to Rename Buffer
@@ -319,18 +361,6 @@
 
     #+BEGIN_SRC emacs-lisp :tangle no
       (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
-    #+END_SRC
-
-    Rebind keys dynamically when at an input prompt.
-
-    #+BEGIN_SRC text
-      (add-to-list 'em-rebind 'eshell-modules-list)
-    #+END_SRC
-
-    Use TRAMP.
-
-    #+BEGIN_SRC text
-      (add-to-list 'em-tramp 'eshell-modules-list)
     #+END_SRC
 
 ** Load ~em-tramp~
