@@ -117,7 +117,7 @@
        :demand
 
        ;; Load this package after the following packages.
-       :after (em-hist evil ivy magit)
+       :after (em-hist evil ivy)
 
        ;; Inform the bytecode compiler of the following functions.
        :commands
@@ -219,6 +219,48 @@
        (setenv "PAGER" "cat")
      #+END_SRC
 
+**** Use Magit for Some ~git~ Commands
+     The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.rulez.org][<algernon@bonehunter.rulez.org>]] and shared under GPLv3.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (with-eval-after-load 'magit
+	 (defun eshell/git (command &rest args)
+	   (pcase command
+	     ;; Use magit's log.
+	     ("log" (apply #'algernon/git-log args))
+	     ;; Use magit's status.
+	     ("status" (progn
+			 (magit-status)
+			 (eshell/echo)))
+	     ;; Run all other commands directly in `git'.
+	     (_ (let ((command (s-join " " (append (list "git" command) args))))
+		  (message command)
+		  (shell-command-to-string command))))))
+     #+END_SRC
+
+     Run ~magit-log~ after determining if the argument to ~git log~ was a file or branch.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (with-eval-after-load 'magit
+	 (defun algernon/git-log (&rest args)
+	   (let* ((branch-or-file (car args))
+		  (file-list (if (and branch-or-file (f-file-p branch-or-file))
+				 args
+			       (cdr args)))
+		  (branch (if (and branch-or-file (f-file-p branch-or-file))
+			      "HEAD"
+			    branch-or-file)))
+	     (message branch-or-file)
+	     (if branch-or-file
+		 (magit-log (list branch)
+			    '()
+			    (mapcar
+			     (lambda (f) (concat (file-name-as-directory (eshell/pwd)) f))
+			     file-list))
+	       (magit-log-head)))
+	   (eshell/echo)))
+     #+END_SRC
+
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref eshell/config
@@ -293,46 +335,6 @@
          "Rename the buffer with the abbreviation of the new directory."
          (let ((cwd (abbreviate-file-name default-directory)))
            (rename-buffer (concat "*eshell: " cwd "*"))))
-     #+END_SRC
-
-**** Use Magit for Some ~git~ Commands
-     The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.rulez.org][<algernon@bonehunter.rulez.org>]] and shared under GPLv3.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (defun eshell/git (command &rest args)
-         (pcase command
-           ;; Use magit's log.
-           ("log" (apply #'algernon/git-log args))
-           ;; Use magit's status.
-           ("status" (progn
-                       (magit-status)
-                       (eshell/echo)))
-           ;; Run all other commands directly in `git'.
-           (_ (let ((command (s-join " " (append (list "git" command) args))))
-                (message command)
-                (shell-command-to-string command)))))
-     #+END_SRC
-
-     Run ~magit-log~ after determining if the argument to ~git log~ was a file or branch.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (defun algernon/git-log (&rest args)
-	 (let* ((branch-or-file (car args))
-		(file-list (if (and branch-or-file (f-file-p branch-or-file))
-			       args
-			     (cdr args)))
-		(branch (if (and branch-or-file (f-file-p branch-or-file))
-			    "HEAD"
-			  branch-or-file)))
-	   (message branch-or-file)
-	   (if branch-or-file
-	       (magit-log (list branch)
-			  '()
-			  (mapcar
-			   (lambda (f) (concat (file-name-as-directory (eshell/pwd)) f))
-			   file-list))
-	     (magit-log-head)))
-	 (eshell/echo))
      #+END_SRC
 
 ** Load ~esh-module~
