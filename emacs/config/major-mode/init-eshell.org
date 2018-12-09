@@ -156,9 +156,9 @@
     :END:
 
 **** Set =$PAGER=
-     Because Eshell runs entirely within an Emacs buffer it does not need any external pager.
-     Instead, all text can be dumped directly into the Eshell buffer.
-     This is accomplished by setting the value of =$PAGER= to =cat=.
+     Because Eshell runs entirely within an Emacs buffer, Eshell does not need an external pager.
+     Instead, text can be dumped directly into the buffer.
+     This is accomplished by setting ~PAGER~ to ~cat~.
 
      #+BEGIN_SRC emacs-lisp :tangle no
        (setenv "PAGER" "cat")
