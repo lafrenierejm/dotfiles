@@ -30,24 +30,32 @@
 ** Load ~projectile~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package projectile
-       ;; Load this package eagerly.
-       :demand
-
        ;; Load this package after the following packages.
        :after (validate)
 
        ;; Add the following keybindings.
        :bind (("C-c p" . projectile-command-map))
 
+       :init
+       <<projectile/init>>
+
        ;; Evaluate the following code after loading `projectile'.
        :config
        <<projectile/config>>)
    #+END_SRC
 
-*** Post-Load Evaluation (~:config~)
+*** Auto-Loading Keybindings (~:general~)
     :PROPERTIES:
-    :DESCRIPTION: Code to be evaluated after ~projectile~ has been loaded.
-    :HEADER-ARGS: :noweb-ref projectile/config
+    :HEADER-ARGS: :noweb-ref projectile/general
+    :END:
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ("C-c p" #'projectile-command-map)
+    #+END_SRC
+
+*** Pre-Load Evaluation (~:init~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref projectile/init
     :END:
 
     Enable ~projectile-mode~ globally.
@@ -55,6 +63,12 @@
     #+BEGIN_SRC emacs-lisp :tangle no
       (projectile-mode +1)
     #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :DESCRIPTION: Code to be evaluated after ~projectile~ has been loaded.
+    :HEADER-ARGS: :noweb-ref projectile/config
+    :END:
 
     When switching projects, default to opening the ~vc-dir~ at the root of the project.
 
