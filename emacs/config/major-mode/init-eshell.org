@@ -107,29 +107,6 @@
                (beginning-of-line)))))
      #+END_SRC
 
-**** Search History with Ivy
-
-     The following code is copied from https://github.com/samrayleung/emacs.d/blob/master/lisp/init-eshell.el.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (defun init-esh-mode/ivy-esh-history ()
-	 "Interactively search eshell's history."
-	 (interactive)
-	 (save-excursion
-	   (let* ((start-pos (eshell-beginning-of-input))
-		  (input (eshell-get-old-input))
-		  (esh-history (when (> (ring-size eshell-history-ring) 0)
-			     (ring-elements eshell-history-ring)))
-		  (command (ivy-read "Command: "
-				     (delete-dups esh-history)
-				     :initial-input input
-				     :require-match nil
-				     :action #'ivy-completion-in-region-action)))
-	     (eshell-kill-input)
-	     (insert command)))
-	 (end-of-line))
-     #+END_SRC
-
 ** Load ~eshell~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
