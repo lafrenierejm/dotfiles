@@ -92,7 +92,7 @@
      2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
      3. Point will be moved to the beginning of the line.
 
-     #+BEGIN_SRC emacs-lisp :noweb-ref esh-mode/config
+     #+BEGIN_SRC emacs-lisp :tangle no
        (defun init-eshell/beginning-of-maybe-line ()
          "Move point to the start of the command beginning of the line."
          (interactive)
