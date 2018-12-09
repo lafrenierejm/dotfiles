@@ -180,16 +180,6 @@
 **** Keybinding
      Have to rebind in hooks.
 
-***** Bury Eshell Buffer
-      Bury the current buffer with =C-d=.
-
-      #+BEGIN_SRC emacs-lisp :tangle no
-	(defun init-eshell/keybinding/bury-buffer ()
-	  (define-key eshell-mode-map (kbd "C-d") #'bury-buffer))
-      #+END_SRC
-
-      #+BEGIN_SRC emacs-lisp :tangle no
-	(add-hook 'eshell-mode-hook #'init-eshell/keybinding/bury-buffer)
       #+END_SRC
 
 **** Open Eshell in a Given Directory
