@@ -30,8 +30,6 @@
 ** Load ~projectile~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package projectile
-       ;; Load this package after the following packages.
-       :after (validate)
 
        ;; Add the following keybindings.
        :bind (("C-c p" . projectile-command-map))
@@ -39,9 +37,9 @@
        :init
        <<projectile/init>>
 
-       ;; Evaluate the following code after loading `projectile'.
-       :config
-       <<projectile/config>>)
+       ;; Customize the following variables.
+       :custom
+       <<projectile/custom>>)
    #+END_SRC
 
 *** Auto-Loading Keybindings (~:general~)
@@ -64,16 +62,13 @@
       (projectile-mode +1)
     #+END_SRC
 
-*** Post-Load Evaluation (~:config~)
+*** Variable Customizations (~:custom~)
     :PROPERTIES:
-    :DESCRIPTION: Code to be evaluated after ~projectile~ has been loaded.
-    :HEADER-ARGS: :noweb-ref projectile/config
+    :HEADER-ARGS: :noweb-ref projectile/custom
     :END:
 
-    When switching projects, default to opening the ~vc-dir~ at the root of the project.
-
     #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq projectile-switch-project-action 'projectile-vc)
+      (projectile-switch-project-action #'projectile-vc "When switching projects, default to opening the `vc-dir' at the root of the project.")
     #+END_SRC
 
 ** Load ~counsel-projectile~
