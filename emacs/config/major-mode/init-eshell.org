@@ -300,59 +300,86 @@
                     (add-to-list 'eshell-visual-commands command))))
       #+END_SRC
 
-**** Open Eshell in a Given Directory
-     Define a function to start an Eshell instance in a given directory.
+**** Custom Functions
+***** Create Names for Eshell Buffers
+
+      #+BEGIN_SRC emacs-lisp :tangle no
+	(defun init-eshell/name-buffer (directory)
+	  "Create a name for an Eshell buffer in DIRECTORY.
+
+	If DIRECTORY is not in a probject as determined by Projectile, use the
+	abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
+	Projectile project, use the path of DIRECOTYR relative to the project's root."
+	  (concat "*eshell "
+		  (if-let ((projectile-loaded (featurep 'projectile))
+			   (project-root (projectile-project-root directory))
+			   (project-name (projectile-project-name project-root)))
+		      ;; If in a project:
+		      (if (string=
+			   (file-name-as-directory (expand-file-name directory))
+			   project-root)
+			  ;; If at a project's root: use the project's name
+			  project-name
+			;; Else not at project's root: use path starting with project's root
+			(s-chop-suffix
+			 "/"
+			 (concat project-name "/"
+				 (file-relative-name (expand-file-name directory) project-root))))
+		    ;; Else not in project: use abbreviated path
+		    (abbreviate-file-name directory))
+		  "*"))
+      #+END_SRC
+
+***** Open Eshell in a Given Directory
+      Open or switch to an Eshell buffer in a given directory.
+
+      #+BEGIN_SRC emacs-lisp :tangle no
+	(defun init-eshell/find-eshell (directory)
+	  "Open Eshell in DIRECTORY.
+
+	If an Eshell instance for the directory already exists, switch to it.
+	If no such instance exists, start a new instance whose name includes the directory."
+	  (interactive
+	   (let ((cwd (if (buffer-file-name)
+			  (file-name-directory (buffer-file-name))
+			default-directory))
+		 (must-exist t))
+	     (list (read-directory-name "Open Eshell in: " cwd cwd must-exist))))
+	  ;; Set the directory to open Eshell in.
+	  (let ((eshell-buffer-name (init-eshell/name-buffer directory))
+		(default-directory directory))
+	    ;; Start Eshell.
+	    (eshell)))
+      #+END_SRC
+
+***** Open Eshell in the Current Directory
+      Define a function to open an Eshell instance in the current directory.
+      If an Eshell instance already exists in that directory, switch to its buffer.
+
+      #+BEGIN_SRC emacs-lisp :tangle no
+	(defun init-eshell/find-eshell-here ()
+          "Open Eshell in the current working directory.
+
+	If an Eshell instance for the directory already exists, switch to it.
+	If no such instance exists, start a new instance whose name includes the directory."
+          (interactive)
+          (let ((cwd (abbreviate-file-name (if (buffer-file-name)
+                                               (file-name-directory (buffer-file-name))
+                                             default-directory))))
+            (init-eshell/find-eshell cwd)))
+      #+END_SRC
+
+**** Update Buffer Name After Changing Directories
+     Advise ~eshell/cd~ so the buffer where the function is called is renamed to match the new directory.
+     ~init-eshell/name-buffer~ is used to name the buffer.
+
+     Renaming Eshell buffers in this manner is useful for distinguishing multiple Eshell buffers, e.g. when switching buffers.
+     It also works in tandem with ~init-eshell/find-eshell~ and ~init-eshell/find-eshell-here~ to prefer existing Eshell instances over creating new buffers.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (defun init-eshell/find-eshell (directory)
-         "Open Eshell in DIRECTORY.
-
-       If an Eshell instance for the directory already exists, switch to it.
-       If no such instance exists, start a new instance whose name includes the directory."
-         (interactive
-          (let ((cwd (if (buffer-file-name)
-                         (file-name-directory (buffer-file-name))
-                       default-directory))
-                (must-exist t))
-            (list (read-directory-name "Open Eshell in: " cwd cwd must-exist))))
-         ;; Set the directory to open Eshell in.
-         (let ((eshell-buffer-name (concat "*eshell: "
-                                           (abbreviate-file-name directory)
-                                           "*"))
-               (default-directory directory))
-           ;; Start Eshell.
-           (eshell)))
-     #+END_SRC
-
-**** Open Eshell in the Current Directory
-     Define a function to open an Eshell instance in the current directory.
-     If an Eshell instance already exists in that directory, switch to its buffer.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (defun init-eshell/find-eshell-here ()
-         "Open Eshell in the current working directory.
-
-       If an Eshell instance for the directory already exists, switch to it.
-       If no such instance exists, start a new instance whose name includes the directory."
-         (interactive)
-         (let ((cwd (abbreviate-file-name (if (buffer-file-name)
-                                              (file-name-directory (buffer-file-name))
-                                            default-directory))))
-           (init-eshell/find-eshell cwd)))
-     #+END_SRC
-
-**** Advise ~eshell/cd~ to Rename Buffer
-     ~eshell/cd~ is advised to rename the buffer.
-     The new name contains the abbreviated path of the new directory.
-
-     This is useful in distinguishing multiple Eshell buffers, e.g. when switching buffers.
-     It also works in tandem with ~init-eshell/find-eshell-here~ to prefer existing Eshell instances over creating new buffers.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (defadvice eshell/cd (after init-eshell-cd-rename-buffer)
-         "Rename the buffer with the abbreviation of the new directory."
-         (let ((cwd (abbreviate-file-name default-directory)))
-           (rename-buffer (concat "*eshell: " cwd "*"))))
+       (defadvice eshell/cd (after init-eshell/cd-rename-buffer)
+	 "Rename the Eshell buffer with the abbreviation of the new directory."
+	 (rename-buffer (init-eshell/name-buffer default-directory)))
      #+END_SRC
 
 ** Load ~esh-module~
