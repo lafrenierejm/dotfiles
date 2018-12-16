@@ -135,6 +135,10 @@
        :gfhook
        <<eshell/gfhook>>
 
+       ;; Customize the following variables.
+       :custom
+       <<eshell/custom>>
+
        ;; Execute the following code before loading this package.
        :init
        <<eshell/init>>
@@ -205,6 +209,20 @@
 	       :state (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)
 	       "C-d" #'bury-buffer)))
     #+END_SRC
+
+*** Customize Variables (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref eshell/custom
+    :END:
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (eshell-prefer-lisp-functions t "Use built-in commands.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (eshell-prefer-lisp-variables t "Use built-in commands.")
+    #+END_SRC
+
 *** Pre-Load Execution (~:init~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref eshell/init
