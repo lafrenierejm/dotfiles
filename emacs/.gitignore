@@ -1,6 +1,7 @@
 !.gitignore
-elpa/
-straight/
+/elpa/
+/magithub/
+/straight/
 *.el
 *.elc
 *#
