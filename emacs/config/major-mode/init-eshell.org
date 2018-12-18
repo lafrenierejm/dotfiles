@@ -223,6 +223,19 @@
       (eshell-prefer-lisp-variables t "Use built-in commands.")
     #+END_SRC
 
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (eshell-prompt-function
+       (function (lambda ()
+		   (concat
+		    (when-let ((remote-host (file-remote-p default-directory 'host)))
+		      (concat
+		       (eshell-user-name) "@"
+		       remote-host ":"))
+		    (init-eshell/pwd default-directory)
+		    (if (= (user-uid) 0) " # " " $ "))))
+       "Prefix \"$USER@$(hostname):\" if on remote host.")
+    #+END_SRC
+
 *** Pre-Load Execution (~:init~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref eshell/init
@@ -301,32 +314,38 @@
       #+END_SRC
 
 **** Custom Functions
-***** Create Names for Eshell Buffers
+***** Abbreviate a Path
+      #+BEGIN_SRC emacs-lisp :tangle no
+	(defun init-eshell/pwd (directory)
+	    "Use the Projectile root when displaying a path.
 
+	  If DIRECTORY is not in a probject as determined by Projectile, use the
+	  abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
+	  Projectile project, use the path of DIRECOTYR relative to the project's root."
+	    (if-let ((projectile-loaded (featurep 'projectile))
+		     (project-root (projectile-project-root directory))
+		     (project-name (projectile-project-name project-root)))
+		;; If in a project:
+		(if (string=
+		     (file-name-as-directory (expand-file-name directory))
+		     project-root)
+		    ;; If at a project's root: use the project's name
+		    project-name
+		  ;; Else not at project's root: use path starting with project's root
+		  (s-chop-suffix
+		   "/"
+		   (concat project-name "/"
+			   (file-relative-name (expand-file-name directory) project-root))))
+	      ;; Else not in project: use abbreviated path
+	      (abbreviate-file-name directory)))
+      #+END_SRC
+
+***** Create Eshell Buffer Names
       #+BEGIN_SRC emacs-lisp :tangle no
 	(defun init-eshell/name-buffer (directory)
-	  "Create a name for an Eshell buffer in DIRECTORY.
-
-	If DIRECTORY is not in a probject as determined by Projectile, use the
-	abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
-	Projectile project, use the path of DIRECOTYR relative to the project's root."
+	  "Create a name for an Eshell buffer in DIRECTORY."
 	  (concat "*eshell "
-		  (if-let ((projectile-loaded (featurep 'projectile))
-			   (project-root (projectile-project-root directory))
-			   (project-name (projectile-project-name project-root)))
-		      ;; If in a project:
-		      (if (string=
-			   (file-name-as-directory (expand-file-name directory))
-			   project-root)
-			  ;; If at a project's root: use the project's name
-			  project-name
-			;; Else not at project's root: use path starting with project's root
-			(s-chop-suffix
-			 "/"
-			 (concat project-name "/"
-				 (file-relative-name (expand-file-name directory) project-root))))
-		    ;; Else not in project: use abbreviated path
-		    (abbreviate-file-name directory))
+		  (init-eshell/pwd directory)
 		  "*"))
       #+END_SRC
 
