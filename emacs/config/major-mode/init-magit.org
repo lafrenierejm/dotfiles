@@ -34,8 +34,9 @@
        :if
        <<magit/if>>
 
-       ;; Load `magit' after the following packages.
-       :after (validate)
+       ;; Perform the following customizations.
+       :custom
+       <<magit/custom>>
 
        ;; Add the following keybindings.
        :bind
@@ -59,18 +60,22 @@
       (executable-find "git")
     #+END_SRC
 
+*** Customize Variables (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref magit/custom
+    :END:
+
+    Set the list of messages Magit should not display.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (magit-no-message '("Turning on magit-auto-revert-mode...") "Suppress messages")
+    #+END_SRC
+
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref magit/config
     :DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
     :END:
-
-**** Suppress Messages
-    Suppress the message about ~magit-auto-revert-mode~.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq magit-no-message '("Turning on magit-auto-revert-mode..."))
-    #+END_SRC
 
 **** Return After Commit
     Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
@@ -123,24 +128,33 @@
 ** Load ~evil-magit~
     ~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures Evil and Magit to play well together.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-magit
        ;; Load this package eagerly.
        :demand
 
        ;; Load this package after the following packages.
-       :after (evil magit validate)
+       :after (evil magit)
 
        :hook
        ((magit-mode) . evil-local-mode)
 
-       ;; Evaluate the following code after loading this package.
-       :config
-       ;; Start `evil-magit' in the motion state.
-       (validate-setq evil-magit-state 'motion)
-       ;; Enable Evil's horizontal movement in magit buffers.
-       (setq evil-magit-want-horizontal-movement t))
+       :custom
+       <<evil-magit/custom>>)
    #+END_SRC
+
+*** Customize Variables (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref evil-magit/custom
+    :END:
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (evil-magit-state 'motion "Start `evil-magit' in the motion state.")
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
+    #+END_SRC
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
