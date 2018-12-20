@@ -26,6 +26,7 @@
 
 ** Specify Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -33,23 +34,53 @@
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package diff-hl
        ;; Only load the package if the following condition is met.
-       :if (version<= "24.3" emacs-version)
+       :if
+       <<diff-hl/if>>
 
-       ;; Do not load this package lazily.
-       :demand
+       ;; Add the following auto-loading hooks.
+       :ghook
+       <<diff-hl/ghook>>
 
-       ;; Only load the package after the following packages have been loaded.
-       :after (magit)
+       ;; Inform the bytecode compiler about the following functions.
+       :commands
+       global-diff-hl-mode
 
        ;; Execute the following code after the package has been loaded.
        :config
        <<diff-hl/config>>)
    #+END_SRC
 
+*** Conditional Loading (~:if~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref diff-hl/if
+    :END:
+
+    ~diff-hl~ depends on features added in Emacs 24.3.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (version<= "24.3" emacs-version)
+    #+END_SRC
+
+*** Auto-Loading Hooks (~:ghook~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref diff-hl/ghook
+    :END:
+
+    Enable diff-hl in Dired buffers.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('dired-mode-hook #'diff-hl-dired-mode)
+    #+END_SRC
+
+    Update ~diff-hl~'s status when refreshing with modern versions of Magit.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+    #+END_SRC
+
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: diff-hl/config
-    :DESCRIPTION: Code to be executed after diff-hl has been loaded
+    :HEADER-ARGS: :noweb-ref diff-hl/config
     :END:
 
     Enable diff-hl-mode by default.
@@ -58,22 +89,10 @@
       (global-diff-hl-mode 1)
     #+END_SRC
 
-    Enable diff-hl in Dired buffers.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
-    #+END_SRC
-
     Perform highlighting on-the-fly.
 
     #+BEGIN_SRC emacs-lisp :tangle no
       (diff-hl-flydiff-mode 1)
-    #+END_SRC
-
-    Add a hook to update diff-hl's status when refreshing with modern versions of Magit.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
     #+END_SRC
 
 ** Ending Boilerplate
