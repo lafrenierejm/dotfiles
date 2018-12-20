@@ -24,6 +24,7 @@
 
 ** Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -39,8 +40,8 @@
        <<magit/custom>>
 
        ;; Add the following keybindings.
-       :bind
-       ("C-x g" . magit-status)
+       :general
+       <<magit/general>>
 
        ;; Evaluate the following code after loading `magit'.
        :config
@@ -58,6 +59,15 @@
 
     #+BEGIN_SRC emacs-lisp :tangle no
       (executable-find "git")
+    #+END_SRC
+
+*** Keybindings (~:general~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref magit/general
+    :END:
+
+    #+BEGIN_SRC emacs-lisp
+      ("C-x g" #'magit-status)
     #+END_SRC
 
 *** Customize Variables (~:custom~)
@@ -136,12 +146,21 @@
        ;; Load this package after the following packages.
        :after (evil magit)
 
-       :hook
-       ((magit-mode) . evil-local-mode)
+       :ghook
+       <<evil-magit/ghook>>
 
        :custom
        <<evil-magit/custom>>)
    #+END_SRC
+
+*** Auto-Loading Hooks (~:ghook~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref evil-magit/ghook
+    :END:
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('magit-mode-hook #'evil-local-mode)
+    #+END_SRC
 
 *** Customize Variables (~:custom~)
     :PROPERTIES:
