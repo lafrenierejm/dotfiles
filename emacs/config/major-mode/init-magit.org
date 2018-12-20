@@ -88,16 +88,17 @@
     :END:
 
 **** Return After Commit
-    Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
+     Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
-      ;; Close commit message buffer after commit.
+     #+BEGIN_SRC emacs-lisp :tangle no
       (defadvice git-commit-commit (after move-to-magit-buffer activate)
         (delete-window))
-      ;; Close commit message buffer after abort.
-      (defadvice git-commit-abort (after move-to-magit-buffer activate)
-        (delete-window))
-    #+END_SRC
+     #+END_SRC
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (defadvice git-commit-abort (after move-to-magit-buffer activate)
+	 (delete-window))
+     #+END_SRC
 
 **** Comparable Version Number
      The function ~magit-version~ provided by Magit does not return a version string that is comparable using Emacs's built-in ~version<~.
