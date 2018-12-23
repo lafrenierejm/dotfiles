@@ -36,6 +36,10 @@
        ;; Load `mu4e' after the following packages.
        :after (flyspell ispell s validate)
 
+       ;; Apply the following variable customizations.
+       :custom
+       <<mu4e/custom>>
+
        ;; Add keybindings according to the following alist.
        :bind
        (("C-x m" . mu4e-compose-new))
@@ -43,48 +47,90 @@
        ;; Add the following directories to `load-path'.
        :load-path ("site-lisp/mu4e")
 
-       ;; Evaluate the following code after loading `mu4e'.
+       ;; Evaluate the following code after loading this package.
        :config
        <<mu4e/config>>)
    #+END_SRC
 
-*** Post-Load Execution (~:config~)
+*** Variable Customization (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref mu4e/config
+    :HEADER-ARGS: :noweb-ref mu4e/custom
     :END:
 
-**** Fetching and Indexing Mail
-     If isync is installed, use =mbsync= to fetch all mail and rename filenames when moving mail.
+    Use ISO-esque timestamps for ~:human-date~.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (validate-setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
+    #+END_SRC
+
+**** Account Contexts
+     Do not prompt for the context when starting mu4e.
+     Being in the proper context is unnecessary except when composing messages.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (when (executable-find "mbsync")
-         (validate-setq mu4e-get-mail-command "mbsync -a")
-         (validate-setq mu4e-change-filenames-when-moving t))
+       (mu4e-context-policy 'pick-first "Do not be concerned about context on startup.")
      #+END_SRC
 
-     Display the update status in the modeline.
+     If no context matches (using its match function) when beginning to compose a message, prompt the user to manually select a context.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-display-update-status-in-modeline t)
+       (validate-setq mu4e-compose-context-policy 'ask)
+     #+END_SRC
+
+**** Fetching and Indexing
+     Display the update status in the modeline.
+     This helps keep track of the current update status.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (mu4e-display-update-status-in-modeline t "Display the update status in the modeline.")
      #+END_SRC
 
      Do not display messages related to updating or indexing.
+     These messages are generally uninteresting.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-hide-index-messages t)
+       (mu4e-hide-index-messages t "Do not display messages related to updating or indexing.")
+     #+END_SRC
+
+**** Sending
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (message-sendmail-envelope-from 'header "Use the value from the mail's header as the FROM field.")
+     #+END_SRC
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (message-kill-buffer-on-exit t "Close the message buffer after sending its message.")
+     #+END_SRC
+
+**** Composing
+     Use =[[https://joeclark.org/ffaq.html][format=flowed]]= for nicer viewing of plaintext mail.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (mu4e-compose-format-flowed t "Use format=flowed when composing mail.")
+     #+END_SRC
+
+     Replace the current frame when writing mail.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (mu4e-compose-in-new-frame nil "Do not open a new frame when composing mail.")
+     #+END_SRC
+
+     If a signature is set, automatically include it.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (mu4e-compose-signature-auto-include t "Automatically include signatures.")
      #+END_SRC
 
 **** Message View
-     Show senders' full addresses in message view.
+     Show senders' full addresses.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-view-show-addresses t)
+       (mu4e-view-show-addresses t "Show senders' full addresses.")
      #+END_SRC
 
      View messages in their own window.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-split-view 'single-window)
+       (mu4e-split-view 'single-window)
      #+END_SRC
 
 **** Header View
@@ -96,37 +142,44 @@
 
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-headers-fields
-		      '((:human-date . 16)
-			(:flags . 8)
-			(:mailing-list . 10)
-			(:from-or-to . 20)
-			(:subject . nil)))
-     #+END_SRC
-
-     Use ISO-esque timestamps for ~:human-date~.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
+       (mu4e-headers-fields
+	'((:human-date . 16)
+	  (:flags . 8)
+	  (:mailing-list . 10)
+	  (:from-or-to . 20)
+	  (:subject . nil)))
      #+END_SRC
 
      Use Unicode box-drawing characters for the prefixes.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (setq mu4e-headers-has-child-prefix '("-" . "─"))
-       (setq mu4e-headers-empty-parent-prefix '("-" . "─"))
-       (setq mu4e-headers-first-child-prefix '("-" . "─"))
-       (setq mu4e-headers-duplicate-prefix '("=" . "═"))
-       (setq mu4e-headers-default-prefix '("-" . "─"))
+       (mu4e-headers-has-child-prefix '("-" . "─"))
+       (mu4e-headers-empty-parent-prefix '("-" . "─"))
+       (mu4e-headers-first-child-prefix '("-" . "─"))
+       (mu4e-headers-duplicate-prefix '("=" . "═"))
+       (mu4e-headers-default-prefix '("-" . "─"))
+     #+END_SRC
+
+*** Post-Load Execution (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref mu4e/config
+    :END:
+
+**** Fetching and Indexing
+     If isync is installed, use =mbsync= to fetch all mail and rename filenames when moving mail.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (when (executable-find "mbsync")
+         (validate-setq mu4e-get-mail-command "mbsync -a")
+         (validate-setq mu4e-change-filenames-when-moving t))
      #+END_SRC
 
 **** Mail Directory
-     Set the path to my mail directory.
+     Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (let ((maildir (getenv "MAILDIR")))
-	 (when maildir
-	   (validate-setq mu4e-maildir maildir)))
+       (when-let ((maildir (getenv "MAILDIR")))
+	 (validate-setq mu4e-maildir maildir))
      #+END_SRC
 
 **** Sending Mail
@@ -137,18 +190,6 @@
 	      <<mu4e/config/sending/msmtp>>)
 	     (t
 	      <<mu4e/config/sending/smtpmail-send-it>>))
-     #+END_SRC
-
-     Use the value from the mail's header as the FROM field.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq message-sendmail-envelope-from 'header)
-     #+END_SRC
-
-     Close the message buffer after sending its message.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq message-kill-buffer-on-exit t)
      #+END_SRC
 
 ***** =msmtp= Configuration
@@ -308,67 +349,31 @@
 				       "lafrenierejm@utdallas.edu"))
       #+END_SRC
 
-***** Contexts
-      Being in the proper context is unnecessary except when composing messages;
-      just select the first available context.
-
-        (validate-setq mu4e-context-policy 'pick-first)
-      #+BEGIN_SRC emacs-lisp :tangle no
-      #+END_SRC
-
-      If no context matches (using its match function) when beginning to compose a message, prompt the user to manually select a context.
-
-      #+BEGIN_SRC emacs-lisp :tangle no
-        (validate-setq mu4e-compose-context-policy 'ask)
-      #+END_SRC
-
 **** Composing Mail
 
-     Use =[[https://joeclark.org/ffaq.html][format=flowed]]= for nicer viewing of plaintext mail.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-compose-format-flowed t)
-     #+END_SRC
-
-     Do not open a new frame when composing mail.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-compose-in-new-frame nil)
-     #+END_SRC
-
-     If a signature is set, automatically include it.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (validate-setq mu4e-compose-signature-auto-include t)
-     #+END_SRC
-
      Show trailing whitespace.
-     This is helpful when composing or viewing =format=flowed= mail.
+     This is helpful when composing =format=flowed= mail.
 
      #+BEGIN_SRC emacs-lisp :tangle no
        ;; Show trailing whitespace in the current buffer.
        (defun init-mu4e/show-trailing-whitespace ()
 	 "Highlight trailing whitespace with face `trailing-whitespace'."
 	 (validate-setq show-trailing-whitespace t))
-       (add-hook 'mu4e-compose-mode-hook #'init-mu4e/show-trailing-whitespace)
-     #+END_SRC
-
-     If a spellcheck program is loaded, enable spellcheck with ~flyspell-mode~.
-
-     #+BEGIN_SRC emacs-lisp
-       (defun init-mu4e/enable-flyspell-mode ()
-         "Enable `flyspell-mode'."
-         (flyspell-mode 1))
-       (when ispell-program-name
-         (add-hook 'mu4e-compose-mode-hook #'init-mu4e/enable-flyspell-mode))
      #+END_SRC
 
 ** Load ~evil-mu4e~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package evil-mu4e
+       ;; Load `evil-mu4e' after the following packages.
+       :after (evil mu4e)
+
+       ;; Load `evil-mu4e' eagerly.
+       :demand
+
        :config
        ;; Mark messages for a later action.
-       (evil-define-key 'motion mu4e-headers-mode-map "*" #'mu4e-headers-mark-for-something))
+       (with-eval-after-load 'evil-core
+	 (evil-define-key 'motion mu4e-headers-mode-map "*" #'mu4e-headers-mark-for-something)))
    #+END_SRC
 
 ** Attachment Reminders
