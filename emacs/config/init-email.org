@@ -24,6 +24,7 @@
 
 ** Dependencies
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -36,9 +37,16 @@
        ;; Load `mu4e' after the following packages.
        :after (flyspell ispell s validate)
 
+       ;; Inform the bytecode compiler of the following functions.
+       :commands (init-email/mu4e-choose-msmtp-account init-email/mu4e-show-trailing-whitespace)
+
        ;; Apply the following variable customizations.
        :custom
        <<mu4e/custom>>
+
+       ;; Add the following, non-autoloading hooks.
+       :gfhook
+       <<mu4e/gfhook>>
 
        ;; Add keybindings according to the following alist.
        :bind
@@ -160,6 +168,29 @@
        (mu4e-headers-default-prefix '("-" . "─"))
      #+END_SRC
 
+*** Non-Autoloading Hooks (~:gfhook~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref mu4e/gfhook
+    :END:
+
+    Enable Flyspell mode when composing mail.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('mu4e-compose-mode-hook #'flyspell-mode)
+    #+END_SRC
+
+    Show trailing whitespace when composing mail.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('mu4e-compose-mode-hook #'init-email/mu4e-show-trailing-whitespace)
+    #+END_SRC
+
+    Specify the SMTP account to use before sending mail.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      ('message-send-mail #'init-email/mu4e-choose-msmtp-account)
+    #+END_SRC
+
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref mu4e/config
@@ -216,7 +247,6 @@
 		  (s-replace "@" "." (mu4e-context-name (mu4e-context-current)))))
 	     (validate-setq
 	      message-sendmail-extra-arguments (list '"-a" account-name)))))
-       (add-hook 'message-send-mail-hook #'init-mu4e/choose-msmtp-account)
      #+END_SRC
 
 ***** ~smtpmail-send-it~ Configuration
