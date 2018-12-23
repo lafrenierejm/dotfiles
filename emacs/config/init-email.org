@@ -445,27 +445,49 @@
      (add-hook 'message-send-hook #'mbork/message-warn-if-no-attachments)
    #+END_SRC
 
-** Add Attachments at Ends of Buffers
-   =mml-attach-file=, the function used in =mu4e:compose= mode to add attachments to mail, adds the specified file where =point= happens to be.
-   [[http://emacs.1067599.n8.nabble.com/Why-does-mml-attach-file-put-the-attachment-at-the-very-end-of-the-message-td373798.html][This thread]], authored by Marcin Borkowski, explores the problems that attachments anywhere but the end of a message buffer can cause.
-   In light of that, it is desirable to only /ever/ insert attachments at the end of the buffer.
-   This can be accomplished by advising =mml-attach-file= to automatically move and restore =point=.
-   Borkowsi provided code to do so in [[http://mbork.pl/2015-11-28_Fixing_mml-attach-file_using_advice][a blog post]].
+** Load Mml
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package mml
+       ;; This package is built-in.
+       :straight nil
 
-   The license of the post's code does not appear to be posted anywhere on Borkowski's blog.
-   I have reached out to Borkowski asking about how he would like the code to be licensed.
+       ;; Load this package eagerly.
+       :demand
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (defun mml-attach-file--go-to-eob (orig-fun &rest args)
-       "Go to the end of the buffer before attaching files."
-       (save-excursion
-	 (save-restriction
-	   (widen)
-	   (goto-char (point-max))
-	   (apply orig-fun args))))
-
-     (advice-add 'mml-attach-file :around #'mml-attach-file--go-to-eob)
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<mml/config>>)
    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref mml/config
+    :END:
+
+**** Add Attachments at Ends of Buffers
+     ~mml-attach-file~, the function used by ~mu4e-compose-mode~ to add attachments to mail, attaches the specified file wherever point happens to be.
+     [[http://emacs.1067599.n8.nabble.com/Why-does-mml-attach-file-put-the-attachment-at-the-very-end-of-the-message-td373798.html][This thread]], authored by Marcin Borkowski, explores the problems that attachments anywhere but the end of a message buffer can cause.
+     In light of that, it is desirable to only /ever/ insert attachments at the end of the buffer.
+     This can be accomplished by advising ~mml-attach-file~ to automatically move and restore ~point~.
+     Borkowsi provided code to do so in [[http://mbork.pl/2015-11-28_Fixing_mml-attach-file_using_advice][a blog post]]:
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (defun init-email/mml-attach-file-at-eob (orig-fun &rest args)
+	 "Go to the end of the buffer before attaching files."
+	 (save-excursion
+	   (save-restriction
+	     (widen)
+	     (goto-char (point-max))
+	     (apply orig-fun args))))
+
+     #+END_SRC
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (advice-add 'mml-attach-file :around #'init-email/mml-attach-file-at-eob)
+     #+END_SRC
+
+     The license of the code hosted on Borkowsi's blog does not appear to be specified anywhere in the blog.
+     I have reached out to Borkowski asking how he would like the code to be licensed.
 
 ** Ending Boilerplate
   #+BEGIN_SRC emacs-lisp :tangle yes
