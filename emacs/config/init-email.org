@@ -1,4 +1,4 @@
-#+TITLE: mu4e Configuration
+#+TITLE: Email Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 
@@ -7,16 +7,16 @@
   All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
 
 * About This File
-  This file contains configuration for [[http://www.djcbsoftware.nl/code/mu/mu4e.html][mu4e]].
+  This file contains configuration for working with email.
   It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
 
 * Code
 ** Introductory Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     ;;; init-mu4e.el --- mu4e initialization
+     ;;; init-email.el --- Email configuration
 
      ;;; Commentary:
-     ;; This file is tangled from init-mu4e.org.
+     ;; This file is tangled from init-email.org.
      ;; Changes made here will be overwritten by changes to that Org-mode file.
 
      ;;; Code:
@@ -208,7 +208,7 @@
       Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
 
      #+BEGIN_SRC emacs-lisp :tangle no
-       (defun init-mu4e/choose-msmtp-account ()
+       (defun init-email/mu4e-choose-msmtp-account ()
 	 "Choose msmtp account label based on mu4e context name."
 	 (when (message-mail-p)
 	   (let ((account-name
@@ -356,7 +356,7 @@
 
      #+BEGIN_SRC emacs-lisp :tangle no
        ;; Show trailing whitespace in the current buffer.
-       (defun init-mu4e/show-trailing-whitespace ()
+       (defun init-email/mu4e-show-trailing-whitespace ()
 	 "Highlight trailing whitespace with face `trailing-whitespace'."
 	 (validate-setq show-trailing-whitespace t))
      #+END_SRC
@@ -439,6 +439,6 @@
 
 ** Ending Boilerplate
   #+BEGIN_SRC emacs-lisp :tangle yes
-    (provide 'init-mu4e)
-    ;;; init-mu4e.el ends here
+    (provide 'init-email)
+    ;;; init-email.el ends here
   #+END_SRC
