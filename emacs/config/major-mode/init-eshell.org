@@ -321,7 +321,7 @@
 
 	  If DIRECTORY is not in a probject as determined by Projectile, use the
 	  abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
-	  Projectile project, use the path of DIRECOTYR relative to the project's root."
+	  Projectile project, use the path of DIRECTORY relative to the project's root."
 	    (if-let ((projectile-loaded (featurep 'projectile))
 		     (project-root (projectile-project-root directory))
 		     (project-name (projectile-project-name project-root)))
