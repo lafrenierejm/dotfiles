@@ -29,19 +29,6 @@ user lafrenierejm@gmail.com
 passwordeval "pass email/gmail.com/mutt"
 
 # ##############################################################################
-# Settings specfific to utdlug@gmail.com
-# ##############################################################################
-account com.gmail.utdlug
-# Host name of SMTP server
-host smtp.gmail.com
-# Envelope-from address
-from utdlug@gmail.com
-# Authentication
-auth on
-user utdlug@gmail.com
-passwordeval "pass email/gmail.com/utdlug-gmail-com/pixel13.lafreniere.xyz"
-
-# ##############################################################################
 # Settings specfific to jml140230@utdallas.edu
 # ##############################################################################
 account edu.utdallas.jml140230
