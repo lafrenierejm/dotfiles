@@ -338,30 +338,6 @@
 					 (when msg
 					   (mu4e-message-field msg :maildir)
 					   (string-prefix-p "/com.gmail.lafrenierejm"
-							    (mu4e-message-field msg :maildir)))))
-			 ,(make-mu4e-context
-			   ;; Name of the context
-			   :name "com.gmail@utdlug"
-			   ;; alist of variables to set for this context
-			   :vars '(
-				   ;; From
-				   (user-full-name . "LaFreniere, Joseph")
-				   (user-mail-address . "utdlug@gmail.com")
-				   ;; Signature
-				   (mu4e-compose-signature-auto-include . t)
-				   (mu4e-compose-signature . "Joseph LaFreniere\nLinux Users Group at UT Dallas")
-				   ;; SMTP
-				   (smtpmail-smtp-server . "smtp.gmail.com") ; hostname
-				   (smtpmail-smtp-user . "utdlug@gmail.com")  ; username
-				   ;; Folders
-				   (mu4e-archive-folder . nil)
-				   (mu4e-drafts-folder . "/com.gmail.utdlug/draft")
-				   (mu4e-sent-folder . "/com.gmail.utdlug/sent")
-				   (mu4e-trash-folder . nil))
-			   :match-func (lambda (msg)
-					 (when msg
-					   (mu4e-message-field msg :maildir)
-					   (string-prefix-p "/com.gmail.utdlug"
 							    (mu4e-message-field msg :maildir)))))))
      #+END_SRC
 
