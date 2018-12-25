@@ -108,6 +108,56 @@
                (beginning-of-line)))))
      #+END_SRC
 
+** Load Em Dirs
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package em-dirs
+       :straight nil
+
+       :config
+       <<em-dirs/config>>)
+   #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref em-dirs/config
+    :END:
+
+**** Abbreviate a Path
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (defun init-eshell/pwd (directory)
+	   "Use the Projectile root when displaying a path.
+
+	 If DIRECTORY is not in a probject as determined by Projectile, use the
+	 abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
+	 Projectile project, use the path of DIRECTORY relative to the project's root."
+	   (if-let ((projectile-loaded (featurep 'projectile))
+		    (project-root (projectile-project-root directory))
+		    (project-name (projectile-project-name project-root)))
+	       ;; If in a project:
+	       (if (string=
+		    (file-name-as-directory (expand-file-name directory))
+		    project-root)
+		   ;; If at a project's root: use the project's name
+		   project-name
+		 ;; Else not at project's root: use path starting with project's root
+		 (s-chop-suffix
+		  "/"
+		  (concat project-name "/"
+			  (file-relative-name (expand-file-name directory) project-root))))
+	     ;; Else not in project: use abbreviated path
+	     (abbreviate-file-name directory)))
+     #+END_SRC
+
+**** Create Eshell Buffer Names
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (defun init-eshell/name-buffer (directory)
+	 "Create a name for an Eshell buffer in DIRECTORY."
+	 (concat "*eshell "
+		 (init-eshell/pwd directory)
+		 "*"))
+     #+END_SRC
+
 ** Load ~eshell~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
@@ -314,41 +364,6 @@
       #+END_SRC
 
 **** Custom Functions
-***** Abbreviate a Path
-      #+BEGIN_SRC emacs-lisp :tangle no
-	(defun init-eshell/pwd (directory)
-	    "Use the Projectile root when displaying a path.
-
-	  If DIRECTORY is not in a probject as determined by Projectile, use the
-	  abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
-	  Projectile project, use the path of DIRECTORY relative to the project's root."
-	    (if-let ((projectile-loaded (featurep 'projectile))
-		     (project-root (projectile-project-root directory))
-		     (project-name (projectile-project-name project-root)))
-		;; If in a project:
-		(if (string=
-		     (file-name-as-directory (expand-file-name directory))
-		     project-root)
-		    ;; If at a project's root: use the project's name
-		    project-name
-		  ;; Else not at project's root: use path starting with project's root
-		  (s-chop-suffix
-		   "/"
-		   (concat project-name "/"
-			   (file-relative-name (expand-file-name directory) project-root))))
-	      ;; Else not in project: use abbreviated path
-	      (abbreviate-file-name directory)))
-      #+END_SRC
-
-***** Create Eshell Buffer Names
-      #+BEGIN_SRC emacs-lisp :tangle no
-	(defun init-eshell/name-buffer (directory)
-	  "Create a name for an Eshell buffer in DIRECTORY."
-	  (concat "*eshell "
-		  (init-eshell/pwd directory)
-		  "*"))
-      #+END_SRC
-
 ***** Open Eshell in a Given Directory
       Open or switch to an Eshell buffer in a given directory.
 
