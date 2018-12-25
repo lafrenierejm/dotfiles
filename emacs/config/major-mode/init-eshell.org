@@ -158,6 +158,92 @@
 		 "*"))
      #+END_SRC
 
+**** Prefer Changing Buffers to Changing Directories
+     Redefine ~eshell/cd~ to prefer switching to an Eshell buffer in the new directory (if such a buffer exists) over changing the directory of the buffer where ~eshell/cd~ was called.
+     Whether or not an Eshell buffer exists at the specified location is determined by the name of existing Eshell buffers.
+
+     The following code is derived directly from code in GNU Emacs's Em Dirs and Files packages.
+     As such, it is licensed under GPLv3.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (defun eshell/cd (&rest args)           ; all but first ignored
+	 "Alias to extend the behavior of `cd'.
+
+       If an Eshell buffer already exists at the target directory, switch to that
+       buffer.  Otherwise, change the working directory of the current buffer to the
+       target directory then rename the current buffer to reflect its new working
+       directory.
+
+       The presence of an existing Eshell buffer at the new location is determined by
+       comparing the name of buffers to the result of `init-eshell/name-buffer'."
+	 (setq args (eshell-flatten-list args))
+	 (let ((path (car args))
+	       (subpath (car (cdr args)))
+	       (case-fold-search (eshell-under-windows-p))
+	       handled)
+	   (if (numberp path)
+	       (setq path (number-to-string path)))
+	   (if (numberp subpath)
+	       (setq subpath (number-to-string subpath)))
+	   (cond
+	    (subpath
+	     (let ((curdir (eshell/pwd)))
+	       (if (string-match path curdir)
+		   (setq path (replace-match subpath nil nil curdir))
+		 (error "Path substring `%s' not found" path))))
+	    ((and path (string-match "^-\\([0-9]*\\)$" path))
+	     (let ((index (match-string 1 path)))
+	       (setq path
+		     (ring-remove eshell-last-dir-ring
+				  (if index
+				      (string-to-number index)
+				    0)))))
+	    ((and path (string-match "^=\\(.*\\)$" path))
+	     (let ((oldpath (eshell-find-previous-directory
+			     (match-string 1 path))))
+	       (if oldpath
+		   (setq path oldpath)
+		 (let ((len (ring-length eshell-last-dir-ring))
+		       (index 0))
+		   (if (= len 0)
+		       (error "Directory ring empty"))
+		   (eshell-init-print-buffer)
+		   (while (< index len)
+		     (eshell-buffered-print
+		      (concat (number-to-string index) ": "
+			      (ring-ref eshell-last-dir-ring index) "\n"))
+		     (setq index (1+ index)))
+		   (eshell-flush)
+		   (setq handled t)))))
+	    (path
+	     (setq path (eshell-expand-multiple-dots path))))
+	   (unless handled
+	     (let* ((cd-path (or (parse-colon-path (getenv "CDPATH"))
+				 (list "./")))
+		    (curdir (eshell/pwd))
+		    (newdir (expand-file-name (file-name-as-directory (or path "~"))))
+		    (newname (init-eshell/name-buffer newdir)))
+	       (unless (equal curdir newdir)
+		 (eshell-add-to-dir-ring curdir))
+	       ;; If an Eshell buffer already exists in the new directory...
+	       (if-let ((newbuf (get-buffer newname)))
+		   ;; Then switch to the existing Eshell buffer.
+		   (switch-to-buffer newbuf)
+		 ;; Else change to the new directory.
+		 (let ((result (cd newdir)))
+		   ;; Change the buffer's name.
+		   (rename-buffer newname)
+		   ;; If `eshell-cd-shows-directory' is non-nil...
+		   (when eshell-cd-shows-directory
+		     ;; Then print the new directory.
+		     (eshell-printn result))))
+	       (run-hooks 'eshell-directory-change-hook)
+	       (if eshell-list-files-after-cd
+		   ;; Let-bind eshell-last-command around this?
+		   (eshell-plain-command "ls" (cdr args)))
+	       nil))))
+     #+END_SRC
+
 ** Load ~eshell~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package eshell
@@ -402,19 +488,6 @@
                                              default-directory))))
             (init-eshell/find-eshell cwd)))
       #+END_SRC
-
-**** Update Buffer Name After Changing Directories
-     Advise ~eshell/cd~ so the buffer where the function is called is renamed to match the new directory.
-     ~init-eshell/name-buffer~ is used to name the buffer.
-
-     Renaming Eshell buffers in this manner is useful for distinguishing multiple Eshell buffers, e.g. when switching buffers.
-     It also works in tandem with ~init-eshell/find-eshell~ and ~init-eshell/find-eshell-here~ to prefer existing Eshell instances over creating new buffers.
-
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (defadvice eshell/cd (after init-eshell/cd-rename-buffer)
-	 "Rename the Eshell buffer with the abbreviation of the new directory."
-	 (rename-buffer (init-eshell/name-buffer default-directory)))
-     #+END_SRC
 
 ** Load ~esh-module~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
