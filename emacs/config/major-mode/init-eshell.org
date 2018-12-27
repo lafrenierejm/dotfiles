@@ -517,17 +517,84 @@
       (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
     #+END_SRC
 
-** Load ~em-tramp~
-   ~em-tramp~ provides Eshell features that require TRAMP.
+** Load Em Tramp
+   Em Tramp is an Eshell modules that provides TRAMP features.
 
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package em-tramp
        ;; This package is included in Emacs.
        :straight nil
 
+       ;; Load this package after the following packages.
+       :after (esh-module)
+
        ;; Load this package eagerly.
-       :demand)
+       :demand
+
+       ;; Evaluate the following code after loading this package.
+       :config
+       <<em-tramp/config>>)
    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS: :noweb-ref em-tramp/config
+    :HEADER-ARGS: :tangle no
+    :END:
+
+    Load Em Tramp as an Eshell module.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (add-to-list 'eshell-modules-list 'eshell-tramp)
+    #+END_SRC
+
+**** Redefine ~eshell/sudo~
+
+     For ease of use with Emacs's authentication mechanisms, the full hostname of the machine should be resolved in all cases, even when the Eshell prompt is running locally.
+
+     The following code is derived from the Em Tramp package distributed with GNU Emacs.
+     As such, it is licensed under the same conditions as GNU Emacs itself (namely, GPLv3 or later).
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (defun eshell/sudo (&rest args)
+	 "Alias \"sudo\" to call Tramp.
+
+       Uses the system sudo through TRAMP's sudo method."
+	 (setq args (eshell-stringify-list (eshell-flatten-list args)))
+	 (let ((orig-args (copy-tree args)))
+	   (eshell-eval-using-options
+	    "sudo" args
+	    '((?h "help" nil nil "show this usage screen")
+	      (?u "user" t user "execute a command as another USER")
+	      :show-usage
+	      :usage "[(-u | --user) USER] COMMAND
+       Execute a COMMAND as the superuser or another USER.")
+	    (throw 'eshell-external
+		   (let ((user (or user "root"))
+			 (host (or (file-remote-p default-directory 'host)
+				   (system-name)))
+			 (dir (file-local-name (expand-file-name default-directory)))
+			 (prefix (file-remote-p default-directory)))
+		     ;; `eshell-eval-using-options' reads options of COMMAND.
+		     (while (and (stringp (car orig-args))
+				 (member (car orig-args) '("-u" "--user")))
+		       (setq orig-args (cddr orig-args)))
+		     (let ((default-directory
+			     (if (and prefix
+				      (or
+				       (not
+					(string-equal
+					 "sudo"
+					 (file-remote-p default-directory 'method)))
+				       (not
+					(string-equal
+					 user
+					 (file-remote-p default-directory 'user)))))
+				 (format "%s|sudo:%s@%s:%s"
+					 (substring prefix 0 -1) user host dir)
+			       (format "/sudo:%s@%s:%s" user host dir))))
+		       (eshell-named-command (car orig-args) (cdr orig-args))))))))
+     #+END_SRC
 
 ** Load ~em-rebind~
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
