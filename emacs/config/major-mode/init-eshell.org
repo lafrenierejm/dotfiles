@@ -311,13 +311,6 @@
 		"H" #'init-eshell/beginning-of-maybe-line)
     #+END_SRC
 
-    Unbind =C-d= to make room for ~bury-buffer~.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (:keymaps 'eshell-mode-map :state (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)
-		"C-d" #'bury-buffer)
-    #+END_SRC
-
 *** Non-Autoloading Hooks (~:gfhook~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref eshell/gfhook
@@ -333,17 +326,6 @@
 
     #+BEGIN_SRC emacs-lisp :tangle no
       (nil #'init-eshell/add-visual-commands)
-    #+END_SRC
-
-    Bury the Eshell buffer with =C-d=.
-    This is reminiscent of how terminal applications respond to =sigkill=
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (nil '(lambda ()
-	      (general-define-key
-	       :keymaps 'eshell-mode-map
-	       :state (list 'emacs 'insert 'motion 'normal 'operator 'replace 'visual)
-	       "C-d" #'bury-buffer)))
     #+END_SRC
 
 *** Customize Variables (~:custom~)
