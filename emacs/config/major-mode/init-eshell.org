@@ -151,10 +151,12 @@
 
 **** Create Eshell Buffer Names
      #+BEGIN_SRC emacs-lisp :tangle no
-       (defun init-eshell/name-buffer (directory)
+       (defun init-eshell/name-buffer (directory &optional process-name)
 	 "Create a name for an Eshell buffer in DIRECTORY."
 	 (concat "*eshell "
 		 (init-eshell/pwd directory)
+		 (when process-name
+		   (concat " <" process-name ">"))
 		 "*"))
      #+END_SRC
 
@@ -328,6 +330,15 @@
       (nil #'init-eshell/add-visual-commands)
     #+END_SRC
 
+    "Background" processes with =C-z=.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (nil (lambda ()
+	     (general-define-key
+	      :keymaps 'eshell-mode-map
+	      "C-z" #'init-eshell/background-process-maybe)))
+    #+END_SRC
+
 *** Customize Variables (~:custom~)
     :PROPERTIES:
     :HEADER-ARGS: :noweb-ref eshell/custom
@@ -469,6 +480,35 @@
                                                (file-name-directory (buffer-file-name))
                                              default-directory))))
             (init-eshell/find-eshell cwd)))
+      #+END_SRC
+
+***** "Background" the Current Process
+      If a long-running process is started from an Eshell prompt without explicitly backgrounding the process, that process will block any further input to the prompt.
+      Because having access to long-running processes' stdout and stderr is useful, there is a need for an interactive function that can
+      1. preserve the buffer belonging to that long-running process;
+      2. rename the buffer belonging to the process; and
+      3. open a new Eshell buffer in the same directory.
+
+
+      #+BEGIN_SRC emacs-lisp :tangle no
+	(defun init-eshell/background-process-maybe ()
+	  "Rename the Eshell BUFFER with its process and reopen the directory."
+	  (interactive)
+	  (when-let ((path default-directory)
+		     (process (get-buffer-process (current-buffer)))
+		     (process-name (process-name process)))
+	    (rename-buffer (init-eshell/name-buffer path process-name))
+	    (init-eshell/find-eshell path)))
+      #+END_SRC
+
+      UNIX shells use the chord =C-z= to background the current process.
+
+      #+BEGIN_SRC emacs-lisp :tangle no
+	(defun init-eshell/bind-background-process-maybe ()
+	  "Add a keybinding for `init-eshell/background-process-maybe'."
+	  (general-define-key
+	   :keymaps 'eshell-mode-map
+	   "C-z" #'init-eshell/background-process-maybe))
       #+END_SRC
 
 ** Load ~esh-module~
