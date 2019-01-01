@@ -29,7 +29,7 @@
      (require 'use-package)
    #+END_SRC
 
-** Load ~company~
+** Load Company
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package company
        ;; Eagerly load this package.
