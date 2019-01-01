@@ -20,11 +20,13 @@
 
      ;;; Code:
    #+END_SRC
+
 ** Required Packages
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
      (require 's)
      (require 'files)
    #+END_SRC
+
 ** Get Arguments for Interactive Call
 *** Get a Buffer to Use
     #+BEGIN_SRC emacs-lisp :tangle yes
@@ -54,6 +56,7 @@
                  buffer
                  (type-of buffer)))))
     #+END_SRC
+
 *** Buffer to Rename
     If called as part of an interactive function with a prefix argument, prompt the user to provide a buffer.
     Otherwise use the current buffer.
@@ -65,6 +68,7 @@
 					     (s-downcase verb))
 	  (get-buffer (buffer-name))))))
     #+END_SRC
+
 *** New File Name
     The user shall be prompted for the new file path.
 
@@ -75,6 +79,7 @@
 				(s-capitalize verb)
 				buffer-name)))
     #+END_SRC
+
 ** Rename
 *** Define Function
     :PROPERTIES:
@@ -118,6 +123,7 @@
 		   orig-buffer-name new-buffer-name
 		   new-file-name)))
     #+END_SRC
+
 *** Bind Function
     #+BEGIN_SRC emacs-lisp :tangle yes
       (global-set-key (kbd "C-x C-r") #'current-buffer/rename)
@@ -226,10 +232,12 @@
 	(interactive (list current-prefix-arg))
 	(revert-buffer :ignore-auto (or noconfirm (not (buffer-modified-p)))))
     #+END_SRC
+
 *** Bind Function
     #+BEGIN_SRC emacs-lisp :tangle yes
       (global-set-key (kbd "C-x C-g") #'current-buffer/revert)
     #+END_SRC
+
 ** Kill
 *** Define Function
     :PROPERTIES:
@@ -247,10 +255,12 @@
 	  (set-buffer-modified-p nil))
 	(kill-this-buffer))
     #+END_SRC
+
 *** Bind Function
     #+BEGIN_SRC emacs-lisp :tangle yes
       (global-set-key (kbd "C-x C-k") #'current-buffer/kill)
     #+END_SRC
+
 ** Ending Boilerplate 						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'current-buffer)
