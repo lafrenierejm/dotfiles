@@ -176,6 +176,11 @@
 	 (kill-buffer buffer)))
    #+END_SRC
 
+** Bind Function
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-x C-S-d") #'current-buffer/delete)
+   #+END_SRC
+
 * Copy
 ** Define Copy Function
    #+BEGIN_SRC emacs-lisp
