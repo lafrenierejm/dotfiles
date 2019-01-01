@@ -1,6 +1,8 @@
 #+TITLE: Operate on the Current Buffer
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle yes
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -29,7 +31,7 @@
 
 ** Get Arguments for Interactive Call
 *** Get a Buffer to Use
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer~obj-to-buffer (&optional buffer)
 	"Get the buffer to use.
 
@@ -61,7 +63,7 @@
     If called as part of an interactive function with a prefix argument, prompt the user to provide a buffer.
     Otherwise use the current buffer.
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer~get-buffer (verb)
 	(if current-prefix-arg
 	    (get-buffer (read-buffer (format "Buffer to %s with visiting file: "
@@ -72,7 +74,7 @@
 *** New File Name
     The user shall be prompted for the new file path.
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer~read-file-name (verb buffer-name)
 	"Prompt the user for the destination of applying VERB to BUFFER-NAME's visiting file."
 	(read-file-name (format "%s the file visited by buffer %s to: "
@@ -86,7 +88,7 @@
     :DESCRIPTION: Rename a buffer and its visited file, if any.
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer/rename (new-file-name &optional buffer ok-if-already-exists)
 	"Rename a buffer and the file it's visiting, if any, to NEW-FILE-NAME.
 
@@ -125,7 +127,7 @@
     #+END_SRC
 
 *** Bind Function
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (global-set-key (kbd "C-x C-r") #'current-buffer/rename)
     #+END_SRC
 
@@ -135,7 +137,7 @@
     :DESCRIPTION: Delete a buffer and its visited file, if any.
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer/delete (&optional buffer)
 	"Delete the file a buffer is visiting, if any, then kill the buffer.
 
@@ -165,7 +167,7 @@
 
 ** Copy
 *** Define Copy Function
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer/copy (new-file-name &optional
 							  buffer
 							  confirm-overwrite
@@ -217,13 +219,13 @@
     #+END_SRC
 
 *** Bind Function
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (global-set-key (kbd "C-x C-c") #'current-buffer/copy)
     #+END_SRC
 
 ** Revert
 *** Define Revert Function
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer/revert (&optional noconfirm)
 	"Replace current buffer text with the text of the visited file on disk.
 
@@ -234,7 +236,7 @@
     #+END_SRC
 
 *** Bind Function
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (global-set-key (kbd "C-x C-g") #'current-buffer/revert)
     #+END_SRC
 
@@ -244,7 +246,7 @@
     :DESCRIPTION: Kill the current buffer.
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (defun current-buffer/kill (&optional ignore-buffer-modified-p)
 	"Kill the current buffer.
 
@@ -257,12 +259,12 @@
     #+END_SRC
 
 *** Bind Function
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp
       (global-set-key (kbd "C-x C-k") #'current-buffer/kill)
     #+END_SRC
 
-** Ending Boilerplate 						   :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes
+** Ending Boilerplate                                              :noexport:
+   #+BEGIN_SRC emacs-lisp
      (provide 'current-buffer)
      ;;; current-buffer.el ends here
    #+END_SRC
