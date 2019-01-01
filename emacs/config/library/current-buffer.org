@@ -1,4 +1,4 @@
-#+TITLE: Operate on the Current Buffer
+#+TITLE: Current Buffer
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 #+PROPERTY: header-args+ :comments link
