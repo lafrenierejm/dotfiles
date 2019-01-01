@@ -161,25 +161,49 @@
 		       LaTeX-csquotes-close-quote "}")
      #+END_SRC
 
-** Load auctex-latexmk
-   Tomoya Tanjo (tom-tan)'s [[https://github.com/tom-tan/auctex-latexmk][auctex-latexmk]] package adds =latexmk= as a compilation target for AUCTeX.
-   =[[https://ctan.org/pkg/latexmk][latexmk]]= itself is a Perl script that automates the steps needed to fully compile a TeX document.
+** Load AUCTeX Latexmk
+   Tomoya Tanjo (tom-tan)'s [[https://github.com/tom-tan/auctex-latexmk][AUCTeX Latexmk]] package adds =latexmk= as a compilation target for AUCTeX.
+   [[https://ctan.org/pkg/latexmk][Latexmk]] itself is a Perl script that automates the steps needed to fully compile a TeX document.
+   Latexmk is included as part of both MaCTeX and MikTeX.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package auctex-latexmk
-       ;; Only load the package if the following condition is met.
+       ;; Only load this package if the following condition is met.
        :if (executable-find "latemk")
 
-       ;; Do not load this package lazily.
-       :demand t
+       ;; Load this package eagerly.
+       :demand
 
-       ;; Only load the parent package after the following packages.
-       :after (tex validate)
+       ;; Load this package after the following packages.
+       :after (tex)
 
        ;; Execute the following code after the package has been loaded.
        :config
        <<auctex-latexmk/config>>)
    #+END_SRC
+
+*** Variable Customization (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref auctex-latexmk/custom
+    :END:
+
+    Use the =-pdf= flag when ~TeX-PDF-mode~ is active.
+
+    #+BEGIN_SRC emacs-lisp
+      (auctex-latexmk-inherit-TeX-PDF-mode t)
+    #+END_SRC
+
+    Workaround a MikTeX bug by disabling ~TeX-file-line-error~.
+
+    #+BEGIN_SRC emacs-lisp
+      (TeX-file-line-error nil)
+    #+END_SRC
+
+    Set =latexmk= as the default compilation method.
+
+    #+BEGIN_SRC emacs-lisp
+      (TeX-command-default "LatexMk")
+    #+END_SRC
 
 *** Post-Load Execution
     :PROPERTIES:
@@ -189,25 +213,7 @@
     Run the package's setup.
 
     #+BEGIN_SRC emacs-lisp
-       (auctex-latexmk-setup)
-    #+END_SRC
-
-    Use the =-pdf= flag when ~TeX-PDF-mode~ is active.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq auctex-latexmk-inherit-TeX-PDF-mode t)
-    #+END_SRC
-
-    Workaround a MikTeX bug by disabling ~TeX-file-line-error~.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq TeX-file-line-error nil)
-    #+END_SRC
-
-    Set =latexmk= as the default compilation command.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq TeX-command-default "LatexMk")
+      (auctex-latexmk-setup)
     #+END_SRC
 
 ** Ending Boilerplate
