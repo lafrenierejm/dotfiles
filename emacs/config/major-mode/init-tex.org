@@ -64,101 +64,56 @@
     :HEADER-ARGS+: :noweb-ref tex/config
     :END:
 
-    Update PDF buffers are successful compilation.
+    Update PDF buffers upon successful compilation.
 
     #+BEGIN_SRC emacs-lisp
       (add-hook 'TeX-after-compilation-finished-functions
-		'TeX-revert-document-buffer)
+                'TeX-revert-document-buffer)
     #+END_SRC
 
-    Apply (plain)TeX-specific settings.
-
-     #+BEGIN_SRC emacs-lisp
-       (defun init-tex/config/plain-tex ()
-         "Configure `plain-tex-mode'."
-         <<tex/config/plain-tex>>)
-       (add-hook 'plain-TeX-mode-hook
-                 #'init-tex/config/plain-tex)
-     #+END_SRC
-
-    Apply LaTeX-specific settings.
+    Use =`= as a prefix for typing mathematics symbols.
 
     #+BEGIN_SRC emacs-lisp
-      (defun init-tex/configure-latex-mode ()
-        "Configure `LaTeX-mode'."
-        <<tex/config/latex>>)
-      (add-hook 'LaTeX-mode-hook
-                #'init-tex/configure-latex-mode)
-      (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-    #+BEGIN_SRC emacs-lisp :tangle no
       (latex-math-mode)
     #+END_SRC
 
-**** allTeX Configuration
-     :PROPERTIES:
-     :noweb-ref: tex/config/all-tex
-     :END:
-
-     Set "`" to a prefix for typing mathematics symbols.
-
-     #+BEGIN_SRC emacs-lisp
-       (LaTeX-math-mode)
-     #+END_SRC
-
-     Automatically add braces after "^" or "_" in a math environment.
+    Enable spellchecking.
 
     #+BEGIN_SRC emacs-lisp
-      (set (make-variable-buffer-local 'TeX-electric-sub-and-superscript) t)
+      (setq ispell-parser 'tex)
+      (flyspell-mode 1)
     #+END_SRC
 
-     Enable spellchecking.
+** Load LaTeX
+   AUCTeX advises functions provided by GNU Emacs's built-in LaTeX package.
 
-     #+BEGIN_SRC emacs-lisp
-       (setq ispell-parser 'tex)
-       (flyspell-mode 1)
-     #+END_SRC
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package latex
+       :straight auctex
 
-**** (plain)TeX Configuration
-     :PROPERTIES:
-     :noweb-ref: tex/config/plain-tex
-     :END:
+       ;; Only load `latex' after the following packages.
+       :after (validate tex)
 
-     Include the allTeX configuration.
+       :custom
+       <<latex/custom>>)
+   #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp
-       <<tex/config/all-tex>>
-     #+END_SRC
+*** Variable Customization (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref latex/custom
+    :END:
 
-     Automatically insert a matching "$" to delimit math environments.
+    Automatically convert =$= to LaTeX-style math environment delimiters.
 
-     #+BEGIN_SRC emacs-lisp
-       (set (make-variable-buffer-local 'TeX-electric-math)
-            (cons "$" "$"))
-     #+END_SRC
-
-**** LaTeX Configuration
-     :PROPERTIES:
-     :noweb-ref: tex/config/latex
-     :END:
-
-     Include the allTeX configuration.
-
-     #+BEGIN_SRC emacs-lisp
-       <<tex/config/all-tex>>
-     #+END_SRC
-
-     Automatically convert "$" to LaTeX-style math environment delimeters.
-
-     #+BEGIN_SRC emacs-lisp
-       (set (make-variable-buffer-local 'TeX-electric-math)
-            (cons "\\(" "\\)"))
-     #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (TeX-electric-math (cons "\\(" "\\)"))
+    #+END_SRC
 
      Replace double quotes with =\enquote{}= if the csquotes package is loaded.
 
      #+BEGIN_SRC emacs-lisp
-	(validate-setq LaTeX-csquotes-open-quote "\\enquote{"
-		       LaTeX-csquotes-close-quote "}")
+       (LaTeX-csquotes-open-quote "\\enquote{")
+       (LaTeX-csquotes-close-quote "}")
      #+END_SRC
 
 ** Load AUCTeX Latexmk
