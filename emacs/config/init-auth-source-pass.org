@@ -1,8 +1,6 @@
-#+TITLE: auth-source-pass Configuration
+#+TITLE: Auth Source Pass Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
-#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -31,7 +29,7 @@
      (require 'use-package)
    #+END_SRC
 
-** Load ~auth-source-pass~
+** Load Auth Source Pass
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package auth-source-pass
        ;; Only load this package if the following code evaluates to non-nil.
@@ -49,24 +47,24 @@
 *** Conditional Loading (~:if~)
     :PROPERTIES:
     :DESCRIPTION: Only load ~auth-source-pass~ if this condition is met.
-    :HEADER-ARGS+: :noweb-ref auth-source-pass/if
+    :HEADER-ARGS: :noweb-ref auth-source-pass/if
     :END:
 
     ~auth-source-pass~ is only usable if =pass= is available in the user's =$PATH=.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (executable-find "pass")
     #+END_SRC
 
 *** Post-Load Execution
     :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref auth-source-pass/config
+    :HEADER-ARGS: :noweb-ref auth-source-pass/config
     :DESCRIPTION: Code to execute after the parent package has been loaded
     :END:
 
     Enable auth-source-password-store.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (auth-source-pass-enable)
     #+END_SRC
 
