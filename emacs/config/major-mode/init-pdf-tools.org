@@ -1,6 +1,8 @@
 #+TITLE: PDF-Tools Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License							   :noexport:
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -69,7 +71,7 @@
 
 *** Keybindings (~:bind~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref pdf-tools/bind
+    :HEADER-ARGS+: :noweb-ref pdf-tools/general
     :END:
 
     #+NAME: pdf-view-mode-map
@@ -94,7 +96,7 @@
 
 *** Pre-Load Evaluation (~:init~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref pdf-tools/init
+    :HEADER-ARGS+: :noweb-ref pdf-tools/init
     :DESCRIPTION: Code to be evaluated before ~pdf-tools~ has been loaded.
     :END:
 
@@ -102,13 +104,13 @@
     - Attempt to install system packages.
     - Signal an error if the build fails.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (pdf-tools-install 'no-query)
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref pdf-tools/config
+    :HEADER-ARGS+: :noweb-ref pdf-tools/config
     :DESCRIPTION: Code to be evaluated after ~pdf-tools~ has been loaded.
     :END:
 
@@ -120,7 +122,7 @@
 
     Use monokai colors for "midnight mode."
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq pdf-view-midnight-colors '("#F8F8F2" . "#272822"))
     #+END_SRC
 

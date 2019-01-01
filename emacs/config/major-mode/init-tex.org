@@ -1,6 +1,8 @@
 #+TITLE: TeX Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -48,7 +50,7 @@
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: tex/config
+    :HEADER-ARGS+: :noweb-ref tex/config
     :END:
 
     Automatically save style information with the buffer.
@@ -83,14 +85,14 @@
 
     Update PDF buffers are successful compilation.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (add-hook 'TeX-after-compilation-finished-functions
 		'TeX-revert-document-buffer)
     #+END_SRC
 
     Use RefTeX.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (setq reftex-plug-into-AUCTeX t)
     #+END_SRC
 
@@ -206,30 +208,30 @@
 
 *** Post-Load Execution
     :PROPERTIES:
-    :noweb-ref: auctex-latexmk/config
+    :HEADER-ARGS+: :noweb-ref auctex-latexmk/config
     :END:
 
     Run the package's setup.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
        (auctex-latexmk-setup)
     #+END_SRC
 
     Use the =-pdf= flag when ~TeX-PDF-mode~ is active.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq auctex-latexmk-inherit-TeX-PDF-mode t)
     #+END_SRC
 
     Workaround a MikTeX bug by disabling ~TeX-file-line-error~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq TeX-file-line-error nil)
     #+END_SRC
 
     Set =latexmk= as the default compilation command.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq TeX-command-default "LatexMk")
     #+END_SRC
 

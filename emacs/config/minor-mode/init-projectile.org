@@ -1,6 +1,8 @@
 #+TITLE: Projectile Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License                                                          :noexport:
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -44,30 +46,30 @@
 
 *** Auto-Loading Keybindings (~:general~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref projectile/general
+    :HEADER-ARGS+: :noweb-ref projectile/general
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ("C-c p" #'projectile-command-map)
     #+END_SRC
 
 *** Pre-Load Evaluation (~:init~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref projectile/init
+    :HEADER-ARGS+: :noweb-ref projectile/init
     :END:
 
     Enable ~projectile-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (projectile-mode +1)
     #+END_SRC
 
 *** Variable Customizations (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref projectile/custom
+    :HEADER-ARGS+: :noweb-ref projectile/custom
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (projectile-switch-project-action #'projectile-vc "When switching projects, default to opening the `vc-dir' at the root of the project.")
     #+END_SRC
 
@@ -96,18 +98,18 @@
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to be evaluated after ~counsel-projectile~ has been loaded.
-    :HEADER-ARGS: :noweb-ref counsel-projectile/config
+    :HEADER-ARGS+: :noweb-ref counsel-projectile/config
     :END:
 
     Enable ~counsel-projectile-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (counsel-projectile-mode)
     #+END_SRC
 
     When switching projects, default to opening the ~vc-dir~ at the root of the project.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq projectile-switch-project-action #'counsel-projectile-switch-project-action-vc
 		     counsel-projectile-switch-project-action #'counsel-projectile-switch-project-action-vc)
     #+END_SRC

@@ -1,6 +1,8 @@
 #+TITLE: Spellcheck Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License							   :noexport:
   All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -54,27 +56,27 @@
 
 *** Conditional Loading (~:if~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ispell/if
+    :HEADER-ARGS+: :noweb-ref ispell/if
     :DESCRIPTION: Define condition for loading ~ispell~.
     :END:
 
     ~ispell~ provides interfaces for third-party spellchecking binaries.
     If no such binaries exist, ~ispell~ does not need to be downloaded.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (executable-find "aspell")
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ispell/config
+    :HEADER-ARGS+: :noweb-ref ispell/config
     :DESCRIPTION: Code to be evaluated after ~ispell~ has been loaded.
     :END:
 
     Set the executable to use for spellchecking.
     If =aspell= is not available, disable ~ispell~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (cond
        ((executable-find "aspell")
         (setq ispell-program-name "aspell"))

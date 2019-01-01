@@ -1,6 +1,8 @@
 #+TITLE: Email Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -62,12 +64,12 @@
 
 *** Variable Customization (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref mu4e/custom
+    :HEADER-ARGS+: :noweb-ref mu4e/custom
     :END:
 
     Use ISO-esque timestamps for ~:human-date~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
     #+END_SRC
 
@@ -75,13 +77,13 @@
      Do not prompt for the context when starting mu4e.
      Being in the proper context is unnecessary except when composing messages.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-context-policy 'pick-first "Do not be concerned about context on startup.")
      #+END_SRC
 
      If no context matches (using its match function) when beginning to compose a message, prompt the user to manually select a context.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (validate-setq mu4e-compose-context-policy 'ask)
      #+END_SRC
 
@@ -89,55 +91,55 @@
      Display the update status in the modeline.
      This helps keep track of the current update status.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-display-update-status-in-modeline t "Display the update status in the modeline.")
      #+END_SRC
 
      Do not display messages related to updating or indexing.
      These messages are generally uninteresting.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-hide-index-messages t "Do not display messages related to updating or indexing.")
      #+END_SRC
 
 **** Sending
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (message-sendmail-envelope-from 'header "Use the value from the mail's header as the FROM field.")
      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (message-kill-buffer-on-exit t "Close the message buffer after sending its message.")
      #+END_SRC
 
 **** Composing
      Use =[[https://joeclark.org/ffaq.html][format=flowed]]= for nicer viewing of plaintext mail.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-compose-format-flowed t "Use format=flowed when composing mail.")
      #+END_SRC
 
      Replace the current frame when writing mail.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-compose-in-new-frame nil "Do not open a new frame when composing mail.")
      #+END_SRC
 
      If a signature is set, automatically include it.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-compose-signature-auto-include t "Automatically include signatures.")
      #+END_SRC
 
 **** Message View
      Show senders' full addresses.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-view-show-addresses t "Show senders' full addresses.")
      #+END_SRC
 
      View messages in their own window.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-split-view 'single-window)
      #+END_SRC
 
@@ -149,7 +151,7 @@
      - subject
 
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-headers-fields
 	'((:human-date . 16)
 	  (:flags . 8)
@@ -160,7 +162,7 @@
 
      Use Unicode box-drawing characters for the prefixes.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (mu4e-headers-has-child-prefix '("-" . "─"))
        (mu4e-headers-empty-parent-prefix '("-" . "─"))
        (mu4e-headers-first-child-prefix '("-" . "─"))
@@ -170,36 +172,36 @@
 
 *** Non-Autoloading Hooks (~:gfhook~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref mu4e/gfhook
+    :HEADER-ARGS+: :noweb-ref mu4e/gfhook
     :END:
 
     Enable Flyspell mode when composing mail.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('mu4e-compose-mode-hook #'flyspell-mode)
     #+END_SRC
 
     Show trailing whitespace when composing mail.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('mu4e-compose-mode-hook #'init-email/mu4e-show-trailing-whitespace)
     #+END_SRC
 
     Specify the SMTP account to use before sending mail.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('message-send-mail #'init-email/mu4e-choose-msmtp-account)
     #+END_SRC
 
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref mu4e/config
+    :HEADER-ARGS+: :noweb-ref mu4e/config
     :END:
 
 **** Fetching and Indexing
      If isync is installed, use =mbsync= to fetch all mail and rename filenames when moving mail.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (when (executable-find "mbsync")
          (validate-setq mu4e-get-mail-command "mbsync -a")
          (validate-setq mu4e-change-filenames-when-moving t))
@@ -208,7 +210,7 @@
 **** Mail Directory
      Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (when-let ((maildir (getenv "MAILDIR")))
 	 (validate-setq mu4e-maildir maildir))
      #+END_SRC
@@ -216,7 +218,7 @@
 **** Sending Mail
      Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
 
-     #+BEGIN_SRC emacs-lisp :tangle no :noweb yes
+     #+BEGIN_SRC emacs-lisp :noweb yes
        (cond ((executable-find "msmtp")
 	      <<mu4e/config/sending/msmtp>>)
 	     (t
@@ -225,12 +227,12 @@
 
 ***** =msmtp= Configuration
       :PROPERTIES:
-      :HEADER-ARGS: :noweb-ref mu4e/config/sending/msmtp
+      :HEADER-ARGS+: :noweb-ref mu4e/config/sending/msmtp
       :END:
 
       Use =msmtp= as the sender.
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
 	(validate-setq
 	 sendmail-program (executable-find "msmtp")
 	 message-send-mail-function #'message-send-mail-with-sendmail)
@@ -238,7 +240,7 @@
 
       Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-email/mu4e-choose-msmtp-account ()
 	 "Choose msmtp account label based on mu4e context name."
 	 (when (message-mail-p)
@@ -251,13 +253,12 @@
 
 ***** ~smtpmail-send-it~ Configuration
       :PROPERTIES:
-      :HEADER-ARGS: :noweb-ref mu4e/config/sending/smtpmail-send-it
-      :HEADER-ARGS: :tangle no
+      :HEADER-ARGS+: :noweb-ref mu4e/config/sending/smtpmail-send-it
       :END:
 
       Provide settings for using ~smtpmail-send-it~ to send mail.
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
 	(validate-setq
 	 message-send-mail-function 'smtpmail-send-it
 	 send-mail-function 'smtpmail-send-it
@@ -268,7 +269,7 @@
       #+END_SRC
 
 **** Multiple Accounts
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (validate-setq
 	mu4e-contexts `( ,(make-mu4e-context
 			   ;; Name of the context
@@ -345,7 +346,7 @@
       mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
       In such cases, display the To address(es).
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
        	(validate-setq
 	 mu4e-user-mail-address-list '("admin@lafreniere.xyz"
 				       "jml140230@utdallas.edu"
@@ -360,7 +361,7 @@
      Show trailing whitespace.
      This is helpful when composing =format=flowed= mail.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        ;; Show trailing whitespace in the current buffer.
        (defun init-email/mu4e-show-trailing-whitespace ()
 	 "Highlight trailing whitespace with face `trailing-whitespace'."
@@ -402,18 +403,18 @@
 
 *** Non-Autoloading Hooks (~:gfhook~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref message/gfhook
+    :HEADER-ARGS+: :noweb-ref message/gfhook
     :END:
 
     Prompt the user before sending a message without an attachment.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('message-send-hook #'mbork/message-warn-if-no-attachments)
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref message/config
+    :HEADER-ARGS+: :noweb-ref message/config
     :END:
 
 **** Attachment Reminders
@@ -422,7 +423,7 @@
      Interestingly, the repository appears to contain neither the attachment code nor any commits that hint at the code having ever been committed into the repository's mbork-message package.
      Despite the attachment code never having (publicly) been a part of mbork/message, the code is attributed here to Borkowsi under the same GPLv2 license as mbork-message.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun mbork/message-attachment-present-p ()
 	 "Return t if an attachment is found in the current message."
 	 (save-excursion
@@ -433,19 +434,19 @@
 	       t))))
      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defcustom mbork/message-attachment-intent-re
 	 (regexp-opt '("attachment" "attached"))
 	 "If this regex is matched then the message should have an attachment.")
      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defcustom mbork/message-attachment-reminder
 	 "Are you sure you want to send this message without any attachment? "
 	 "The question asked when trying to send a message with a missing attachment.")
      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun mbork/message-warn-if-no-attachments ()
 	 "Ask if the user wants to send even though the message has no attachment."
 	 (when (and (save-excursion
@@ -474,7 +475,7 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref mml/config
+    :HEADER-ARGS+: :noweb-ref mml/config
     :END:
 
 **** Add Attachments at Ends of Buffers
@@ -484,7 +485,7 @@
      This can be accomplished by advising ~mml-attach-file~ to automatically move and restore ~point~.
      Borkowsi provided code to do so in [[http://mbork.pl/2015-11-28_Fixing_mml-attach-file_using_advice][a blog post]]:
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-email/mml-attach-file-at-eob (orig-fun &rest args)
 	 "Go to the end of the buffer before attaching files."
 	 (save-excursion
@@ -494,7 +495,7 @@
 	     (apply orig-fun args))))
      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (advice-add 'mml-attach-file :around #'init-email/mml-attach-file-at-eob)
      #+END_SRC
 

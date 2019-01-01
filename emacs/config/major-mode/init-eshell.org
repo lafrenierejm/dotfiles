@@ -1,6 +1,8 @@
 #+TITLE: Eshell Initialization
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -43,7 +45,7 @@
 
 *** Post-Load Execution
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref esh-mode/config
+    :HEADER-ARGS+: :noweb-ref esh-mode/config
     :END:
 
 **** Only Write the Current Command
@@ -58,7 +60,7 @@
      I posted the following code as [[https://stackoverflow.com/a/46937891/8468492][an answer on StackOverflow]].
      As such, this code is licensed under [[https://creativecommons.org/licenses/by-sa/3.0/][CC BY-SA 3.0]].
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-eshell/move-point-to-command ()
 	 "Move point to the current command.
        If point is not on the last line, move point to the maximum position
@@ -93,7 +95,7 @@
      2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
      3. Point will be moved to the beginning of the line.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-eshell/beginning-of-maybe-line ()
          "Move point to the start of the command beginning of the line."
          (interactive)
@@ -120,11 +122,11 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref em-dirs/config
+    :HEADER-ARGS+: :noweb-ref em-dirs/config
     :END:
 
 **** Abbreviate a Path
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-eshell/pwd (directory)
 	   "Use the Projectile root when displaying a path.
 
@@ -150,7 +152,7 @@
      #+END_SRC
 
 **** Create Eshell Buffer Names
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-eshell/name-buffer (directory &optional process-name)
 	 "Create a name for an Eshell buffer in DIRECTORY."
 	 (concat "*eshell "
@@ -167,7 +169,7 @@
      The following code is derived directly from code in GNU Emacs's Em Dirs and Files packages.
      As such, it is licensed under GPLv3.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun eshell/cd (&rest args)           ; all but first ignored
 	 "Alias to extend the behavior of `cd'.
 
@@ -288,13 +290,13 @@
 
 *** Keybindings (~:general~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref eshell/general
+    :HEADER-ARGS+: :noweb-ref eshell/general
     :END:
 
     Map the opening an Eshell buffer to =C-x z=.
     This keybinding mirrors the defaults for ~find-file~ and ~dired~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ("C-x z" #'init-eshell/find-eshell)
     #+END_SRC
 
@@ -302,37 +304,37 @@
     This imitates the behavior of *NIX terminal applications.
     In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ("C-z" #'init-eshell/find-eshell-here)
     #+END_SRC
 
     Account for the prompt's read-only text when moving the point to the beginning of the line.
 
-    #+BEGIN_SRC text :tangle no
+    #+BEGIN_SRC emacs-lisp
       (:keymaps 'eshell-mode-map :state 'motion
 		"H" #'init-eshell/beginning-of-maybe-line)
     #+END_SRC
 
 *** Non-Autoloading Hooks (~:gfhook~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref eshell/gfhook
+    :HEADER-ARGS+: :noweb-ref eshell/gfhook
     :END:
 
     Enable ~init-eshell/move-point-on-insert-to-command~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (nil #'init-eshell/move-point-on-insert-to-command)
     #+END_SRC
 
     Make the list of commands to be run in Term mode buffers.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (nil #'init-eshell/add-visual-commands)
     #+END_SRC
 
     "Background" processes with =C-z=.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (nil (lambda ()
 	     (general-define-key
 	      :keymaps 'eshell-mode-map
@@ -341,18 +343,18 @@
 
 *** Customize Variables (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref eshell/custom
+    :HEADER-ARGS+: :noweb-ref eshell/custom
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (eshell-prefer-lisp-functions t "Use built-in commands.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (eshell-prefer-lisp-variables t "Use built-in commands.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (eshell-prompt-function
        (function (lambda ()
 		   (concat
@@ -367,7 +369,7 @@
 
 *** Pre-Load Execution (~:init~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref eshell/init
+    :HEADER-ARGS+: :noweb-ref eshell/init
     :END:
 
 **** Set =$PAGER=
@@ -375,14 +377,14 @@
      Instead, text can be dumped directly into the buffer.
      This is accomplished by setting ~PAGER~ to ~cat~.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (setenv "PAGER" "cat")
      #+END_SRC
 
 **** Use Magit for Some ~git~ Commands
      The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.rulez.org][<algernon@bonehunter.rulez.org>]] and shared under GPLv3.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (with-eval-after-load 'magit
 	 (defun eshell/git (command &rest args)
 	   (pcase command
@@ -400,7 +402,7 @@
 
      Run ~magit-log~ after determining if the argument to ~git log~ was a file or branch.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (with-eval-after-load 'magit
 	 (defun algernon/git-log (&rest args)
 	   (let* ((branch-or-file (car args))
@@ -423,7 +425,7 @@
 
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref eshell/config
+    :HEADER-ARGS+: :noweb-ref eshell/config
     :END:
 
 **** "Visual" Commands
@@ -434,7 +436,7 @@
      - top
      - tail
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
 	(defun init-eshell/add-visual-commands ()
           "Add commands to `eshell-visual-commands'."
           (let ((commands (list "alsamixer" "ssh" "top" "tail")))
@@ -446,7 +448,7 @@
 ***** Open Eshell in a Given Directory
       Open or switch to an Eshell buffer in a given directory.
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
 	(defun init-eshell/find-eshell (directory)
 	  "Open Eshell in DIRECTORY.
 
@@ -469,7 +471,7 @@
       Define a function to open an Eshell instance in the current directory.
       If an Eshell instance already exists in that directory, switch to its buffer.
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
 	(defun init-eshell/find-eshell-here ()
           "Open Eshell in the current working directory.
 
@@ -490,7 +492,7 @@
       3. open a new Eshell buffer in the same directory.
 
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
 	(defun init-eshell/background-process-maybe ()
 	  "Rename the Eshell BUFFER with its process and reopen the directory."
 	  (interactive)
@@ -503,7 +505,7 @@
 
       UNIX shells use the chord =C-z= to background the current process.
 
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
 	(defun init-eshell/bind-background-process-maybe ()
 	  "Add a keybinding for `init-eshell/background-process-maybe'."
 	  (general-define-key
@@ -530,12 +532,12 @@
 
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref esh-module/config
+    :HEADER-ARGS+: :noweb-ref esh-module/config
     :END:
     
     Disable the greeting banner.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
     #+END_SRC
 
@@ -560,13 +562,12 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref em-tramp/config
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS+: :noweb-ref em-tramp/config
     :END:
 
     Load Em Tramp as an Eshell module.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (add-to-list 'eshell-modules-list 'eshell-tramp)
     #+END_SRC
 
@@ -577,7 +578,7 @@
      The following code is derived from the Em Tramp package distributed with GNU Emacs.
      As such, it is licensed under the same conditions as GNU Emacs itself (namely, GPLv3 or later).
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun eshell/sudo (&rest args)
 	 "Alias \"sudo\" to call Tramp.
 
@@ -634,14 +635,14 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref em-rebind/config
+    :HEADER-ARGS+: :noweb-ref em-rebind/config
     :DESCRIPTION: The code to be evaluated after ~em-rebind~ has been loaded.
     :END:
 
     Rebind Emacs's vertical movement keys to search through history.
     Normal buffer movement is performed using keybindings provided by ~evil~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (add-to-list '([(control ?n)] . init-esh-mode/ivy-esh-history) 'eshell-rebind-keys-alist)
     #+END_SRC
 
@@ -681,13 +682,13 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref em-hist/config
+    :HEADER-ARGS+: :noweb-ref em-hist/config
     :DESCRIPTION: The code to be evaluated after ~em-hist~ has been loaded.
     :END:
 
     Skip duplicates when traversing command history.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq eshell-hist-ignoredups t)
     #+END_SRC
 

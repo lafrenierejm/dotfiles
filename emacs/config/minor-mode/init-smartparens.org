@@ -1,6 +1,8 @@
 #+TITLE: Smartparens Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License                                                          :noexport:
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -77,12 +79,12 @@
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to be evaluated after ~smartparens~ has been loaded.
-    :HEADER-ARGS: :noweb-ref smartparens/config
+    :HEADER-ARGS+: :noweb-ref smartparens/config
     :END:
 
     Enable ~smartparens-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (smartparens-global-mode +1)
     #+END_SRC
 
@@ -103,12 +105,12 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref smartparens-config/config
+    :HEADER-ARGS+: :noweb-ref smartparens-config/config
     :END:
 
     Remove the single quote (') from the list of auto-paired character in LISPs.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (sp-local-pair init-smartparens-lisps "'" nil :actions :rem)
     #+END_SRC
 
@@ -135,30 +137,30 @@
 *** Add Hooks (~:ghook~)
     :PROPERTIES:
     :DESCRIPTION: Add hooks related to ~evil-cleverparens~.
-    :HEADER-ARGS: :noweb-ref evil-cleverparens/ghook
+    :HEADER-ARGS+: :noweb-ref evil-cleverparens/ghook
     :END:
 
     Enable ~evil-cleverparens-mode~ for LISPs.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (init-smartparens-lisp-mode-hooks #'evil-cleverparens-mode)
     #+END_SRC
 
     Let the cursor move past the end of lines in LISPs.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (init-smartparens-lisp-mode-hooks #'init-smartparens/evil-move-beyond-eol)
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref evil-cleverparens/config
+    :HEADER-ARGS+: :noweb-ref evil-cleverparens/config
     :DESCRIPTION: Code to be evaluated after ~evil-cleverparens~ has been loaded.
     :END:
 
     Allow the cursor to move past the end of lines to avoid [[https://github.com/luxbock/evil-cleverparens/issues/29][breaking "certain movement commands"]].
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (defun init-smartparens/evil-move-beyond-eol ()
 	"Enable EVIL-MOVE-BEYOND-EOL."
 	(setq evil-move-beyond-eol t))

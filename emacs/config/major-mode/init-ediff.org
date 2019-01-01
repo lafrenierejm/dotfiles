@@ -1,6 +1,8 @@
 #+TITLE: Ediff Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -40,10 +42,10 @@
 
 *** Customize Variables (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ediff/custom
+    :HEADER-ARGS+: :noweb-ref ediff/custom
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ediff-window-setup-function #'ediff-setup-windows-plain "Use a single frame for all buffers including the control panel.")
     #+END_SRC
 

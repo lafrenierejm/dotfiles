@@ -1,6 +1,8 @@
 #+TITLE: Magit Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -51,19 +53,19 @@
 *** Conditional Loading (~:if~)
     :PROPERTIES:
     :DESCRIPTION: Only load ~magit~ if this code evaluates to non-~nil~.
-    :HEADER-ARGS: :noweb-ref magit/if
+    :HEADER-ARGS+: :noweb-ref magit/if
     :END:
 
     ~magit~ is an interface for Git.
     As such, it is worthless if =git= is not in the user's ~$PATH~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (executable-find "git")
     #+END_SRC
 
 *** Keybindings (~:general~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref magit/general
+    :HEADER-ARGS+: :noweb-ref magit/general
     :END:
 
     #+BEGIN_SRC emacs-lisp
@@ -72,30 +74,30 @@
 
 *** Customize Variables (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref magit/custom
+    :HEADER-ARGS+: :noweb-ref magit/custom
     :END:
 
     Set the list of messages Magit should not display.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (magit-no-message '("Turning on magit-auto-revert-mode...") "Suppress messages")
     #+END_SRC
 
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref magit/config
     :DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
+    :HEADER-ARGS+: :noweb-ref magit/config
     :END:
 
 **** Return After Commit
      Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
       (defadvice git-commit-commit (after move-to-magit-buffer activate)
         (delete-window))
      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defadvice git-commit-abort (after move-to-magit-buffer activate)
 	 (delete-window))
      #+END_SRC
@@ -105,7 +107,7 @@
      However, Magit's semver is /par/ of the string returned by ~magit-version~;
      it is everything before the first hyphen.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-magit/version ()
          "Return Magit's version for use in comparisons."
          (car (split-string (magit-version) "-")))
@@ -156,23 +158,23 @@
 
 *** Auto-Loading Hooks (~:ghook~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref evil-magit/ghook
+    :HEADER-ARGS+: :noweb-ref evil-magit/ghook
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('magit-mode-hook #'evil-local-mode)
     #+END_SRC
 
 *** Customize Variables (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref evil-magit/custom
+    :HEADER-ARGS+: :noweb-ref evil-magit/custom
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (evil-magit-state 'motion "Start `evil-magit' in the motion state.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
     #+END_SRC
 

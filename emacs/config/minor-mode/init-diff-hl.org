@@ -1,7 +1,8 @@
 #+TITLE: diff-hl Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+LaTeX_header: \usepackage[margin=1in]{geometry}
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -52,46 +53,46 @@
 
 *** Conditional Loading (~:if~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref diff-hl/if
+    :HEADER-ARGS+: :noweb-ref diff-hl/if
     :END:
 
     ~diff-hl~ depends on features added in Emacs 24.3.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (version<= "24.3" emacs-version)
     #+END_SRC
 
 *** Auto-Loading Hooks (~:ghook~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref diff-hl/ghook
+    :HEADER-ARGS+: :noweb-ref diff-hl/ghook
     :END:
 
     Enable diff-hl in Dired buffers.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('dired-mode-hook #'diff-hl-dired-mode)
     #+END_SRC
 
     Update ~diff-hl~'s status when refreshing with modern versions of Magit.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
     #+END_SRC
 
 *** Post-Load Execution
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref diff-hl/config
+    :HEADER-ARGS+: :noweb-ref diff-hl/config
     :END:
 
     Enable diff-hl-mode by default.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (global-diff-hl-mode 1)
     #+END_SRC
 
     Perform highlighting on-the-fly.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (diff-hl-flydiff-mode 1)
     #+END_SRC
 

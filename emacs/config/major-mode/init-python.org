@@ -1,6 +1,8 @@
 #+TITLE: Python Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -40,12 +42,12 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref python/config
+    :HEADER-ARGS+: :noweb-ref python/config
     :END:
 
     Precede inline (i.e. end-of-line) comments with two spaces, per PEP 8.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (defun init-python/set-comment-inline-offset ()
 	(set (make-local-variable 'comment-inline-offset) 2))
       (add-hook 'python-mode-hook #'init-python/set-comment-inline-offset)

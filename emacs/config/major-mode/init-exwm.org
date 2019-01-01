@@ -1,6 +1,8 @@
 #+TITLE: EXWM Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -45,14 +47,14 @@
 
 *** Non-Auto-Loading Hooks (~:gfhook~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref exwm/gfhook
+    :HEADER-ARGS+: :noweb-ref exwm/gfhook
     :END:
 
     Hide the mode line for these classes:
     - Firefox
 
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('exwm-manage-finish-hook
        (defun init-exwm/hide-mode-line ()
 	 "Hide the mode line in special buffers"
@@ -64,7 +66,7 @@
     - Firefox
 
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('exwm-update-title-hook
        (defun init-exwm/update-title ()
 	 (when (string-match "Firefox" exwm-class-name)
@@ -73,7 +75,7 @@
 
     Add simulation keys for Firefox windows.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('exwm-manage-finish-hook
        (defun init-exwm/set-firefox-simulation-keys ()
 	 (when (and exwm-class-name (string= exwm-class-name "Firefox"))
@@ -84,18 +86,18 @@
 
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref exwm/config
+    :HEADER-ARGS+: :noweb-ref exwm/config
     :END:
     Only enable a single workspace.
     Buffer switching with [[https://github.com/abo-abo/swiper][Ivy]] is preferred to using multiple workspaces.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (setq exwm-workspace-number 1)
     #+END_SRC
 
     Hide the modeline in floating X windows.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
       (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
     #+END_SRC
@@ -120,7 +122,7 @@
      Keybindings using Meta are allowed by convention to be rebound by major and minor modes.
      The keybindings for the above actions must not be overridden, so they are added to ~overriding-local-map~.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        ;; Move between windows.
        (exwm-input-set-key (kbd "M-j") #'windmove-down)
        (exwm-input-set-key (kbd "M-h") #'windmove-left)
@@ -140,7 +142,7 @@
 
      Launching applications is performed by calling =start-process-shell-command=.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        ;; Launch applications.
        (defun init-exwm/start-process (command)
 	 "Start a process via a shell command."

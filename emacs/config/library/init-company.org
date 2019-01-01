@@ -1,6 +1,8 @@
 #+TITLE: Company Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License							   :noexport:
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -44,12 +46,12 @@
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to be evaluated after ~company~ has been loaded.
-    :HEADER-ARGS: :noweb-ref company/config
+    :HEADER-ARGS+: :noweb-ref company/config
     :END:
 
     Enable ~company-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (global-company-mode)
     #+END_SRC
 

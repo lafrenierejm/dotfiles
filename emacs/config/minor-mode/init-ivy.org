@@ -1,6 +1,8 @@
 #+TITLE: Minibuffer Completion with Ivy and Counsel
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -54,14 +56,14 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref flx/config
+    :HEADER-ARGS+: :noweb-ref flx/config
     :DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
     :END:
 
     Run Emacs's garbage collector only when at least 20 MB have been allocated.
     Doing so greatly improves ~flx~'s performance when working with large sets.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (when (> 20000000 gc-cons-threshold)
 	(validate-setq gc-cons-threshold 20000000))
     #+END_SRC
@@ -102,62 +104,62 @@
 
 *** Keybindings (~:general~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ivy/general
+    :HEADER-ARGS+: :noweb-ref ivy/general
     :END:
 
     Shadow ~switch-to-buffer~ with ~ivy-switch-buffer~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ("C-x C-b" #'ivy-switch-buffer)
     #+END_SRC
 
     When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (:keymaps 'ivy-minibuffer-map
                 "<C-return>" #'ivy-immediate-done)
     #+END_SRC
 
 *** Variable Customizations (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ivy/custom
+    :HEADER-ARGS+: :noweb-ref ivy/custom
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-display-style 'fancy "Highlight the matching parts of the regexp in the minibuffer.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-format-function #'ivy-format-function-line "Extend line highlighting to the right.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-use-virtual-buffers t "Show recently killed buffers when calling `ivy-switch-buffer'.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-re-builders-alist '((t . ivy--regex-plus)) "Use `ivy--regex-plus' as the default matching function.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to evaluate after ~ivy~ has been loaded.
-    :HEADER-ARGS: :noweb-ref ivy/config
+    :HEADER-ARGS+: :noweb-ref ivy/config
     :END:
 
     Enable ~ivy-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-mode +1)
     #+END_SRC
 
     Do not include TRAMP buffers in Ivy's buffer lists.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (setq ivy-ignore-buffers
 	    (cons (rx line-start "*tramp/"
 		      (one-or-more (not whitespace))
@@ -221,32 +223,32 @@
 
 *** Variable Customization (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ivy-rich/custom
+    :HEADER-ARGS+: :noweb-ref ivy-rich/custom
     :END:
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-virtual-abbreviate 'abbreviate "Abbreviate virtual buffer names.")
     #+END_SRC
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-rich-path-style 'relative "Show paths relative their the project home.")
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
-    :HEADER-ARGS: :noweb-ref ivy-rich/config
+    :HEADER-ARGS+: :noweb-ref ivy-rich/config
     :END:
 
     Enable ~ivy-rich-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ivy-rich-mode 1)
     #+END_SRC
 
     Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-switch-buffer~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (setq ivy-rich--display-transformers-list
 	    (plist-put
 	     ivy-rich--display-transformers-list

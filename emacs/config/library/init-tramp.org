@@ -1,6 +1,8 @@
 #+TITLE: TRAMP Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under an [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][ISC license]] except when otherwise noted.
@@ -45,14 +47,14 @@
 
 *** Post-Load Execution
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref tramp/config
+    :HEADER-ARGS+: :noweb-ref tramp/config
     :END:
 
     Create local backups of files edited over TRAMP.
     The backups will be created along with backups of local files.
     The filenames of these backups will be prefixed with their TRAMP name prefixes.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (validate-setq tramp-backup-directory-alist backup-directory-alist)
      #+END_SRC
 

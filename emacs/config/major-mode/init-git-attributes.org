@@ -1,6 +1,8 @@
 #+TITLE: Git Attributes Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -43,17 +45,17 @@
     ~rx~ is used to form the regular expressions as I find its syntax to be more readable than Emacs's raw regex.
     - =.gitattributes=, labeled =rx-gitattributes=
       #+HEADER: :noweb-ref rx-gitattributes
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
         (rx ".gitattributes" string-end)
       #+END_SRC
     - =.git/info/attributes=, labeled =rx-git-info-attributes=
       #+HEADER: :noweb-ref rx-git-info-attributes
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
         (rx ".git/info/attributes" string-end)
       #+END_SRC
     - =git/attributes=, labeled =rx-git-attributes=
       #+HEADER: :noweb-ref rx-git-attributes
-      #+BEGIN_SRC emacs-lisp :tangle no
+      #+BEGIN_SRC emacs-lisp
         (rx "git/attributes" string-end)
       #+END_SRC
 
@@ -66,7 +68,7 @@
 
     #+HEADER: :noweb no-export
     #+HEADER: :results verbatim org
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (let ((alist ())
 	    (regexes (list <<rx-gitattributes>>
 			   <<rx-git-info-attributes>>
@@ -80,7 +82,7 @@
 
     #+RESULTS:
     #+HEADER: :noweb-ref gitattributes-mode/mode
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (("git/attributes\\'" . gitattributes-mode)
        ("\\.git/info/attributes\\'" . gitattributes-mode)
        ("\\.gitattributes\\'" . gitattributes-mode))

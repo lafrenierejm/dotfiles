@@ -1,6 +1,8 @@
 #+TITLE: Org mode Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][the ISC license]] except when otherwise noted.
@@ -49,30 +51,30 @@
 
 *** Add Non-Autoloading Hooks (~:general~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref org/gfhook
+    :HEADER-ARGS+: :noweb-ref org/gfhook
     :END:
 
     Enable minor modes in all ~org~ buffers.
     ~nil~ is used to infer the name of the hook.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (nil (list #'flyspell-mode #'visual-line-mode))
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref org/config
+    :HEADER-ARGS+: :noweb-ref org/config
     :END:
 
     Edit source blocks in the current window.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq org-src-window-setup 'current-window)
     #+END_SRC
 
     Settings.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq org-highlight-latex-and-related '(latex)
                      org-return-follows-link t
                      org-src-fontify-natively t
@@ -82,7 +84,7 @@
     Set the workflow states.
     Unfortunately, [[https://github.com/Malabarba/validate.el/issues/5][an issue]] with ~validate~ prevents using ~validate-setq~ to set the states.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (setq org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
                                           "DELEGATED" "DONE(d!/!)" "|"
                                           "CANCELED")))
@@ -105,12 +107,12 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ox/config
+    :HEADER-ARGS+: :noweb-ref ox/config
     :END:
 
     Allow =BIND= keywords to define local variable values at the time of export.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq org-export-allow-bind-keywords t)
     #+END_SRC
 
@@ -132,17 +134,17 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ox-latex/config
+    :HEADER-ARGS+: :noweb-ref ox-latex/config
     :END:
     Use the =listings= LaTeX package to typeset source code.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq org-latex-listings t)
     #+END_SRC
 
     Use =latexmk= with a LuaLaTeX backend to compile TeX exports if =latexmk= and its runtime dependencies are installed.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (when (and (executable-find "latexmk")
                  (executable-find "perl"))
         (validate-setq org-latex-pdf-process '("latexmk -lualatex -f %f")))
@@ -183,26 +185,26 @@
 
 *** Conditional Loading (~:if~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ob-prolog/if
+    :HEADER-ARGS+: :noweb-ref ob-prolog/if
     :DESCRIPTION: Only load ~ob-prolog~ if this condition is met.
     :END:
 
     Adding Babel support for Prolog is useless unless a Prolog interpreter is available on the user's =$PATH=.
     Thus far, the only Prolog interpreter I have used is =swipl=.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (executable-find "swipl")
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ob-prolog/config
+    :HEADER-ARGS+: :noweb-ref ob-prolog/config
     :DESCRIPTION: Code to be executed after ob-prolog has been loaded.
     :END:
 
     Add Prolog to the list of languages available to Babel.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (org-babel-do-load-languages 'org-babel-load-languages
                                    '((prolog .t )))
     #+END_SRC
@@ -236,23 +238,23 @@
 
 *** Add Hooks (~:ghook~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref evil-org/ghook
+    :HEADER-ARGS+: :noweb-ref evil-org/ghook
     :END:
 
     Enable Evil Org mode in all Org mode buffers.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ('org-mode-hook #'evil-org-mode)
     #+END_SRC
 
 *** Modify Keybindings (~:general~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref evil-org/general
+    :HEADER-ARGS+: :noweb-ref evil-org/general
     :END:
 
     Unbind =M-h= and =M-l= in ~org-mode-map~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (:keymaps 'org-mode-map
                 "M-h" nil
                 "M-l" nil)
@@ -260,12 +262,12 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref evil-org/config
+    :HEADER-ARGS+: :noweb-ref evil-org/config
     :END:
 
     Choose the keybinding themes to enable.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq evil-org-key-theme '(calendar
 					  navigation
 					  insert
@@ -275,13 +277,13 @@
 
     Apply the above bindings.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (evil-org-set-key-theme)
     #+END_SRC
 
     Retain selection after typing =<= or =>= in visual state.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq evil-org-retain-visual-state-on-shift t)
     #+END_SRC
 

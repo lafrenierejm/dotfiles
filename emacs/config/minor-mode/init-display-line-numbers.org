@@ -1,6 +1,8 @@
 #+TITLE: Line Number Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * Copyright and Licensing					   :noexport:
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -51,29 +53,29 @@
 *** Conditional Loading (~:if~)
     :PROPERTIES:
     :DESCRIPTION: Define condition for loading ~display-line-numbers~.
-    :HEADER-ARGS: :noweb-ref display-line-numbers/if
+    :HEADER-ARGS+: :noweb-ref display-line-numbers/if
     :END:
 
     ~display-line-numbers~ was added in GNU Emacs 26.1.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (not (version< "26.1" emacs-version))
     #+END_SRC
 
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref display-line-numbers/config
+    :HEADER-ARGS+: :noweb-ref display-line-numbers/config
     :END:
 
     Display relative line numbers for all lines except the current line.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (validate-setq display-line-numbers-type 'relative)
     #+END_SRC
 
     Display the absolute line number of the current line.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (setq display-line-numbers-current-absolute t)
     #+END_SRC
 

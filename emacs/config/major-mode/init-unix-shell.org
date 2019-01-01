@@ -1,7 +1,8 @@
 #+TITLE: UNIX Shell Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+LaTeX_header: \usepackage[margin=1in]{geometry}
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -64,7 +65,7 @@
 
      #+NAME: rx-zsh-dotfile
      #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (rx "/.z"
            (one-or-more (not (any ".")))
            string-end)
@@ -75,7 +76,7 @@
 
      #+NAME: rx-zsh-script
      #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (rx ".zsh" string-end)
      #+END_SRC
 
@@ -84,20 +85,20 @@
 
     #+HEADER: :noweb no-export
     #+HEADER: :noweb-ref sh-script/mode
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       ((<<rx-zsh-dotfile()>> . sh-script-mode)
        (<<rx-zsh-script()>> . sh-script-mode))
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref sh-script/config
+    :HEADER-ARGS+: :noweb-ref sh-script/config
     :END:
 
 **** Set Shell Type
      First define a function that sets the shell type to Zsh when working with a Zsh file.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (defun init-unix-shell/set-shell-type ()
          "Set the shell type based on variable `buffer-file-name'."
          ;; Loop over the list of Zsh filenames.
@@ -110,7 +111,7 @@
 
     Then evaluate the function on a hook on ~shell-script-mode~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (add-hook 'shell-script-mode #'init-unix-shell/set-shell-type)
     #+END_SRC
 

@@ -1,6 +1,8 @@
 #+TITLE: ws-butler Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License							   :noexport:
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -50,13 +52,13 @@
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
-    :HEADER-ARGS: :noweb-ref ws-butler/config
+    :HEADER-ARGS+: :noweb-ref ws-butler/config
     :DESCRIPTION: Code to be evaluated after loading ~ws-butler~.
     :END:
 
     Enable ws-butler globally.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (ws-butler-global-mode)
     #+END_SRC
 

@@ -1,6 +1,8 @@
 #+TITLE: Emacs Lisp Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :comments link
+#+PROPERTY: header-args+ :tangle no
 
 * License
   All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
@@ -44,7 +46,7 @@
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
     :DESCRIPTION: Code to evaluate after ~elisp-mode~ has been loaded.
-    :HEADER-ARGS: :noweb-ref elisp-mode/config
+    :HEADER-ARGS+: :noweb-ref elisp-mode/config
     :END:
 
     LISP code is typically written using only spaces for indentation.
@@ -52,7 +54,7 @@
     This behavior can be controlled via the value of ~indent-tabs-mode~.
     The following code creates a function to set the value of ~indent-tabs-mode~ to ~nil~, then adds that function to a hook on ~emacs-lisp-mode~.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (defun init-elisp/use-spaces ()
 	(validate-setq indent-tabs-mode nil))
       (add-hook 'emacs-lisp-mode-hook #'init-elisp/use-spaces)
