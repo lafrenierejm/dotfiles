@@ -29,10 +29,10 @@
      (require 'use-package)
    #+END_SRC
 
-** Load auctex
-   auctex adds advice to Emacs's existing TeX modes.
-   As such, auctex cannot be loaded with =use-package= directly.
-   Instead we can hook onto tex-site and specify a custom package with =:straight=.
+** Load AUCTeX
+   AUCTeX adds advice to Emacs's existing TeX modes.
+   As such, AUCTeX cannot be loaded with ~use-package~ directly.
+   Instead, we can hook onto ~tex-site~ and specify a custom package with ~:straight~.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package tex
