@@ -43,6 +43,17 @@
        ;; Load the parent package after the following packages have been loaded.
        :after (validate)
 
+       ;; Customize the following variables.
+       :custom
+       (TeX-auto-save t "Automatically save style information with the buffer.")
+       (TeX-parse-self t "Parse files after loading them.")
+       (TeX-master nil "Query for the mast file.")
+       (TeX-view-program-selection '((output-pdf "PDF Tools")) "Use PDF Tools to view PDF output.")
+       (TeX-source-correlate-start-server t "Automatically start the server for correlating allTeX's output back to the source.")
+       (TeX-electric-sub-and-superscript t "Automatically add braces after "^" or "_" in a math environment.")
+       (Tex-electric-math (cons "$" "$") "Automatically insert a matching "$" to delimit math environments.")
+       (reftex-plug-into-AUCTeX t "Use ReFTeX")
+
        ;; Execute the following code after the parent package has been loaded.
        :config
        <<tex/config>>)
@@ -53,47 +64,11 @@
     :HEADER-ARGS+: :noweb-ref tex/config
     :END:
 
-    Automatically save style information with the buffer.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq TeX-auto-save t)
-    #+END_SRC
-
-    Parse files after loading them.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq TeX-parse-self t)
-    #+END_SRC
-
-    Query user for master file.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (setq-default TeX-master nil)
-    #+END_SRC
-
-    Use pdf-tools to view PDF outputs.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-    #+END_SRC
-
-    Automatically start the server for correlating allTeX's output back to the source.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq TeX-source-correlate-start-server t)
-    #+END_SRC
-
     Update PDF buffers are successful compilation.
 
     #+BEGIN_SRC emacs-lisp
       (add-hook 'TeX-after-compilation-finished-functions
 		'TeX-revert-document-buffer)
-    #+END_SRC
-
-    Use RefTeX.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq reftex-plug-into-AUCTeX t)
     #+END_SRC
 
     Apply (plain)TeX-specific settings.
