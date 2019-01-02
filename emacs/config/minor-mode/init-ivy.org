@@ -117,7 +117,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (:keymaps 'ivy-minibuffer-map
-                "<C-return>" #'ivy-immediate-done)
+                "M-<return>" #'ivy-immediate-done)
     #+END_SRC
 
 *** Variable Customizations (~:custom~)
