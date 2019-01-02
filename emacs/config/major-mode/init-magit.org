@@ -122,20 +122,23 @@
        (push #'magit-insert-ignored-files magit-status-sections-hook)
      #+END_SRC
 
-** Load magithub
-   [[https://github.com/vermiculus/magithub][magithub]] provides Magit-based interfaces to GitHub's API.
+** Load Forge
+   From the project's README:
+   #+BEGIN_QUOTE
+   Work with Git forges, such as Github and Gitlab, from the comfort of Magit and the rest of Emacs.
+   #+END_QUOTE
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package magithub
-       ;; Load this package eagerly.
-       :demand
-
+     (use-package forge
        ;; Load this package after the following packages.
        :after (magit)
 
-       ;; Evaluate the following code after loading this package.
-       :config
-       (magithub-feature-autoinject t))
+       ;; Load this package eagerly.
+       :demand
+
+       :straight
+       (forge :type git :host github :repo "magit/forge"
+	      :fork (:host github :repo "lafrenierejm/forge")))
    #+END_SRC
 
 ** Load ~evil-magit~
