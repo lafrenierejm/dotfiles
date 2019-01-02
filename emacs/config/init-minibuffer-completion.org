@@ -1,4 +1,4 @@
-#+TITLE: Minibuffer Completion with Ivy and Counsel
+#+TITLE: Minibuffer Completion
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 #+PROPERTY: header-args+ :comments link
@@ -22,10 +22,10 @@
 * Code
 ** Introductory Boilerplate
   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-    ;;; init-ivy.el --- Minibuffer completion with Ivy, Counsel, and Swiper
+    ;;; init-minibuffer-completion.el --- Minibuffer completion with Ivy, Counsel, and Swiper
 
     ;;; Commentary:
-    ;; This file is tangled from init-ivy.org.
+    ;; This file is tangled from init-minibuffer-completion.org.
     ;; Changes made here will be overwritten by changes to that Org file.
 
     ;;; Code:
@@ -37,9 +37,9 @@
      (require 'use-package)
    #+END_SRC
 
-** Load ~flx~
-   ~[[https://github.com/lewang/flx][flx]]~ provides fuzzy searching algorithms.
-   Ivy's fuzzy finding will use flx's scoring mechanism if flx is loaded.
+** Load Flx
+   ~[[https://github.com/lewang/flx][Flx]]~ provides fuzzy searching algorithms.
+   Ivy's fuzzy finding will use Flx's scoring mechanism if Flx is loaded.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package flx
@@ -258,6 +258,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-ivy)
-     ;;; init-ivy.el ends here
+     (provide 'init-minibuffer-completion)
+     ;;; init-minibuffer-completion.el ends here
    #+END_SRC
