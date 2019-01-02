@@ -308,13 +308,6 @@
       ("C-z" #'init-eshell/find-eshell-here)
     #+END_SRC
 
-    Account for the prompt's read-only text when moving the point to the beginning of the line.
-
-    #+BEGIN_SRC emacs-lisp
-      (:keymaps 'eshell-mode-map :state 'motion
-		"H" #'init-eshell/beginning-of-maybe-line)
-    #+END_SRC
-
 *** Non-Autoloading Hooks (~:gfhook~)
     :PROPERTIES:
     :HEADER-ARGS+: :noweb-ref eshell/gfhook
