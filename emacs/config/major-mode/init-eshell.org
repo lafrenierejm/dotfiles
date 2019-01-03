@@ -506,7 +506,12 @@
 	   "C-z" #'init-eshell/background-process-maybe))
       #+END_SRC
 
-** Load ~esh-module~
+** Load Esh Module
+   From the package group's docstring:
+   #+BEGIN_QUOTE
+   The ~eshell-module~ group is for Eshell extension modules, which provide optional behavior which the user can enable or disable by customizing the variable ~eshell-modules-list~.
+   #+END_QUOTE
+
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package esh-module
        ;; This package is included in Emacs.
