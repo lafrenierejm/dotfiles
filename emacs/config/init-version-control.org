@@ -1,4 +1,4 @@
-#+TITLE: Magit Configuration
+#+TITLE: Version Control Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 #+PROPERTY: header-args+ :comments link
@@ -15,10 +15,10 @@
 * Code
 ** Introductory Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     ;;; init-magit.el --- Configuration for Magit
+     ;;; init-version-control.el --- Configuration for VCSs
 
      ;;; Commentary:
-     ;; This file is tangled from init-magit.org.
+     ;; This file is tangled from init-version-control.org.
      ;; Changes made here will be overwritten by changes to that Org-mode file.
 
      ;;; Code:
@@ -30,10 +30,10 @@
      (require 'use-package)
    #+END_SRC
 
-** Load ~magit~
+** Load Magit
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
      (use-package magit
-       ;; Only load `magit' if the following sexp's Boolean evaulation is t.
+       ;; Load this package if the following code evaluates to non-nil.
        :if
        <<magit/if>>
 
@@ -141,7 +141,7 @@
 	      :fork (:host github :repo "lafrenierejm/forge")))
    #+END_SRC
 
-** Load ~evil-magit~
+** Load Evil Magit
     ~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures Evil and Magit to play well together.
 
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
@@ -183,6 +183,6 @@
 
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-magit)
-     ;;; init-magit.el ends here
+     (provide 'init-version-control)
+     ;;; init-version-control.el ends here
    #+END_SRC
