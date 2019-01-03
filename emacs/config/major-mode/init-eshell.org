@@ -636,7 +636,8 @@
     Normal buffer movement is performed using keybindings provided by ~evil~.
 
     #+BEGIN_SRC emacs-lisp
-      (add-to-list '([(control ?n)] . init-esh-mode/ivy-esh-history) 'eshell-rebind-keys-alist)
+      (push '([(control ?n)] . eshell-previous-matching-input-from-input)
+	    eshell-rebind-keys-alist)
     #+END_SRC
 
 ** Load ~em-cmpl~
