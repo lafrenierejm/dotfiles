@@ -349,14 +349,14 @@
 
     #+BEGIN_SRC emacs-lisp
       (eshell-prompt-function
-       (function (lambda ()
-		   (concat
-		    (when-let ((remote-host (file-remote-p default-directory 'host)))
-		      (concat
-		       (eshell-user-name) "@"
-		       remote-host ":"))
-		    (init-eshell/pwd default-directory)
-		    (if (= (user-uid) 0) " # " " $ "))))
+       (lambda ()
+	 (concat
+	  (when-let ((remote-host (file-remote-p default-directory 'host)))
+	    (concat
+	     (eshell-user-name) "@"
+	     remote-host ":"))
+	  (init-eshell/pwd default-directory)
+	  (if (= (user-uid) 0) " # " " $ ")))
        "Prefix \"$USER@$(hostname):\" if on remote host.")
     #+END_SRC
 
