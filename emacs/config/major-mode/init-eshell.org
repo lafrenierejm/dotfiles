@@ -621,10 +621,28 @@
        ;; Load this package eagerly.
        :demand
 
+       ;; Load this package after the following packages.
+       :after (esh-module)
+
+       ;; Evaluate the following code before loading this package.
+       :init
+       <<em-rebind/init>>
+
        ;; Evaluate the following code after loading this package.
        :config
        <<em-rebind/config>>)
    #+END_SRC
+
+*** Pre-Load Evaluation (~:init~)
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref em-rebind/init
+    :END:
+
+    Add this module to the list of Eshell modules to load.
+
+    #+BEGIN_SRC emacs-lisp
+      (push 'eshell-rebind eshell-modules-list)
+    #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
     :PROPERTIES:
