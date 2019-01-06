@@ -1,4 +1,4 @@
-#+TITLE: EXWM Configuration
+#+TITLE: Window- and Frame-Related Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 #+PROPERTY: header-args+ :comments link
@@ -15,11 +15,12 @@
 * Code
 ** Introductory Boilerplate					   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
-     ;;; init-exwm.el --- Customization for EXWM
+     ;;; init-window-and-frame.el --- Configure window- and frame-related features
 
      ;;; Commentary:
-     ;; This file is tangled from init-exwm.org.
-     ;; Changes made here will be overwritten by changes to that Org-mode file.
+
+     ;; This file is tangled from init-window-and-frame.org.  Changes made here will
+     ;; be overwritten by changes to that Org file.
 
      ;;; Code:
    #+END_SRC
@@ -56,7 +57,7 @@
 
     #+BEGIN_SRC emacs-lisp
       ('exwm-manage-finish-hook
-       (defun init-exwm/hide-mode-line ()
+       (defun init-window-and-frame/hide-mode-line ()
 	 "Hide the mode line in special buffers"
 	 (when (string-match "Firefox" exwm-class-name)
 	   (exwm-layout-hide-mode-line))))
@@ -68,7 +69,7 @@
 
     #+BEGIN_SRC emacs-lisp
       ('exwm-update-title-hook
-       (defun init-exwm/update-title ()
+       (defun init-window-and-frame/update-title ()
 	 (when (string-match "Firefox" exwm-class-name)
 	   (exwm-workspace-rename-buffer exwm-title))))
     #+END_SRC
@@ -77,7 +78,7 @@
 
     #+BEGIN_SRC emacs-lisp
       ('exwm-manage-finish-hook
-       (defun init-exwm/set-firefox-simulation-keys ()
+       (defun init-window-and-frame/set-firefox-simulation-keys ()
 	 (when (and exwm-class-name (string= exwm-class-name "Firefox"))
 	   (exwm-input-set-local-simulation-keys
 	    '(([\?C-t] . [\?C-n])
@@ -135,7 +136,7 @@
        ;; Close other windows.
        (exwm-input-set-key (kbd "M-o") #'delete-other-windows)
        ;; Run a shell command.
-       (exwm-input-set-key (kbd "M-d") #'init-exwm/start-process)
+       (exwm-input-set-key (kbd "M-d") #'init-window-and-frame/start-process)
        ;; Open Eshell in the current directory.
        (exwm-input-set-key (kbd "C-z") #'init-eshell/find-eshell-here)
      #+END_SRC
@@ -144,7 +145,7 @@
 
      #+BEGIN_SRC emacs-lisp
        ;; Launch applications.
-       (defun init-exwm/start-process (command)
+       (defun init-window-and-frame/start-process (command)
 	 "Start a process via a shell command."
 	 (interactive (list (read-shell-command "$ ")))
 	 (start-process-shell-command command nil command))
@@ -152,6 +153,6 @@
 
 ** Ending Boilerplate						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-exwm)
-     ;;; init-exwm.el ends here
+     (provide 'init-window-and-frame)
+     ;;; init-window-and-frame.el ends here
    #+END_SRC
