@@ -4,185 +4,184 @@
 #+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
-* Code
-** Introductory Boilerplate					   :noexport:
-   #+HEADER: :padline no
-   #+HEADER: :comments no
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;;; init-window-and-frame.el --- Configure window- and frame-related features
+* Introductory Boilerplate                                         :noexport:
+  #+HEADER: :padline no
+  #+HEADER: :comments no
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    ;;; init-window-and-frame.el --- Configure window- and frame-related features
 
-     ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+    ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
-     ;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
-     ;; Keywords: frames
-     ;; Version 1.0
-     ;; Package-Requires: ((general) (use-package))
+    ;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+    ;; Keywords: frames
+    ;; Version 1.0
+    ;; Package-Requires: ((general) (use-package))
 
-     ;; This file is not part of GNU Emacs.
+    ;; This file is not part of GNU Emacs.
 
-     ;; Init Window and Frame is free software: you can redistribute it and/or modify
-     ;; it under the terms of the GNU General Public License as published by the Free
-     ;; Software Foundation, either version 3 of the License, or (at your option) any
-     ;; later version.
+    ;; Init Window and Frame is free software: you can redistribute it and/or modify
+    ;; it under the terms of the GNU General Public License as published by the Free
+    ;; Software Foundation, either version 3 of the License, or (at your option) any
+    ;; later version.
 
-     ;; Init Window and Frame is distributed in the hope that it will be useful, but
-     ;; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-     ;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-     ;; more details.
+    ;; Init Window and Frame is distributed in the hope that it will be useful, but
+    ;; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    ;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+    ;; more details.
 
-     ;; You should have received a copy of the GNU General Public License along with
-     ;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+    ;; You should have received a copy of the GNU General Public License along with
+    ;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
-     ;;; Commentary:
+    ;;; Commentary:
 
-     ;; This file is tangled from init-window-and-frame.org.  Changes made here will
-     ;; be overwritten by changes to that Org file.
+    ;; This file is tangled from init-window-and-frame.org.  Changes made here will
+    ;; be overwritten by changes to that Org file.
 
-     ;;; Code:
+    ;;; Code:
+  #+END_SRC
+
+* Specify Dependencies                                             :noexport:
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (require 'general)
+    (require 'use-package)
+  #+END_SRC
+
+* Load EXWM
+  From the package's README:
+  #+BEGIN_QUOTE
+  EXWM (Emacs X Window Manager) is a full-featured tiling X window manager for Emacs built on top of XELB.
+  It features:
+
+  - Fully keyboard-driven operations
+  - Hybrid layout modes (tiling & stacking)
+  - Dynamic workspace support
+  - ICCCM/EWMH compliance
+  - (Optional) RandR (multi-monitor) support
+  - (Optional) Built-in system tray
+  #+END_QUOTE
+
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+    (use-package exwm
+      ;; Do not load the package lazily.
+      :demand
+
+      ;; Add the following function hooks.
+      :gfhook
+      <<exwm/gfhook>>
+
+      ;; Execute the following code after the package has been loaded.
+      :config
+      <<exwm/config>>)
+  #+END_SRC
+
+** Non-Auto-Loading Hooks (~:gfhook~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref exwm/gfhook
+   :END:
+
+   Hide the mode line for these classes:
+   - Firefox
+
+
+   #+BEGIN_SRC emacs-lisp
+     ('exwm-manage-finish-hook
+      (defun init-window-and-frame/hide-mode-line ()
+	"Hide the mode line in special buffers"
+	(when (string-match "Firefox" exwm-class-name)
+	  (exwm-layout-hide-mode-line))))
    #+END_SRC
 
-** Specify Dependencies						   :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'general)
-     (require 'use-package)
+   Use the window names of the application as its buffers' names for these application classes:
+   - Firefox
+
+
+   #+BEGIN_SRC emacs-lisp
+     ('exwm-update-title-hook
+      (defun init-window-and-frame/update-title ()
+	(when (string-match "Firefox" exwm-class-name)
+	  (exwm-workspace-rename-buffer exwm-title))))
    #+END_SRC
 
-** Load EXWM
-   From the package's README:
-   #+BEGIN_QUOTE
-   EXWM (Emacs X Window Manager) is a full-featured tiling X window manager for Emacs built on top of XELB.
-   It features:
+   Add simulation keys for Firefox windows.
 
-   - Fully keyboard-driven operations
-   - Hybrid layout modes (tiling & stacking)
-   - Dynamic workspace support
-   - ICCCM/EWMH compliance
-   - (Optional) RandR (multi-monitor) support
-   - (Optional) Built-in system tray
-   #+END_QUOTE
-
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package exwm
-       ;; Do not load the package lazily.
-       :demand
-
-       ;; Add the following function hooks.
-       :gfhook
-       <<exwm/gfhook>>
-
-       ;; Execute the following code after the package has been loaded.
-       :config
-       <<exwm/config>>)
+   #+BEGIN_SRC emacs-lisp
+     ('exwm-manage-finish-hook
+      (defun init-window-and-frame/set-firefox-simulation-keys ()
+	(when (and exwm-class-name (string= exwm-class-name "Firefox"))
+	  (exwm-input-set-local-simulation-keys
+	   '(([?\C-s] . [?\C-f])
+	     ([?\C-q] . [?\C-w])
+	     ([?\C-t] . [?\C-n]))))))
    #+END_SRC
 
-*** Non-Auto-Loading Hooks (~:gfhook~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref exwm/gfhook
-    :END:
+** Post-Load Evaluation (~:config~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref exwm/config
+   :END:
+   Only enable a single workspace.
+   Buffer switching with [[https://github.com/abo-abo/swiper][Ivy]] is preferred to using multiple workspaces.
 
-    Hide the mode line for these classes:
-    - Firefox
-
-
-    #+BEGIN_SRC emacs-lisp
-      ('exwm-manage-finish-hook
-       (defun init-window-and-frame/hide-mode-line ()
-	 "Hide the mode line in special buffers"
-	 (when (string-match "Firefox" exwm-class-name)
-	   (exwm-layout-hide-mode-line))))
-    #+END_SRC
-
-    Use the window names of the application as its buffers' names for these application classes:
-    - Firefox
-
-
-    #+BEGIN_SRC emacs-lisp
-      ('exwm-update-title-hook
-       (defun init-window-and-frame/update-title ()
-	 (when (string-match "Firefox" exwm-class-name)
-	   (exwm-workspace-rename-buffer exwm-title))))
-    #+END_SRC
-
-    Add simulation keys for Firefox windows.
-
-    #+BEGIN_SRC emacs-lisp
-      ('exwm-manage-finish-hook
-       (defun init-window-and-frame/set-firefox-simulation-keys ()
-	 (when (and exwm-class-name (string= exwm-class-name "Firefox"))
-	   (exwm-input-set-local-simulation-keys
-	    '(([?\C-s] . [?\C-f])
-	      ([?\C-q] . [?\C-w])
-	      ([?\C-t] . [?\C-n]))))))
-    #+END_SRC
-
-*** Post-Load Execution (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref exwm/config
-    :END:
-    Only enable a single workspace.
-    Buffer switching with [[https://github.com/abo-abo/swiper][Ivy]] is preferred to using multiple workspaces.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq exwm-workspace-number 1)
-    #+END_SRC
-
-    Hide the modeline in floating X windows.
-
-    #+BEGIN_SRC emacs-lisp
-      (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
-      (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
-    #+END_SRC
-
-**** Keybindings
-     Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
-     This will be performed with =M-r=.
-
-     #+BEGIN_SRC emacs-lisp
-       ;; Return to `line-mode'.
-       (exwm-input-set-key (kbd "M-r") #'exwm-reset)
-     #+END_SRC
-
-     From any window, regardless of its buffer contents/mode, I want to be able to
-     - move focus to a different window,
-     - close the current window and kill its buffer,
-     - close the current window without killing its buffer, and
-     - run a shell command.
-
-
-     Because Chromebooks have neither Super nor Hyper meta keys, the above keybindings shall use Meta prefixes.
-     Keybindings using Meta are allowed by convention to be rebound by major and minor modes.
-     The keybindings for the above actions must not be overridden, so they are added to ~overriding-local-map~.
-
-     #+BEGIN_SRC emacs-lisp
-       ;; Move between windows.
-       (exwm-input-set-key (kbd "M-j") #'windmove-down)
-       (exwm-input-set-key (kbd "M-h") #'windmove-left)
-       (exwm-input-set-key (kbd "M-l") #'windmove-right)
-       (exwm-input-set-key (kbd "M-k") #'windmove-up)
-       ;; Close the current window and kill its buffer.
-       (exwm-input-set-key (kbd "M-Q") #'kill-buffer-and-window)
-       ;; Close the current window, leaving its buffer open.
-       (exwm-input-set-key (kbd "M-q") #'delete-window)
-       ;; Close other windows.
-       (exwm-input-set-key (kbd "M-o") #'delete-other-windows)
-       ;; Run a shell command.
-       (exwm-input-set-key (kbd "M-d") #'init-window-and-frame/start-process)
-       ;; Open Eshell in the current directory.
-       (exwm-input-set-key (kbd "C-z") #'init-eshell/find-eshell-here)
-     #+END_SRC
-
-     Launching applications is performed by calling =start-process-shell-command=.
-
-     #+BEGIN_SRC emacs-lisp
-       ;; Launch applications.
-       (defun init-window-and-frame/start-process (command)
-	 "Start a process via a shell command."
-	 (interactive (list (read-shell-command "$ ")))
-	 (start-process-shell-command command nil command))
-     #+END_SRC
-
-** Ending Boilerplate						   :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-window-and-frame)
-     ;;; init-window-and-frame.el ends here
+   #+BEGIN_SRC emacs-lisp
+     (setq exwm-workspace-number 1)
    #+END_SRC
+
+   Hide the modeline in floating X windows.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
+     (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
+   #+END_SRC
+
+*** Keybindings
+    Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
+    This will be performed with =M-r=.
+
+    #+BEGIN_SRC emacs-lisp
+      ;; Return to `line-mode'.
+      (exwm-input-set-key (kbd "M-r") #'exwm-reset)
+    #+END_SRC
+
+    From any window, regardless of its buffer contents/mode, I want to be able to
+    - move focus to a different window,
+    - close the current window and kill its buffer,
+    - close the current window without killing its buffer, and
+    - run a shell command.
+
+
+    Because Chromebooks have neither Super nor Hyper meta keys, the above keybindings shall use Meta prefixes.
+    Keybindings using Meta are allowed by convention to be rebound by major and minor modes.
+    The keybindings for the above actions must not be overridden, so they are added to ~overriding-local-map~.
+
+    #+BEGIN_SRC emacs-lisp
+      ;; Move between windows.
+      (exwm-input-set-key (kbd "M-j") #'windmove-down)
+      (exwm-input-set-key (kbd "M-h") #'windmove-left)
+      (exwm-input-set-key (kbd "M-l") #'windmove-right)
+      (exwm-input-set-key (kbd "M-k") #'windmove-up)
+      ;; Close the current window and kill its buffer.
+      (exwm-input-set-key (kbd "M-Q") #'kill-buffer-and-window)
+      ;; Close the current window, leaving its buffer open.
+      (exwm-input-set-key (kbd "M-q") #'delete-window)
+      ;; Close other windows.
+      (exwm-input-set-key (kbd "M-o") #'delete-other-windows)
+      ;; Run a shell command.
+      (exwm-input-set-key (kbd "M-d") #'init-window-and-frame/start-process)
+      ;; Open Eshell in the current directory.
+      (exwm-input-set-key (kbd "C-z") #'init-eshell/find-eshell-here)
+    #+END_SRC
+
+    Launching applications is performed by calling =start-process-shell-command=.
+
+    #+BEGIN_SRC emacs-lisp
+      ;; Launch applications.
+      (defun init-window-and-frame/start-process (command)
+	"Start a process via a shell command."
+	(interactive (list (read-shell-command "$ ")))
+	(start-process-shell-command command nil command))
+    #+END_SRC
+
+* Ending Boilerplate                                               :noexport:
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (provide 'init-window-and-frame)
+    ;;; init-window-and-frame.el ends here
+  #+END_SRC
