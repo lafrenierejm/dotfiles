@@ -81,8 +81,9 @@
        (defun init-window-and-frame/set-firefox-simulation-keys ()
 	 (when (and exwm-class-name (string= exwm-class-name "Firefox"))
 	   (exwm-input-set-local-simulation-keys
-	    '(([\?C-t] . [\?C-n])
-	      ([\?C-q] . [\?C-w]))))))
+	    '(([?\C-s] . [?\C-f])
+	      ([?\C-q] . [?\C-w])
+	      ([?\C-t] . [?\C-n]))))))
     #+END_SRC
 
 *** Post-Load Execution (~:config~)
