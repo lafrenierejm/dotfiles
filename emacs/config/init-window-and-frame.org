@@ -192,8 +192,26 @@
 
       ;; Apply the following customizations.
       :custom
-      (aw-dispatch-always t))
+      <<ace-window/custom>>)
   #+END_SRC
+
+** Customize Variables (~:custom~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref ace-window/custom
+   :END:
+
+   Use home row characters to label windows.
+
+   #+BEGIN_SRC emacs-lisp
+     (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+   #+END_SRC
+
+   Issue a read-char even for one window.
+   This allows more flexibility in what action is performed, i.e. more than just changing focus, at the cost of requiring more keystrokes for the single most common task of changing focus.
+
+   #+BEGIN_SRC emacs-lisp
+     (aw-dispatch-always t)
+   #+END_SRC
 
 * Ending Boilerplate                                               :noexport:
   #+BEGIN_SRC emacs-lisp :tangle yes
