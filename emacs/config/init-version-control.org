@@ -159,17 +159,15 @@
     :HEADER-ARGS+: :noweb-ref magit/config
     :END:
 
-**** Return After Commit
+**** Return After Commit Message
      Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
 
      #+BEGIN_SRC emacs-lisp
-      (defadvice git-commit-commit (after move-to-magit-buffer activate)
-	(delete-window))
+       (advice-add 'git-commit-commit :after #'delete-window)
      #+END_SRC
 
      #+BEGIN_SRC emacs-lisp
-       (defadvice git-commit-abort (after move-to-magit-buffer activate)
-	 (delete-window))
+       (advice-add 'git-commit-abort :after #'delete-window)
      #+END_SRC
 
 **** Comparable Version Number
