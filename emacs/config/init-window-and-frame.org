@@ -132,53 +132,68 @@
      (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
    #+END_SRC
 
+   Define a function to launch applications from the shell.
+   Launching applications is performed by calling ~start-process-shell-command~.
+
+   #+BEGIN_SRC emacs-lisp
+     (defun init-window-and-frame/start-process (command)
+       "Start a process via a shell command."
+       (interactive (list (read-shell-command "$ ")))
+       (start-process-shell-command command nil command))
+   #+END_SRC
+
 *** Keybindings
+    Because Chromebooks have neither Super nor Hyper meta keys, the following keybindings shall use Meta prefixes.
+    Unfortunately, keybindings using Meta are allowed by convention to be rebound by major and minor modes.
+    This means the below keybindings are not necessarily /truly/ global.
+
     Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
     This will be performed with =M-r=.
 
     #+BEGIN_SRC emacs-lisp
-      ;; Return to `line-mode'.
       (exwm-input-set-key (kbd "M-r") #'exwm-reset)
     #+END_SRC
 
-    From any window, regardless of its buffer contents/mode, I want to be able to
-    - move focus to a different window,
-    - close the current window and kill its buffer,
-    - close the current window without killing its buffer, and
-    - run a shell command.
-
-
-    Because Chromebooks have neither Super nor Hyper meta keys, the above keybindings shall use Meta prefixes.
-    Keybindings using Meta are allowed by convention to be rebound by major and minor modes.
-    The keybindings for the above actions must not be overridden, so they are added to ~overriding-local-map~.
+    Close the current window and kill its buffer.
 
     #+BEGIN_SRC emacs-lisp
-      ;; Move between windows.
-      (exwm-input-set-key (kbd "M-j") #'windmove-down)
-      (exwm-input-set-key (kbd "M-h") #'windmove-left)
-      (exwm-input-set-key (kbd "M-l") #'windmove-right)
-      (exwm-input-set-key (kbd "M-k") #'windmove-up)
-      ;; Close the current window and kill its buffer.
       (exwm-input-set-key (kbd "M-Q") #'kill-buffer-and-window)
-      ;; Close the current window, leaving its buffer open.
+    #+END_SRC
+
+    Close the current window without killing its buffer.
+
+    #+BEGIN_SRC emacs-lisp
       (exwm-input-set-key (kbd "M-q") #'delete-window)
-      ;; Close other windows.
-      (exwm-input-set-key (kbd "M-o") #'delete-other-windows)
-      ;; Run a shell command.
+    #+END_SRC
+
+    Run a shell command.
+
+    #+BEGIN_SRC emacs-lisp
       (exwm-input-set-key (kbd "M-d") #'init-window-and-frame/start-process)
-      ;; Open Eshell in the current directory.
+    #+END_SRC
+
+    Open an Eshell buffer in the current buffer's location.
+
+    #+BEGIN_SRC emacs-lisp
       (exwm-input-set-key (kbd "C-z") #'init-eshell/find-eshell-here)
     #+END_SRC
 
-    Launching applications is performed by calling =start-process-shell-command=.
+* Load Ace Window
+  From the README of Oleh Krehel (abo-abo)'s Ace Window package:
+  #+BEGIN_QUOTE
+  This package aims to take the speed and predictability of ~windmove~ and pack it into a single key binding, similar to ~other-window~.
+  #+END_QUOTE
 
-    #+BEGIN_SRC emacs-lisp
-      ;; Launch applications.
-      (defun init-window-and-frame/start-process (command)
-	"Start a process via a shell command."
-	(interactive (list (read-shell-command "$ ")))
-	(start-process-shell-command command nil command))
-    #+END_SRC
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+    (use-package ace-window
+      ;; Add the following keybindings.
+      :general
+      ("M-o" #'ace-window)
+
+      ;; Apply the following customizations.
+      :custom
+      (aw-dispatch-always t))
+  #+END_SRC
 
 * Ending Boilerplate                                               :noexport:
   #+BEGIN_SRC emacs-lisp :tangle yes
