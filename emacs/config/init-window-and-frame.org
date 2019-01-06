@@ -4,18 +4,34 @@
 #+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
-* License
-  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
-  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
-
-* About This File
-  This file contains configuration for [[https://github.com/ch11ng/exwm][Emacs X Window Manager (EXWM)]].
-  It is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
-
 * Code
 ** Introductory Boilerplate					   :noexport:
+   #+HEADER: :padline no
+   #+HEADER: :comments no
    #+BEGIN_SRC emacs-lisp :tangle yes
      ;;; init-window-and-frame.el --- Configure window- and frame-related features
+
+     ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+
+     ;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+     ;; Keywords: frames
+     ;; Version 1.0
+     ;; Package-Requires: ((general) (use-package))
+
+     ;; This file is not part of GNU Emacs.
+
+     ;; Init Window and Frame is free software: you can redistribute it and/or modify
+     ;; it under the terms of the GNU General Public License as published by the Free
+     ;; Software Foundation, either version 3 of the License, or (at your option) any
+     ;; later version.
+
+     ;; Init Window and Frame is distributed in the hope that it will be useful, but
+     ;; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+     ;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+     ;; more details.
+
+     ;; You should have received a copy of the GNU General Public License along with
+     ;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
      ;;; Commentary:
 
