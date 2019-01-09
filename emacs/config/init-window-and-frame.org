@@ -79,25 +79,12 @@
    :HEADER-ARGS+: :noweb-ref exwm/gfhook
    :END:
 
-   Hide the mode line for these classes:
-   - Firefox
-
-
-   #+BEGIN_SRC emacs-lisp
-     ('exwm-manage-finish-hook
-      (defun init-window-and-frame/hide-mode-line ()
-	"Hide the mode line in special buffers"
-	(when (string-match "Firefox" exwm-class-name)
-	  (exwm-layout-hide-mode-line))))
-   #+END_SRC
-
-   Use the window names of the application as its buffers' names for these application classes:
-   - Firefox
-
+   Use Firefox windows' names as the windows' buffers names.
 
    #+BEGIN_SRC emacs-lisp
      ('exwm-update-title-hook
       (defun init-window-and-frame/update-title ()
+        "Use Firefox windows' names as the windows' buffers names."
 	(when (string-match "Firefox" exwm-class-name)
 	  (exwm-workspace-rename-buffer exwm-title))))
    #+END_SRC
@@ -123,13 +110,6 @@
 
    #+BEGIN_SRC emacs-lisp
      (setq exwm-workspace-number 1)
-   #+END_SRC
-
-   Hide the modeline in floating X windows.
-
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
-     (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
    #+END_SRC
 
    Define a function to launch applications from the shell.
@@ -186,13 +166,20 @@
 
   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
     (use-package ace-window
+      ;; Load this package eagerly.
+      :demand
+
       ;; Add the following keybindings.
       :general
       ("M-o" #'ace-window)
 
       ;; Apply the following customizations.
       :custom
-      <<ace-window/custom>>)
+      <<ace-window/custom>>
+
+      ;; Evaluate the following code before loading this package.
+      :init
+      <<ace-window/init>>)
   #+END_SRC
 
 ** Customize Variables (~:custom~)
@@ -211,6 +198,25 @@
 
    #+BEGIN_SRC emacs-lisp
      (aw-dispatch-always t)
+   #+END_SRC
+
+   Show the ace window key in the mode line.
+   This is useful for EXWM buffers which cannot display keys in the buffer itself.
+
+   #+BEGIN_SRC emacs-lisp
+     (ace-window-display-mode t)
+   #+END_SRC
+
+** Pre-Load Evaluation
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref ace-window/init
+   :END:
+
+   Bind Ace Window to =M-o= in EXWM.
+
+   #+BEGIN_SRC emacs-lisp
+     (with-eval-after-load 'exwm
+       (exwm-input-set-key (kbd "M-o") #'ace-window))
    #+END_SRC
 
 * Ending Boilerplate                                               :noexport:
