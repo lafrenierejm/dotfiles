@@ -1,308 +1,321 @@
-#+TITLE: Org mode Configuration
+#+TITLE: Org-Related Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 #+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
-* License
-  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][the ISC license]] except when otherwise noted.
-  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+* Introductory Boilerplate
+  #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+    ;;; init-org.el --- Org-related configuration
 
-* About This File
-  This file contains my configuration for [[http://orgmode.org/][Org mode]].
-  Org-mode itself is loaded in =[[file:~/.emacs.d/init.org][init.org]]= because =org-babel-tangle= was required to tangle this file.
-  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+    ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
-* Code
-** Introductory Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     ;;; init-org.el --- Configuration for Org-mode
+    ;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+    ;; Keywords: convenience
+    ;; Version 1.0
+    ;; Package-Requires: ((s) (files))
 
-     ;;; Commentary:
-     ;; This file is tangled from init-org.org.
-     ;; Changes made here will be overwritten by changes to that Org-mode file.
+    ;; This file is not part of GNU Emacs.
 
-     ;;; Code:
+    ;; Init Org is free software: you can redistribute it and/or modify it
+    ;; under the terms of the GNU General Public License as published by the Free
+    ;; Software Foundation, either version 3 of the License, or (at your option) any
+    ;; later version.
+
+    ;; Init Org is distributed in the hope that it will be useful, but WITHOUT
+    ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+    ;; FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+    ;; details.
+
+    ;; You should have received a copy of the GNU General Public License along with
+    ;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+
+    ;;; Commentary:
+    ;; This file is tangled from init-org.org.  Changes made here will be
+    ;; overwritten by changes to that Org-mode file.
+
+    ;;; Code:
+  #+END_SRC
+
+* Dependencies
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (require 'general)
+    (require 'use-package)
+  #+END_SRC
+
+* Load Org
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+    (use-package org
+      ;; This package is included in GNU Emacs.
+      :straight nil
+
+      ;; Load this package after the following packages.
+      :after (validate)
+
+      ;; Add the following non-autoloading hooks.
+      :gfhook
+      <<org/gfhook>>
+
+      ;; Apply the following customizations.
+      :custom
+      <<org/custom>>)
+  #+END_SRC
+
+** Add Non-Autoloading Hooks (~:gfhook~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref org/gfhook
+   :END:
+
+   Enable the following minor modes in all Org buffers.
+   ~nil~ is used to infer the name of the hook.
+
+   #+BEGIN_SRC emacs-lisp
+     (nil (list #'flyspell-mode #'visual-line-mode))
    #+END_SRC
 
-** Dependencies
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     (require 'general)
-     (require 'use-package)
+** Variable Customizations (~:custom~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref org/custom
+   :END:
+
+   Edit source blocks in the current window.
+
+   #+BEGIN_SRC emacs-lisp
+     (org-src-window-setup 'current-window)
    #+END_SRC
 
-** Load ~org~
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package org
-       ;; This package is included in GNU Emacs.
-       :straight nil
+   Highlight LaTeX snippets and environments in Org buffers.
 
-       ;; Load this package after the following packages.
-       :after (validate)
-
-       ;; Add the following non-autoloading hooks.
-       :gfhook
-       <<org/gfhook>>
-
-       ;; Apply the following customizations.
-       :custom
-       <<org/custom>>)
+   #+BEGIN_SRC emacs-lisp
+     (org-highlight-latex-and-related '(latex))
    #+END_SRC
 
-*** Add Non-Autoloading Hooks (~:general~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref org/gfhook
-    :END:
+   Follow links with =RET= except when in table mode.
 
-    Enable minor modes in all ~org~ buffers.
-    ~nil~ is used to infer the name of the hook.
-
-    #+BEGIN_SRC emacs-lisp
-      (nil (list #'flyspell-mode #'visual-line-mode))
-    #+END_SRC
-
-*** Variable Customizations (~:custom~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref org/custom
-    :END:
-
-    Edit source blocks in the current window.
-
-    #+BEGIN_SRC emacs-lisp
-      (org-src-window-setup 'current-window)
-    #+END_SRC
-
-    Highlight LaTeX snippets and environments in Org buffers.
-
-    #+BEGIN_SRC emacs-lisp
-      (org-highlight-latex-and-related '(latex))
-    #+END_SRC
-
-    Follow links with =RET= except when in table mode.
-
-    #+BEGIN_SRC emacs-lisp
-      (org-return-follows-link t)
-    #+END_SRC
-
-    Fontify code in source blocks.
-
-    #+BEGIN_SRC emacs-lisp
-      (org-src-fontify-natively t)
-    #+END_SRC
-
-    Do not require confirmation before evaluating source blocks.
-
-    #+BEGIN_SRC emacs-lisp
-      (org-confirm-babel-evalutate nil)
-    #+END_SRC
-
-    Set the workflow states.
-
-    #+BEGIN_SRC emacs-lisp
-      (org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
-				     "DELEGATED" "DONE(d!/!)" "|"
-				     "CANCELED")))
-    #+END_SRC
-
-** Load ~ox~
-   ~ox~ (short for Org eXport) allows exporting (publishing) Org-mode documents such as this one.
-
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package ox
-       ;; This package is included in the following package.
-       :straight nil ;; org
-
-       ;; Load this package after the following packages.
-       :after (validate)
-
-       ;; Evlauate the following sexps after loading this package.
-       <<ox/config>>)
+   #+BEGIN_SRC emacs-lisp
+     (org-return-follows-link t)
    #+END_SRC
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref ox/config
-    :END:
+   Fontify code in source blocks.
 
-    Allow =BIND= keywords to define local variable values at the time of export.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq org-export-allow-bind-keywords t)
-    #+END_SRC
-
-** Load ~ox-latex~
-   ~ox-latex~ is a library used by ~ox~ that provides exporting to TeX.
-
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package ox-latex
-       ;; This package is included in the following package.
-       :straight nil ; org
-
-       ;; Load this package after the following packages.
-       :after (validate ox)
-
-       ;; Evaluate the following sexps after loading this package.
-       :config
-       <<ox-latex/config>>)
+   #+BEGIN_SRC emacs-lisp
+     (org-src-fontify-natively t)
    #+END_SRC
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref ox-latex/config
-    :END:
-    Use the =listings= LaTeX package to typeset source code.
+   Do not require confirmation before evaluating source blocks.
 
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq org-latex-listings t)
-    #+END_SRC
-
-    Use =latexmk= with a LuaLaTeX backend to compile TeX exports if =latexmk= and its runtime dependencies are installed.
-
-    #+BEGIN_SRC emacs-lisp
-      (when (and (executable-find "latexmk")
-                 (executable-find "perl"))
-        (validate-setq org-latex-pdf-process '("latexmk -lualatex -f %f")))
-    #+END_SRC
-
-** Load ~ox-moderncv~
-   From the [[https://titan-c.gitlab.io/org-cv/][the package's website]]:
-   #+BEGIN_QUOTE
-   This project aims to generate from an org-mode file with reasonably ordered items a latex file which compiles into a reasonably nice CV.
-   In the same spirit[,] the org-mode file must export to markdown so that it can be use[d] for web based CV.
-   #+END_QUOTE
-
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package ox-moderncv
-       :straight (ox-moderncv :type git :host gitlab :repo "lafrenierejm/org-cv"
-			      :upstream (:host gitlab :repo "Titan-C/org-cv"))
-
-       ;; Load this package eagerly.
-       :demand
-
-       ;; Load this package after the following packages.
-       :after (ox-latex))
+   #+BEGIN_SRC emacs-lisp
+     (org-confirm-babel-evalutate nil)
    #+END_SRC
 
-** Load ~ob-prolog~
-   ~[[https://github.com/ljos/ob-prolog][ob-prolog]]~ by Bjarte Johansen (ljos) <[[mailto:Bjarte.Johansen@gmail.com][Bjarte.Johansen@gmail.com]]> as Org-babel support for Prolog.
+   Set the workflow states.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package ob-prolog
-       ;; Only load this package if the following code evaluates to non-nil.
-       :if
-       <<ob-prolog/if>>
-
-       ;; Evaluate the following sexps after loading `ob-prolog'.
-       :config
-       <<ob-prolog/config>>)
+   #+BEGIN_SRC emacs-lisp
+     (org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
+				    "DELEGATED" "DONE(d!/!)" "|"
+				    "CANCELED")))
    #+END_SRC
 
-*** Conditional Loading (~:if~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref ob-prolog/if
-    :DESCRIPTION: Only load ~ob-prolog~ if this condition is met.
-    :END:
+* Load Ox
+  Ox (Org eXport) allows exporting (publishing) Org-mode documents such as this one.
 
-    Adding Babel support for Prolog is useless unless a Prolog interpreter is available on the user's =$PATH=.
-    Thus far, the only Prolog interpreter I have used is =swipl=.
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+    (use-package ox
+      ;; This package is included in the following package.
+      :straight nil ;; org
 
-    #+BEGIN_SRC emacs-lisp
-      (executable-find "swipl")
-    #+END_SRC
+      ;; Load this package after the following packages.
+      :after (validate)
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref ob-prolog/config
-    :DESCRIPTION: Code to be executed after ob-prolog has been loaded.
-    :END:
+      ;; Evlauate the following sexps after loading this package.
+      <<ox/config>>)
+  #+END_SRC
 
-    Add Prolog to the list of languages available to Babel.
+** Post-Load Evaluation (~:config~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref ox/config
+   :END:
 
-    #+BEGIN_SRC emacs-lisp
-      (org-babel-do-load-languages 'org-babel-load-languages
-                                   '((prolog .t )))
-    #+END_SRC
+   Allow =BIND= keywords to define local variable values at the time of export.
 
-** Load ~evil-org~
-   [[https://github.com/Somelauw/evil-org-mode][Evil Org mode]] is a minor mode that provides Evil keybindings for common Org mode actions.
-
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package evil-org
-       ;; Load this package after the following packages.
-       :after (evil org validate)
-
-       ;; Hide the following text in the modeline.
-       :diminish evil-org-mode
-
-       ;; Add hooks.
-       :ghook
-       <<evil-org/ghook>>
-
-       ;; Add keybindings.
-       :general
-       <<evil-org/general>>
-
-       ;; Inform the bytecode compiler of the following functions.
-       :commands (evil-org-set-key-theme)
-
-       ;; Evaluate the following sexps after loading this package.
-       :config
-       <<evil-org/config>>)
+   #+BEGIN_SRC emacs-lisp
+     (validate-setq org-export-allow-bind-keywords t)
    #+END_SRC
 
-*** Add Hooks (~:ghook~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref evil-org/ghook
-    :END:
+* Load Ox LaTeX
+  Ox LaTeX is a library used by Ox that provides exporting to TeX.
 
-    Enable Evil Org mode in all Org mode buffers.
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+    (use-package ox-latex
+      ;; This package is included in the following package.
+      :straight nil ; org
 
-    #+BEGIN_SRC emacs-lisp
-      ('org-mode-hook #'evil-org-mode)
-    #+END_SRC
+      ;; Load this package after the following packages.
+      :after (validate ox)
 
-*** Modify Keybindings (~:general~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref evil-org/general
-    :END:
+      ;; Evaluate the following sexps after loading this package.
+      :config
+      <<ox-latex/config>>)
+  #+END_SRC
 
-    Unbind =M-h= and =M-l= in ~org-mode-map~.
+** Post-Load Evaluation (~:config~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref ox-latex/config
+   :END:
 
-    #+BEGIN_SRC emacs-lisp
-      (:keymaps 'org-mode-map
-                "M-h" nil
-                "M-l" nil)
-    #+END_SRC
+   Use the =listings= LaTeX package to typeset source code.
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref evil-org/config
-    :END:
-
-    Choose the keybinding themes to enable.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq evil-org-key-theme '(calendar
-					  navigation
-					  insert
-					  return
-					  textobjects))
-    #+END_SRC
-
-    Apply the above bindings.
-
-    #+BEGIN_SRC emacs-lisp
-      (evil-org-set-key-theme)
-    #+END_SRC
-
-    Retain selection after typing =<= or =>= in visual state.
-
-    #+BEGIN_SRC emacs-lisp
-      (validate-setq evil-org-retain-visual-state-on-shift t)
-    #+END_SRC
-
-** Ending Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-org)
-     ;;; init-org.el ends here
+   #+BEGIN_SRC emacs-lisp
+     (validate-setq org-latex-listings t)
    #+END_SRC
+
+   Use =latexmk= with a LuaLaTeX backend to compile TeX exports if =latexmk= and its runtime dependencies are installed.
+
+   #+BEGIN_SRC emacs-lisp
+     (when (and (executable-find "latexmk")
+		(executable-find "perl"))
+       (validate-setq org-latex-pdf-process '("latexmk -lualatex -f %f")))
+   #+END_SRC
+
+* Load Ox Moderncv
+  From the [[https://titan-c.gitlab.io/org-cv/][the package's website]]:
+  #+BEGIN_QUOTE
+  This project aims to generate from an org-mode file with reasonably ordered items a latex file which compiles into a reasonably nice CV.
+  In the same spirit the org-mode file must export to markdown so that it can be use[d] for web based CV.
+  #+END_QUOTE
+
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (use-package ox-moderncv
+      :straight (ox-moderncv :type git :host gitlab :repo "lafrenierejm/org-cv"
+			     :upstream (:host gitlab :repo "Titan-C/org-cv"))
+
+      ;; Load this package eagerly.
+      :demand
+
+      ;; Load this package after the following packages.
+      :after (ox-latex))
+  #+END_SRC
+
+* Load Ob Prolog
+  Bjarte Johansen (ljos) <[[mailto:Bjarte.Johansen@gmail.com][Bjarte.Johansen@gmail.com]]>'s [[https://github.com/ljos/ob-prolog][Ob Prolog]] by adds Org-babel support for Prolog.
+
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+    (use-package ob-prolog
+      ;; Only load this package if the following code evaluates to non-nil.
+      :if
+      <<ob-prolog/if>>
+
+      ;; Evaluate the following sexps after loading `ob-prolog'.
+      :config
+      <<ob-prolog/config>>)
+  #+END_SRC
+
+** Conditional Loading (~:if~)
+   :PROPERTIES:
+   :DESCRIPTION: Only load ~ob-prolog~ if this condition is met.
+   :HEADER-ARGS+: :noweb-ref ob-prolog/if
+   :END:
+
+   Adding Babel support for Prolog is useless unless a Prolog interpreter is available on the user's =$PATH=.
+   Thus far, the only Prolog interpreter I have used is =swipl=.
+
+   #+BEGIN_SRC emacs-lisp
+     (executable-find "swipl")
+   #+END_SRC
+
+** Post-Load Evaluation (~:config~)
+   :PROPERTIES:
+   :DESCRIPTION: Code to be executed after ob-prolog has been loaded.
+   :HEADER-ARGS+: :noweb-ref ob-prolog/config
+   :END:
+
+   Add Prolog to the list of languages available to Babel.
+
+   #+BEGIN_SRC emacs-lisp
+     (org-babel-do-load-languages 'org-babel-load-languages
+				  '((prolog .t )))
+   #+END_SRC
+
+* Load Evil Org
+  [[https://github.com/Somelauw/evil-org-mode][Evil Org mode]] is a minor mode that provides Evil keybindings for common Org mode actions.
+
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+    (use-package evil-org
+      ;; Load this package after the following packages.
+      :after (evil org validate)
+
+      ;; Hide the following text in the modeline.
+      :diminish evil-org-mode
+
+      ;; Add hooks.
+      :ghook
+      <<evil-org/ghook>>
+
+      ;; Add keybindings.
+      :general
+      <<evil-org/general>>
+
+      ;; Inform the bytecode compiler of the following functions.
+      :commands (evil-org-set-key-theme)
+
+      ;; Evaluate the following sexps after loading this package.
+      :config
+      <<evil-org/config>>)
+  #+END_SRC
+
+** Add Auto-Loading Hooks (~:ghook~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref evil-org/ghook
+   :END:
+
+   Enable Evil Org mode in all Org mode buffers.
+
+   #+BEGIN_SRC emacs-lisp
+     ('org-mode-hook #'evil-org-mode)
+   #+END_SRC
+
+** Modify Keybindings (~:general~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref evil-org/general
+   :END:
+
+   Unbind =M-h= and =M-l= in ~org-mode-map~.
+
+   #+BEGIN_SRC emacs-lisp
+     (:keymaps 'org-mode-map
+	       "M-h" nil
+	       "M-l" nil)
+   #+END_SRC
+
+** Post-Load Evaluation (~:config~)
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref evil-org/config
+   :END:
+
+   Choose the keybinding themes to enable.
+
+   #+BEGIN_SRC emacs-lisp
+     (validate-setq evil-org-key-theme '(calendar
+					 navigation
+					 insert
+					 return
+					 textobjects))
+   #+END_SRC
+
+   Apply the above bindings.
+
+   #+BEGIN_SRC emacs-lisp
+     (evil-org-set-key-theme)
+   #+END_SRC
+
+   Retain selection after typing =<= or =>= in visual state.
+
+   #+BEGIN_SRC emacs-lisp
+     (validate-setq evil-org-retain-visual-state-on-shift t)
+   #+END_SRC
+
+* Ending Boilerplate
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (provide 'init-org)
+    ;;; init-org.el ends here
+  #+END_SRC
