@@ -181,15 +181,6 @@
          (car (split-string (magit-version) "-")))
      #+END_SRC
 
-**** Add a Section for Ignored Files
-     It is sometimes useful to be able to add ignored files (those that match a rule in =.gitignore=).
-     To this end, a new section adding ignored files will be added to Magit's main status buffer.
-     Starting in release 2.12.2, Magit includes a built-in function to add such a section
-
-     #+BEGIN_SRC emacs-lisp
-       (push #'magit-insert-ignored-files magit-status-sections-hook)
-     #+END_SRC
-
 ** Load Forge
    From the project's README:
    #+BEGIN_QUOTE
