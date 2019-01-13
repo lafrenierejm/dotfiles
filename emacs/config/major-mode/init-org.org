@@ -44,9 +44,9 @@
        :gfhook
        <<org/gfhook>>
 
-       ;; Evaluate the following sexps after loading this package.
-       :config
-       <<org/config>>)
+       ;; Apply the following customizations.
+       :custom
+       <<org/custom>>)
    #+END_SRC
 
 *** Add Non-Autoloading Hooks (~:general~)
@@ -61,33 +61,47 @@
       (nil (list #'flyspell-mode #'visual-line-mode))
     #+END_SRC
 
-*** Post-Load Evaluation (~:config~)
+*** Variable Customizations (~:custom~)
     :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref org/config
+    :HEADER-ARGS+: :noweb-ref org/custom
     :END:
 
     Edit source blocks in the current window.
 
     #+BEGIN_SRC emacs-lisp
-      (validate-setq org-src-window-setup 'current-window)
+      (org-src-window-setup 'current-window)
     #+END_SRC
 
-    Settings.
+    Highlight LaTeX snippets and environments in Org buffers.
 
     #+BEGIN_SRC emacs-lisp
-      (validate-setq org-highlight-latex-and-related '(latex)
-                     org-return-follows-link t
-                     org-src-fontify-natively t
-                     org-confirm-babel-evaluate nil)
+      (org-highlight-latex-and-related '(latex))
+    #+END_SRC
+
+    Follow links with =RET= except when in table mode.
+
+    #+BEGIN_SRC emacs-lisp
+      (org-return-follows-link t)
+    #+END_SRC
+
+    Fontify code in source blocks.
+
+    #+BEGIN_SRC emacs-lisp
+      (org-src-fontify-natively t)
+    #+END_SRC
+
+    Do not require confirmation before evaluating source blocks.
+
+    #+BEGIN_SRC emacs-lisp
+      (org-confirm-babel-evalutate nil)
     #+END_SRC
 
     Set the workflow states.
-    Unfortunately, [[https://github.com/Malabarba/validate.el/issues/5][an issue]] with ~validate~ prevents using ~validate-setq~ to set the states.
 
     #+BEGIN_SRC emacs-lisp
-      (setq org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
-                                          "DELEGATED" "DONE(d!/!)" "|"
-                                          "CANCELED")))
+      (org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
+				     "DELEGATED" "DONE(d!/!)" "|"
+				     "CANCELED")))
     #+END_SRC
 
 ** Load ~ox~
