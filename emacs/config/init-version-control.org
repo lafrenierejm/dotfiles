@@ -153,6 +153,15 @@
       (magit-no-message '("Turning on magit-auto-revert-mode...") "Suppress messages")
     #+END_SRC
 
+    Hide the stash and ignored file sections by default in status buffers.
+
+    #+BEGIN_SRC emacs-lisp
+      (magit-section-initial-visibility-alist
+       '((ignored . hide)
+	 (stashes . hide)
+	 (untracked . hide)))
+    #+END_SRC
+
 *** Post-Load Execution (~:config~)
     :PROPERTIES:
     :DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
