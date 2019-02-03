@@ -22,3 +22,5 @@
 	email = "joseph@lafreniere.xyz"
 [include]
 	path = "include/gpg"
+[github]
+	user = lafrenierejm
