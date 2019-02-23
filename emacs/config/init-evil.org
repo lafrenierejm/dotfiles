@@ -40,6 +40,9 @@
        :general
        <<evil/general>>
 
+       :init
+       <<evil/init>>
+
        ;; Evaluate the following code after loading this package.
        :config
        <<evil/config>>)
@@ -67,6 +70,18 @@
     #+BEGIN_SRC emacs-lisp
       (:states 'normal
 	       "Y" #'init-evil/evil-yank-to-end-of-line)
+    #+END_SRC
+
+*** Pre-Load Evaluation
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref evil/init
+    :END:
+
+    Allow use of Evil Collection.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq evil-want-integration t)
+      (setq evil-want-keybinding nil)
     #+END_SRC
 
 *** Post-Load Evaluation (~:config~)
@@ -195,6 +210,71 @@
               ;; ...then go to the beginning of trailing whitespace.
               (init-evil/back-totext))))
       #+END_SRC
+
+** Load Evil Collection
+   From the package's README:
+   #+BEGIN_QUOTE
+   This is a collection of Evil bindings for /the parts of Emacs/ that Evil does not cover properly by default, such as ~help-mode~, =M-x calendar=, Eshell and more
+   #+END_QUOTE
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package evil-collection
+       :demand
+
+       :after evil
+
+       :custom
+       <<evil-collection/custom>>
+
+       :config
+       <<evil-collection/config>>)
+   #+END_SRC
+
+*** Apply Customizations (~:custom~)
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref evil-collection/custom
+    :END:
+
+    Set up autocompletion to be similar to Vim's YouCompleteMe.
+
+    #+BEGIN_SRC emacs-lisp
+      (evil-collection-company-use-tng t)
+    #+END_SRC
+
+    Enable =TAB=-based bindings in Outline mode.
+
+    #+BEGIN_SRC emacs-lisp
+      (evil-collection-outline-bind-tab t)
+    #+END_SRC
+
+    Synchronize insert and normal states with char and line modes, respectively, in Term mode.
+
+    #+BEGIN_SRC emacs-lisp
+      (evil-collection-term-sync-state-and-mode-p t)
+    #+END_SRC
+
+    Set up Vim-style keybindings in the minibuffer.
+
+    #+BEGIN_SRC emacs-lisp
+      (evil-collection-setup-minibuffer t)
+    #+END_SRC
+
+    Set up debugger keys.
+
+    #+BEGIN_SRC emacs-lisp
+      (evil-collection-setup-debugger-keys t)
+    #+END_SRC
+
+*** Post-Load Evaluation (~:config~)
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref evil-collection/config
+    :END:
+
+    Enable Evil Collection globally.
+
+    #+BEGIN_SRC emacs-lisp
+      (evil-collection-init)
+    #+END_SRC
 
 ** Load [[https://github.com/redguardtoo/evil-matchit][evil-matchit]]
    ~evil-matchit~ is a port of Tim Pope's [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] to Evil.
