@@ -246,3 +246,9 @@ keycode 252 =
 keycode 253 =
 keycode 254 =
 keycode 255 =
+
+! Bind Caps_Lock to Escape.
+remove Lock = Caps_Lock
+keysym Escape = Caps_Lock
+keysym Caps_Lock = Escape
+add Lock = Caps_Lock
