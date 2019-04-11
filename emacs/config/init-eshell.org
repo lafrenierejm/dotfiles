@@ -110,8 +110,53 @@
                (beginning-of-line)))))
      #+END_SRC
 
-** Load Em Dirs
+**** Update Prompts' Timestamps
+     :PROPERTIES:
+     :DESCRIPTION: Before sending input, update the current prompt with a timestamp in ISO 8601 (2000 version) form: "--MM-DDTHH:MM".
+     :END:
 
+     Define a function to remove the existing timestamp then insert a new one at the beginning of the latest prompt.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-eshell/timestamp-prompt ()
+         "Update the timestamp at the beginning of the current prompt."
+         (interactive)
+         (let ((cur-pos (point)))
+           ;; Move to the end of the buffer.
+           (goto-char (point-max))
+           ;; Move POINT to the end of the previous prompt, then to end of the next prompt.
+           ;; This handles cases of multi-line input and ensures POINT is at the most recent prompt.
+           (eshell-previous-prompt 1)
+           (eshell-next-prompt 1)
+           ;; Move POINT to the beginning of the line.
+           (forward-line 0)
+           (let ((inhibit-read-only t)
+                 (prompt-properties
+                  (list 'font-lock-face 'eshell-prompt
+                        'font-sticky '(font-lock-face 'read-only)
+                        'read-only t
+                        'rear-nonsticky '(font-lock-face read-only))))
+             ;; Remove the existing timestamp.
+             (when (re-search-forward
+                    (rx line-start
+                        "--" (repeat 2 digit) ?- (repeat 2 digit)
+                        ?T (repeat 2 digit) (repeat 2 (and ?: (repeat 2 digit)))))
+               (replace-match ""))
+             ;; Insert the timestamp, propertized to match the rest of the prompt.
+             (insert (apply #'propertize
+                            (format-time-string "--%m-%dT%T")
+                            prompt-properties)))
+           ;; Restore POINT to its original location.
+           (goto-char cur-pos)))
+     #+END_SRC
+
+     Call the above function before sending input.
+
+     #+BEGIN_SRC emacs-lisp
+       (advice-add 'eshell-send-input :before #'init-eshell/timestamp-prompt)
+     #+END_SRC
+
+** Load Em Dirs
    #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
      (use-package em-dirs
        :straight nil
@@ -348,22 +393,32 @@
     #+END_SRC
 
     #+BEGIN_SRC emacs-lisp
-      (eshell-prompt-function
-       (lambda ()
-	 (concat
-	  (when-let ((remote-host (file-remote-p default-directory 'host)))
-	    (concat
-	     (eshell-user-name) "@"
-	     remote-host ":"))
-	  (init-eshell/pwd default-directory)
-	  (if (= (user-uid) 0) " # " " $ ")))
-       "Prefix \"$USER@$(hostname):\" if on remote host.")
+      (eshell-prompt-function #'init-eshell/prompt)
     #+END_SRC
 
 *** Pre-Load Execution (~:init~)
     :PROPERTIES:
     :HEADER-ARGS+: :noweb-ref eshell/init
     :END:
+
+**** Eshell Prompt
+     #+BEGIN_SRC emacs-lisp
+       (defun init-eshell/prompt ()
+         "Prefix \"$USER@$(hostname):\" if on remote host."
+         (concat
+          (format-time-string "--%m-%dT%T ")
+          (if (file-remote-p default-directory 'host)
+              (with-parsed-tramp-file-name default-directory nil
+                (concat
+                 (when user
+                   (concat user "@"))
+                 host ":"
+                 localname))
+            (init-eshell/pwd default-directory))
+          (if (= (user-uid) 0)
+              " # "
+            " $ ")))
+     #+END_SRC
 
 **** Set =$PAGER=
      Because Eshell runs entirely within an Emacs buffer, Eshell does not need an external pager.
