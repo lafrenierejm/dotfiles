@@ -550,6 +550,33 @@
       (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
     #+END_SRC
 
+** Load Em Smart
+   Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+     (use-package em-smart
+       :straight nil
+
+       ;; Load this package after the following packages.
+       :after (esh-module)
+
+       :custom
+       (eshell-where-to-jump 'begin)
+       (eshell-review-quick-commands nil)
+
+       :config
+       <<em-smart/config>>)
+   #+END_SRC
+
+*** Config
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref em-smart/config
+    :END:
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'eshell-modules-list 'eshell-smart)
+    #+END_SRC
+
 ** Load Em Tramp
    Em Tramp is an Eshell modules that provides TRAMP features.
 
