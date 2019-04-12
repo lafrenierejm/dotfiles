@@ -70,7 +70,7 @@
     Use ISO-esque timestamps for ~:human-date~.
 
     #+BEGIN_SRC emacs-lisp
-      (validate-setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
+      (mu4e-headers-date-format "%Y-%m-%d %H:%M")
     #+END_SRC
 
 **** Account Contexts
@@ -84,7 +84,7 @@
      If no context matches (using its match function) when beginning to compose a message, prompt the user to manually select a context.
 
      #+BEGIN_SRC emacs-lisp
-       (validate-setq mu4e-compose-context-policy 'ask)
+       (mu4e-compose-context-policy 'ask)
      #+END_SRC
 
 **** Fetching and Indexing

@@ -48,44 +48,6 @@
     :HEADER-ARGS+: :noweb-ref esh-mode/config
     :END:
 
-**** Only Write the Current Command
-     Because I am not interested in existing shell output, the only valid position where I want to insert text in an Eshell buffer is when composing the current command.
-     The composition of the current command takes place in the last line of the buffer past Eshell's prompt.
-     The following algorithm ensures that I am inserting in a valid position when added as a hook on entering insert mode:
-
-     1. If =point= is not on the last line of the buffer then move =point= to =point-max=.
-       	In Eshell =point-max= is always part of the current command.
-     2. Otherwise if the text at =point= is read-only then move =point= to the character where that text property changes.
-
-     I posted the following code as [[https://stackoverflow.com/a/46937891/8468492][an answer on StackOverflow]].
-     As such, this code is licensed under [[https://creativecommons.org/licenses/by-sa/3.0/][CC BY-SA 3.0]].
-
-     #+BEGIN_SRC emacs-lisp
-       (defun init-eshell/move-point-to-command ()
-	 "Move point to the current command.
-       If point is not on the last line, move point to the maximum position
-       in the buffer.  Else if point is in the Eshell prompt, move it to the
-       start of the command."
-	 (interactive)
-	 (let ((curline (line-number-at-pos))
-	       (endline (line-number-at-pos (point-max))))
-	   (if (= curline endline)
-	       (if (not (eobp))
-		   (let ((old (point)))        ; Get the current position as OLD.
-		     (eshell-bol)              ; Move to beginning of current command.
-		     (if (<= (point) old)      ; If point now before OLD...
-			 (goto-char old)       ; ...move it back to OLD.
-		       nil)))                  ; Otherwise keep as is.
-	     (goto-char (point-max)))))
-
-       (defun init-eshell/move-point-on-insert-to-command ()
-	 "Move point to edit the current command when insert mode is entered."
-	 (add-hook 'evil-insert-state-entry-hook
-		   'init-eshell/move-point-to-command
-		   nil
-		   t))
-     #+END_SRC
-
 **** Define Eshell-Specific ~beginning-of-maybe-line~
      [[../minor-mode/init-evil.org][init-evil.org]] defines ~init/beginning-of-maybe-line~.
      That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
