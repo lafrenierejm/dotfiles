@@ -320,12 +320,6 @@
     :HEADER-ARGS+: :noweb-ref eshell/gfhook
     :END:
 
-    Enable ~init-eshell/move-point-on-insert-to-command~.
-
-    #+BEGIN_SRC emacs-lisp
-      (nil #'init-eshell/move-point-on-insert-to-command)
-    #+END_SRC
-
     Make the list of commands to be run in Term mode buffers.
 
     #+BEGIN_SRC emacs-lisp
