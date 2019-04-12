@@ -26,6 +26,7 @@
 
 ** Dependencies							   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
+     (require 'general)
      (require 'use-package)
    #+END_SRC
 
@@ -40,8 +41,8 @@
        <<pdf-tools/mode>>
 
        ;; Create key maps and, if necessary, autoloads.
-       :bind
-       <<pdf-tools/bind>>
+       :general
+       <<pdf-tools/general>>
 
        ;; Execute the following code before loading this package.
        :init
@@ -68,24 +69,14 @@
     :HEADER-ARGS+: :noweb-ref pdf-tools/general
     :END:
 
-    #+NAME: pdf-view-mode-map
-    | Key | Action                      |
-    |-----+-----------------------------|
-    | =h= | scroll left                 |
-    | =j= | scroll down                 |
-    | =k= | scroll up                   |
-    | =l= | scroll right                |
-    | =q= | do nothing                  |
-    | =y= | yank selection to clipboard |
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (:map pdf-view-mode-map
-            ("h" . left-char)
-            ("j" . pdf-view-next-line-or-next-page)
-            ("k" . pdf-view-previous-line-or-previous-page)
-            ("l" . right-char)
-            ("q" . nil)
-            ("y" . kill-region))
+    #+BEGIN_SRC emacs-lisp
+      (:keymaps 'pdf-view-mode-map
+       "h" #'left-char
+       "j" #'pdf-view-next-line-or-next-page
+       "k" #'pdf-view-previous-line-or-previous-page
+       "l" #'right-char
+       "q" nil
+       "y" #'kill-region)
     #+END_SRC
 
 *** Pre-Load Evaluation (~:init~)
