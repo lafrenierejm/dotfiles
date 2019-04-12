@@ -53,21 +53,15 @@
    #+END_SRC
 
 *** Filename Mapping (~:mode~)
+    :PROPERTIES:
+    :HEADER-ARGS+: :noweb-ref pdf-tools/mode
+    :END:
+
     Create an alist whose keys are regexps matching filenames and whose values are the function to enable ~pdf-view-mode~.
 
-    #+HEADER: :noweb-ref pdf-tools/mode
-    #+BEGIN_SRC emacs-lisp :tangle no :noweb yes
-      ((<<rx-pdf-file()>> . pdf-view-mode))
+    #+BEGIN_SRC emacs-lisp
+      ("\\.pdf\\'" . pdf-view-mode)
     #+END_SRC
-
-**** ~rx~ Sexps
-     Describe a regexp that matches PDF files.
-
-     #+NAME: rx-pdf-file
-     #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (rx ".pdf" string-end)
-     #+END_SRC
 
 *** Keybindings (~:bind~)
     :PROPERTIES:
