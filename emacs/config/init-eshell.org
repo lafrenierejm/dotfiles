@@ -335,6 +335,15 @@
 	      "C-z" #'init-eshell/background-process-maybe)))
     #+END_SRC
 
+    Clear buffers' scrollback with =C-l=.
+
+    #+BEGIN_SRC emacs-lisp
+      (nil (lambda ()
+             (general-define-key
+              :keymaps 'eshell-mode-map
+              "C-l" #'init-eshell/clear-scrollback)))
+    #+END_SRC
+
 *** Customize Variables (~:custom~)
     :PROPERTIES:
     :HEADER-ARGS+: :noweb-ref eshell/custom
@@ -515,6 +524,17 @@
           (general-define-key
            :keymaps 'eshell-mode-map
            "C-z" #'init-eshell/background-process-maybe))
+      #+END_SRC
+
+***** Clear Buffer
+      #+BEGIN_SRC emacs-lisp
+        (defun init-eshell/clear-scrollback ()
+          "Clear the scrollback content of the eshell window."
+          (interactive)
+          (let ((input (eshell-get-old-input)))
+            (eshell/clear-scrollback)
+            (eshell-emit-prompt)
+            (insert input)))
       #+END_SRC
 
 ** Load Esh Module
