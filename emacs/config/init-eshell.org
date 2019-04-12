@@ -269,10 +269,10 @@
        ;; Inform the bytecode compiler of the following functions.
        :commands
        (init-eshell/add-visual-commands
-	init-eshell/beginning-of-maybe-line
-	init-eshell/find-eshell
-	init-eshell/find-eshell-here
-	init-eshell/move-point-on-insert-to-command)
+        init-eshell/beginning-of-maybe-line
+        init-eshell/find-eshell
+        init-eshell/find-eshell-here
+        init-eshell/prompt)
 
        ;; Add the following keybindings.
        :general
@@ -510,11 +510,11 @@
       UNIX shells use the chord =C-z= to background the current process.
 
       #+BEGIN_SRC emacs-lisp
-	(defun init-eshell/bind-background-process-maybe ()
-	  "Add a keybinding for `init-eshell/background-process-maybe'."
-	  (general-define-key
-	   :keymaps 'eshell-mode-map
-	   "C-z" #'init-eshell/background-process-maybe))
+        (defun init-eshell/bind-background-process-maybe ()
+          "Add a keybinding for `init-eshell/background-process-maybe'."
+          (general-define-key
+           :keymaps 'eshell-mode-map
+           "C-z" #'init-eshell/background-process-maybe))
       #+END_SRC
 
 ** Load Esh Module
@@ -543,7 +543,7 @@
     :PROPERTIES:
     :HEADER-ARGS+: :noweb-ref esh-module/config
     :END:
-    
+
     Disable the greeting banner.
 
     #+BEGIN_SRC emacs-lisp
