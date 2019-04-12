@@ -1,7 +1,6 @@
-#+TITLE: PDF-Tools Configuration
+#+TITLE: PDF Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
 * License							   :noexport:
@@ -15,10 +14,10 @@
 * Code
 ** Introductory Boilerplate					   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     ;;; init-pdf-tools.el --- Configuration for PDF-Tools
+     ;;; init-pdf.el --- Configuration for PDFs
 
      ;;; Commentary:
-     ;; This file is tangled from init-pdf-tools.org.
+     ;; This file is tangled from init-pdf.org.
      ;; Changes made here will be overwritten by changes to that Org-mode file.
 
      ;;; Code:
@@ -113,6 +112,6 @@
 
 ** Ending Boilerplate						   :noexport:
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-pdf-tools)
-     ;;; init-pdf-tools.el ends here
+     (provide 'init-pdf)
+     ;;; init-pdf.el ends here
    #+END_SRC
