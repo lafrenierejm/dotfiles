@@ -279,6 +279,23 @@
      (global-set-key (kbd "C-x C-k") #'current-buffer/kill)
    #+END_SRC
 
+* Place Visited File Name on Kill Ring
+** Define Function
+   #+BEGIN_SRC emacs-lisp
+     (defun current-buffer/yank-path ()
+       "Place the path of the current buffer's visited file on the kill ring."
+       (interactive)
+       (when-let* ((filepath (or (buffer-file-name) default-directory))
+                   (expanded-filename (expand-file-name filepath)))
+         (kill-new expanded-filename)
+         (message "Copied buffer path '%s' to the clipboard." expanded-filename)))
+   #+END_SRC
+
+** Bind Function
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-x C-y") #'current-buffer/yank-path)
+   #+END_SRC
+
 * Ending Boilerplate                                               :noexport:
   #+BEGIN_SRC emacs-lisp
     (provide 'current-buffer)
