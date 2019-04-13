@@ -296,6 +296,22 @@
      (global-set-key (kbd "C-x C-y") #'current-buffer/yank-path)
    #+END_SRC
 
+* Visit Current Directory in Dired
+** Define Function
+   #+BEGIN_SRC emacs-lisp
+     (defun current-buffer/dired ()
+       "Open the current directory in Dired."
+       (interactive)
+       (when-let* ((file-path (or (buffer-file-name) default-directory))
+		   (directory-path (file-name-directory file-path)))
+	 (dired directory-path)))
+   #+END_SRC
+
+** Bind Function
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-d") #'current-buffer/dired)
+   #+END_SRC
+
 * Ending Boilerplate                                               :noexport:
   #+BEGIN_SRC emacs-lisp
     (provide 'current-buffer)
