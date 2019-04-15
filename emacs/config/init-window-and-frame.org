@@ -141,25 +141,25 @@
     This will be performed with =M-r=.
 
     #+BEGIN_SRC emacs-lisp
-      (exwm-input-set-key (kbd "M-r") #'exwm-reset)
+      (exwm-input-set-key (kbd "s-r") #'exwm-reset)
     #+END_SRC
 
     Close the current window and kill its buffer.
 
     #+BEGIN_SRC emacs-lisp
-      (exwm-input-set-key (kbd "M-Q") #'kill-buffer-and-window)
+      (exwm-input-set-key (kbd "s-Q") #'kill-buffer-and-window)
     #+END_SRC
 
     Close the current window without killing its buffer.
 
     #+BEGIN_SRC emacs-lisp
-      (exwm-input-set-key (kbd "M-q") #'delete-window)
+      (exwm-input-set-key (kbd "s-q") #'delete-window)
     #+END_SRC
 
     Run a shell command.
 
     #+BEGIN_SRC emacs-lisp
-      (exwm-input-set-key (kbd "M-d") #'init-window-and-frame/start-process)
+      (exwm-input-set-key (kbd "s-d") #'init-window-and-frame/start-process)
     #+END_SRC
 
     Open an Eshell buffer in the current buffer's location.
@@ -181,7 +181,7 @@
 
       ;; Add the following keybindings.
       :general
-      ("M-o" #'ace-window)
+      ("s-a" #'ace-window)
 
       ;; Apply the following customizations.
       :custom
@@ -226,7 +226,7 @@
 
    #+BEGIN_SRC emacs-lisp
      (with-eval-after-load 'exwm
-       (exwm-input-set-key (kbd "M-o") #'ace-window))
+       (exwm-input-set-key (kbd "s-a") #'ace-window))
    #+END_SRC
 
 * Ending Boilerplate                                               :noexport:
