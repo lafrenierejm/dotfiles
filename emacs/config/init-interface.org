@@ -58,33 +58,26 @@
      (use-package monokai-theme
        :demand                               ; do not defer loading
 
-       :defines   ; variables provided by the parent package and used below
-       (monokai-height-minus-1
-        monokai-height-plus-1
-        monokai-height-plus-2
-        monokai-height-plus-3
-        monokai-height-plus-4)
-
-       :init
-       <<monokai-theme-init>>
+       :custom
+       <<monokai-theme/custom>>
 
        :config   ; code to execute after the parent package has been loaded
        <<monokai-theme-config>>)
    #+END_SRC
 
-*** Pre-Load Execution
+*** Variable Customizations
     :PROPERTIES:
-    :noweb-ref: monokai-theme-init
+    :noweb-ref: monokai-theme/custom
     :END:
 
     Do not change font sizes.
 
     #+BEGIN_SRC emacs-lisp
-      (setq monokai-height-minus-1 1.0
-            monokai-height-plus-1 1.0
-            monokai-height-plus-2 1.0
-            monokai-height-plus-3 1.0
-            monokai-height-plus-4 1.0)
+(monokai-height-minus-1 1.0)
+(monokai-height-plus-1 1.0)
+(monokai-height-plus-2 1.0)
+(monokai-height-plus-3 1.0)
+(monokai-height-plus-4 1.0)
     #+END_SRC
 
 *** Post-Load Execution
