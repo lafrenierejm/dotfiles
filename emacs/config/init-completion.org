@@ -7,7 +7,7 @@
 #+HEADER: :comments no
 #+HEADER: :padline no
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-company.el --- Completion configuration.
+;;; init-completion.el --- Completion configuration.
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
@@ -72,6 +72,6 @@ Enable ~company-mode~ globally.
 
 * Ending Boilerplate                                               :noexport:
 #+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-company)
-;;; init-company.el ends here
+(provide 'init-completion)
+;;; init-completion.el ends here
 #+END_SRC
