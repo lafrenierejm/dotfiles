@@ -1,279 +1,301 @@
 #+TITLE: Version Control Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
 * Introductory Boilerplate
-  #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-    ;;; init-version-control.el --- Configuration for VCSs
+#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+;;; init-org.el --- Version control -related configuration.
 
-    ;;; Commentary:
-    ;; This file is tangled from init-version-control.org.
-    ;; Changes made here will be overwritten by changes to that Org-mode file.
+;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
-    ;;; Code:
-  #+END_SRC
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Keywords: vc tools
+;; Version 1.0
+;; Package-Requires: ((s) (files))
+
+;; This file is not part of GNU Emacs.
+
+;; Init Org is free software: you can redistribute it and/or modify it under the
+;; terms of the GNU General Public License as published by the Free Software
+;; Foundation, either version 3 of the License, or (at your option) any later
+;; version.
+
+;; Init Org is distributed in the hope that it will be useful, but WITHOUT ANY
+;; WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+;; A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License along with
+;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+;; This file is tangled from init-org.org.  Changes made here will be
+;; overwritten by changes to that Org-mode file.
+
+;;; Code:
+#+END_SRC
 
 * Dependencies
-  #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-    (require 'general)
-    (require 'use-package)
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+(require 'general)
+(require 'use-package)
+#+END_SRC
 
 * VC-Agnostic
-** Load Diff HL
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package diff-hl
-       ;; Only load the package if the following condition is met.
-       :if
-       <<diff-hl/if>>
+** Diff HL
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+(use-package diff-hl
+  ;; Only load the package if the following condition is met.
+  :if
+  <<diff-hl/if>>
 
-       ;; Load this package eagerly.
-       :demand
+  ;; Load this package eagerly.
+  :demand
 
-       ;; Add the following auto-loading hooks.
-       :ghook
-       <<diff-hl/ghook>>
+  ;; Add the following auto-loading hooks.
+  :ghook
+  <<diff-hl/ghook>>
 
-       ;; Inform the bytecode compiler about the following functions.
-       :commands
-       (global-diff-hl-mode)
+  ;; Inform the bytecode compiler about the following functions.
+  :commands
+  (global-diff-hl-mode)
 
-       ;; Evaluate the following code before loading this package.
-       :init
-       <<diff-hl/init>>
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<diff-hl/init>>
 
-       ;; Evaluate the following code after loading this package.
-       :config
-       <<diff-hl/config>>)
-   #+END_SRC
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<diff-hl/config>>)
+#+END_SRC
 
-*** Conditional Loading (~:if~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref diff-hl/if
-    :END:
+*** Conditional Loading
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref diff-hl/if
+:END:
 
-    Diff HL depends on features added in Emacs 24.3.
+Diff HL depends on features added in Emacs 24.3.
 
-    #+BEGIN_SRC emacs-lisp
-      (version<= "24.3" emacs-version)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(version<= "24.3" emacs-version)
+#+END_SRC
 
-*** Auto-Loading Hooks (~:ghook~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref diff-hl/ghook
-    :END:
+*** Auto-Loading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref diff-hl/ghook
+:END:
 
-    Enable Diff HL in Dired buffers.
+Enable Diff HL in Dired buffers.
 
-    #+BEGIN_SRC emacs-lisp
-      ('dired-mode-hook #'diff-hl-dired-mode)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+('dired-mode-hook #'diff-hl-dired-mode)
+#+END_SRC
 
-    Update Diff HL's status when refreshing with modern versions of Magit.
+Update Diff HL's status when refreshing with modern versions of Magit.
 
-    #+BEGIN_SRC emacs-lisp
-      ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+#+END_SRC
 
-*** Pre-Load Evaluation (~:init~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref diff-hl/init
-    :END:
+*** Pre-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref diff-hl/init
+:END:
 
-    Enable Diff HL's base minor mode globally.
+Enable Diff HL's base minor mode globally.
 
-    #+BEGIN_SRC emacs-lisp
-      (global-diff-hl-mode)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(global-diff-hl-mode)
+#+END_SRC
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref diff-hl/config
-    :END:
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref diff-hl/config
+:END:
 
-    Perform Diff HL highlighting on-the-fly.
+Perform Diff HL highlighting on-the-fly.
 
-    #+BEGIN_SRC emacs-lisp
-      (diff-hl-flydiff-mode)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(diff-hl-flydiff-mode)
+#+END_SRC
 
 * Git
-** Load Magit
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package magit
-       ;; Load this package if the following code evaluates to non-nil.
-       :if
-       <<magit/if>>
+** Magit
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+(use-package magit
+  ;; Load this package if the following code evaluates to non-nil.
+  :if
+  <<magit/if>>
 
-       ;; Perform the following customizations.
-       :custom
-       <<magit/custom>>
+  ;; Perform the following customizations.
+  :custom
+  <<magit/custom>>
 
-       ;; Add the following keybindings.
-       :general
-       <<magit/general>>
+  ;; Add the following keybindings.
+  :general
+  <<magit/general>>
 
-       ;; Evaluate the following code after loading `magit'.
-       :config
-       <<magit/config>>)
-   #+END_SRC
+  ;; Evaluate the following code after loading `magit'.
+  :config
+  <<magit/config>>)
+#+END_SRC
 
-*** Conditional Loading (~:if~)
-    :PROPERTIES:
-    :DESCRIPTION: Only load ~magit~ if this code evaluates to non-~nil~.
-    :HEADER-ARGS+: :noweb-ref magit/if
-    :END:
+*** Conditional Loading
+:PROPERTIES:
+:DESCRIPTION: Only load ~magit~ if this code evaluates to non-~nil~.
+:HEADER-ARGS+: :noweb-ref magit/if
+:END:
 
-    ~magit~ is an interface for Git.
-    As such, it is worthless if =git= is not in the user's ~$PATH~.
+~magit~ is an interface for Git.
+As such, it is worthless if =git= is not in the user's ~$PATH~.
 
-    #+BEGIN_SRC emacs-lisp
-      (executable-find "git")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(executable-find "git")
+#+END_SRC
 
-*** Keybindings (~:general~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref magit/general
-    :END:
+*** Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref magit/general
+:END:
 
-    #+BEGIN_SRC emacs-lisp
-      ("C-x g" #'magit-status)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+("C-x g" #'magit-status)
+#+END_SRC
 
-*** Customize Variables (~:custom~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref magit/custom
-    :END:
+*** Customize Variables
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref magit/custom
+:END:
 
-    Set the list of messages Magit should not display.
+Set the list of messages Magit should not display.
 
-    #+BEGIN_SRC emacs-lisp
-      (magit-no-message '("Turning on magit-auto-revert-mode...") "Suppress messages")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(magit-no-message '("Turning on magit-auto-revert-mode...") "Suppress messages")
+#+END_SRC
 
-    Hide the stash and ignored file sections by default in status buffers.
+Hide the stash and ignored file sections by default in status buffers.
 
-    #+BEGIN_SRC emacs-lisp
-      (magit-section-initial-visibility-alist
-       '((ignored . hide)
-	 (stashes . hide)
-	 (untracked . hide)))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(magit-section-initial-visibility-alist
+ '((ignored . hide)
+   (stashes . hide)
+   (untracked . hide)))
+#+END_SRC
 
-    Set the sections to be displayed in status buffers.
+Set the sections to be displayed in status buffers.
 
-    #+BEGIN_SRC emacs-lisp
-      (magit-status-sections-hook
-       '(magit-insert-status-headers
-	 magit-insert-merge-log
-	 magit-insert-rebase-sequence
-	 magit-insert-am-sequence
-	 magit-insert-sequencer-sequence
-	 magit-insert-bisect-output
-	 magit-insert-bisect-rest
-	 magit-insert-bisect-log
-	 magit-insert-ignored-files
-	 magit-insert-untracked-files
-	 magit-insert-unstaged-changes
-	 magit-insert-staged-changes
-	 magit-insert-stashes
-	 magit-insert-unpushed-to-pushremote
-	 magit-insert-unpushed-to-upstream-or-recent
-	 magit-insert-unpulled-from-pushremote
-	 magit-insert-unpulled-from-upstream))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(magit-status-sections-hook
+ '(magit-insert-status-headers
+   magit-insert-merge-log
+   magit-insert-rebase-sequence
+   magit-insert-am-sequence
+   magit-insert-sequencer-sequence
+   magit-insert-bisect-output
+   magit-insert-bisect-rest
+   magit-insert-bisect-log
+   magit-insert-ignored-files
+   magit-insert-untracked-files
+   magit-insert-unstaged-changes
+   magit-insert-staged-changes
+   magit-insert-stashes
+   magit-insert-unpushed-to-pushremote
+   magit-insert-unpushed-to-upstream-or-recent
+   magit-insert-unpulled-from-pushremote
+   magit-insert-unpulled-from-upstream))
+#+END_SRC
 
-*** Post-Load Execution (~:config~)
-    :PROPERTIES:
-    :DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
-    :HEADER-ARGS+: :noweb-ref magit/config
-    :END:
+*** Post-Load Execution
+:PROPERTIES:
+:DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
+:HEADER-ARGS+: :noweb-ref magit/config
+:END:
 
 **** Return After Commit Message
-     Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
+Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
 
-     #+BEGIN_SRC emacs-lisp
-       (advice-add 'git-commit-commit :after #'delete-window)
-     #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(advice-add 'git-commit-commit :after #'delete-window)
+#+END_SRC
 
-     #+BEGIN_SRC emacs-lisp
-       (advice-add 'git-commit-abort :after #'delete-window)
-     #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(advice-add 'git-commit-abort :after #'delete-window)
+#+END_SRC
 
 **** Comparable Version Number
-     The function ~magit-version~ provided by Magit does not return a version string that is comparable using Emacs's built-in ~version<~.
-     However, Magit's semver is /par/ of the string returned by ~magit-version~;
-     it is everything before the first hyphen.
+The function ~magit-version~ provided by Magit does not return a version string that is comparable using Emacs's built-in ~version<~.
+However, Magit's semver is /par/ of the string returned by ~magit-version~;
+it is everything before the first hyphen.
 
-     #+BEGIN_SRC emacs-lisp
-       (defun init-magit/version ()
-         "Return Magit's version for use in comparisons."
-         (car (split-string (magit-version) "-")))
-     #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(defun init-magit/version ()
+  "Return Magit's version for use in comparisons."
+  (car (split-string (magit-version) "-")))
+#+END_SRC
 
-** Load Forge
-   From the project's README:
-   #+BEGIN_QUOTE
-   Work with Git forges, such as Github and Gitlab, from the comfort of Magit and the rest of Emacs.
-   #+END_QUOTE
+** Forge
+From the project's README:
+#+BEGIN_QUOTE
+Work with Git forges, such as Github and Gitlab, from the comfort of Magit and the rest of Emacs.
+#+END_QUOTE
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package forge
-       ;; Load this package after the following packages.
-       :after (magit)
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package forge
+  :disabled
 
-       ;; Load this package eagerly.
-       :demand
+  ;; Load this package after the following packages.
+  :after (magit)
 
-       :straight
-       (forge :type git :host github :repo "magit/forge"
-	      :fork (:host github :repo "lafrenierejm/forge")))
-   #+END_SRC
+  ;; Load this package eagerly.
+  :demand
 
-** Load Evil Magit
-    ~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures Evil and Magit to play well together.
+  :straight
+  (forge :type git :host github :repo "magit/forge"
+         :fork (:host github :repo "lafrenierejm/forge")))
+#+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package evil-magit
-       ;; Load this package eagerly.
-       :demand
+** Evil Magit
+~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures Evil and Magit to play well together.
 
-       ;; Load this package after the following packages.
-       :after (evil magit)
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+(use-package evil-magit
+  ;; Load this package eagerly.
+  :demand
 
-       :ghook
-       <<evil-magit/ghook>>
+  ;; Load this package after the following packages.
+  :after (evil magit)
 
-       :custom
-       <<evil-magit/custom>>)
-   #+END_SRC
+  :ghook
+  <<evil-magit/ghook>>
 
-*** Auto-Loading Hooks (~:ghook~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref evil-magit/ghook
-    :END:
+  :custom
+  <<evil-magit/custom>>)
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      ('magit-mode-hook #'evil-local-mode)
-    #+END_SRC
+*** Auto-Loading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref evil-magit/ghook
+:END:
 
-*** Customize Variables (~:custom~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref evil-magit/custom
-    :END:
+#+BEGIN_SRC emacs-lisp
+('magit-mode-hook #'evil-local-mode)
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (evil-magit-state 'motion "Start `evil-magit' in the motion state.")
-    #+END_SRC
+*** Customize Variables
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref evil-magit/custom
+:END:
 
-    #+BEGIN_SRC emacs-lisp
-      (evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(evil-magit-state 'motion "Start `evil-magit' in the motion state.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
+#+END_SRC
 
 * Ending Boilerplate
-  #+BEGIN_SRC emacs-lisp :tangle yes
-    (provide 'init-version-control)
-    ;;; init-version-control.el ends here
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-version-control)
+;;; init-version-control.el ends here
+#+END_SRC
