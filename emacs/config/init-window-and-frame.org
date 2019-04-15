@@ -65,6 +65,10 @@
       ;; Do not load the package lazily.
       :demand
 
+      ;; Customize the following variables.
+      :custom
+      <<exwm/custom>>
+
       ;; Add the following function hooks.
       :gfhook
       <<exwm/gfhook>>
@@ -74,7 +78,19 @@
       <<exwm/config>>)
   #+END_SRC
 
-** Non-Auto-Loading Hooks (~:gfhook~)
+** Variable Customization
+   :PROPERTIES:
+   :HEADER-ARGS+: :noweb-ref exwm/custom
+   :END:
+
+   Only enable a single workspace.
+   Buffer switching with e.g. Counsel is preferred to using multiple workspaces.
+
+   #+BEGIN_SRC emacs-lisp
+     (exwm-workspace-number 1)
+   #+END_SRC
+
+** Non-Auto-Loading Hooks
    :PROPERTIES:
    :HEADER-ARGS+: :noweb-ref exwm/gfhook
    :END:
@@ -105,12 +121,6 @@
    :PROPERTIES:
    :HEADER-ARGS+: :noweb-ref exwm/config
    :END:
-   Only enable a single workspace.
-   Buffer switching with [[https://github.com/abo-abo/swiper][Ivy]] is preferred to using multiple workspaces.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq exwm-workspace-number 1)
-   #+END_SRC
 
    Define a function to launch applications from the shell.
    Launching applications is performed by calling ~start-process-shell-command~.
