@@ -140,24 +140,24 @@
 	 If DIRECTORY is not in a probject as determined by Projectile, use the
 	 abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
 	 Projectile project, use the path of DIRECTORY relative to the project's root."
-	   (if-let ((projectile-loaded (featurep 'projectile))
-		    (project-root (projectile-project-root directory))
-		    (project-name (projectile-project-name project-root)))
-	       ;; If in a project:
-	       (if (string=
-		    (file-name-as-directory (expand-file-name directory))
-		    project-root)
-		   ;; If at a project's root: use the project's name
-		   project-name
-		 ;; Else not at project's root: use path starting with project's root
-		 (s-chop-suffix
-		  "/"
-		  (concat project-name "/"
+	   (s-chop-suffix
+	    "/"
+	    (if-let ((projectile-loaded (featurep 'projectile))
+		     (project-root (projectile-project-root directory))
+		     (project-name (projectile-project-name project-root)))
+		;; If in a project:
+		(if (string=
+		     (file-name-as-directory (expand-file-name directory))
+		     project-root)
+		    ;; If at a project's root: use the project's name
+		    project-name
+		  ;; Else not at project's root: use path starting with project's root
+		  (concat (file-name-as-directory project-name)
 			  (file-relative-name
 			   (expand-file-name directory)
-			   project-root))))
-	     ;; Else not in project: use abbreviated path
-	     (abbreviate-file-name directory)))
+			   project-root)))
+	      ;; Else not in project: use abbreviated path
+	      (abbreviate-file-name directory))))
      #+END_SRC
 
 **** Abbreviate Path Elements
