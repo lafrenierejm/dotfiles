@@ -132,9 +132,9 @@
     :HEADER-ARGS+: :noweb-ref em-dirs/config
     :END:
 
-**** Abbreviate a Path
+**** Return Path Relative to Project Root
      #+BEGIN_SRC emacs-lisp
-       (defun init-eshell/pwd (directory)
+       (defun init-eshell/pwd-relative-to-project (directory)
 	   "Use the Projectile root when displaying a path.
 
 	 If DIRECTORY is not in a probject as determined by Projectile, use the
@@ -153,9 +153,53 @@
 		 (s-chop-suffix
 		  "/"
 		  (concat project-name "/"
-			  (file-relative-name (expand-file-name directory) project-root))))
+			  (file-relative-name
+			   (expand-file-name directory)
+			   project-root))))
 	     ;; Else not in project: use abbreviated path
 	     (abbreviate-file-name directory)))
+     #+END_SRC
+
+**** Abbreviate Path Elements
+     Printing the path to the current directory in the shell prompt helps me keep track of the context.
+     However, if the path is long this can result in unwieldy prompts.
+     The following functions can be used to abbreviate a path by shortening each element in the path to that element's first non-period character;
+     only the last directory in the path is shown in full.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-eshell/abbreviate-dirname (filename)
+	 (cond
+	  ((string-empty-p filename)
+	   "")
+	  ((string= (substring filename 0 1) ".")
+	   (substring filename 0 2))
+	  (t
+	   (substring filename 0 1))))
+     #+END_SRC
+
+     #+BEGIN_SRC emacs-lisp
+       (defun init-eshell/abbreviate-path (path)
+	 "Abbreviate each element in PATH except for the last.
+
+       Abbreviated path elements are represented by their first non-period character.
+       For example, the path \"/home/user/.config/curdir\" will become
+       \"/h/u/.c/curdir\"."
+	 (let* ((split-path (split-string path "/")))
+	   (if (< (length split-path) 2)
+	       (or (car split-path) "")
+	     (concat
+	      (file-name-as-directory
+	       (cl-reduce
+		(lambda (directory filename)
+		  (concat (if (string-empty-p directory)
+			      "/"
+			    (file-name-as-directory directory))
+			  filename))
+		(mapcar
+		 #'init-eshell/abbreviate-dirname
+		 split-path)
+		:end (- (length split-path) 1)))
+	      (car (last split-path))))))
      #+END_SRC
 
 **** Create Eshell Buffer Names
@@ -163,7 +207,7 @@
        (defun init-eshell/name-buffer (directory &optional process-name)
 	 "Create a name for an Eshell buffer in DIRECTORY."
 	 (concat "*eshell "
-		 (init-eshell/pwd directory)
+		 (init-eshell/pwd-relative-to-project directory)
 		 (when process-name
 		   (concat " <" process-name ">"))
 		 "*"))
@@ -379,7 +423,8 @@
                    (concat user "@"))
                  host ":"
                  localname))
-            (init-eshell/pwd default-directory))
+            (init-eshell/abbreviate-path
+             (init-eshell/pwd-relative-to-project default-directory)))
           (if (= (user-uid) 0)
               " # "
             " $ ")))
