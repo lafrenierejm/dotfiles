@@ -1,14 +1,13 @@
 #+TITLE: Interface Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
 * Introductory Boilerplate                                         :noexport:
 #+HEADER: :padline no
 #+HEADER: :comments no
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-window-and-frame.el --- Configure Eshell
+;;; init-interface.el --- Basic user interface configuration.
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
@@ -19,12 +18,12 @@
 
 ;; This file is not part of GNU Emacs.
 
-;; Init Eshell is free software: you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free Software
-;; Foundation, either version 3 of the License, or (at your option) any later
-;; version.
+;; Init Interface is free software: you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by the Free
+;; Software Foundation, either version 3 of the License, or (at your option) any
+;; later version.
 
-;; Init Eshell is distributed in the hope that it will be useful, but WITHOUT
+;; Init Interface is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 ;; FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 ;; details.
@@ -34,154 +33,152 @@
 
 ;;; Commentary:
 
-;; This file is tangled from init-eshell.org.  Changes made here will be
+;; This file is tangled from init-interface.org.  Changes made here will be
 ;; overwritten by changes to that Org file.
 
 ;;; Code:
 #+END_SRC
 
-** Dependencies
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     (require 'use-package)
-   #+END_SRC
+* Dependencies
+#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+(require 'use-package)
+#+END_SRC
 
-** Startup
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq inhibit-splash-screen t
-           inhibit-startup-message t
-           initial-major-mode #'fundamental-mode
-           initial-scratch-message nil)      ; do not pre-populate scratch
-   #+END_SRC
+* Startup
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq inhibit-splash-screen t
+      inhibit-startup-message t
+      initial-major-mode #'fundamental-mode
+      initial-scratch-message nil)
+  #+END_SRC
 
-** Load =monokai-theme=
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package monokai-theme
-       :demand                               ; do not defer loading
+* Monokai Theme
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+(use-package monokai-theme
+  ;; Load this package eagerly.
+  :demand
 
-       :custom
-       <<monokai-theme/custom>>
+  :custom
+  <<monokai-theme/custom>>
 
-       :config   ; code to execute after the parent package has been loaded
-       <<monokai-theme-config>>)
-   #+END_SRC
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<monokai-theme/config>>)
+  #+END_SRC
 
-*** Variable Customizations
-    :PROPERTIES:
-    :noweb-ref: monokai-theme/custom
-    :END:
+** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref monokai-theme/custom
+:END:
 
-    Do not change font sizes.
+Do not change font sizes.
 
-    #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (monokai-height-minus-1 1.0)
 (monokai-height-plus-1 1.0)
 (monokai-height-plus-2 1.0)
 (monokai-height-plus-3 1.0)
 (monokai-height-plus-4 1.0)
-    #+END_SRC
+#+END_SRC
 
-*** Post-Load Execution
-    :PROPERTIES:
-    :noweb-ref: monokai-theme-config
-    :END:
+** Post-Load Execution
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref monokai-theme/config
+:END:
 
-    Apply the theme when Emacs is run as a daemon.
+Apply the theme when Emacs is run as a daemon.
 
-    #+BEGIN_SRC emacs-lisp
-      (when window-system
-        (if (daemonp)
-            (add-hook 'after-make-frame-functions
-                      (lambda (frame)
-                        (when (eq (length (frame-list)) 2)
-                          (progn
-                            (select-frame frame)
-                            (load-theme 'monokai t)))))
-          (load-theme 'monokai t)))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(when window-system
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions
+                (lambda (frame)
+                  (when (eq (length (frame-list)) 2)
+                    (progn
+                      (select-frame frame)
+                      (load-theme 'monokai t)))))
+    (load-theme 'monokai t)))
+#+END_SRC
 
-** Load rainbow-identifiers
-   The rainbow-identifiers package provides a minor mode that highlights identifiers based on their names.
-   The highlight color of each identifier is chosen based on the hash of the identifier's name.
-   The package's source is available at [[https://github.com/Fanael/rainbow-identifiers][github.com/Fanael/rainbow-identifiers]].
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package rainbow-identifiers
-       :demand                               ; do not defer loading
+* Rainbow Identifiers
+Rainbow Identifiers provides a minor mode that highlights identifiers based on their names.
+The highlight color of each identifier is chosen based on the hash of the identifier's name.
+The package's source is available at [[https://github.com/Fanael/rainbow-identifiers][github.com/Fanael/rainbow-identifiers]].
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+(use-package rainbow-identifiers
+  :demand                               ; do not defer loading
 
-       :after
-       (monokai-theme)
+  :after
+  (monokai-theme)
 
-       :hook
-       ((prog-mode) . rainbow-identifiers-mode)
+  :hook
+  ((prog-mode) . rainbow-identifiers-mode)
 
-       :config
-       <<rainbow-identifiers-config>>
-       )
+  :custom
+  <<rainbow-identifiers/custom>>)
+#+END_SRC
+
+** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref rainbow-identifiers/custom
+:END:
+
+Disable highlighting of keywords that are not variable names.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(rainbow-identifiers-faces-to-override
+ '(font-lock-constant-face
+   font-lock-type-face
+   font-lock-function-name-face
+   font-lock-variable-name-face
+   font-lock-keyword-face
+   font-lock-builtin-face))
    #+END_SRC
 
-*** Disable Keyword Highlighting
-    :PROPERTIES:
-    :noweb-ref: rainbow-identifiers-config
-    :END:
+* Rainbow Delimeters
+Rainbow Delimters provides a minor mode that highlights delimeters such as parantheses based on their depth.
+The highlight color of each level is distinct.
+The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimeters]].
 
-    Disable highlighting of keywords that are not variable names.
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package rainbow-delimiters
+  :demand                               ; do not defer loading
 
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (validate-setq rainbow-identifiers-faces-to-override
-                     '(font-lock-constant-face
-                       font-lock-type-face
-                       font-lock-function-name-face
-                       font-lock-variable-name-face
-                       font-lock-keyword-face
-                       font-lock-builtin-face
-                       ;; font-lock-preprocessor-face
-                       ;; font-lock-warning-face
-                       ;; font-lock-doc-face
-                       ))
-    #+END_SRC
+  :hook
+  ((prog-mode) . rainbow-delimiters-mode))
+#+END_SRC
 
-** Load rainbow-delimeters
-   The rainbow-delimters package provides a minor mode that highlights delimeters such as parantheses basied on their depth.
-   The highlight color of each level is distinct.
-   The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimeters]].
+* Built-In Modes
+#+BEGIN_SRC emacs-lisp :tangle yes
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(show-paren-mode 1)
+(setq display-time-24hr-format t)
+(display-time-mode 1)
+  #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package rainbow-delimiters
-       :demand                               ; do not defer loading
+* Undo Tree
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package undo-tree
+  :config
+  (defalias 'yes-or-no-p #'y-or-n-p))
+#+END_SRC
 
-       :hook
-       ((prog-mode) . rainbow-delimiters-mode))
-   #+END_SRC
+* Line Wrapping
+Set the column at which line-wrapping should occur.
 
-** Built-In Modes
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (menu-bar-mode -1)
-     (tool-bar-mode -1)
-     (scroll-bar-mode -1)
-     (show-paren-mode 1)
-     (setq display-time-24hr-format t)
-     (display-time-mode 1)
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq-default fill-column 80)
+#+END_SRC
 
-** Interactive Prompts
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; Let 'y' and 'n' suffice for "yes\y" and "no\n", respectively.
-     (defalias 'yes-or-no-p 'y-or-n-p)
-   #+END_SRC
+* Font
+#+BEGIN_SRC emacs-lisp :tangle yes
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-11"))
+#+END_SRC
 
-** Line Wrapping
-   Set the column at which line-wrapping should occur.
-
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq-default fill-column 80)
-   #+END_SRC
-
-** Font
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (add-to-list 'default-frame-alist '(font . "Hasklig-16"))
-   #+END_SRC
-
-** Ending Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-interface)
-     ;;; init-interface.el ends here
-   #+END_SRC
+* Ending Boilerplate
+#+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-interface)
+;;; init-interface.el ends here
+#+END_SRC
