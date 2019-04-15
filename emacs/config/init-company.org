@@ -1,62 +1,77 @@
-#+TITLE: Company Configuration
+#+TITLE: Completion Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
-* License							   :noexport:
-  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
-  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+* Introductory Boilerplate                                         :noexport:
+#+HEADER: :comments no
+#+HEADER: :padline no
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-company.el --- Completion configuration.
 
-* About This File
-  This file loads and configures Emacs's built-in company package.
-  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
-* Code
-** Introductory Boilerplate					   :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
-     ;;; init-company.el --- Configuration for company
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Keywords: convenience
+;; Version 1.0
+;; Package-Requires: ((use-package))
 
-     ;;; Commentary:
-     ;; This file is tangled from init-company.org.
-     ;; Changes made here will be overwritten by changes to that Org file.
+;; This file is not part of GNU Emacs.
 
-     ;;; Code:
-   #+END_SRC
+;; Init Completion is free software: you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by the Free
+;; Software Foundation, either version 3 of the License, or (at your option) any
+;; later version.
 
-** Specify Dependencies						   :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
-     (require 'use-package)
-   #+END_SRC
+;; Init Completion is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+;; more details.
 
-** Load Company
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package company
-       ;; Eagerly load this package.
-       :demand
+;; You should have received a copy of the GNU General Public License along with
+;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
-       ;; Do not modify the modeline.
-       :diminish
+;;; Commentary:
 
-       ;; Evaluate the following code after loading.
-       :config
-       <<company/config>>)
-   #+END_SRC
+;; This file is tangled from init-comint.org.  Changes made here will
+;; be overwritten by changes to that Org file.
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :DESCRIPTION: Code to be evaluated after ~company~ has been loaded.
-    :HEADER-ARGS+: :noweb-ref company/config
-    :END:
+;;; Code:
+#+END_SRC
 
-    Enable ~company-mode~ globally.
+* Dependencies                                                     :noexport:
+#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+(require 'use-package)
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (global-company-mode)
-    #+END_SRC
+* Load Company
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+(use-package company
+  ;; Eagerly load this package.
+  :demand
 
-** Ending Boilerplate						   :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-company)
-     ;;; init-company.el ends here
-   #+END_SRC
+  ;; Do not modify the modeline.
+  :diminish
+
+  ;; Evaluate the following code after loading.
+  :config
+  <<company/config>>)
+#+END_SRC
+
+** Post-Load Evaluation
+:PROPERTIES:
+:DESCRIPTION: Code to be evaluated after ~company~ has been loaded.
+:HEADER-ARGS+: :noweb-ref company/config
+:END:
+
+Enable ~company-mode~ globally.
+
+#+BEGIN_SRC emacs-lisp
+(global-company-mode)
+#+END_SRC
+
+* Ending Boilerplate                                               :noexport:
+#+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-company)
+;;; init-company.el ends here
+#+END_SRC
