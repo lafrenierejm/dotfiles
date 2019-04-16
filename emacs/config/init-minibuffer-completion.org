@@ -4,260 +4,266 @@
 #+PROPERTY: header-args+ :comments link
 #+PROPERTY: header-args+ :tangle no
 
-* License
-  All code sections in this =.org= file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
-  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+* Introductory Boilerplate                                         :noexport:
+#+HEADER: :comments no
+#+HEADER: :padline no
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-minibuffer-completion.el --- Configure minibuffer completion.
 
-* About This File
-  This file configures minibuffer completion with two packages:
-  - Ivy, a generic completion mechanism for Emacs.
-  - Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
-  - Swiper, an incremental search built around Ivy.
+;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Keywords: convenience
+;; Version 1.0
+;; Package-Requires: ((general) (use-package))
 
-  All three packages are published in author abo-abo's [[https://github.com/abo-abo/swiper/tree/master][swiper GitHub repository]].
+;; This file is not part of GNU Emacs.
 
-  The file itself is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+;; Init Minibuffer Completion is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or (at your
+;; option) any later version.
 
-* Code
-** Introductory Boilerplate
-  #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-    ;;; init-minibuffer-completion.el --- Minibuffer completion with Ivy, Counsel, and Swiper
+;; Init Minibuffer Completion is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+;; Public License for more details.
 
-    ;;; Commentary:
-    ;; This file is tangled from init-minibuffer-completion.org.
-    ;; Changes made here will be overwritten by changes to that Org file.
+;; You should have received a copy of the GNU General Public License along with
+;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
-    ;;; Code:
-  #+END_SRC
-   
-** Dependencies
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     (require 'general)
-     (require 'use-package)
-   #+END_SRC
+;;; Commentary:
 
-** Load Flx
-   ~[[https://github.com/lewang/flx][Flx]]~ provides fuzzy searching algorithms.
-   Ivy's fuzzy finding will use Flx's scoring mechanism if Flx is loaded.
+;; This file is tangled from init-minibuffer-completion.org.  Changes made here
+;; will be overwritten by changes to that Org file.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package flx
-       ;; Load this package eagerly.
-       :demand
+;;; Code:
+#+END_SRC
 
-       ;; Load this package after the following packages.
-       :after (validate)
+* Dependencies
+#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+(require 'general)
+(require 'use-package)
+#+END_SRC
 
-       ;; Evaluate the following code before loading this package.
-       :init
-       <<flx/config>>)
-   #+END_SRC
+* Load Flx
+~[[https://github.com/lewang/flx][Flx]]~ provides fuzzy searching algorithms.
+Ivy's fuzzy finding will use Flx's scoring mechanism if Flx is loaded.
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref flx/config
-    :DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
-    :END:
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+(use-package flx
+  ;; Load this package eagerly.
+  :demand
 
-    Run Emacs's garbage collector only when at least 20 MB have been allocated.
-    Doing so greatly improves ~flx~'s performance when working with large sets.
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<flx/config>>)
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (when (> 20000000 gc-cons-threshold)
-	(validate-setq gc-cons-threshold 20000000))
-    #+END_SRC
+** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref flx/config
+:DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
+:END:
 
-** Load Ivy
-   From the project's README:
-   #+BEGIN_QUOTE
-   Ivy is a generic completion mechanism for Emacs.
-   While it operates similarly to other completion schemes such as =icomplete-mode=, Ivy aims to be more efficient, smaller, simpler, and smoother to use yet highly customizable.
-   #+END_QUOTE
+Run Emacs's garbage collector only when at least 20 MB have been allocated.
+Doing so greatly improves ~flx~'s performance when working with large sets.
 
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package ivy
-       ;; Load this package after the following packages.
-       :after (flx)
+#+BEGIN_SRC emacs-lisp
+(when (> 20000000 gc-cons-threshold)
+  (setq gc-cons-threshold 20000000))
+#+END_SRC
 
-       ;; Load this package eagerly.
-       :demand
+* Ivy
+From the project's README:
+#+BEGIN_QUOTE
+Ivy is a generic completion mechanism for Emacs.
+While it operates similarly to other completion schemes such as =icomplete-mode=, Ivy aims to be more efficient, smaller, simpler, and smoother to use yet highly customizable.
+#+END_QUOTE
 
-       ;; Hide the lighter text provided by this package.
-       :diminish ivy-mode
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+(use-package ivy
+  ;; Load this package after the following packages.
+  :after (flx)
 
-       ;; Inform the byte-code compiler of the existence of the following functions.
-       :commands (ivy-mode ivy-format-function-line)
+  ;; Load this package eagerly.
+  :demand
 
-       ;; Add the following keybindings.
-       :general
-       <<ivy/general>>
+  ;; Hide the lighter text provided by this package.
+  :diminish ivy-mode
 
-       ;; Apply the following customizations.
-       :custom
-       <<ivy/custom>>
+  ;; Inform the byte-code compiler of the existence of the following functions.
+  :commands (ivy-mode ivy-format-function-line)
 
-       ;; Evaluate the following code after loading this package.
-       :config
-       <<ivy/config>>)
-   #+END_SRC
+  ;; Add the following keybindings.
+  :general
+  <<ivy/general>>
 
-*** Keybindings (~:general~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref ivy/general
-    :END:
+  ;; Apply the following customizations.
+  :custom
+  <<ivy/custom>>
 
-    Shadow ~switch-to-buffer~ with ~ivy-switch-buffer~.
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<ivy/config>>)
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      ("C-x C-b" #'ivy-switch-buffer)
-    #+END_SRC
+** Keybindings (~:general~)
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ivy/general
+:END:
 
-    When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
+Shadow ~switch-to-buffer~ with ~ivy-switch-buffer~.
 
-    #+BEGIN_SRC emacs-lisp
-      (:keymaps 'ivy-minibuffer-map
-                "M-<return>" #'ivy-immediate-done)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+("C-x C-b" #'ivy-switch-buffer)
+#+END_SRC
 
-*** Variable Customizations (~:custom~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref ivy/custom
-    :END:
+When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-display-style 'fancy "Highlight the matching parts of the regexp in the minibuffer.")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(:keymaps 'ivy-minibuffer-map
+ "M-<return>" #'ivy-immediate-done)
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-format-function #'ivy-format-function-line "Extend line highlighting to the right.")
-    #+END_SRC
+** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ivy/custom
+:END:
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-use-virtual-buffers t "Show recently killed buffers when calling `ivy-switch-buffer'.")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(ivy-display-style 'fancy "Highlight the matching parts of the regexp in the minibuffer.")
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-re-builders-alist '((t . ivy--regex-plus)) "Use `ivy--regex-plus' as the default matching function.")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(ivy-format-function #'ivy-format-function-line "Extend line highlighting to the right.")
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(ivy-use-virtual-buffers t "Show recently killed buffers when calling `ivy-switch-buffer'.")
+#+END_SRC
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :DESCRIPTION: Code to evaluate after ~ivy~ has been loaded.
-    :HEADER-ARGS+: :noweb-ref ivy/config
-    :END:
+#+BEGIN_SRC emacs-lisp
+(ivy-re-builders-alist '((t . ivy--regex-plus)) "Use `ivy--regex-plus' as the default matching function.")
+#+END_SRC
 
-    Enable ~ivy-mode~ globally.
+#+BEGIN_SRC emacs-lisp
+(ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-mode +1)
-    #+END_SRC
+** Post-Load Evaluation
+:PROPERTIES:
+:DESCRIPTION: Code to evaluate after ~ivy~ has been loaded.
+:HEADER-ARGS+: :noweb-ref ivy/config
+:END:
 
-    Do not include TRAMP buffers in Ivy's buffer lists.
+Enable ~ivy-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
-      (setq ivy-ignore-buffers
-	    (cons (rx line-start "*tramp/"
-		      (one-or-more (not whitespace))
-		      whitespace
-		      (one-or-more anything)
-		      "*" line-end)
-		  ivy-ignore-buffers))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(ivy-mode +1)
+#+END_SRC
 
-** Load Counsel
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package counsel
-       ;; Load this package after the following packages.
-       :after (ivy)
+Do not include TRAMP buffers in Ivy's buffer lists.
 
-       ;; Load this package eagerly.
-       :demand
+#+BEGIN_SRC emacs-lisp
+(setq ivy-ignore-buffers
+      (cons (rx line-start "*tramp/"
+                (one-or-more (not whitespace))
+                whitespace
+                (one-or-more anything)
+                "*" line-end)
+            ivy-ignore-buffers))
+#+END_SRC
 
-       ;; Perform the following keybindings.
-       :general
-       ("C-h k" #'counsel-descbinds)
-       ("C-x C-4 C-b" #'switch-to-buffer-other-window)
-       ("C-x C-4 C-f" #'find-file-other-window)
-       ("C-x C-4 b" #'switch-to-buffer-other-window)
-       ("C-x C-f" #'counsel-find-file)
-       ("C-x f" #'counsel-find-file)
-       ("M-x" #'counsel-M-x))
-   #+END_SRC
+* Counsel
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package counsel
+  ;; Load this package after the following packages.
+  :after (ivy)
 
-** Load Swiper
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package swiper
-       ;; Load this package eagerly.
-       :demand
+  ;; Load this package eagerly.
+  :demand
 
-       ;; Load this package after the following packages.
-       :after (ivy)
+  ;; Perform the following keybindings.
+  :general
+  ("C-h k" #'counsel-descbinds)
+  ("C-x C-4 C-b" #'switch-to-buffer-other-window)
+  ("C-x C-4 C-f" #'find-file-other-window)
+  ("C-x C-4 b" #'switch-to-buffer-other-window)
+  ("C-x C-f" #'counsel-find-file)
+  ("C-x f" #'counsel-find-file)
+  ("M-x" #'counsel-M-x))
+#+END_SRC
 
-       ;; Perform the following keybindings.
-       :general
-       ("C-s" #'swiper))
-   #+END_SRC
+* Swiper
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package swiper
+  ;; Load this package eagerly.
+  :demand
 
-** Load Ivy Rich
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package ivy-rich
-       ;; Load this package after the following packages.
-       :after (ivy validate)
+  ;; Load this package after the following packages.
+  :after (ivy)
 
-       ;; Load this package eagerly.
-       :demand
+  ;; Perform the following keybindings.
+  :general
+  ("C-s" #'swiper))
+#+END_SRC
 
-       ;; Apply the following customizations.
-       :custom
-       <<ivy-rich/custom>>
+* Ivy Rich
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+(use-package ivy-rich
+  ;; Load this package after the following packages.
+  :after (ivy)
 
-       ;; Evaluate the following code after loading this package.
-       :config
-       <<ivy-rich/config>>)
-   #+END_SRC
+  ;; Load this package eagerly.
+  :demand
 
-*** Variable Customization (~:custom~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref ivy-rich/custom
-    :END:
+  ;; Apply the following customizations.
+  :custom
+  <<ivy-rich/custom>>
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-virtual-abbreviate 'abbreviate "Abbreviate virtual buffer names.")
-    #+END_SRC
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<ivy-rich/config>>)
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-rich-path-style 'relative "Show paths relative their the project home.")
-    #+END_SRC
+** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ivy-rich/custom
+:END:
 
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
-    :HEADER-ARGS+: :noweb-ref ivy-rich/config
-    :END:
+#+BEGIN_SRC emacs-lisp
+(ivy-virtual-abbreviate 'abbreviate "Abbreviate virtual buffer names.")
+#+END_SRC
 
-    Enable ~ivy-rich-mode~ globally.
+#+BEGIN_SRC emacs-lisp
+(ivy-rich-path-style 'relative "Show paths relative their the project home.")
+#+END_SRC
 
-    #+BEGIN_SRC emacs-lisp
-      (ivy-rich-mode 1)
-    #+END_SRC
+** Post-Load Evaluation
+:PROPERTIES:
+:DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
+:HEADER-ARGS+: :noweb-ref ivy-rich/config
+:END:
 
-    Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-switch-buffer~.
+Enable ~ivy-rich-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
-      (setq ivy-rich--display-transformers-list
-	    (plist-put
-	     ivy-rich--display-transformers-list
-	     'counsel-projectile-switch-to-buffer
-	     (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(ivy-rich-mode 1)
+#+END_SRC
 
-** Ending Boilerplate
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-minibuffer-completion)
-     ;;; init-minibuffer-completion.el ends here
-   #+END_SRC
+Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-switch-buffer~.
+
+#+BEGIN_SRC emacs-lisp
+(setq ivy-rich--display-transformers-list
+      (plist-put
+       ivy-rich--display-transformers-list
+       'counsel-projectile-switch-to-buffer
+       (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
+#+END_SRC
+
+* Ending Boilerplate                                               :noexport:
+#+BEGIN_SRC emacs-lisp :tangle yes
+(provide 'init-minibuffer-completion)
+;;; init-minibuffer-completion.el ends here
+#+END_SRC
