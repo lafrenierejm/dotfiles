@@ -1,52 +1,71 @@
-#+TITLE: Eshell Initialization
+#+TITLE: Eshell Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :tangle no
+#+PROPERTY: HEADER-ARGS+ :noweb yes
 
-* Introductory Boilerplate                                         :noexport:
-#+HEADER: :padline no
-#+HEADER: :comments no
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-window-and-frame.el --- Configure Eshell
+;;; init-eshell.el --- Configure Eshell
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
-;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
 ;; Keywords: processes
 ;; Version 1.0
 ;; Package-Requires: ((general) (use-package))
 
-;; This file is not part of GNU Emacs.
-
-;; Init Eshell is free software: you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free Software
-;; Foundation, either version 3 of the License, or (at your option) any later
-;; version.
-
-;; Init Eshell is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-;; FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-;; details.
-
-;; You should have received a copy of the GNU General Public License along with
-;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+;; <<license>>
 
 ;;; Commentary:
-
-;; This file is tangled from init-eshell.org.  Changes made here will be
-;; overwritten by changes to that Org file.
+;; <<commentary>>
 
 ;;; Code:
+<<code>>
+
+(provide 'init-eshell)
+;;; init-eshell.el ends here
 #+END_SRC
 
-* Dependencies                                                     :noexport:
-#+BEGIN_SRC emacs-lisp :tangle yes
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Eshell is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Eshell is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-eshell.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies                                                   :noexport:
+#+BEGIN_SRC emacs-lisp
 (require 'general)
 (require 'use-package)
 #+END_SRC
 
-* Esh Mode
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Esh Mode
+#+BEGIN_SRC emacs-lisp
 (use-package esh-mode
   ;; This package is included in Emacs.
   :straight nil
@@ -58,12 +77,12 @@
   <<esh-mode/config>>)
 #+END_SRC
 
-** Post-Load Execution
+*** Post-Load Execution
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref esh-mode/config
 :END:
 
-*** Define Eshell-Specific ~beginning-of-maybe-line~
+**** Define Eshell-Specific ~beginning-of-maybe-line~
 [[../minor-mode/init-evil.org][init-evil.org]] defines ~init/beginning-of-maybe-line~.
 That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
 
@@ -87,7 +106,7 @@ That function acts as a do-what-I-mean alternative to the built-in =beginning-of
         (beginning-of-line)))))
 #+END_SRC
 
-*** Update Prompts' Timestamps
+**** Update Prompts' Timestamps
 :PROPERTIES:
 :DESCRIPTION: Before sending input, update the current prompt with a timestamp in ISO 8601 (2000 version) form: "--MM-DDTHH:MM".
 :END:
@@ -133,8 +152,8 @@ Call the above function before sending input.
 (advice-add 'eshell-send-input :before #'init-eshell/timestamp-prompt)
 #+END_SRC
 
-* Load Em Dirs
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Load Em Dirs
+#+BEGIN_SRC emacs-lisp
 (use-package em-dirs
   :straight nil
 
@@ -142,12 +161,12 @@ Call the above function before sending input.
   <<em-dirs/config>>)
 #+END_SRC
 
-** Post-Load Evaluation (~:config~)
+*** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref em-dirs/config
 :END:
 
-*** Return Path Relative to Project Root
+**** Return Path Relative to Project Root
 #+BEGIN_SRC emacs-lisp
 (defun init-eshell/pwd-relative-to-project (directory)
   "Use the Projectile root when displaying a path.
@@ -175,7 +194,7 @@ Call the above function before sending input.
      (abbreviate-file-name directory))))
 #+END_SRC
 
-*** Abbreviate Path Elements
+**** Abbreviate Path Elements
 Printing the path to the current directory in the shell prompt helps me keep track of the context.
 However, if the path is long this can result in unwieldy prompts.
 The following functions can be used to abbreviate a path by shortening each element in the path to that element's first non-period character;
@@ -217,7 +236,7 @@ only the last directory in the path is shown in full.
        (car (last split-path))))))
 #+END_SRC
 
-*** Create Eshell Buffer Names
+**** Create Eshell Buffer Names
 #+BEGIN_SRC emacs-lisp
 (defun init-eshell/name-buffer (directory &optional process-name)
   "Create a name for an Eshell buffer in DIRECTORY."
@@ -228,7 +247,7 @@ only the last directory in the path is shown in full.
           "*"))
 #+END_SRC
 
-*** Prefer Changing Buffers to Changing Directories
+**** Prefer Changing Buffers to Changing Directories
 Redefine ~eshell/cd~ to prefer switching to an Eshell buffer in the new directory (if such a buffer exists) over changing the directory of the buffer where ~eshell/cd~ was called.
 Whether or not an Eshell buffer exists at the specified location is determined by the name of existing Eshell buffers.
 
@@ -314,8 +333,8 @@ comparing the name of buffers to the result of `init-eshell/name-buffer'."
         nil))))
     #+END_SRC
 
-* Eshell
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Eshell
+#+BEGIN_SRC emacs-lisp
 (use-package eshell
   :straight nil
 
@@ -354,7 +373,7 @@ comparing the name of buffers to the result of `init-eshell/name-buffer'."
   <<eshell/config>>)
 #+END_SRC
 
-** Keybindings (~:general~)
+*** Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref eshell/general
 :END:
@@ -374,7 +393,7 @@ In most terminal applications, =C-z= is the key combination to suspend the curre
 ("C-z" #'init-eshell/find-eshell-here)
 #+END_SRC
 
-** Non-Autoloading Hooks (~:gfhook~)
+*** Non-Autoloading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref eshell/gfhook
 :END:
@@ -403,7 +422,7 @@ Clear buffers' scrollback with =C-l=.
         "C-l" #'init-eshell/clear-scrollback)))
 #+END_SRC
 
-** Customize Variables (~:custom~)
+*** Customize Variables
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref eshell/custom
 :END:
@@ -420,12 +439,12 @@ Clear buffers' scrollback with =C-l=.
 (eshell-prompt-function #'init-eshell/prompt)
 #+END_SRC
 
-** Pre-Load Execution (~:init~)
+*** Pre-Load Execution
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref eshell/init
 :END:
 
-*** Eshell Prompt
+**** Eshell Prompt
 #+BEGIN_SRC emacs-lisp
 (defun init-eshell/prompt ()
   "Prefix \"$USER@$(hostname):\" if on remote host."
@@ -445,7 +464,7 @@ Clear buffers' scrollback with =C-l=.
      " $ ")))
 #+END_SRC
 
-*** Set =$PAGER=
+**** Set =$PAGER=
 Because Eshell runs entirely within an Emacs buffer, Eshell does not need an external pager.
 Instead, text can be dumped directly into the buffer.
 This is accomplished by setting ~PAGER~ to ~cat~.
@@ -454,7 +473,7 @@ This is accomplished by setting ~PAGER~ to ~cat~.
 (setenv "PAGER" "cat")
 #+END_SRC
 
-*** Use Magit for Some ~git~ Commands
+**** Use Magit for Some Git Commands
 The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.rulez.org][<algernon@bonehunter.rulez.org>]] and shared under GPLv3.
 
 #+BEGIN_SRC emacs-lisp
@@ -496,12 +515,12 @@ Run ~magit-log~ after determining if the argument to ~git log~ was a file or bra
     (eshell/echo)))
 #+END_SRC
 
-** Post-Load Execution (~:config~)
+*** Post-Load Execution
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref eshell/config
 :END:
 
-*** "Visual" Commands
+**** "Visual" Commands
 Run the following commands in a =term= buffer:
 #+NAME: visual-commands
 - alsamixer
@@ -517,8 +536,8 @@ Run the following commands in a =term= buffer:
       (add-to-list 'eshell-visual-commands command))))
 #+END_SRC
 
-*** Custom Functions
-**** Open Eshell in a Given Directory
+**** Custom Functions
+***** Open Eshell in a Given Directory
 Open or switch to an Eshell buffer in a given directory.
 
 #+BEGIN_SRC emacs-lisp
@@ -540,7 +559,7 @@ such instance exists, start a new instance whose name includes the directory."
     (eshell)))
 #+END_SRC
 
-**** Open Eshell in the Current Directory
+***** Open Eshell in the Current Directory
 Define a function to open an Eshell instance in the current directory.
 If an Eshell instance already exists in that directory, switch to its buffer.
 
@@ -557,7 +576,7 @@ instance exists, start a new instance whose name includes the directory."
     (init-eshell/find-eshell cwd)))
      #+END_SRC
 
-**** "Background" the Current Process
+***** "Background" the Current Process
 If a long-running process is started from an Eshell prompt without explicitly backgrounding the process, that process will block any further input to the prompt.
 Because having access to long-running processes' stdout and stderr is useful, there is a need for an interactive function that can
 1. preserve the buffer belonging to that long-running process;
@@ -586,7 +605,7 @@ UNIX shells use the chord =C-z= to background the current process.
    "C-z" #'init-eshell/background-process-maybe))
 #+END_SRC
 
-**** Clear Buffer
+***** Clear Buffer
 #+BEGIN_SRC emacs-lisp
 (defun init-eshell/clear-scrollback ()
   "Clear the scrollback content of the eshell window."
@@ -597,13 +616,13 @@ UNIX shells use the chord =C-z= to background the current process.
     (insert input)))
 #+END_SRC
 
-* Esh Module
+** Esh Module
 From the package group's docstring:
 #+BEGIN_QUOTE
 The ~eshell-module~ group is for Eshell extension modules, which provide optional behavior which the user can enable or disable by customizing the variable ~eshell-modules-list~.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+#+BEGIN_SRC emacs-lisp
 (use-package esh-module
   ;; This package is included in Emacs.
   :straight nil
@@ -619,7 +638,7 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
   <<esh-module/config>>)
 #+END_SRC
 
-** Post-Load Execution (~:config~)
+*** Post-Load Execution
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref esh-module/config
 :END:
@@ -630,10 +649,10 @@ Disable the greeting banner.
 (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
 #+END_SRC
 
-* Em Smart
+** Em Smart
 Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
 
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+#+BEGIN_SRC emacs-lisp
 (use-package em-smart
   :straight nil
 
@@ -648,7 +667,7 @@ Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
   <<em-smart/config>>)
 #+END_SRC
 
-** Config
+*** Config
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref em-smart/config
 :END:
@@ -657,10 +676,10 @@ Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
 (add-to-list 'eshell-modules-list 'eshell-smart)
 #+END_SRC
 
-* Em Tramp
+** Em Tramp
 Em Tramp is an Eshell modules that provides TRAMP features.
 
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+#+BEGIN_SRC emacs-lisp
 (use-package em-tramp
   ;; This package is included in Emacs.
   :straight nil
@@ -676,7 +695,7 @@ Em Tramp is an Eshell modules that provides TRAMP features.
   <<em-tramp/config>>)
 #+END_SRC
 
-** Post-Load Evaluation (~:config~)
+*** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref em-tramp/config
 :END:
@@ -687,7 +706,7 @@ Load Em Tramp as an Eshell module.
 (add-to-list 'eshell-modules-list 'eshell-tramp)
 #+END_SRC
 
-*** Redefine ~eshell/sudo~
+**** Redefine ~eshell/sudo~
 For ease of use with Emacs's authentication mechanisms, the full hostname of the machine should be resolved in all cases, even when the Eshell prompt is running locally.
 
 The following code is derived from the Em Tramp package distributed with GNU Emacs.
@@ -697,7 +716,7 @@ As such, it is licensed under the same conditions as GNU Emacs itself (namely, G
 (defun eshell/sudo (&rest args)
   "Alias \"sudo\" to call Tramp.
 
-      Uses the system sudo through TRAMP's sudo method."
+Uses the system sudo through TRAMP's sudo method."
   (setq args (eshell-stringify-list (eshell-flatten-list args)))
   (let ((orig-args (copy-tree args)))
     (eshell-eval-using-options
@@ -734,8 +753,8 @@ As such, it is licensed under the same conditions as GNU Emacs itself (namely, G
                 (eshell-named-command (car orig-args) (cdr orig-args))))))))
 #+END_SRC
 
-* Em Rebind
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Em Rebind
+#+BEGIN_SRC emacs-lisp
 (use-package em-rebind
   ;; This package is included in Emacs.
   :straight nil
@@ -755,7 +774,7 @@ As such, it is licensed under the same conditions as GNU Emacs itself (namely, G
   <<em-rebind/config>>)
 #+END_SRC
 
-** Pre-Load Evaluation (~:init~)
+*** Pre-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref em-rebind/init
 :END:
@@ -766,7 +785,7 @@ Add this module to the list of Eshell modules to load.
 (push 'eshell-rebind eshell-modules-list)
 #+END_SRC
 
-** Post-Load Evaluation (~:config~)
+*** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref em-rebind/config
 :DESCRIPTION: The code to be evaluated after ~em-rebind~ has been loaded.
@@ -780,8 +799,8 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
       eshell-rebind-keys-alist)
 #+END_SRC
 
-* Em Cmpl
-#+BEGIN_SRC emacs-lisp :tangle yes
+** Em Cmpl
+#+BEGIN_SRC emacs-lisp
 (use-package em-cmpl
   ;; This package is included in Emacs.
   :straight nil
@@ -797,8 +816,8 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   (validate-setq eshell-cmpl-cycle-completions nil))
 #+END_SRC
 
-* Em Hist
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Em Hist
+#+BEGIN_SRC emacs-lisp
 (use-package em-hist
   ;; This package is included in Emacs.
   :straight nil
@@ -814,7 +833,7 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   <<em-hist/config>>)
 #+END_SRC
 
-** Post-Load Evaluation (~:config~)
+*** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref em-hist/config
 :DESCRIPTION: The code to be evaluated after ~em-hist~ has been loaded.
@@ -826,8 +845,3 @@ Skip duplicates when traversing command history.
 (validate-setq eshell-hist-ignoredups t)
 #+END_SRC
 
-* Ending Boilerplate                                               :noexport:
-#+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-eshell)
-;;; init-eshell.el ends here
-#+END_SRC
