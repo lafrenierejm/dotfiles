@@ -259,9 +259,9 @@ only the last directory in the path is shown in full.
 (defun init-eshell/abbreviate-path (path)
   "Abbreviate each element in PATH except for the last.
 
-      Abbreviated path elements are represented by their first non-period character.
-      For example, the path \"/home/user/.config/curdir\" will become
-      \"/h/u/.c/curdir\"."
+Abbreviated path elements are represented by their first non-period
+character. For example, the path \"/home/user/.config/curdir\" will become
+\"/h/u/.c/curdir\"."
   (let* ((split-path (split-string path "/")))
     (if (< (length split-path) 2)
         (or (car split-path) "")
