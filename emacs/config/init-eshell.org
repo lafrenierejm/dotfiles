@@ -152,6 +152,50 @@ Call the above function before sending input.
 (advice-add 'eshell-send-input :before #'init-eshell/timestamp-prompt)
 #+END_SRC
 
+**** Narrow to Command
+
+Narrow the buffer to the context ~point~ is currently in:
+- command output :: narrow to the preceding command and the current output
+- last prompt/command :: do nothing
+- other prompt/command :: narrow to the prompt, command, and the command's output
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/narrow-to-command ()
+  "Make text outside the current command invisible.
+
+- If `point' is in the last prompt or last command, do nothing.
+- If `point' is in command output, narrow to the output and the corresponding
+  prompt and command.
+- if `point' is in a prompt or command that's not the last, narrow to that
+  prompt, command, and the corresponding output."
+  (interactive)
+  (let ((orig (point))
+        (line-orig (line-number-at-pos (point)))
+        (line-later-prompt (progn (eshell-next-prompt 2)
+                                  (line-number-at-pos (point)))))
+    ;; Restore original position.
+    (goto-char orig)
+    ;; If not in the last command...
+    (if (not (= line-orig line-later-prompt))
+        (let* ((command-beg (progn (eshell-bol) (point)))
+               (line-beg (progn (beginning-of-line) (point)))
+               (start (cond
+                       ;; If not in a command...
+                       ((= command-beg line-beg)
+                        (eshell-previous-prompt 1)
+                        (beginning-of-line)
+                        (point))
+                       ;; Else in a command...
+                       (t
+                        line-beg)))
+               (end (progn
+                      (eshell-next-prompt 2) ; next prompt
+                      (previous-line 1) ; up one line
+                      (end-of-line) ; end of line
+                      (point))))
+          (narrow-to-region start end)))))
+#+END_SRC
+
 ** Load Em Dirs
 #+BEGIN_SRC emacs-lisp
 (use-package em-dirs
@@ -404,22 +448,18 @@ Build the list of commands to be run in Term mode buffers.
 (nil #'init-eshell/add-visual-commands)
 #+END_SRC
 
-"Background" processes with =C-z=.
+Add the following keybindings:
+- =C-l= :: clear the buffer's scrollback
+- =C-x n c= :: narrow to the current command
+- =C-z= :: "background" the current process
 
 #+BEGIN_SRC emacs-lisp
 (nil (lambda ()
        (general-define-key
         :keymaps 'eshell-mode-map
+        "C-l" #'init-eshell/clear-scrollback
+        "C-x n c" #'init-eshell/narrow-to-command
         "C-z" #'init-eshell/background-process-maybe)))
-#+END_SRC
-
-Clear buffers' scrollback with =C-l=.
-
-#+BEGIN_SRC emacs-lisp
-(nil (lambda ()
-       (general-define-key
-        :keymaps 'eshell-mode-map
-        "C-l" #'init-eshell/clear-scrollback)))
 #+END_SRC
 
 *** Customize Variables
