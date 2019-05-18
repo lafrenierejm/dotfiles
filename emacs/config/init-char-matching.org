@@ -1,0 +1,204 @@
+#+TITLE: Character Matching Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: HEADER-ARGS+ :noweb yes
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; init-char-matching.el --- Configure character matching
+
+;; Copyright (C) Joseph LaFreniere (lafrenierejm)
+
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Keywords:
+;; Version: 1.0
+;; Package-Requires: ((derived) (general) (use-package))
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<code>>
+
+(provide 'init-paren-matching)
+;;; init-char-matching.el ends here
+#+END_SRC
+
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Char Matching is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Char Matching is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-char-matching.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies
+#+BEGIN_SRC emacs-lisp
+(require 'derived)
+(require 'diminish)
+(require 'general)
+(require 'use-package)
+#+END_SRC
+
+** Lisp Modes
+
+It is desirable to have slightly different character matching behavior when editing Lisps.
+The following is a list of the Lisp modes I edit in.
+
+#+BEGIN_SRC emacs-lisp
+(defconst init-char-matching/lisp-major-modes
+  '(cider-repl-mode
+    clojure-mode
+    emacs-lisp-mode
+    ielm-mode
+    lisp-mode
+    scheme-mode)
+  "A list of Lisp major modes.")
+#+END_SRC
+
+And the above modes' hooks:
+
+#+BEGIN_SRC emacs-lisp
+(defconst init-char-matching/lisp-major-mode-hooks
+  (mapcar #'derived-mode-hook-name init-char-matching/lisp-major-modes)
+  "A list of Lisp major mode hooks.")
+#+END_SRC
+
+** Smartparens
+[[https://github.com/Fuco1/smartparens][Matus Goljer (Fuco1)'s package]] provides a minor mode "that deals with parens pairs and tries to be smart about it".
+
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Hide this package's lighter.
+  :diminish
+
+  ;; Inform the bytecode compiler of the following functions.
+  :commands (smartparens-global-mode)
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<smartparens/config>>)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:DESCRIPTION: Code to be evaluated after Smartparens has been loaded.
+:HEADER-ARGS+: :noweb-ref smartparens/config
+:END:
+
+Enable ~smartparens-mode~ globally.
+
+#+BEGIN_SRC emacs-lisp
+(smartparens-global-mode +1)
+#+END_SRC
+
+** Smartparens Config
+Smartparens Config configures Smartparens for various programming languages.
+
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens-config
+
+  ;; Load this package eagerly.
+  :demand)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref smartparens-config/config
+:END:
+
+Remove the single quote (='=) from the list of auto-paired character in Lisps.
+
+#+BEGIN_SRC emacs-lisp
+(sp-local-pair init-char-matching/lisp-major-modes "'" nil :actions :rem)
+#+END_SRC
+
+** Evil Cleverparens
+[[https://github.com/luxbock/evil-cleverparens][Llli Pieponnen (luxbock)'s package]] provides an "Evil normal-state minor-mode for editing lisp-like languages".
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil-cleverparens
+  ;; Load this package after the following packages.
+  :after (evil smartparens)
+
+  ;; Inform the bytecode compiler of the following functions.
+  :commands (init-char-matching/evil-move-beyond-eol)
+
+  ;; Add the following autoloading hooks.
+  :ghook
+  <<evil-cleverparens/ghook>>
+
+  ;; Add the following non-autoloading hooks.
+  :gfhook
+  <<evil-cleverparens/gfhook>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<evil-cleverparens/config>>)
+   #+END_SRC
+
+*** Autoloading Hooks
+:PROPERTIES:
+:DESCRIPTION: Add auto-loading hooks related to ~evil-cleverparens~.
+:HEADER-ARGS+: :noweb-ref evil-cleverparens/ghook
+:END:
+
+Enable ~evil-cleverparens-mode~ for Lisps.
+
+#+BEGIN_SRC emacs-lisp
+(init-char-matching/lisp-major-mode-hooks #'evil-cleverparens-mode)
+#+END_SRC
+
+*** Non-Autoloading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref evil-cleverparens/gfhook
+:END:
+
+Let the cursor move past the end of lines in Lisp source code.
+
+#+BEGIN_SRC emacs-lisp
+(init-char-matching/lisp-major-mode-hooks #'init-char-matching/evil-move-beyond-eol)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref evil-cleverparens/config
+:DESCRIPTION: Code to be evaluated after ~evil-cleverparens~ has been loaded.
+:END:
+
+Allow the cursor to move past the end of lines to avoid [[https://github.com/luxbock/evil-cleverparens/issues/29][breaking "certain movement commands"]].
+
+#+BEGIN_SRC emacs-lisp
+(defun init-char-matching/evil-move-beyond-eol ()
+  "Enable EVIL-MOVE-BEYOND-EOL."
+  (setq evil-move-beyond-eol t))
+#+END_SRC
