@@ -1,49 +1,72 @@
 #+TITLE: Version Control Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :tangle no
+#+PROPERTY: HEADER-ARGS+ :noweb yes
 
-* Introductory Boilerplate
-#+BEGIN_SRC emacs-lisp :tangle yes :padline no
-;;; init-org.el --- Version control -related configuration.
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-version-control.el --- Configure version control features
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
 ;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
-;; Keywords: vc tools
+;; Keywords: frames
 ;; Version 1.0
-;; Package-Requires: ((s) (files))
+;; Package-Requires: ((general) (use-package))
 
-;; This file is not part of GNU Emacs.
-
-;; Init Org is free software: you can redistribute it and/or modify it under the
-;; terms of the GNU General Public License as published by the Free Software
-;; Foundation, either version 3 of the License, or (at your option) any later
-;; version.
-
-;; Init Org is distributed in the hope that it will be useful, but WITHOUT ANY
-;; WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-;; A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License along with
-;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+;; <<license>>
 
 ;;; Commentary:
-;; This file is tangled from init-org.org.  Changes made here will be
-;; overwritten by changes to that Org-mode file.
+;; <<commentary>>
 
 ;;; Code:
+<<code>>
+
+(provide 'init-version-control)
+;;; init-version-control.el ends here
 #+END_SRC
 
-* Dependencies
-#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Version Control is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Version Control is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-version-control.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies
+#+BEGIN_SRC emacs-lisp
 (require 'general)
 (require 'use-package)
 #+END_SRC
 
-* VC-Agnostic
-** Diff HL
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** VC-Agnostic
+*** Diff HL
+#+BEGIN_SRC emacs-lisp
 (use-package diff-hl
   ;; Only load the package if the following condition is met.
   :if
@@ -69,7 +92,7 @@
   <<diff-hl/config>>)
 #+END_SRC
 
-*** Conditional Loading
+**** Conditional Loading
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref diff-hl/if
 :END:
@@ -80,7 +103,7 @@ Diff HL depends on features added in Emacs 24.3.
 (version<= "24.3" emacs-version)
 #+END_SRC
 
-*** Auto-Loading Hooks
+**** Auto-Loading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref diff-hl/ghook
 :END:
@@ -97,7 +120,7 @@ Update Diff HL's status when refreshing with modern versions of Magit.
 ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
 #+END_SRC
 
-*** Pre-Load Evaluation
+**** Pre-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref diff-hl/init
 :END:
@@ -108,7 +131,7 @@ Enable Diff HL's base minor mode globally.
 (global-diff-hl-mode)
 #+END_SRC
 
-*** Post-Load Evaluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref diff-hl/config
 :END:
@@ -119,9 +142,9 @@ Perform Diff HL highlighting on-the-fly.
 (diff-hl-flydiff-mode)
 #+END_SRC
 
-* Git
-** Magit
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+** Git
+*** Magit
+#+BEGIN_SRC emacs-lisp
 (use-package magit
   ;; Load this package if the following code evaluates to non-nil.
   :if
@@ -140,7 +163,7 @@ Perform Diff HL highlighting on-the-fly.
   <<magit/config>>)
 #+END_SRC
 
-*** Conditional Loading
+**** Conditional Loading
 :PROPERTIES:
 :DESCRIPTION: Only load ~magit~ if this code evaluates to non-~nil~.
 :HEADER-ARGS+: :noweb-ref magit/if
@@ -153,7 +176,7 @@ As such, it is worthless if =git= is not in the user's ~$PATH~.
 (executable-find "git")
 #+END_SRC
 
-*** Keybindings
+**** Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref magit/general
 :END:
@@ -162,7 +185,7 @@ As such, it is worthless if =git= is not in the user's ~$PATH~.
 ("C-x g" #'magit-status)
 #+END_SRC
 
-*** Customize Variables
+**** Customize Variables
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref magit/custom
 :END:
@@ -205,13 +228,13 @@ Set the sections to be displayed in status buffers.
    magit-insert-unpulled-from-upstream))
 #+END_SRC
 
-*** Post-Load Execution
+**** Post-Load Execution
 :PROPERTIES:
 :DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
 :HEADER-ARGS+: :noweb-ref magit/config
 :END:
 
-**** Return After Commit Message
+***** Return After Commit Message
 Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
 
 #+BEGIN_SRC emacs-lisp
@@ -222,7 +245,7 @@ Return to the main Magit window after closing a commit message, regardless of wh
 (advice-add 'git-commit-abort :after #'delete-window)
 #+END_SRC
 
-**** Comparable Version Number
+***** Comparable Version Number
 The function ~magit-version~ provided by Magit does not return a version string that is comparable using Emacs's built-in ~version<~.
 However, Magit's semver is /par/ of the string returned by ~magit-version~;
 it is everything before the first hyphen.
@@ -233,13 +256,13 @@ it is everything before the first hyphen.
   (car (split-string (magit-version) "-")))
 #+END_SRC
 
-** Forge
+*** Forge
 From the project's README:
 #+BEGIN_QUOTE
 Work with Git forges, such as Github and Gitlab, from the comfort of Magit and the rest of Emacs.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
 (use-package forge
   :disabled
 
@@ -254,10 +277,10 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
          :fork (:host github :repo "lafrenierejm/forge")))
 #+END_SRC
 
-** Evil Magit
+*** Evil Magit
 ~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures Evil and Magit to play well together.
 
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+#+BEGIN_SRC emacs-lisp
 (use-package evil-magit
   ;; Load this package eagerly.
   :demand
@@ -272,7 +295,7 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   <<evil-magit/custom>>)
 #+END_SRC
 
-*** Auto-Loading Hooks
+**** Auto-Loading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil-magit/ghook
 :END:
@@ -281,7 +304,7 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 ('magit-mode-hook #'evil-local-mode)
 #+END_SRC
 
-*** Customize Variables
+**** Customize Variables
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil-magit/custom
 :END:
@@ -292,10 +315,4 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 
 #+BEGIN_SRC emacs-lisp
 (evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
-#+END_SRC
-
-* Ending Boilerplate
-#+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-version-control)
-;;; init-version-control.el ends here
 #+END_SRC
