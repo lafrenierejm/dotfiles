@@ -78,6 +78,7 @@ The following is a list of the Lisp modes I edit in.
     emacs-lisp-mode
     ielm-mode
     lisp-mode
+    minibuffer-inactive-mode
     scheme-mode)
   "A list of Lisp major modes.")
 #+END_SRC
@@ -104,9 +105,23 @@ And the above modes' hooks:
   ;; Inform the bytecode compiler of the following functions.
   :commands (smartparens-global-mode)
 
+  :custom
+  <<smartparens/custom>>
+
   ;; Evaluate the following code after loading this package.
   :config
   <<smartparens/config>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref smartparens/custom
+:END:
+
+Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
+
+#+BEGIN_SRC emacs-lisp
+(sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
 #+END_SRC
 
 *** Post-Load Evaluation
