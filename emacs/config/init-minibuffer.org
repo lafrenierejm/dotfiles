@@ -1,14 +1,10 @@
-#+TITLE: Minibuffer Completion
+#+TITLE: Minibuffer Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
-#+PROPERTY: header-args+ :tangle no
+#+PROPERTY: HEADER-ARGS+ :noweb yes
 
-* Introductory Boilerplate                                         :noexport:
-#+HEADER: :comments no
-#+HEADER: :padline no
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-minibuffer-completion.el --- Configure minibuffer completion.
+;;; init-minibuffer.el --- Configure minibuffer features
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
@@ -17,40 +13,60 @@
 ;; Version 1.0
 ;; Package-Requires: ((general) (use-package))
 
-;; This file is not part of GNU Emacs.
-
-;; Init Minibuffer Completion is free software: you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or (at your
-;; option) any later version.
-
-;; Init Minibuffer Completion is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-;; Public License for more details.
-
-;; You should have received a copy of the GNU General Public License along with
-;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+;; <<license>>
 
 ;;; Commentary:
-
-;; This file is tangled from init-minibuffer-completion.org.  Changes made here
-;; will be overwritten by changes to that Org file.
+;; <<commentary>>
 
 ;;; Code:
+<<code>>
+
+(provide 'init-minibuffer)
+;;; init-minibuffer.el ends here
 #+END_SRC
 
-* Dependencies
-#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Minibuffer is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Minibuffer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-minibuffer.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+** Dependencies
+#+BEGIN_SRC emacs-lisp
 (require 'general)
 (require 'use-package)
 #+END_SRC
 
-* Load Flx
+** Load Flx
 ~[[https://github.com/lewang/flx][Flx]]~ provides fuzzy searching algorithms.
 Ivy's fuzzy finding will use Flx's scoring mechanism if Flx is loaded.
 
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+#+BEGIN_SRC emacs-lisp
 (use-package flx
   ;; Load this package eagerly.
   :demand
@@ -60,7 +76,7 @@ Ivy's fuzzy finding will use Flx's scoring mechanism if Flx is loaded.
   <<flx/config>>)
 #+END_SRC
 
-** Post-Load Evaluation
+*** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref flx/config
 :DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
@@ -74,14 +90,14 @@ Doing so greatly improves ~flx~'s performance when working with large sets.
   (setq gc-cons-threshold 20000000))
 #+END_SRC
 
-* Ivy
+** Ivy
 From the project's README:
 #+BEGIN_QUOTE
 Ivy is a generic completion mechanism for Emacs.
 While it operates similarly to other completion schemes such as =icomplete-mode=, Ivy aims to be more efficient, smaller, simpler, and smoother to use yet highly customizable.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
+#+BEGIN_SRC emacs-lisp
 (use-package ivy
   ;; Load this package after the following packages.
   :after (flx)
@@ -108,7 +124,7 @@ While it operates similarly to other completion schemes such as =icomplete-mode=
   <<ivy/config>>)
 #+END_SRC
 
-** Keybindings (~:general~)
+*** Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref ivy/general
 :END:
@@ -126,7 +142,7 @@ When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
  "M-<return>" #'ivy-immediate-done)
 #+END_SRC
 
-** Variable Customizations
+*** Variable Customization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref ivy/custom
 :END:
@@ -151,7 +167,7 @@ When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
 (ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
 #+END_SRC
 
-** Post-Load Evaluation
+*** Post-Load Evaluation
 :PROPERTIES:
 :DESCRIPTION: Code to evaluate after ~ivy~ has been loaded.
 :HEADER-ARGS+: :noweb-ref ivy/config
@@ -175,8 +191,8 @@ Do not include TRAMP buffers in Ivy's buffer lists.
             ivy-ignore-buffers))
 #+END_SRC
 
-* Counsel
-#+BEGIN_SRC emacs-lisp :tangle yes
+** Counsel
+#+BEGIN_SRC emacs-lisp
 (use-package counsel
   ;; Load this package after the following packages.
   :after (ivy)
@@ -195,8 +211,8 @@ Do not include TRAMP buffers in Ivy's buffer lists.
   ("M-x" #'counsel-M-x))
 #+END_SRC
 
-* Swiper
-#+BEGIN_SRC emacs-lisp :tangle yes
+** Swiper
+#+BEGIN_SRC emacs-lisp
 (use-package swiper
   ;; Load this package eagerly.
   :demand
@@ -209,8 +225,8 @@ Do not include TRAMP buffers in Ivy's buffer lists.
   ("C-s" #'swiper))
 #+END_SRC
 
-* Ivy Rich
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Ivy Rich
+#+BEGIN_SRC emacs-lisp
 (use-package ivy-rich
   ;; Load this package after the following packages.
   :after (ivy)
@@ -227,7 +243,7 @@ Do not include TRAMP buffers in Ivy's buffer lists.
   <<ivy-rich/config>>)
 #+END_SRC
 
-** Variable Customizations
+*** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref ivy-rich/custom
 :END:
@@ -240,7 +256,7 @@ Do not include TRAMP buffers in Ivy's buffer lists.
 (ivy-rich-path-style 'relative "Show paths relative their the project home.")
 #+END_SRC
 
-** Post-Load Evaluation
+*** Post-Load Evaluation
 :PROPERTIES:
 :DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
 :HEADER-ARGS+: :noweb-ref ivy-rich/config
@@ -260,10 +276,4 @@ Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-sw
        ivy-rich--display-transformers-list
        'counsel-projectile-switch-to-buffer
        (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
-#+END_SRC
-
-* Ending Boilerplate                                               :noexport:
-#+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-minibuffer-completion)
-;;; init-minibuffer-completion.el ends here
 #+END_SRC
