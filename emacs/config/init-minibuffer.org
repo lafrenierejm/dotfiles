@@ -62,7 +62,21 @@ Changes made here will be overwritten by changes to that Org file.
 (require 'use-package)
 #+END_SRC
 
-** Load Flx
+** Recursive Minibuffers
+
+Recursive minibuffers allow for more complicated workflows.
+
+#+BEGIN_SRC emacs-lisp
+(setq enable-recursive-minibuffers t)
+#+END_SRC
+
+When recursive minibuffers are possible, it is helpful to keep track of the depth of recursion.
+
+#+BEGIN_SRC emacs-lisp
+(minibuffer-depth-indicate-mode)
+#+END_SRC
+
+** Flx
 ~[[https://github.com/lewang/flx][Flx]]~ provides fuzzy searching algorithms.
 Ivy's fuzzy finding will use Flx's scoring mechanism if Flx is loaded.
 
