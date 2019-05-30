@@ -378,16 +378,6 @@ This is helpful when composing =format=flowed= mail.
   (validate-setq show-trailing-whitespace t))
 #+END_SRC
 
-** Evil mu4e
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-(use-package evil-mu4e
-  ;; Load `evil-mu4e' after the following packages.
-  :after (evil mu4e)
-
-  ;; Load `evil-mu4e' eagerly.
-  :demand)
-#+END_SRC
-
 ** Message
 #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
 (use-package message
