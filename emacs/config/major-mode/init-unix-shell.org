@@ -1,122 +1,134 @@
 #+TITLE: UNIX Shell Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
-#+PROPERTY: header-args+ :tangle no
+#+PROPERTY: HEADER-ARGS+ :noweb yes
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-unix-shell.el --- UNIX shell configuration
+
+;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Version 0.1
+;; Package-Requires: ((general) (use-package))
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<code>>
+
+(provide 'init-unix-shell)
+;;; init-unix-shell.el ends here
+#+END_SRC
 
 * License
-  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
-  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
 
-* About This File
-  This file contains my configuration for working with UNIX shells.
-  This file is written in the [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org-mode Babel]].
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init UNIX Shell is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init UNIX Shell is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-unix-shell.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
 
 * Code
-** Introductory Boilerplate                                        :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no
-     ;;; init-unix-shell.el --- Configuration for UNIX shells
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
 
-     ;;; Commentary:
-     ;; This file is tangled from init-unix-shell.org.
-     ;; Changes made here will be overwritten by changes to that Org-mode file.
+** Dependencies
+#+BEGIN_SRC emacs-lisp
+(require 'use-package)
+#+END_SRC
 
-     ;;; Code:
-   #+END_SRC
+** Sh Script
+#+BEGIN_SRC emacs-lisp
+(use-package sh-script
+  ;; Evaluate the following code before everything except `:disabled'.
+  :preface
+  <<sh-script/preface>>
 
-** Specify Dependencies
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'use-package)
-   #+END_SRC
+  ;; Evaluate the following code after loading `shell-script-mode'.
+  :config
+  <<sh-script/config>>)
+#+END_SRC
 
-** Load ~sh-script~
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package sh-script
-       ;; Evaluate the following code before everything except `:disabled'.
-       :preface
-       <<sh-script/preface>>
+*** Pre-Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref sh-script/preface
+:END:
 
-       ;; This package is included with Emacs, so it does not need to be downloaded separately.
-       :straight nil
+Describe a regexp that matches Zsh dotfile filenames.
 
-       ;; Establish deferred binding within `auto-mode-alist'.
-       :mode
-       <<sh-script/mode>>
+#+NAME: rx-zsh-dotfile
+#+BEGIN_SRC emacs-lisp
+(defconst init-unix-shell/zsh-dotfile-regexp
+  (rx "/.z"
+      (one-or-more (not (any ".")))
+      string-end)
+  "Regular expression matching Zsh dotfile filenames.")
+#+END_SRC
 
-       ;; Evaluate the following code after loading `shell-script-mode'.
-       :config
-       <<sh-script/config>>)
-   #+END_SRC
+Describe a regexp that matches Zsh script filenames.
 
-*** Pre-Evaluation Configuration (~:preface~)
-    Define a list of regexps that match Zsh dotfiles and script filenames.
+#+NAME: rx-zsh-script
+#+BEGIN_SRC emacs-lisp
+(defconst init-unix-shell/zsh-script-regexp
+  (rx ".zsh" string-end)
+  "Regular expression matching Zsh script filenames.")
+#+END_SRC
 
-    #+HEADER: :noweb-ref sh-script/preface
-    #+HEADER: :noweb no-export
-    #+BEGIN_SRC emacs-lisp :noweb no-export
-      (defconst init-unix-shell/regexps-zsh
-        (list '<<rx-zsh-dotfile()>>
-              '<<rx-zsh-script()>>)
-        "A list of regexps describing known Zsh filenames.")
-   #+END_SRC
+Define a list of regexps that match Zsh dotfiles and script filenames.
 
-**** Regexp for Zsh Dotfiles
-     Describe a regexp that matches Zsh dotfile filenames.
+#+NAME: sh-script/preface
+#+BEGIN_SRC emacs-lisp
+(defconst init-unix-shell/regexps-zsh
+  (list 'init-unix-shell/zsh-dotfile-regexp
+        'init-unix-shell/zsh-script-regexp
+  "A list of regexps describing known Zsh filenames.")
+#+END_SRC
 
-     #+NAME: rx-zsh-dotfile
-     #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp
-       (rx "/.z"
-           (one-or-more (not (any ".")))
-           string-end)
-     #+END_SRC
-
-**** Regexp for Zsh Scripts
-     Describe a regexp that matches Zsh script filenames.
-
-     #+NAME: rx-zsh-script
-     #+HEADER: :results value scalar
-     #+BEGIN_SRC emacs-lisp
-       (rx ".zsh" string-end)
-     #+END_SRC
-
-*** Deferred Binding within ~auto-mode-alist~ (~:mode~)
-    Create a list of cons cells whose keys are regexps matching filenames and whose values are the function that enables ~shell-script-mode~.
-
-    #+HEADER: :noweb no-export
-    #+HEADER: :noweb-ref sh-script/mode
-    #+BEGIN_SRC emacs-lisp
-      ((<<rx-zsh-dotfile()>> . sh-script-mode)
-       (<<rx-zsh-script()>> . sh-script-mode))
-    #+END_SRC
-
-*** Post-Load Evaluation (~:config~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref sh-script/config
-    :END:
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref sh-script/config
+:END:
 
 **** Set Shell Type
-     First define a function that sets the shell type to Zsh when working with a Zsh file.
+First define a function that sets the shell type to Zsh when working with a Zsh file.
 
-     #+BEGIN_SRC emacs-lisp
-       (defun init-unix-shell/set-shell-type ()
-         "Set the shell type based on variable `buffer-file-name'."
-         ;; Loop over the list of Zsh filenames.
-         (dolist (regexp init-unix-shell/regexps-zsh)
-           ;; If the regexp matches the name of the file the buffer is visiting...
-           (when (string-match regexp buffer-file-name)
-             ;; Then set the shell type to Zsh.
-             (sh-set-shell "zsh"))))
-     #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(defun init-unix-shell/set-shell-type ()
+  "Set the shell type based on variable `buffer-file-name'."
+  ;; Loop over the list of Zsh filenames.
+  (dolist (regexp init-unix-shell/regexps-zsh)
+    ;; If the regexp matches the name of the file the buffer is visiting...
+    (when (string-match regexp buffer-file-name)
+      ;; Then set the shell type to Zsh.
+      (sh-set-shell "zsh"))))
+#+END_SRC
 
-    Then evaluate the function on a hook on ~shell-script-mode~.
+Then evaluate the function on a hook on ~shell-script-mode~.
 
-    #+BEGIN_SRC emacs-lisp
-      (add-hook 'shell-script-mode #'init-unix-shell/set-shell-type)
-    #+END_SRC
-
-** Ending Boilerplate                                              :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-unix-shell)
-     ;;; init-unix-shell.el ends here
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(add-hook 'shell-script-mode #'init-unix-shell/set-shell-type)
+#+END_SRC
