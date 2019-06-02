@@ -1,53 +1,71 @@
 #+TITLE: Completion Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :tangle no
+#+PROPERTY: header-args+ :noweb yes
 
-* Introductory Boilerplate                                         :noexport:
-#+HEADER: :comments no
-#+HEADER: :padline no
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-completion.el --- Completion configuration.
+;;; init-completion.el --- Completion configuration
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
 ;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
-;; Keywords: convenience
-;; Version 1.0
-;; Package-Requires: ((use-package))
+;; Version 0.1
+;; Package-Requires: ((general) (use-package))
 
-;; This file is not part of GNU Emacs.
-
-;; Init Completion is free software: you can redistribute it and/or modify it
-;; under the terms of the GNU General Public License as published by the Free
-;; Software Foundation, either version 3 of the License, or (at your option) any
-;; later version.
-
-;; Init Completion is distributed in the hope that it will be useful, but
-;; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-;; more details.
-
-;; You should have received a copy of the GNU General Public License along with
-;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+;; <<license>>
 
 ;;; Commentary:
-
-;; This file is tangled from init-comint.org.  Changes made here will
-;; be overwritten by changes to that Org file.
+;; <<commentary>>
 
 ;;; Code:
+<<code>>
+
+(provide 'init-completion)
+;;; init-completion.el ends here
 #+END_SRC
 
-* Dependencies                                                     :noexport:
-#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Completion is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Completion is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-completion.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies
+#+BEGIN_SRC emacs-lisp
+(require 'diminish)
 (require 'use-package)
 #+END_SRC
 
-* Load Company
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** Company
+#+BEGIN_SRC emacs-lisp
 (use-package company
-  ;; Eagerly load this package.
+  ;; Load this package eagerly.
   :demand
 
   ;; Do not modify the modeline.
@@ -60,7 +78,7 @@
 
 ** Post-Load Evaluation
 :PROPERTIES:
-:DESCRIPTION: Code to be evaluated after ~company~ has been loaded.
+:DESCRIPTION: Code to be evaluated after Company has been loaded.
 :HEADER-ARGS+: :noweb-ref company/config
 :END:
 
@@ -68,10 +86,4 @@ Enable ~company-mode~ globally.
 
 #+BEGIN_SRC emacs-lisp
 (global-company-mode)
-#+END_SRC
-
-* Ending Boilerplate                                               :noexport:
-#+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-completion)
-;;; init-completion.el ends here
 #+END_SRC
