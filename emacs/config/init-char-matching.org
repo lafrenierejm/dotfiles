@@ -11,7 +11,7 @@
 ;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
 ;; Keywords:
 ;; Version: 1.0
-;; Package-Requires: ((derived) (general) (use-package))
+;; Package-Requires: ((general) (use-package))
 
 ;; <<license>>
 
@@ -60,35 +60,9 @@ Changes made here will be overwritten by changes to that Org file.
 
 ** Dependencies
 #+BEGIN_SRC emacs-lisp
-(require 'derived)
 (require 'diminish)
 (require 'general)
 (require 'use-package)
-#+END_SRC
-
-** Lisp Modes
-
-It is desirable to have slightly different character matching behavior when editing Lisps.
-The following is a list of the Lisp modes I edit in.
-
-#+BEGIN_SRC emacs-lisp
-(defconst init-char-matching/lisp-major-modes
-  '(cider-repl-mode
-    clojure-mode
-    emacs-lisp-mode
-    ielm-mode
-    lisp-mode
-    minibuffer-inactive-mode
-    scheme-mode)
-  "A list of Lisp major modes.")
-#+END_SRC
-
-And the above modes' hooks:
-
-#+BEGIN_SRC emacs-lisp
-(defconst init-char-matching/lisp-major-mode-hooks
-  (mapcar #'derived-mode-hook-name init-char-matching/lisp-major-modes)
-  "A list of Lisp major mode hooks.")
 #+END_SRC
 
 ** Smartparens
@@ -141,20 +115,8 @@ Smartparens Config configures Smartparens for various programming languages.
 
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens-config
-
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
-
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref smartparens-config/config
-:END:
-
-Remove the single quote (='=) from the list of auto-paired character in Lisps.
-
-#+BEGIN_SRC emacs-lisp
-(sp-local-pair init-char-matching/lisp-major-modes "'" nil :actions :rem)
 #+END_SRC
 
 ** Evil Cleverparens
@@ -168,40 +130,9 @@ Remove the single quote (='=) from the list of auto-paired character in Lisps.
   ;; Inform the bytecode compiler of the following functions.
   :commands (init-char-matching/evil-move-beyond-eol)
 
-  ;; Add the following autoloading hooks.
-  :ghook
-  <<evil-cleverparens/ghook>>
-
-  ;; Add the following non-autoloading hooks.
-  :gfhook
-  <<evil-cleverparens/gfhook>>
-
   ;; Evaluate the following code after loading this package.
   :config
   <<evil-cleverparens/config>>)
-   #+END_SRC
-
-*** Autoloading Hooks
-:PROPERTIES:
-:DESCRIPTION: Add auto-loading hooks related to ~evil-cleverparens~.
-:HEADER-ARGS+: :noweb-ref evil-cleverparens/ghook
-:END:
-
-Enable ~evil-cleverparens-mode~ for Lisps.
-
-#+BEGIN_SRC emacs-lisp
-(init-char-matching/lisp-major-mode-hooks #'evil-cleverparens-mode)
-#+END_SRC
-
-*** Non-Autoloading Hooks
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil-cleverparens/gfhook
-:END:
-
-Let the cursor move past the end of lines in Lisp source code.
-
-#+BEGIN_SRC emacs-lisp
-(init-char-matching/lisp-major-mode-hooks #'init-char-matching/evil-move-beyond-eol)
 #+END_SRC
 
 *** Post-Load Evaluation

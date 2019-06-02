@@ -1,0 +1,206 @@
+#+TITLE: Configuration for S Expression-Based Language
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: HEADER-ARGS+ :noweb yes
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-prog-lisp.el --- Configuration for sexp-based languages
+
+;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+
+;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
+;; Keywords: languages
+;; Version 1.0
+;; Package-Requires: ((derived) (general) (use-package))
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<code>>
+
+(provide 'init-prog-lisp)
+;;; init-prog-lisp.el ends here
+#+END_SRC
+
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Prog Lisp is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Prog Lisp is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-prog-lisp.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies
+#+BEGIN_SRC emacs-lisp
+(require 'derived)
+(require 'general)
+(require 'init-char-matching)
+(require 'use-package)
+#+END_SRC
+
+** Lisp Modes
+
+It is desirable to have slightly different character matching behavior when editing Lisps.
+The following is a list of the Lisp modes I edit in.
+
+#+BEGIN_SRC emacs-lisp
+(defconst init-prog-lisp/major-modes
+  '(cider-repl-mode
+    clojure-mode
+    emacs-lisp-mode
+    ielm-mode
+    lisp-mode
+    minibuffer-inactive-mode
+    scheme-mode)
+  "A list of Lisp major modes.")
+#+END_SRC
+
+And the above modes' hooks:
+
+#+BEGIN_SRC emacs-lisp
+(defconst init-prog-lisp/major-mode-hooks
+  (mapcar #'derived-mode-hook-name init-prog-lisp/major-modes)
+  "A list of Lisp major mode hooks.")
+#+END_SRC
+
+** Indent Tabs Mode
+For sexp-based languages it is desirable to disallow tabs for line indentation.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-prog-lisp/use-spaces ()
+  "Only use spaces (as opposed to tabs) for indentation."
+  (setq indent-tabs-mode nil))
+#+END_SRC
+
+Add above function to all Lisp major modes' hooks.
+
+#+BEGIN_SRC emacs-lisp
+(dolist (hook init-prog-lisp/major-mode-hooks)
+  (add-hook hook #'init-prog-lisp/use-spaces))
+#+END_SRC
+
+** Smartparens
+*** Smartparens Config
+Smartparens Config's primary configuration is in [[file:init-char-matching.org][Init Char Matching]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens-config
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<smartparens-config/config>>)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref smartparens-config/config
+:END:
+
+Lisps use the single quote (='=) for quoting, where it is not paired with a closing character.
+
+#+BEGIN_SRC emacs-lisp
+(sp-local-pair init-prog-lisp/major-modes "'" nil :actions :rem)
+#+END_SRC
+
+*** Evil Cleverparens
+Evil Cleverparens's primary configuration is in [[file:init-char-matching.org][Init Char Matching]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil-cleverparens
+  ;; Add the following autoloading hooks.
+  :ghook
+  <<evil-cleverparens/ghook>>
+
+  ;; Add the following non-autoloading hooks.
+  :gfhook
+  <<evil-cleverparens/gfhook>>)
+#+END_SRC
+
+**** Autoloading Hooks
+:PROPERTIES:
+:DESCRIPTION: Add auto-loading hooks related to Evil Cleverparens.
+:HEADER-ARGS+: :noweb-ref evil-cleverparens/ghook
+:END:
+
+Enable ~evil-cleverparens-mode~ for Lisps.
+
+#+BEGIN_SRC emacs-lisp
+(init-prog-lisp/major-mode-hooks #'evil-cleverparens-mode)
+#+END_SRC
+
+**** Non-Autoloading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref evil-cleverparens/gfhook
+:END:
+
+Let the cursor move past the end of lines in Lisp source code.
+
+#+BEGIN_SRC emacs-lisp
+(init-prog-lisp/major-mode-hooks #'init-prog-lisp/evil-move-beyond-eol)
+#+END_SRC
+
+** Lisp-1
+Lisp-1 languages have a single namespace for all names.
+
+*** Geiser Guile
+#+BEGIN_SRC emacs-lisp
+(use-package geiser-guile
+  :config
+  (add-to-list 'geiser-guile-load-path
+               "~/source/org.gnu.savannah.git/guix/"))
+#+END_SRC
+
+** Lisp-2
+Lisp-2 languages have a separate namespace for functions.
+
+*** Superior Lisp Interaction Mode (SLIME)
+#+BEGIN_SRC emacs-lisp
+(use-package slime
+  :init
+  (defvar init-prog-lisp/slime-extra
+    '(slime-indentation slime-fancy)
+    "The contrib packages for SLIME to load")
+
+  :config
+  (setq slime-lisp-implementations
+        '((sbcl ("sbcl" "--noinform"))))
+  (slime-setup init-prog-lisp/slime-extra))
+#+END_SRC
+
+*** Emacs Lisp
+#+BEGIN_SRC emacs-lisp
+(use-package elisp-mode
+  ;; Add the following keybindings.
+  :general
+  (:keymaps 'emacs-lisp-mode-map
+   "C-x d" #'eval-defun
+   "C-x e" #'eval-last-sexp
+   "C-x k" #'eval-buffer))
+#+END_SRC
