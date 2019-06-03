@@ -102,8 +102,7 @@ For sexp-based languages it is desirable to disallow tabs for line indentation.
 Add above function to all Lisp major modes' hooks.
 
 #+BEGIN_SRC emacs-lisp
-(dolist (hook init-prog-lisp/major-mode-hooks)
-  (add-hook hook #'init-prog-lisp/use-spaces))
+(general-add-hook init-prog-lisp/major-mode-hooks #'init-prog-lisp/use-spaces)
 #+END_SRC
 
 ** Smartparens
