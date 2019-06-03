@@ -105,6 +105,15 @@ Add above function to all Lisp major modes' hooks.
 (general-add-hook init-prog-lisp/major-mode-hooks #'init-prog-lisp/use-spaces)
 #+END_SRC
 
+** Aggressive Indent
+Aggressive Indent provides a minor mode to re-indent code after every change.
+
+#+BEGIN_SRC emacs-lisp
+(use-package aggressive-indent
+  :ghook
+  (init-prog-lisp/major-mode-hooks #'aggressive-indent-mode))
+#+END_SRC
+
 ** Smartparens
 *** Smartparens
 Smartparens Config's primary configuration is in [[file:init-char-matching.org][Init Char Matching]].
