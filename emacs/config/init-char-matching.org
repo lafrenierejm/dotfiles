@@ -21,7 +21,7 @@
 ;;; Code:
 <<code>>
 
-(provide 'init-paren-matching)
+(provide 'init-char-matching)
 ;;; init-char-matching.el ends here
 #+END_SRC
 
@@ -117,34 +117,4 @@ Smartparens Config configures Smartparens for various programming languages.
 (use-package smartparens-config
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
-
-** Evil Cleverparens
-[[https://github.com/luxbock/evil-cleverparens][Llli Pieponnen (luxbock)'s package]] provides an "Evil normal-state minor-mode for editing lisp-like languages".
-
-#+BEGIN_SRC emacs-lisp
-(use-package evil-cleverparens
-  ;; Load this package after the following packages.
-  :after (evil smartparens)
-
-  ;; Inform the bytecode compiler of the following functions.
-  :commands (init-char-matching/evil-move-beyond-eol)
-
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<evil-cleverparens/config>>)
-#+END_SRC
-
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil-cleverparens/config
-:DESCRIPTION: Code to be evaluated after ~evil-cleverparens~ has been loaded.
-:END:
-
-Allow the cursor to move past the end of lines to avoid [[https://github.com/luxbock/evil-cleverparens/issues/29][breaking "certain movement commands"]].
-
-#+BEGIN_SRC emacs-lisp
-(defun init-char-matching/evil-move-beyond-eol ()
-  "Enable EVIL-MOVE-BEYOND-EOL."
-  (setq evil-move-beyond-eol t))
 #+END_SRC

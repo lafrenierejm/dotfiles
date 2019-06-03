@@ -62,7 +62,6 @@ Changes made here will be overwritten by changes to that Org file.
 #+BEGIN_SRC emacs-lisp
 (require 'derived)
 (require 'general)
-(require 'init-char-matching)
 (require 'use-package)
 #+END_SRC
 
@@ -108,19 +107,19 @@ Add above function to all Lisp major modes' hooks.
 #+END_SRC
 
 ** Smartparens
-*** Smartparens Config
+*** Smartparens
 Smartparens Config's primary configuration is in [[file:init-char-matching.org][Init Char Matching]].
 
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens-config
+(use-package smartparens
   ;; Evaluate the following code after loading this package.
   :config
-  <<smartparens-config/config>>)
+  <<smartparens/config>>)
 #+END_SRC
 
 **** Post-Load Evaluation
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref smartparens-config/config
+:HEADER-ARGS+: :noweb-ref smartparens/config
 :END:
 
 Lisps use the single quote (='=) for quoting, where it is not paired with a closing character.
@@ -130,17 +129,28 @@ Lisps use the single quote (='=) for quoting, where it is not paired with a clos
 #+END_SRC
 
 *** Evil Cleverparens
-Evil Cleverparens's primary configuration is in [[file:init-char-matching.org][Init Char Matching]].
+Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "Evil normal-state minor-mode for editing lisp-like languages".
 
 #+BEGIN_SRC emacs-lisp
 (use-package evil-cleverparens
+  ;; Delay loading this package until after the following packages.
+  :after
+  (evil smartparens)
+
+  ;; Inform the byte compiler of the following functions.
+  :commands
+  (init-prog-lisp/evil-move-beyond-eol)
+
   ;; Add the following autoloading hooks.
   :ghook
   <<evil-cleverparens/ghook>>
 
   ;; Add the following non-autoloading hooks.
   :gfhook
-  <<evil-cleverparens/gfhook>>)
+  <<evil-cleverparens/gfhook>>
+
+  :config
+  <<evil-cleverparens/config>>)
 #+END_SRC
 
 **** Autoloading Hooks
@@ -164,6 +174,17 @@ Let the cursor move past the end of lines in Lisp source code.
 
 #+BEGIN_SRC emacs-lisp
 (init-prog-lisp/major-mode-hooks #'init-prog-lisp/evil-move-beyond-eol)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref evil-cleverparens/config
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defun init-prog-lisp/evil-move-beyond-eol ()
+  "Allow the cursor to move beyond the end of the line."
+  (setq evil-move-beyond-eol t))
 #+END_SRC
 
 ** Lisp-1
