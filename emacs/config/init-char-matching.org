@@ -76,15 +76,8 @@ Changes made here will be overwritten by changes to that Org file.
   ;; Hide this package's lighter.
   :diminish
 
-  ;; Inform the bytecode compiler of the following functions.
-  :commands (smartparens-global-mode)
-
   :custom
-  <<smartparens/custom>>
-
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<smartparens/config>>)
+  <<smartparens/custom>>)
 #+END_SRC
 
 *** Variable Customization
@@ -98,16 +91,10 @@ Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
 (sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
 #+END_SRC
 
-*** Post-Load Evaluation
-:PROPERTIES:
-:DESCRIPTION: Code to be evaluated after Smartparens has been loaded.
-:HEADER-ARGS+: :noweb-ref smartparens/config
-:END:
-
 Enable ~smartparens-mode~ globally.
 
 #+BEGIN_SRC emacs-lisp
-(smartparens-global-mode +1)
+(smartparens-global-mode t)
 #+END_SRC
 
 ** Smartparens Config
@@ -115,6 +102,9 @@ Smartparens Config configures Smartparens for various programming languages.
 
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens-config
+  ;; Load this package after the following packages.
+  :after smartparens
+
   ;; Load this package eagerly.
   :demand)
 #+END_SRC
