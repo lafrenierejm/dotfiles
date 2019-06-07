@@ -230,5 +230,5 @@ Lisp-2 languages have a separate namespace for functions.
   (:keymaps 'emacs-lisp-mode-map
    "C-x d" #'eval-defun
    "C-x e" #'eval-last-sexp
-   "C-x k" #'eval-buffer))
+   "C-c C-c" #'eval-buffer))
 #+END_SRC
