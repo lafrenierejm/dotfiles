@@ -143,11 +143,10 @@ Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "E
 (use-package evil-cleverparens
   ;; Delay loading this package until after the following packages.
   :after
-  (evil smartparens)
+  (:all evil smartparens)
 
   ;; Inform the byte compiler of the following functions.
-  :commands
-  (init-prog-lisp/evil-move-beyond-eol)
+  :functions init-prog-lisp/evil-move-beyond-eol
 
   ;; Add the following autoloading hooks.
   :ghook
