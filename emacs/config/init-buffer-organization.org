@@ -1,134 +1,145 @@
-#+TITLE: Projectile Configuration
+#+TITLE: Buffer Organization
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :comments link
-#+PROPERTY: header-args+ :tangle no
+#+PROPERTY: HEADER-ARGS+ :noweb yes
 
-* License                                                          :noexport:
-  All code sections in this file are licensed under [[https://gitlab.com/lafrenierejm/dotfiles/blob/master/LICENSE][an ISC license]] except when otherwise noted.
-  All prose in this file is licensed under [[https://creativecommons.org/licenses/by/4.0/][CC BY 4.0]] except when otherwise noted.
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-buffer-organization.el --- Organize Emacs buffers
 
-* About This File
-  This file loads and configures Emacs's built-in projectile package.
-  This file is written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style using [[http://orgmode.org/worg/org-contrib/babel/][Org mode Babel]].
+;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+
+;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
+;; Keywords: convenience
+;; Version 1.0
+;; Package-Requires: ((general) (use-package))
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<code>>
+
+(provide 'init-buffer-organization)
+;;; init-buffer-organization.el ends here
+#+END_SRC
+
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Buffer Organization is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Buffer Organization is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-buffer-organization.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
 
 * Code
-** Introductory Boilerplate                                        :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
-     ;;; init-projectile.el --- Configuration for projectile
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
 
-     ;;; Commentary:
-     ;; This file is tangled from init-projectile.org.
-     ;; Changes made here will be overwritten by changes to that Org file.
+** Dependencies
+#+BEGIN_SRC emacs-lisp
+(require 'general)
+(require 'use-package)
+#+END_SRC
 
-     ;;; Code:
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Add the following keybindings.
+  :general
+  <<projectile/general>>
+
+  ;; Customize the following variables.
+  :custom
+  <<projectile/custom>>)
    #+END_SRC
 
-** Specify Dependencies                                            :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes :padline no :export no
-     (require 'general)
-     (require 'use-package)
-   #+END_SRC
+*** Auto-Loading Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref projectile/general
+:END:
 
-** Load Projectile
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export
-     (use-package projectile
-       ;; Load this package eagerly.
-       :demand
-
-       ;; Add the following keybindings.
-       :general
-       <<projectile/general>>
-
-       ;; Customize the following variables.
-       :custom
-       <<projectile/custom>>
-
-       :init
-       <<projectile/init>>)
-   #+END_SRC
-
-*** Auto-Loading Keybindings (~:general~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref projectile/general
-    :END:
-
-    #+BEGIN_SRC emacs-lisp
-      (:keymaps 'projectile-mode-map
-		"C-c p" 'projectile-command-map)
-    #+END_SRC
-
-*** Pre-Load Evaluation (~:init~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref projectile/init
-    :END:
-
-    Enable ~projectile-mode~ globally.
-
-    #+BEGIN_SRC emacs-lisp
-      (projectile-mode +1)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(:keymaps 'projectile-mode-map
+          "C-c p" 'projectile-command-map)
+#+END_SRC
 
 *** Variable Customizations (~:custom~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref projectile/custom
-    :END:
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref projectile/custom
+:END:
 
-    When switching projects, default to opening the ~vc-dir~ at the root of the project.
+Enable ~projectile-mode~ globally.
 
-    #+BEGIN_SRC emacs-lisp
-      (projectile-switch-project-action #'projectile-vc)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(projectile-mode t)
+#+END_SRC
 
-** Load Counsel Projectile
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package counsel-projectile
-       :straight
-       (counsel-projectile :type git :host github :repo "ericdanan/counsel-projectile")
+When switching projects, default to opening the ~vc-dir~ at the root of the project.
 
-       ;; Load this package after the following packages.
-       :after (counsel projectile)
+#+BEGIN_SRC emacs-lisp
+(projectile-switch-project-action #'projectile-vc)
+#+END_SRC
 
-       ;; Add the following keybindings.
-       :general
-       (:keymaps 'projectile-mode-map
-		 "C-x C-f" #'counsel-projectile-find-file-dwim
-		 "C-x C-b" #'counsel-projectile-switch-to-buffer
-		 "C-x C-d" #'counsel-projectile-find-dir)
+** Counsel Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-projectile
+  ;; Load this package after the following packages.
+  :after (counsel projectile)
 
-       ;; Customize the following variables.
-       :custom
-       <<counsel-projectile/custom>>
+  ;; Load this package eagerly.
+  :demand
 
-       ;; Evaluate the following code before loading the package.
-       :init
-       <<counsel-projectile/init>>)
-   #+END_SRC
+  ;; Add the following keybindings.
+  :general
+  (:keymaps 'projectile-mode-map
+            "C-x C-f" #'counsel-projectile-find-file-dwim
+            "C-x C-b" #'counsel-projectile-switch-to-buffer
+            "C-x C-d" #'counsel-projectile-find-dir)
 
-*** Variable Customization (~:custom~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref counsel-projectile/custom
-    :END:
+  ;; Customize the following variables.
+  :custom
+  <<counsel-projectile/custom>>)
+#+END_SRC
 
-    When switching projects, default to opening the ~vc-dir~ at the root of the project.
+*** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref counsel-projectile/custom
+:END:
 
-    #+BEGIN_SRC emacs-lisp
-      (counsel-projectile-switch-project-action #'counsel-projectile-switch-project-action-vc)
-    #+END_SRC
+Enable ~counsel-projectile-mode~ globally.
 
-*** Pre-Load Evaluation (~:init~)
-    :PROPERTIES:
-    :HEADER-ARGS+: :noweb-ref counsel-projectile/init
-    :END:
+#+BEGIN_SRC emacs-lisp
+(counsel-projectile-mode t)
+#+END_SRC
 
-    Enable ~counsel-projectile-mode~.
+When switching projects, default to opening the ~vc-dir~ at the root of the project.
 
-    #+BEGIN_SRC emacs-lisp
-      (counsel-projectile-mode)
-    #+END_SRC
-
-** Ending Boilerplate                                              :noexport:
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (provide 'init-projectile)
-     ;;; init-projectile.el ends here
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(counsel-projectile-switch-project-action #'counsel-projectile-switch-project-action-vc)
+#+END_SRC
