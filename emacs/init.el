@@ -43,10 +43,28 @@
 
 (require 'org)
 (defun init/load-directory-recursively (directory)
-  "Tangle, compile, and load the Org-mode files in DIRECTORY."
-  (dolist (org-file (directory-files-recursively directory
-                                                 (rx ".org" string-end)))
-    (org-babel-load-file org-file 'compile-before-loading)))
+  "Tangle, compile, and load the Org files in DIRECTORY."
+  (let ((org-regexp (rx ".org" string-end))
+        (el-extension ".el"))
+    (dolist (org-file
+             (directory-files-recursively directory org-regexp))
+      (let ((el-file (replace-regexp-in-string
+                      org-regexp el-extension org-file)))
+        (if (not (file-exists-p el-file))
+            ;; If the Emacs Lisp file does not exist, tangle the Org file.
+            (org-babel-tangle-file org-file)
+          ;; If the Emacs Lisp file does exist, compare the modification times.
+          (let* ((modify-time (lambda (file)
+                                (float-time
+                                 (file-attribute-modification-time
+                                  (file-attributes file)))))
+                 (org-modify (funcall modify-time org-file))
+                 (el-modify (funcall modify-time el-file)))
+            ;; If the Org file was modified more recently, tangle it.
+            (when (< el-modify org-modify)
+              (org-babel-tangle-file org-file))))
+        ;; Compile and load the tangled file.
+        (byte-compile-file el-file :load)))))
 
 (init/load-directory-recursively "~/.emacs.d/config/")
 
