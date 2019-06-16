@@ -63,6 +63,39 @@ Changes made here will be overwritten by changes to that Org file.
 (require 'use-package)
 #+END_SRC
 
+** Extract Pages
+Define a function to extract specific pages from a PDF file using [[https://www.ghostscript.com/][Ghostscript]] (=gs=).
+The resulting file is as high quality as the source, since the file is never converted but merely truncated.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-pdf/extract-pages (from to input &optional output)
+  "Extract pages [FROM,TO] from file INPUT and save as OUTPUT.
+
+If OUTPUT is not provided, the output file is named \"{INPUT}_p{FROM}-p{TO}\"."
+  (interactive
+   (let* ((input (read-file-name "Input file: " nil nil t))
+          (from (read-number "From page: "))
+          (to (read-number "To page (`nil' for last page): "))
+          (output (read-file-name
+                   "Output file: "
+                   nil
+                   (format "%s_p%d-p%d" (file-name-base input) from to))))
+     (list from to input output)))
+  (start-process
+   "gs"                              ; name
+   "gs"                              ; buffer
+   "gs"                              ; program
+   ;; arguments
+   "-sDEVICE=pdfwrite"
+   "-dNOPAUSE"
+   "-dBATCH"
+   "-dSAFER"
+   (format "-dFirstPage=%d" from)
+   (format "-dLastPage=%d" to)
+   (format "-sOutputFile=%s" output)
+   input))
+#+END_SRC
+
 ** PDF Tools
 #+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
