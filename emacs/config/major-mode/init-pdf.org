@@ -1,0 +1,136 @@
+#+TITLE: PDF Configuration
+#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-pdf.el --- Configuration for Portable Document Format (PDF)
+
+;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+
+;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
+;; Keywords: convenience
+;; Version 1.0
+;; Package-Requires: ((general) (use-package))
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<code>>
+
+(provide 'init-pdf)
+;;; init-pdf.el ends here
+#+END_SRC
+
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init PDF is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init PDF is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-pdf.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies
+#+BEGIN_SRC emacs-lisp
+(require 'general)
+(require 'use-package)
+#+END_SRC
+
+** PDF Tools
+#+BEGIN_SRC emacs-lisp
+(use-package pdf-tools
+  ;; Load this package after the following packages.
+  :after (autorevert)
+
+  ;; Establish deferred binding within `auto-mode-alist'.
+  :mode
+  <<pdf-tools/mode>>
+
+  ;; Create key maps and, if necessary, autoloads.
+  :general
+  <<pdf-tools/general>>
+
+  ;; Add the following non-autoloading hooks.
+  :gfhook
+  <<pdf-tools/gfhook>>)
+#+END_SRC
+
+*** Filename Mapping
+Create an alist whose keys are regexps matching filenames and whose values are the function to enable ~pdf-view-mode~.
+
+#+HEADER: :noweb-ref pdf-tools/mode
+#+BEGIN_SRC emacs-lisp :tangle no :noweb yes
+((<<rx-pdf-file()>> . pdf-view-mode))
+#+END_SRC
+
+**** ~rx~ Sexps
+Describe a regexp that matches PDF files.
+
+#+NAME: rx-pdf-file
+#+HEADER: :results value scalar
+#+BEGIN_SRC emacs-lisp :tangle no
+(rx ".pdf" string-end)
+#+END_SRC
+
+*** Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref pdf-tools/general
+:END:
+
+#+NAME: pdf-view-mode-map
+| Key | Action                      |
+|-----+-----------------------------|
+| =h= | scroll left                 |
+| =j= | scroll down                 |
+| =k= | scroll up                   |
+| =l= | scroll right                |
+| =q= | do nothing                  |
+| =y= | yank selection to clipboard |
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(:keymaps 'pdf-view-mode-map
+          ("h" . left-char)
+          ("j" . pdf-view-next-line-or-next-page)
+          ("k" . pdf-view-previous-line-or-previous-page)
+          ("l" . right-char)
+          ("q" . nil)
+          ("y" . kill-region))
+#+END_SRC
+
+*** Non-Autoloading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref pdf-tools/gfhook
+:END:
+
+Because PDF Tools is used to render binary files, its buffers should automatically refresh when the contents of their corresponding files are changed.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+('pdf-tools-mode-hook #'auto-revert-mode)
+#+END_SRC
