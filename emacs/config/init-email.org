@@ -181,6 +181,14 @@ Use Unicode box-drawing characters for the prefixes.
 (mu4e-headers-default-prefix '("-" . "─"))
 #+END_SRC
 
+*** Mail Directory
+Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
+
+#+BEGIN_SRC emacs-lisp
+(mu4e-maildir (or (getenv "XDG_MAIL_DIR")
+                  (getenv "MAILDIR")))
+#+END_SRC
+
 ** Non-Autoloading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/gfhook
@@ -216,14 +224,6 @@ If isync is installed, use =mbsync= to fetch all mail and rename filenames when 
 (when (executable-find "mbsync")
   (validate-setq mu4e-get-mail-command "mbsync -a")
   (validate-setq mu4e-change-filenames-when-moving t))
-#+END_SRC
-
-*** Mail Directory
-Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
-
-#+BEGIN_SRC emacs-lisp
-(when-let ((maildir (getenv "MAILDIR")))
-  (validate-setq mu4e-maildir maildir))
 #+END_SRC
 
 *** Sending Mail
