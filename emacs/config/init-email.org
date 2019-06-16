@@ -1,52 +1,71 @@
 #+TITLE: Email Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :tangle no
 
-* Introductory Boilerplate
-#+BEGIN_SRC emacs-lisp :tangle yes :padline no
-;;; init-email.el --- Email-related configuration.
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init-email.el --- Configuration for email
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
-;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
 ;; Keywords: mail
 ;; Version 1.0
 ;; Package-Requires: ((general) (use-package))
 
-;; This file is not part of GNU Emacs.
-
-;; Init Email is free software: you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free Software
-;; Foundation, either version 3 of the License, or (at your option) any later
-;; version.
-
-;; Init Email is distributed in the hope that it will be useful, but WITHOUT ANY
-;; WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-;; A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License along with
-;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+;; <<license>>
 
 ;;; Commentary:
-;; This file is tangled from init-email.org.  Changes made here will be
-;; overwritten by changes to that Org-mode file.
+;; <<commentary>>
 
 ;;; Code:
+<<code>>
+
+(provide 'init-email)
+;;; init-email.el ends here
 #+END_SRC
 
-* Dependencies
-#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Email is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Email is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-email.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies
+#+BEGIN_SRC emacs-lisp
 (require 'general)
 (require 'use-package)
 #+END_SRC
 
-* mu4e
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+** mu4e
+#+BEGIN_SRC emacs-lisp
 (use-package mu4e
-  ;; This package is included with the binary package mu.
-  :straight nil
-
   ;; Load `mu4e' after the following packages.
   :after (flyspell ispell s validate)
 
@@ -73,7 +92,7 @@
   <<mu4e/config>>)
 #+END_SRC
 
-** Variable Customizations
+*** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/custom
 :END:
@@ -84,7 +103,7 @@ Use ISO-esque timestamps for ~:human-date~.
 (mu4e-headers-date-format "%Y-%m-%d %H:%M")
 #+END_SRC
 
-*** Account Contexts
+**** Account Contexts
 Do not prompt for the context when starting mu4e.
 Being in the proper context is unnecessary except when composing messages.
 
@@ -98,7 +117,7 @@ If no context matches (using its match function) when beginning to compose a mes
 (mu4e-compose-context-policy 'ask)
 #+END_SRC
 
-*** Fetching and Indexing
+**** Fetching and Indexing
 Display the update status in the modeline.
 This helps keep track of the current update status.
 
@@ -113,7 +132,7 @@ These messages are generally uninteresting.
 (mu4e-hide-index-messages t "Do not display messages related to updating or indexing.")
 #+END_SRC
 
-*** Sending
+**** Sending
 #+BEGIN_SRC emacs-lisp
 (message-sendmail-envelope-from 'header "Use the value from the mail's header as the FROM field.")
 #+END_SRC
@@ -122,7 +141,7 @@ These messages are generally uninteresting.
 (message-kill-buffer-on-exit t "Close the message buffer after sending its message.")
 #+END_SRC
 
-*** Composing
+**** Composing
 Use =[[https://joeclark.org/ffaq.html][format=flowed]]= for nicer viewing of plaintext mail.
 
 #+BEGIN_SRC emacs-lisp
@@ -141,7 +160,7 @@ If a signature is set, automatically include it.
 (mu4e-compose-signature-auto-include t "Automatically include signatures.")
 #+END_SRC
 
-*** Message View
+**** Message View
 Show senders' full addresses.
 
 #+BEGIN_SRC emacs-lisp
@@ -154,7 +173,7 @@ View messages in their own window.
 (mu4e-split-view 'single-window)
 #+END_SRC
 
-*** Header View
+**** Header View
 Display the following fields in the headers buffer:
 - date
 - mailing list
@@ -181,7 +200,7 @@ Use Unicode box-drawing characters for the prefixes.
 (mu4e-headers-default-prefix '("-" . "─"))
 #+END_SRC
 
-*** Mail Directory
+**** Mail Directory
 Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
 
 #+BEGIN_SRC emacs-lisp
@@ -189,7 +208,7 @@ Use the value of ~$MAILDIR~ as the path to the mail directory if that environmen
                   (getenv "MAILDIR")))
 #+END_SRC
 
-** Non-Autoloading Hooks
+*** Non-Autoloading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/gfhook
 :END:
@@ -212,12 +231,12 @@ Specify the SMTP account to use before sending mail.
 ('message-send-mail #'init-email/mu4e-choose-msmtp-account)
 #+END_SRC
 
-** Post-Load Execution (~:config~)
+*** Post-Load Execution
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/config
 :END:
 
-*** Fetching and Indexing
+**** Fetching and Indexing
 If isync is installed, use =mbsync= to fetch all mail and rename filenames when moving mail.
 
 #+BEGIN_SRC emacs-lisp
@@ -226,7 +245,7 @@ If isync is installed, use =mbsync= to fetch all mail and rename filenames when 
   (validate-setq mu4e-change-filenames-when-moving t))
 #+END_SRC
 
-*** Sending Mail
+**** Sending Mail
 Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
 
 #+BEGIN_SRC emacs-lisp :noweb yes
@@ -236,7 +255,7 @@ Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
        <<mu4e/config/sending/smtpmail-send-it>>))
 #+END_SRC
 
-**** =msmtp= Configuration
+***** =msmtp= Configuration
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/config/sending/msmtp
 :END:
@@ -262,7 +281,7 @@ Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
        message-sendmail-extra-arguments (list '"-a" account-name)))))
 #+END_SRC
 
-**** ~smtpmail-send-it~ Configuration
+***** ~smtpmail-send-it~ Configuration
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/config/sending/smtpmail-send-it
 :END:
@@ -279,7 +298,7 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
  smtpmail-stream-type 'starttls)
 #+END_SRC
 
-*** Multiple Accounts
+**** Multiple Accounts
 #+BEGIN_SRC emacs-lisp
 (validate-setq
  mu4e-contexts `( ,(make-mu4e-context
@@ -353,7 +372,7 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
                                                      (mu4e-message-field msg :maildir)))))))
 #+END_SRC
 
-**** My Addresses
+***** My Addresses
 mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
 In such cases, display the To address(es).
 
@@ -367,7 +386,7 @@ In such cases, display the To address(es).
                                "lafrenierejm@utdallas.edu"))
 #+END_SRC
 
-*** Composing Mail
+**** Composing Mail
 
 Show trailing whitespace.
 This is helpful when composing =format=flowed= mail.
@@ -379,11 +398,8 @@ This is helpful when composing =format=flowed= mail.
 #+END_SRC
 
 ** Message
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+#+BEGIN_SRC emacs-lisp
 (use-package message
-  ;; Use the built-in package.
-  :straight nil
-
   ;; Load this package eagerly.
   :demand
 
@@ -455,11 +471,8 @@ Despite the attachment code never having (publicly) been a part of mbork/message
 #+END_SRC
 
 ** Mml
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+#+BEGIN_SRC emacs-lisp
 (use-package mml
-  ;; This package is built-in.
-  :straight nil
-
   ;; Load this package eagerly.
   :demand
 
@@ -496,9 +509,3 @@ Borkowsi provided code to do so in [[http://mbork.pl/2015-11-28_Fixing_mml-attac
 
 The license of the code hosted on Borkowsi's blog does not appear to be specified anywhere in the blog.
 I have reached out to Borkowski asking how he would like the code to be licensed.
-
-* Ending Boilerplate
-#+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-email)
-;;; init-email.el ends here
-#+END_SRC
