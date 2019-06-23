@@ -228,7 +228,5 @@ Lisp-2 languages have a separate namespace for functions.
   ;; Add the following keybindings.
   :general
   (:keymaps 'emacs-lisp-mode-map
-   "C-x d" #'eval-defun
-   "C-x e" #'eval-last-sexp
    "C-c C-c" #'eval-buffer))
 #+END_SRC
