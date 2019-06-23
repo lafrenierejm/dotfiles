@@ -133,7 +133,7 @@ Smartparens Config's primary configuration is in [[file:init-char-matching.org][
 Lisps use the single quote (='=) for quoting, where it is not paired with a closing character.
 
 #+BEGIN_SRC emacs-lisp
-(sp-local-pair init-prog-lisp/major-modes "'" nil :actions :rem)
+(sp-local-pair init-prog-lisp/major-modes "'" nil :actions nil)
 #+END_SRC
 
 *** Evil Cleverparens
