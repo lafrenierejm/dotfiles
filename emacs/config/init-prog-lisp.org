@@ -201,8 +201,11 @@ Lisp-1 languages have a single namespace for all names.
 #+BEGIN_SRC emacs-lisp
 (use-package geiser-guile
   :config
-  (add-to-list 'geiser-guile-load-path
-               "~/source/org.gnu.savannah.git/guix/"))
+  (when-let ((path (expand-file-name
+                    "org.gnu.savannah.git/guix/"
+                    (or (getenv "XDG_SOURCE_DIR") "~/source")))
+             ((file-directory-p path)))
+    (add-to-list 'geiser-guile-load-path path)))
 #+END_SRC
 
 ** Lisp-2
