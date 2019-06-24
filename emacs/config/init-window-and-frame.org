@@ -63,6 +63,22 @@ Changes made here will be overwritten by changes to that Org file.
 (require 'use-package)
 #+END_SRC
 
+** Minions
+#+BEGIN_QUOTE
+A minor-mode menu for the mode line.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package minions
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following variable customizations.
+  :custom
+  (minions-mode-line-lighter "…")
+  (minions-mode t "Enable `minions-mode' globally."))
+#+END_SRC
+
 ** EXWM
 From the package's README:
 #+BEGIN_QUOTE
