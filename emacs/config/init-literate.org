@@ -47,6 +47,20 @@ If not, see <https://www.gnu.org/licenses/>.
 (require 'general)
 (require 'use-package)
 #+END_SRC
+** Polymode
+From Polymode's [[https://polymode.github.io/][homepage]]:
+#+BEGIN_QUOTE
+Polymode is a framework for multiple major modes (MMM) inside a single Emacs buffer.
+It is fast and has a simple but flexible object oriented design.
+Creating new polymodes normally takes a few lines of code.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package polymode
+  ;; Load this package eagerly.
+  :demand)
+#+END_SRC
+
 ** Org
 *** Org
 #+BEGIN_SRC emacs-lisp
@@ -126,6 +140,15 @@ Set the workflow states.
                                "DELEGATED" "DONE(d!/!)" "|"
                                "CANCELED")))
 #+END_SRC
+*** Poly Org
+Provide Polymode definitions for Org syntax/buffers.
+
+#+BEGIN_SRC emacs-lisp
+(use-package poly-org
+  ;; Load this package eagerly.
+  :demand)
+#+END_SRC
+
 *** Ox
 Ox (Org eXport) allows exporting (publishing) Org-mode documents such as this one.
 
