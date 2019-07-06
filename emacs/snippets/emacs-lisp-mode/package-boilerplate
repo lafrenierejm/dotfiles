@@ -1,0 +1,22 @@
+# -*- mode: snippet; -*-
+# name: emacs-package
+# key: package
+# contributor: Joseph LaFreniere <joseph@lafreniere.xyz>
+# --
+;;; `(concat (file-name-sans-extension (file-name-nondirectory (buffer-file-name))) ".el")` --- Package description  -*- lexical-binding: t; -*-
+
+;; Author: `(concat user-full-name " (" user-login-name ")")`
+;; Keywords: convenience
+;; Version: 0.0.1
+;; Package-Requires: ((general) (use-package))
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<code>>
+
+(provide '`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`)
+;;; `(concat (file-name-sans-extension (file-name-nondirectory (buffer-file-name))) ".el")` ends here
