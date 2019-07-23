@@ -236,7 +236,9 @@ Do not include TRAMP buffers in Ivy's buffer lists.
 
   ;; Perform the following keybindings.
   :general
-  ("C-s" #'swiper))
+  ("C-s" #'swiper-isearch)
+  (:keymaps '(normal movement visual)
+            "/" #'swiper-isearch))
 #+END_SRC
 
 ** Ivy Rich
