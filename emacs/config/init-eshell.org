@@ -468,11 +468,11 @@ Add the following keybindings:
 :END:
 
 #+BEGIN_SRC emacs-lisp
-(eshell-prefer-lisp-functions t "Use built-in commands.")
+(eshell-prefer-lisp-functions nil "Prefer external commands to Lisp functions.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(eshell-prefer-lisp-variables t "Use built-in commands.")
+(eshell-prefer-lisp-variables nil "Prefer environment variables to Lisp variables.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
