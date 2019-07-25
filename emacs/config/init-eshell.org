@@ -845,15 +845,12 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   ;; This package is included in Emacs.
   :straight nil
 
+  ;; Load this package eagerly.
   :demand
 
-  ;; Load `em-cmpl' after the following packages.
-  :after (validate)
-
-  ;; Evaluate the following code after loading `em-cmpl'.
-  :config
-  ;; Use zsh-like completion.
-  (validate-setq eshell-cmpl-cycle-completions nil))
+  ;; Apply the following variable customizations.
+  :custom
+  (setq eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
 #+END_SRC
 
 ** Em Hist
