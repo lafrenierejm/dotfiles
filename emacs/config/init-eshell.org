@@ -673,6 +673,10 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
   ;; Load this package after the following packages.
   :after (validate)
 
+  ;; Customize the following variables.
+  :custom
+  <<esh-module/custom>>
+
   ;; Evaluate the following code after loading this package.
   :config
   <<esh-module/config>>)
@@ -687,6 +691,18 @@ Disable the greeting banner.
 
 #+BEGIN_SRC emacs-lisp
 (validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref esh-module/custom
+:END:
+
+Determine whether input causes window to scroll.
+#+BEGIN_SRC emacs-lisp
+(eshell-scroll-to-bottom-on-input
+ 'this
+ "On input, scroll the selected Eshell window to the bottom.")
 #+END_SRC
 
 ** Em Smart
