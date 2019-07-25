@@ -66,32 +66,38 @@ Changes made here will be overwritten by changes to that Org file.
 ** Evil
 #+BEGIN_SRC emacs-lisp
 (use-package evil
-  ;; Evaluate the following code before anything else.
-  :preface
-  <<evil/preface>>
-
   ;; Load this package eagerly.
   :demand
+
+  ;; Add the following autoloading hooks.
+  :ghook
+  <<evil/ghook>>
+
+  ;; Apply the following variable customizations.
+  :custom
+  <<evil/custom>>
 
   ;; Set the following keybindings.
   :general
   <<evil/general>>
+
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<evil/init>>
 
   ;; Evaluate the following code after loading this package.
   :config
   <<evil/config>>)
 #+END_SRC
 
-*** Preface Evaluation
+*** Variable Customization
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil/preface
+:HEADER-ARGS+: :noweb-ref evil/custom
 :END:
 
-Allow use of Evil Collection.
-
+Determine whether to enable Evil in minibuffers.
 #+BEGIN_SRC emacs-lisp
-(setq evil-want-integration t)
-(setq evil-want-keybinding nil)
+(evil-want-minibuffer t "Enable Evil in minibuffers.")
 #+END_SRC
 
 *** Set Keybindings (~:general~)
