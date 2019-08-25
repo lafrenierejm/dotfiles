@@ -9,7 +9,7 @@
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
 ;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
-;; Keywords: processes
+;; Keywords: convenience
 ;; Version 1.0
 ;; Package-Requires: ((general) (use-package))
 
