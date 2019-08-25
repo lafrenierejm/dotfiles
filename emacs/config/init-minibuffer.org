@@ -4,7 +4,7 @@
 #+PROPERTY: HEADER-ARGS+ :noweb yes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-minibuffer.el --- Configure minibuffer features
+;;; init-minibuffer.el --- Configure minibuffer features  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
