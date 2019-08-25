@@ -4,7 +4,7 @@
 #+PROPERTY: HEADER-ARGS+ :noweb yes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-line-numbers.el --- Configure line numbering
+;;; init-line-numbers.el --- Configure line numbering  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
