@@ -144,16 +144,24 @@ While it operates similarly to other completion schemes such as =icomplete-mode=
 :END:
 
 Shadow ~switch-to-buffer~ with ~ivy-switch-buffer~.
-
 #+BEGIN_SRC emacs-lisp
 ("C-x C-b" #'ivy-switch-buffer)
 #+END_SRC
 
-When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
-
+When in an Ivy buffer:
+- =M-<return>= sends the current input verbatim.
+- =C-u= restarts the minibuffer with a prefix argument.
 #+BEGIN_SRC emacs-lisp
 (:keymaps 'ivy-minibuffer-map
- "M-<return>" #'ivy-immediate-done)
+ "M-<return>" #'ivy-immediate-done
+ "C-u" #'init-minibuffer/restart-with-prefix)
+#+END_SRC
+
+When in the minibuffer:
+- =C-u= restarts the minibuffer with a prefix argument.
+#+BEGIN_SRC emacs-lisp
+(:keymaps 'minibuffer-inactive-mode-map
+ "C-u" #'init-minibuffer/restart-with-prefix)
 #+END_SRC
 
 *** Variable Customization
@@ -199,6 +207,41 @@ Do not include TRAMP buffers in Ivy's buffer lists.
                 (one-or-more anything)
                 "*" line-end)
             ivy-ignore-buffers))
+#+END_SRC
+
+**** Restart the Minibuffer with a Prefix Argument
+:PROPERTIES:
+:AUTHOR: Clemens Radermacher (clemera) <clemera@posteo.net>
+:COPYRIGHT: Copyright (C) 2019 Clemens Radermacher
+:END:
+
+Out of the box, Emacs does not provide a graceful way to add a prefix argument after the user has already started entering a command.
+The following code posted by u/clemera on Reddit provides a workaround by restarting the minibuffer with same text.
+
+First, a variable is defined to hold the minibuffer contents that were typed before entering a prefix.
+#+BEGIN_SRC emacs-lisp
+(defvar init-minibuffer/original-command nil
+  "Command the minibuffer was started with.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun init-minibuffer/restart-with-prefix ()
+  "Restart the minibuffer with a prefix argument."
+  (interactive)
+  (let ((input (ivy--input)))
+    (cond ((memq #'ivy--queue-exhibit post-command-hook)
+           (ivy-quit-and-run
+             (let ((current-prefix-arg '(4))
+                   (ivy-initial-inputs-alist `((,(ivy-state-caller ivy-last) . ,input))))
+               (call-interactively (ivy-state-caller ivy-last))))
+           (t
+            (ivy-quit-and-run
+              (let ((current-prefix-arg '(4)))
+                (minibuffer-with-setup-hook
+                    (lambda ()
+                      (insert input)
+                      (minibuffer-message "C-u"))
+                  (call-interactively init-minibuffer/current-command)))))))))
 #+END_SRC
 
 ** Counsel
