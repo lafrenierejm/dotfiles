@@ -166,10 +166,6 @@ When in an Ivy buffer, press =C-<return>= to use the current input verbatim.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(ivy-format-function #'ivy-format-function-line "Extend line highlighting to the right.")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
 (ivy-use-virtual-buffers t "Show recently killed buffers when calling `ivy-switch-buffer'.")
 #+END_SRC
 
