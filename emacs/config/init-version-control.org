@@ -288,6 +288,11 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   ;; Load this package after the following packages.
   :after (evil magit)
 
+  :general
+  (:keymaps 'magit-mode-map
+   :states 'normal
+   "C-z" nil)
+
   :ghook
   <<evil-magit/ghook>>
 
