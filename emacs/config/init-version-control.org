@@ -245,6 +245,25 @@ Return to the main Magit window after closing a commit message, regardless of wh
 (advice-add 'git-commit-abort :after #'delete-window)
 #+END_SRC
 
+***** Automatically Register Repositories with Projectile
+Define a function to perform the registration.
+#+BEGIN_SRC emacs-lisp
+(defun init-version-control/magit-add-known-project (&rest _)
+  "Register the current repository's root with Projectile."
+  (interactive)
+  (when (and (fboundp #'projectile-add-known-project)
+             magit--default-directory)
+    (projectile-add-known-project magit--default-directory)))
+#+END_SRC
+
+Add the above function to be run after ~magit-status~.
+#+BEGIN_SRC emacs-lisp
+(advice-add
+ 'magit-status-internal
+ :after
+ #'init-version-control/magit-add-known-project)
+#+END_SRC
+
 ***** Comparable Version Number
 The function ~magit-version~ provided by Magit does not return a version string that is comparable using Emacs's built-in ~version<~.
 However, Magit's semver is /par/ of the string returned by ~magit-version~;
