@@ -61,6 +61,7 @@ Changes made here will be overwritten by changes to that Org file.
 ** Dependencies
 #+BEGIN_SRC emacs-lisp
 (require 'general)
+(require 's)
 (require 'use-package)
 #+END_SRC
 
@@ -150,6 +151,9 @@ Perform Diff HL highlighting on-the-fly.
   :if
   <<magit/if>>
 
+  ;; Inform the bytecode compiler of the following autoloaded functions.
+  :commands magit-clone-to-xdg-source
+
   ;; Perform the following customizations.
   :custom
   <<magit/custom>>
@@ -228,6 +232,24 @@ Set the sections to be displayed in status buffers.
    magit-insert-unpulled-from-upstream))
 #+END_SRC
 
+**** Pre-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref magit/init
+:DESCRIPTION: Code to evaluate before loading Magit.
+:END:
+
+Store the usernames used by the current user.
+#+BEGIN_SRC emacs-lisp
+(defconst magit-push-usernames '("lafrenierejm")
+  "The Git forge usernames whose repos this Emacs user has push access to.")
+#+END_SRC
+
+Store the domains where this user has global Git push access.
+#+BEGIN_SRC emacs-lisp
+(defconst magit-push-domains '()
+  "The domains where this Emacs user has global Git push access.")
+#+END_SRC
+
 **** Post-Load Execution
 :PROPERTIES:
 :DESCRIPTION: The code in this section shall be evaluated after ~magit~ has been loaded.
@@ -262,6 +284,46 @@ Add the above function to be run after ~magit-status~.
  'magit-status-internal
  :after
  #'init-version-control/magit-add-known-project)
+#+END_SRC
+
+***** Clone Directly to =$XDG_SOURCE_DIR=
+I want to be able to pass a URL like https://gitlab.com/lafrenierejm/dotfiles/blob/master/.emacs.d and have it clone the containing repository to =$XDG_SOURCE_DIR/com.gitlab/lafrenierejm/dotfiles=.
+If the repository is one that I have push access to, it shall be cloned using a Git URI.
+Otherwise, the repo shall be cloned using an HTTPS URI.
+
+#+BEGIN_SRC emacs-lisp
+(defun magit-clone-to-xdg-source (uri)
+  "Clone URI from DOMAIN to `$XDG_SOURCE_DIR'."
+  (interactive "MClone repository: ")
+  (when-let* ((xdg-source-dir (getenv "XDG_SOURCE_DIR"))
+              (uri-prefix (cond
+                           ((s-starts-with-p "git@" uri)
+                            "git@")
+                           ((s-starts-with-p "https://" uri)
+                            "https://")))
+              (uri-less-prefix (replace-regexp-in-string
+                                (eval `(rx string-start ,uri-prefix))
+                                ""
+                                uri))
+              (uri-split (s-split "/" (s-replace ":" "/" uri-less-prefix)))
+              (domain (nth 0 uri-split))
+              (username (nth 1 uri-split))
+              (repo-name (nth 2 uri-split))
+              (dns (s-join "." (reverse (s-split "\\." domain))))
+              (parent-dir (s-join "/" (list xdg-source-dir dns username))))
+    ;; Ensure the parent directory exists.
+    (make-directory parent-dir t)
+    ;; Determine whether to clone with push access.
+    (let ((own-repo (or (s-starts-with-p "git" uri-prefix)
+                        (seq-contains magit-push-usernames username)
+                        (seq-contains magit-push-domains domain))))
+      ;; Perform the clone.
+      (magit-clone (concat (if own-repo "git@" "https://")
+                           domain
+                           (if own-repo ":" "/")
+                           (s-join "/" (list username repo-name))
+                           ".git")
+                   (s-join "/" (list parent-dir repo-name))))))
 #+END_SRC
 
 ***** Comparable Version Number
