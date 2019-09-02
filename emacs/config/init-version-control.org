@@ -4,7 +4,7 @@
 #+PROPERTY: HEADER-ARGS+ :noweb yes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-version-control.el --- Configure version control features
+;;; init-version-control.el --- Configure version control features  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
