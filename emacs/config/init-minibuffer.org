@@ -337,3 +337,102 @@ Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-sw
        'counsel-projectile-switch-to-buffer
        (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
 #+END_SRC
+
+** Minibuffer Line
+:PROPERTIES:
+:DESCRIPTION: Display status info in the minibuffer
+:END:
+
+#+BEGIN_QUOTE
+This package lets you display various status information in the minibuffer window instead of the mode-line.
+Of course, this is only displayed when the minibuffer window is not already used for other things (e.g. a minibuffer or an each area message).
+The contents and aspect is controlled by the src_emacs-lisp{minibuffer-line-format} variable and the src_emacs-lisp{minibuffer-line} face.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package minibuffer-line
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<minibuffer-line/init>>
+
+  ;; Inform the bytecode compiler of the following non-autoloading functions.
+  :functions
+  (format-time-string-8601 minibuffer-line-align)
+
+  ;; Inform the bytecode compiler of the following autoloading functions.
+  :commands
+  minibuffer-line-mode
+
+  ;; Apply the following variable customizations.
+  :custom
+  <<minibuffer-line/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  (minibuffer-line-mode))
+#+END_SRC
+
+*** Pre-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref minibuffer-line/init
+:DESCRIPTION: Code to evaluate before loading src_emacs-lisp{minibuffer-line}
+:END:
+
+Define a function to print the date and time in ISO 8601 format.
+#+BEGIN_SRC emacs-lisp
+(defun format-time-string-minibuffer-line ()
+  "Print the current date and time in ISO 8601-like format."
+  (format-time-string "%Y-%m-%d %T"))
+#+END_SRC
+
+Define a function to left- and right-align elements using mode-line formatting.
+#+BEGIN_SRC emacs-lisp
+(defun minibuffer-line-align (left right)
+  "Return a string containing LEFT and RIGHT aligned across the frame."
+  (let* ((width-total (frame-text-cols))
+         (width-space (- width-total
+                         (+ (string-width (format-mode-line left))
+                            (string-width (format-mode-line right))))))
+    (append left
+            (list (propertize
+                   (format (format "%%%ds" width-space) "")
+                   'face 'default))
+            right)))
+#+END_SRC
+
+Define a the format to use for displaying battery information in the minibuffer.
+#+BEGIN_SRC emacs-lisp
+(defvar minibuffer-line-battery-format
+  "battery %L %p%%"
+  "Control string formatting the battery status to display in the minibuffer.")
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:DESCRIPTION: Variable customizations to apply when loading src_emacs-lisp{minibuffer-line}
+:HEADER-ARGS+: :noweb-ref minibuffer-line/custom
+:END:
+
+Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is recalculated.
+#+BEGIN_SRC emacs-lisp
+(minibuffer-line-refresh-interval 1 "Refresh the minibuffer-line every second.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(minibuffer-line-format
+ '((:eval
+    (minibuffer-line-align
+     '()
+     '((:eval (propertize
+               (battery-format
+                minibuffer-line-battery-format
+                (funcall battery-status-function))
+               'face 'default))
+       (:eval (propertize " | " 'face 'default))
+       (:eval (propertize system-name 'face 'default))
+       (:eval (propertize " | " 'face 'default))
+       (:eval (propertize (format-time-string-minibuffer-line) 'face 'default)))))))
+#+END_SRC
