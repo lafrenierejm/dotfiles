@@ -1,112 +1,85 @@
 #+TITLE: Interface Configuration
 #+AUTHOR: Joseph M LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
-#+PROPERTY: header-args+ :tangle no
+#+PROPERTY: HEADER-ARGS+ :noweb yes
 
-* Introductory Boilerplate                                         :noexport:
-#+HEADER: :padline no
-#+HEADER: :comments no
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-interface.el --- Basic user interface configuration.
+;;; init-interface.el --- Configure user interface  -*- lexical-binding: t; -*-
 
-;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+;; Copyright (C) Joseph LaFreniere (lafrenierejm)
 
-;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
-;; Keywords: processes
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Keywords: convenience
 ;; Version 1.0
 ;; Package-Requires: ((general) (use-package))
 
-;; This file is not part of GNU Emacs.
-
-;; Init Interface is free software: you can redistribute it and/or modify it
-;; under the terms of the GNU General Public License as published by the Free
-;; Software Foundation, either version 3 of the License, or (at your option) any
-;; later version.
-
-;; Init Interface is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-;; FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-;; details.
-
-;; You should have received a copy of the GNU General Public License along with
-;; GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+;; <<license>>
 
 ;;; Commentary:
-
-;; This file is tangled from init-interface.org.  Changes made here will be
-;; overwritten by changes to that Org file.
+;; <<commentary>>
 
 ;;; Code:
+<<code>>
+
+(provide 'init-interface)
+;;; init-interface.el ends here
 #+END_SRC
 
-* Dependencies
-#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+#+BEGIN_SRC text
+This file is not part of GNU Emacs.
+
+Init Interface is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init Interface is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This file is tangled from init-interface.org.
+Changes made here will be overwritten by changes to that Org file.
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
+
+** Dependencies
+#+BEGIN_SRC emacs-lisp
+(require 'general)
 (require 'use-package)
 #+END_SRC
 
-* Startup
-#+BEGIN_SRC emacs-lisp :tangle yes
+** Startup
+#+BEGIN_SRC emacs-lisp
 (setq inhibit-splash-screen t
       inhibit-startup-message t
       initial-major-mode #'fundamental-mode
       initial-scratch-message nil)
   #+END_SRC
 
-* Monokai Theme
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-(use-package monokai-theme
-  ;; Load this package eagerly.
-  :demand
-
-  :custom
-  <<monokai-theme/custom>>
-
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<monokai-theme/config>>)
-  #+END_SRC
-
-** Variable Customizations
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref monokai-theme/custom
-:END:
-
-Do not change font sizes.
-
-#+BEGIN_SRC emacs-lisp
-(monokai-height-minus-1 1.0)
-(monokai-height-plus-1 1.0)
-(monokai-height-plus-2 1.0)
-(monokai-height-plus-3 1.0)
-(monokai-height-plus-4 1.0)
-#+END_SRC
-
-** Post-Load Execution
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref monokai-theme/config
-:END:
-
-Apply the theme when Emacs is run as a daemon.
-
-#+BEGIN_SRC emacs-lisp
-(when window-system
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions
-                (lambda (frame)
-                  (when (eq (length (frame-list)) 2)
-                    (progn
-                      (select-frame frame)
-                      (load-theme 'monokai t)))))
-    (load-theme 'monokai t)))
-#+END_SRC
-
-* Rainbow Identifiers
+** Rainbow Identifiers
 Rainbow Identifiers provides a minor mode that highlights identifiers based on their names.
 The highlight color of each identifier is chosen based on the hash of the identifier's name.
 The package's source is available at [[https://github.com/Fanael/rainbow-identifiers][github.com/Fanael/rainbow-identifiers]].
-#+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
+
+#+BEGIN_SRC emacs-lisp
 (use-package rainbow-identifiers
-  :demand                               ; do not defer loading
+  ;; Load this package eagerly.
+  :demand
 
   :after
   (monokai-theme)
@@ -118,14 +91,14 @@ The package's source is available at [[https://github.com/Fanael/rainbow-identif
   <<rainbow-identifiers/custom>>)
 #+END_SRC
 
-** Variable Customizations
+*** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref rainbow-identifiers/custom
 :END:
 
 Disable highlighting of keywords that are not variable names.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
 (rainbow-identifiers-faces-to-override
  '(font-lock-constant-face
    font-lock-type-face
@@ -135,50 +108,41 @@ Disable highlighting of keywords that are not variable names.
    font-lock-builtin-face))
    #+END_SRC
 
-* Rainbow Delimeters
+** Rainbow Delimeters
 Rainbow Delimters provides a minor mode that highlights delimeters such as parantheses based on their depth.
 The highlight color of each level is distinct.
 The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimeters]].
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
 (use-package rainbow-delimiters
-  :demand                               ; do not defer loading
+  ;; Load this package eagerly.
+  :demand
 
   :hook
   ((prog-mode) . rainbow-delimiters-mode))
 #+END_SRC
 
-* Built-In Modes
-#+BEGIN_SRC emacs-lisp :tangle yes
+** Built-In Modes
+#+BEGIN_SRC emacs-lisp
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 (setq display-time-24hr-format t)
 (display-time-mode 1)
-  #+END_SRC
+#+END_SRC
 
-* Undo Tree
-#+BEGIN_SRC emacs-lisp :tangle yes
+** Undo Tree
+#+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :config
   (defalias 'yes-or-no-p #'y-or-n-p))
 #+END_SRC
 
-* Line Wrapping
+** Line Wrapping
 Set the column at which line-wrapping should occur.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
 (setq-default fill-column 80)
 #+END_SRC
 
-* Font
-#+BEGIN_SRC emacs-lisp :tangle yes
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-11"))
-#+END_SRC
-
-* Ending Boilerplate
-#+BEGIN_SRC emacs-lisp :tangle yes
-(provide 'init-interface)
-;;; init-interface.el ends here
-#+END_SRC
