@@ -1,0 +1,73 @@
+# -*- mode: snippet -*-
+# name: init-header
+# key: init
+# expand-env: ((yas-triggers-in-field t))
+# --
+
+#+TITLE: `(s-titleized-words (s-replace "init-" "" (file-name-base (buffer-name))))` Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :noweb yes
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; `(concat (file-name-base (buffer-name)) ".el")` --- Configure `(s-titleized-words (s-replace "init-" "" (file-name-base (buffer-name))))`  -*- lexical-binding: t; -*-
+
+;; Copyright (C) `(shell-command-to-string (s-join " " (list "git log --diff-filter=A --follow --format=%aI --" (buffer-name) "| tail -1 | head -c 4 -z")))` Joseph LaFreniere
+
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Version 0.1
+;; Package-Requires: ((general) (use-package))
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<code>>
+
+(provide '`(file-name-base (buffer-name))`)
+;;; `(concat (file-name-base (buffer-name)) ".el")` ends here
+#+END_SRC
+
+* License
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref license
+:END:
+
+** Code
+All source code in this file is licensed under the [[http://www.gnu.org/licenses/gpl-3.0.html][GNU Public License v3]] or later:
+#+BEGIN_SRC text :noweb-ref license
+This file is not part of GNU Emacs.
+
+`(s-titleized-words (file-name-base (file-name-nondirectory (buffer-file-name))))` is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+`(s-titleized-words (file-name-base (file-name-nondirectory (buffer-file-name))))` is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+** Prose
+All prose in this file is licensed under the [[http://www.gnu.org/licenses/fdl-1.3.html][GNU Free Documentation License (FDL) v1.3]]
+#+BEGIN_SRC text
+Copyright (C) `(shell-command-to-string (s-join " " (list "git log --diff-filter=A --follow --format=%aI --" (buffer-name) "| tail -1 | head -c 4 -z")))` Joseph LaFreniere.
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+
+#+END_SRC
+
+* Code
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref code
+:END:
