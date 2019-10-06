@@ -58,9 +58,10 @@ Changes made here will be overwritten by changes to that Org file.
 :HEADER-ARGS+: :noweb-ref code
 :END:
 
-** Dependencies                                                   :noexport:
+** Dependencies
 #+BEGIN_SRC emacs-lisp
 (require 'general)
+(require 'subr-x)
 (require 'use-package)
 #+END_SRC
 
@@ -73,8 +74,41 @@ Changes made here will be overwritten by changes to that Org file.
   ;; Load this package eagerly.
   :demand
 
+  :preface
+  <<esh-mode/preface>>
+
   :config
   <<esh-mode/config>>)
+#+END_SRC
+
+*** Pre-Evaluation Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref esh-mode/preface
+:END:
+
+Define the format of the timestamp to prefix prompts with.
+By default, this follows ISO 8601.
+#+NAME: init-eshell/prompt-timestamp-format-string
+#+BEGIN_SRC emacs-lisp
+(defcustom init-eshell/prompt-timestamp-format-string
+  "%FT%T%z"
+  "The format-string used for Eshell prompts' timestamps.
+
+See `help format-time-string' for the definition of the constructs.
+The default value follows ISO 8601."
+  :type '(string))
+#+END_SRC
+
+Define the regexp to match the result of the above format string.
+#+NAME: init-eshell/prompt-timestamp-regexp
+#+BEGIN_SRC emacs-lisp
+(defcustom init-eshell/prompt-timestamp-regexp
+  (rx
+   (repeat 4 digit) ?- (repeat 2 digit) ?- (repeat 2 digit)
+   ?T (repeat 2 digit) (repeat 2 (and ?: (repeat 2 digit)))
+   (or ?- ?+) (repeat 4 digit))
+  "A regular expression that matches `init-eshell/prompt-timestamp-format-string'."
+  :type '(regexp))
 #+END_SRC
 
 *** Post-Load Execution
@@ -106,13 +140,41 @@ That function acts as a do-what-I-mean alternative to the built-in =beginning-of
         (beginning-of-line)))))
 #+END_SRC
 
-**** Update Prompts' Timestamps
+**** Accurate Prompt Timestamp
 :PROPERTIES:
-:DESCRIPTION: Before sending input, update the current prompt with a timestamp in ISO 8601 (2000 version) form: "--MM-DDTHH:MM".
+:DESCRIPTION: Before sending input, update the current prompt with a timestamp.
 :END:
 
-Define a function to remove the existing timestamp then insert a new one at the beginning of the latest prompt.
+A common practice among users of command line interface (CLI) shells is to include timestamps in their shells' prompts.
 
+In Bash, for example, timestamping one's prompt is frequently accomplished by using the ~date~ command as part of the prompt variable.
+For example, the prompt src_sh[:exports code]{PS1="(\$date +%H:%M:%S) $"} would result in a prompt such as =21:43:41 $=.
+
+I find the information by such a prompt to be misleading, however.
+
+***** The Problem
+My motivation for timestamping my prompts was to be able to easily answer the question, "When did I run this command?"
+But rather than providing context for when the corresponding command was submitted, most =PS1=-inserted timestamps actually indicate when the /previous/ command finished executing.
+
+Answering the question about when an arbitrary command \(c_n\) was submitted, then, involves
+1. ignoring the timestamp \(t_n\) that is next to \(c_n\);
+2. scrolling down to where the next command \(c_{n+1}\) was entered;
+3. removing the timestamp \(t_{n+1}\) that is next to \(c_{n+1}\) from the context conferred upon it by its proximity to \(c_{n+1}\); and
+4. mentally linking \(t_{n+1}\) back to \(c_n\).
+
+Clearly, the task is not so complicated as to be impossible.
+It is far less efficient and more error-prone than it could be, though.
+That inefficiency results from requiring the user to
+- consciously splitting then re-pairing timestamps and
+- visually --- and, if scrolling is required, phsyically --- navigate between two prompts.
+
+
+***** The Solution
+The primary difficulty in establishing accurate timestamps is that doing so requires modifying the prompt text /after/ its input has been sent.
+Some shells have workaround for this, such as Zsh's ~preexec~.
+Rather than implementing such a function for Eshell, we can instead take advantage of the fact that Eshell is written in Emacs Lisp and outputs directly to an Emacs buffer.
+
+Define a function to update the most recent prompt's timestamp.
 #+BEGIN_SRC emacs-lisp
 (defun init-eshell/timestamp-prompt ()
   "Update the timestamp at the beginning of the current prompt."
@@ -133,21 +195,18 @@ Define a function to remove the existing timestamp then insert a new one at the 
                  'read-only t
                  'rear-nonsticky '(font-lock-face read-only))))
       ;; Remove the existing timestamp.
-      (when (re-search-forward
-             (rx line-start
-                 "--" (repeat 2 digit) ?- (repeat 2 digit)
-                 ?T (repeat 2 digit) (repeat 2 (and ?: (repeat 2 digit)))))
+      (when (re-search-forward init-eshell/prompt-timestamp-regexp)
         (replace-match ""))
       ;; Insert the timestamp, propertized to match the rest of the prompt.
       (insert (apply #'propertize
-                     (format-time-string "--%m-%dT%T")
+                     (format-time-string init-eshell/prompt-timestamp-format-string)
                      prompt-properties)))
     ;; Restore POINT to its original location.
     (goto-char cur-pos)))
-    #+END_SRC
+#+END_SRC
+Where ~init-eshell/prompt-timestamp-format-string~ and ~init-eshell/prompt-timestamp-regexp~ are defined in ref:init-eshell/prompt-timestamp-format-string and ref:init-eshell/prompt-timestamp-regexp, respectively.
 
 Call the above function before sending input.
-
 #+BEGIN_SRC emacs-lisp
 (advice-add 'eshell-send-input :before #'init-eshell/timestamp-prompt)
 #+END_SRC
