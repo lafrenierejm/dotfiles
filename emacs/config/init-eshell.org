@@ -4,7 +4,7 @@
 #+PROPERTY: HEADER-ARGS+ :noweb yes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;;; init-eshell.el --- Configure Eshell
+;;; init-eshell.el --- Configure Eshell  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
 
