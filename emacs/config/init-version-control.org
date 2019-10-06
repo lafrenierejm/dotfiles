@@ -367,7 +367,7 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   :demand
 
   ;; Load this package after the following packages.
-  :after (evil magit)
+  :after (:all evil magit)
 
   :general
   (:keymaps 'magit-mode-map
