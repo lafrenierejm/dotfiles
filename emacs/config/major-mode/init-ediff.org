@@ -49,13 +49,6 @@
       (ediff-window-setup-function #'ediff-setup-windows-plain "Use a single frame for all buffers including the control panel.")
     #+END_SRC
 
-** Load evil-ediff
-   #+BEGIN_SRC emacs-lisp :tangle yes :noweb yes
-     (use-package evil-ediff
-       ;; Load this package after the following packages.
-       :after (ediff evil))
-   #+END_SRC
-
 ** Ending Boilerplate
    #+BEGIN_SRC emacs-lisp :tangle yes
      (provide 'init-ediff)
