@@ -396,6 +396,16 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 :HEADER-ARGS+: :noweb-ref evil-magit/custom
 :END:
 
+Determine which Evil state Evil Magit starts in.
+#+BEGIN_SRC emacs-lisp
+(evil-magit-state 'motion "Start `evil-magit' in the motion state.")
+#+END_SRC
+
+Determine whether Evil Magit uses Evil's movement keys.
+#+BEGIN_SRC emacs-lisp
+(evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
+#+END_SRC
+
 *** SSH Agency
 #+BEGIN_SRC emacs-lisp
 (use-package ssh-agency
@@ -409,10 +419,8 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   (ssh-agency-agent-exe-names '("ssh-agent")))
 #+END_SRC
 
+*** Git Unlink
 #+BEGIN_SRC emacs-lisp
-(evil-magit-state 'motion "Start `evil-magit' in the motion state.")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
+(use-package git-unlink
+  :demand)
 #+END_SRC
