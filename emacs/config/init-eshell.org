@@ -255,11 +255,30 @@ Narrow the buffer to the context ~point~ is currently in:
           (narrow-to-region start end)))))
 #+END_SRC
 
-** Load Em Dirs
+** Em Hist
+#+BEGIN_SRC emacs-lisp
+(use-package em-hist
+  ;; Load eagerly.
+  :demand
+
+  ;; Customize the following variables.
+  :custom
+  <<em-hist/custom>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-hist/custom
+:END:
+
+Determine whether duplicates are skipped when traversing command history.
+#+BEGIN_SRC emacs-lisp
+(eshell-hist-ignoredups t "Skip duplicates when traversing command history.")
+#+END_SRC
+
+** Em Dirs
 #+BEGIN_SRC emacs-lisp
 (use-package em-dirs
-  :straight nil
-
   :config
   <<em-dirs/config>>)
 #+END_SRC
@@ -942,34 +961,5 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   ;; Apply the following variable customizations.
   :custom
   (setq eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
-#+END_SRC
-
-** Em Hist
-#+BEGIN_SRC emacs-lisp
-(use-package em-hist
-  ;; This package is included in Emacs.
-  :straight nil
-
-  ;; Load eagerly.
-  :demand
-
-  ;; Load after the following packages.
-  :after (ivy validate)
-
-  ;; Evaluate the following code after loading.
-  :config
-  <<em-hist/config>>)
-#+END_SRC
-
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref em-hist/config
-:DESCRIPTION: The code to be evaluated after ~em-hist~ has been loaded.
-:END:
-
-Skip duplicates when traversing command history.
-
-#+BEGIN_SRC emacs-lisp
-(validate-setq eshell-hist-ignoredups t)
 #+END_SRC
 
