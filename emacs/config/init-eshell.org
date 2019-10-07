@@ -339,7 +339,8 @@ character. For example, the path \"/home/user/.config/curdir\" will become
           #'init-eshell/abbreviate-dirname
           split-path)
          :end (- (length split-path) 1)))
-       (car (last split-path))))))
+       (car (last split-path)))
+      path)))
 #+END_SRC
 
 **** Create Eshell Buffer Names
