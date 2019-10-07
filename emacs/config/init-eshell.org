@@ -649,12 +649,7 @@ Open or switch to an Eshell buffer in a given directory.
 
 If an Eshell instance for the directory already exists, switch to it.  If no
 such instance exists, start a new instance whose name includes the directory."
-  (interactive
-   (let ((cwd (if (buffer-file-name)
-                  (file-name-directory (buffer-file-name))
-                default-directory))
-         (must-exist t))
-     (list (read-directory-name "Open Eshell in: " cwd cwd must-exist))))
+  (interactive "DOpen Eshell in: ")
   ;; Set the directory to open Eshell in.
   (let ((eshell-buffer-name (init-eshell/name-buffer directory))
         (default-directory directory))
