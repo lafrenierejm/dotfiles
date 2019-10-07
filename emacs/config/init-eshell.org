@@ -281,7 +281,8 @@ If DIRECTORY is _not_ in a project, return the abbreviated form of DIRECTORY's
 path."
   (s-chop-suffix
    "/"
-   (if-let ((projectile-loaded (featurep 'projectile))
+   (if-let (((fboundp #'projectile-project-name))
+            ((fboundp #'projectile-project-root))
             (project-root (projectile-project-root directory))
             (project-name (projectile-project-name project-root)))
        ;; If in a project:
