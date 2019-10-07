@@ -551,7 +551,8 @@ Add the following keybindings:
 (defun init-eshell/prompt ()
   "Prefix \"$USER@$(hostname):\" if on remote host."
   (concat
-   (format-time-string "--%m-%dT%T ")
+   (format-time-string
+    (concat init-eshell/prompt-timestamp-format-string " "))
    (if (file-remote-p default-directory 'host)
        (with-parsed-tramp-file-name default-directory nil
          (concat
