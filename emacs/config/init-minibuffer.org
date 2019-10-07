@@ -436,3 +436,67 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
        (:eval (propertize " | " 'face 'default))
        (:eval (propertize (format-time-string-minibuffer-line) 'face 'default)))))))
 #+END_SRC
+
+** McFly
+:PROPERTIES:
+:COPYRIGHT_YEAR: 2019
+:COPYRIGHT_AUTHOR: Vincent Zhang (seagle0128)
+:COPYRIGHT_EMAIL: seagle0128@gmail.com
+:LICENSE: GPLv3+
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defvar my-ivy-fly-commands '(query-replace-regexp
+                              flush-lines
+                              keep-lines
+                              ivy-read
+                              swiper
+                              swiper-backward
+                              swiper-all
+                              swiper-isearch
+                              swiper-isearch-backward
+                              counsel-grep-or-swiper
+                              counsel-grep-or-swiper-backward
+                              counsel-grep
+                              counsel-ack
+                              counsel-ag
+                              counsel-rg
+                              counsel-pt))
+
+(defun my-ivy-fly-back-to-present ()
+  ;; (remove-hook 'pre-command-hook 'my-ivy-fly-back-to-present t)
+  (cond ((and (memq last-command my-ivy-fly-commands)
+              (equal (this-command-keys-vector) (kbd "M-p")))
+         ;; repeat one time to get straight to the first history item
+         (setq unread-command-events
+               (append unread-command-events
+                       (listify-key-sequence (kbd "M-p")))))
+        ((or (memq this-command '(self-insert-command
+                                  yank
+                                  ivy-yank-word
+                                  counsel-yank-pop))
+             (equal (this-command-keys-vector) (kbd "M-n")))
+         (delete-region (point)
+                        (point-max)))))
+
+(defun my-ivy-fly-time-travel ()
+  (when (memq this-command my-ivy-fly-commands)
+    (let* ((kbd (kbd "M-n"))
+           (cmd (key-binding kbd))
+           (future (and cmd
+                        (with-temp-buffer
+                          (when (ignore-errors
+                                  (call-interactively cmd) t)
+                            (buffer-string))))))
+      (when future
+        (save-excursion
+          (insert (propertize (replace-regexp-in-string
+                               "\\\\_<" ""
+                               (replace-regexp-in-string
+                                "\\\\_>" ""
+                                future))
+                              'face 'shadow)))
+        (add-hook 'pre-command-hook 'my-ivy-fly-back-to-present nil t)))))
+
+(add-hook 'minibuffer-setup-hook #'my-ivy-fly-time-travel)
+#+END_SRC
