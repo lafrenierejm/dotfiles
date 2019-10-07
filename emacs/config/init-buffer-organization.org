@@ -76,7 +76,11 @@ Changes made here will be overwritten by changes to that Org file.
 
   ;; Customize the following variables.
   :custom
-  <<projectile/custom>>)
+  <<projectile/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<projectile/config>>)
    #+END_SRC
 
 *** Auto-Loading Keybindings
@@ -106,11 +110,22 @@ When switching projects, default to opening the ~vc-dir~ at the root of the proj
 (projectile-switch-project-action #'projectile-vc)
 #+END_SRC
 
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref projectile/config
+:END:
+
+Use Ivy's integration.
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'ivy
+  (setq projectile-completion-system 'ivy))
+#+END_SRC
+
 ** Counsel Projectile
 #+BEGIN_SRC emacs-lisp
 (use-package counsel-projectile
   ;; Load this package after the following packages.
-  :after (counsel projectile)
+  :after (:all counsel projectile)
 
   ;; Load this package eagerly.
   :demand
@@ -136,10 +151,4 @@ Enable ~counsel-projectile-mode~ globally.
 
 #+BEGIN_SRC emacs-lisp
 (counsel-projectile-mode t)
-#+END_SRC
-
-When switching projects, default to opening the ~vc-dir~ at the root of the project.
-
-#+BEGIN_SRC emacs-lisp
-(counsel-projectile-switch-project-action #'counsel-projectile-switch-project-action-vc)
 #+END_SRC
