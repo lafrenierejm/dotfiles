@@ -181,6 +181,11 @@ This will be performed with =s-r=.
 (exwm-input-set-key (kbd "s-r") #'exwm-reset)
 #+END_SRC
 
+Hide all windows except the current one.
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "s-o") #'delete-other-windows)
+#+END_SRC
+
 Close the current window and kill its buffer.
 
 #+BEGIN_SRC emacs-lisp
