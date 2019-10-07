@@ -1,14 +1,14 @@
 #+TITLE: Eshell Configuration
-#+AUTHOR: Joseph M LaFreniere (lafrenierejm)
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
 #+EMAIL: joseph@lafreniere.xyz
 #+PROPERTY: HEADER-ARGS+ :noweb yes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;;; init-eshell.el --- Configure Eshell  -*- lexical-binding: t; -*-
 
-;; Copyright (C) Joseph M LaFreniere (lafrenierejm)
+;; Copyright (C) Joseph LaFreniere (lafrenierejm)
 
-;; Author: Joseph M LaFreniere <joseph@lafreniere.xyz>
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
 ;; Keywords: processes
 ;; Version 1.0
 ;; Package-Requires: ((general) (use-package))
