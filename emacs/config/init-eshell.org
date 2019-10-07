@@ -272,11 +272,13 @@ Narrow the buffer to the context ~point~ is currently in:
 **** Return Path Relative to Project Root
 #+BEGIN_SRC emacs-lisp
 (defun init-eshell/pwd-relative-to-project (directory)
-  "Use the Projectile root when displaying a path.
+  "Print DIRECTORY relative to its Projectile root, if any.
 
-        If DIRECTORY is not in a probject as determined by Projectile, use the
-        abbreviated name of DIRECTORY in the returned name.  If DIRECTORY is in a
-        Projectile project, use the path of DIRECTORY relative to the project's root."
+If DIRECTORY is in a project as determined by Projectile, return DIRECTORY's
+path starting starting at the project's root.
+
+If DIRECTORY is _not_ in a project, return the abbreviated form of DIRECTORY's
+path."
   (s-chop-suffix
    "/"
    (if-let ((projectile-loaded (featurep 'projectile))
