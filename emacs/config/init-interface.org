@@ -127,7 +127,6 @@ The package's source is available at [[https://github.com/Fanael/rainbow-delimit
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(show-paren-mode 1)
 #+END_SRC
 
 ** Undo Tree

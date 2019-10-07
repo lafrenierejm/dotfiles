@@ -4,7 +4,7 @@
 #+PROPERTY: HEADER-ARGS+ :noweb yes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; init-char-matching.el --- Configure character matching
+;; init-char-matching.el --- Configure character matching  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) Joseph LaFreniere (lafrenierejm)
 
@@ -107,4 +107,123 @@ Smartparens Config configures Smartparens for various programming languages.
 
   ;; Load this package eagerly.
   :demand)
+#+END_SRC
+** Simple
+#+BEGIN_SRC emacs-lisp
+(use-package simple
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following customizations.
+  :custom
+  <<simple/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<simple/config>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref simple/custom
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(blink-matching-paren t "Highlight matching parentheses")
+#+END_SRC
+
+Set the style used when showing a matching paren.
+#+BEGIN_SRC emacs-lisp
+(show-paren-style 'parenthesis "Highlight maching parens.")
+#+END_SRC
+
+Set whether open parens are highlighted.
+#+BEGIN_SRC emacs-lisp
+(show-paren-highlight-openparen t "Highlight open parens.")
+#+END_SRC
+
+Set the behavior when ~point~ is immediately inside a paren.
+#+BEGIN_SRC emacs-lisp
+(show-paren-when-point-inside-paren "Show paren with `point' is just inside one.")
+#+END_SRC
+
+Set the behavior when ~point~ is in the same line as a closing paren.
+#+BEGIN_SRC emacs-lisp
+(show-paren-when-point-in-periphery "Show parens when `point' is in the line's periphery.")
+#+END_SRC
+
+Set whether ~show-paren-mode~ is globally enabled.
+#+BEGIN_SRC emacs-lisp
+(show-paren-mode t "Enable `show-paren-mode' globally.")
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref simple/config
+:END:
+
+**** Show Lines for Off-Screen Parentheses
+This functionality is inspired by Clemens Radermacher's <with-emacs@posteo.org> post [[https://with-emacs.com/posts/editing/show-matching-lines-when-parentheses-go-off-screen/]["Show Matching Lines When Parentheses Go Off-Screen"]].
+That blog post is copyright 2019 Clemens Radermacher and is licensed [[https://creativecommons.org/licenses/by-nc-sa/4.0/][CC BY-NC-SA 4.0]].
+All code in this section falls under the same copyright and license.
+
+The display of matching parentheses is configured via the variable ~blink-matching-paren~.
+For this to work, ~blink-matching-paren~ needs to be ~t~;
+that customization is performed in "Variable Customization".
+
+First, the hooks on character insertion need to be modified:
+#+BEGIN_SRC emacs-lisp
+(remove-hook 'post-self-insert-hook #'blink-paren-post-self-insert-function)
+#+END_SRC
+
+Next, advice is added to ~show-paren-function~, the function that performs the visualization.
+#+BEGIN_SRC emacs-lisp
+(let ((ov nil)) ; keep track of the overlay
+  (advice-add
+   #'show-paren-function
+   :after
+   (defun show-paren--off-screen+ (&rest _args)
+     "Display matching line for off-screen paren."
+     (when (overlayp ov)
+       (delete-overlay ov))
+     ;; check if it's appropriate to show match info,
+     ;; see `blink-paren-post-self-insert-function'
+     (when (and (overlay-buffer show-paren--overlay)
+                (not (or cursor-in-echo-area
+                         executing-kbd-macro
+                         noninteractive
+                         (minibufferp)
+                         this-command))
+                (and (not (bobp))
+                     (memq (char-syntax (char-before)) '(?\) ?\$)))
+                (= 1 (logand 1 (- (point)
+                                  (save-excursion
+                                    (forward-char -1)
+                                    (skip-syntax-backward "/\\")
+                                    (point))))))
+       ;; rebind `minibuffer-message' called by
+       ;; `blink-matching-open' to handle the overlay display
+       (cl-letf (((symbol-function #'minibuffer-message)
+                  (lambda (msg &rest args)
+                    (let ((msg (apply #'format-message msg args)))
+                      (setq ov (display-line-overlay+
+                                (window-start) msg ))))))
+         (blink-matching-open))))))
+#+END_SRC
+
+
+To create the overlay, Radermacher wrote the following helper function:
+#+BEGIN_SRC emacs-lisp
+(defun display-line-overlay+ (pos str &optional face)
+  "Display line at POS as STR with FACE.
+
+FACE defaults to inheriting from default and highlight."
+  (let ((ol (save-excursion
+              (goto-char pos)
+              (make-overlay (line-beginning-position)
+                            (line-end-position)))))
+    (overlay-put ol 'display str)
+    (overlay-put ol 'face
+                 (or face '(:inherit default :inherit highlight)))
+    ol))
 #+END_SRC
