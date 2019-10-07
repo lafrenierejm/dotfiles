@@ -884,6 +884,10 @@ Uses the system sudo through TRAMP's sudo method."
   ;; Load this package after the following packages.
   :after (esh-module)
 
+  ;; Apply the following variable customizations.
+  :custom
+  <<em-rebind/custom>>
+
   ;; Evaluate the following code before loading this package.
   :init
   <<em-rebind/init>>
@@ -891,6 +895,18 @@ Uses the system sudo through TRAMP's sudo method."
   ;; Evaluate the following code after loading this package.
   :config
   <<em-rebind/config>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-rebind/custom
+:END:
+
+Determine whether movement commands can cause the point to leave the current input.
+#+BEGIN_SRC emacs-lisp
+(eshell-confine-point-to-input
+ nil
+ "Allow movement commands to move `point' out of the current input.")
 #+END_SRC
 
 *** Pre-Load Evaluation
