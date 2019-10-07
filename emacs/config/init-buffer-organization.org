@@ -133,7 +133,7 @@ Use Ivy's integration.
   ;; Add the following keybindings.
   :general
   (:keymaps 'projectile-mode-map
-            "C-x C-f" #'counsel-projectile-find-file-dwim
+            "C-x C-f" #'counsel-projectile-find-file
             "C-x C-b" #'counsel-projectile-switch-to-buffer
             "C-x C-d" #'counsel-projectile-find-dir)
 
