@@ -345,17 +345,11 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 
 #+BEGIN_SRC emacs-lisp
 (use-package forge
-  :disabled
-
   ;; Load this package after the following packages.
   :after (magit)
 
   ;; Load this package eagerly.
-  :demand
-
-  :straight
-  (forge :type git :host github :repo "magit/forge"
-         :fork (:host github :repo "lafrenierejm/forge")))
+  :demand)
 #+END_SRC
 
 *** Evil Magit
