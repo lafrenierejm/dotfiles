@@ -31,10 +31,6 @@
 #+END_SRC
 
 * License
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref license
-:END:
-
 ** Code
 All source code in this file is licensed under the [[http://www.gnu.org/licenses/gpl-3.0.html][GNU Public License v3]] or later:
 #+BEGIN_SRC text :noweb-ref license
