@@ -428,16 +428,20 @@ This is useful when adding determining information.
   "Determine the year when FILENAME was added to a Git repository.
 
 If the file has not been added to the repository, use the current year."
-  (shell-command-to-string
-   (format "{ %s || %s; } | tail -1 | head -c 4 -z"
-           (s-join " " `("git" "log"
-                         "--diff-filter=A"
-                         "--follow"
-                         "--format=%aI"
-                         "--"
-                         ,filename
-                         ,(format "2>%s" null-device)))
-           (format-time-string "%Y"))))
+  (if-let (((not (string-empty-p filename)))
+           (git-output
+            (shell-command-to-string
+             (format "%s | tail -1 | head -c 4 -z"
+                     (s-join " " `("git" "log"
+                                   "--diff-filter=A"
+                                   "--follow"
+                                   "--format=%aI"
+                                   "--"
+                                   ,filename
+                                   ,(format "2>%s" null-device))))))
+           ((not (string-empty-p git-output))))
+      git-output
+    (format-time-string "%Y")))
 #+END_SRC
 
 Alias the above function to remove my username.
