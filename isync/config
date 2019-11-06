@@ -161,6 +161,7 @@ IMAPStore remote-xyz.lafreniere.joseph
 MaildirStore local-xyz.lafreniere.joseph
 	Inbox ~/mail/xyz.lafreniere.joseph/inbox
 	Path  ~/mail/xyz.lafreniere.joseph/
+	subFolders Verbatim
 
 Channel xyz.lafreniere.joseph-draft
 	Master ":remote-xyz.lafreniere.joseph:Drafts"
@@ -174,9 +175,25 @@ Channel xyz.lafreniere.joseph-inbox
 	Master ":remote-xyz.lafreniere.joseph:INBOX"
 	Slave  ":local-xyz.lafreniere.joseph:INBOX"
 
-Channel xyz.lafreniere.joseph-nixers
-	Master ":remote-xyz.lafreniere.joseph:nixers"
-	Slave  ":local-xyz.lafreniere.joseph:nixers"
+Channel xyz.lafreniere.joseph.list.emacs-devel
+	Master ":remote-xyz.lafreniere.joseph:list/emacs-devel"
+	Slave  ":local-xyz.lafreniere.joseph:list/emacs-devel"
+
+Channel xyz.lafreniere.joseph.list.emacs-orgmode
+	Master ":remote-xyz.lafreniere.joseph:list/emacs-orgmode"
+	Slave  ":local-xyz.lafreniere.joseph:list/emacs-orgmode"
+
+Channel xyz.lafreniere.joseph.list.guix-help
+	Master ":remote-xyz.lafreniere.joseph:list/guix-help"
+	Slave  ":local-xyz.lafreniere.joseph:list/guix-help"
+
+Channel xyz.lafreniere.joseph.list.guix-patches
+	Master ":remote-xyz.lafreniere.joseph:list/guix-patches"
+	Slave  ":local-xyz.lafreniere.joseph:list/guix-patches"
+
+Channel xyz.lafreniere.joseph.list.mu
+	Master ":remote-xyz.lafreniere.joseph:list/mu"
+	Slave  ":local-xyz.lafreniere.joseph:list/mu"
 
 Channel xyz.lafreniere.joseph-sent
 	Master ":remote-xyz.lafreniere.joseph:Sent"
@@ -186,5 +203,9 @@ Group xyz.lafreniere.joseph
 	Channel xyz.lafreniere.joseph-draft
 	Channel xyz.lafreniere.joseph-housing
 	Channel xyz.lafreniere.joseph-inbox
-	Channel xyz.lafreniere.joseph-nixers
+	Channel xyz.lafreniere.joseph.list.emacs-devel
+	Channel xyz.lafreniere.joseph.list.emacs-orgmode
+	Channel xyz.lafreniere.joseph.list.guix-help
+	Channel xyz.lafreniere.joseph.list.guix-patches
+	Channel xyz.lafreniere.joseph.list.mu
 	Channel xyz.lafreniere.joseph-sent
