@@ -85,10 +85,12 @@ Creating new polymodes normally takes a few lines of code.
 Enable the following minor modes in all Org buffers:
 - Flyspell Mode for on-the-fly spell checking
 - Org Indent Mode to indent text according to outline structure
+- wrap lines
 
 #+BEGIN_SRC emacs-lisp
-(nil #'flyspell-mode)
-(nil #'org-indent-mode)
+('org-mode-hook #'flyspell-mode)
+('org-mode-hook #'org-indent-mode)
+('org-mode-hook #'visual-line-mode)
 #+END_SRC
 
 **** Variable Customizations
