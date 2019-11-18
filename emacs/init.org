@@ -43,6 +43,9 @@
 ;;; Completion
 <<completion>>
 
+;;; Diff:
+<<diff>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -1785,6 +1788,31 @@ Enable ~company-mode~ globally.
 
   ;; Load this package eagerly.
   :demand)
+#+END_SRC
+* Diff
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref diff-hl/config
+:END:
+
+** Ediff
+
+#+BEGIN_SRC emacs-lisp
+(use-package ediff
+  ;; Evaluate the following code after loading this package.
+  :custom
+  <<ediff/custom>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ediff/custom
+:END:
+
+Determine how Ediff windows are setup.
+#+BEGIN_SRC emacs-lisp
+(ediff-window-setup-function
+ #'ediff-setup-windows-plain
+ "Use a single frame for all buffers including the control panel.")
 #+END_SRC
 
 * Footnotes
