@@ -40,6 +40,9 @@
 ;;; Version Control:
 <<version-control>>
 
+;;; Completion
+<<completion>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -1721,6 +1724,67 @@ If the file has not been added to the repository, use the current year."
 Alias the above function to remove my username.
 #+BEGIN_SRC
 (defalias 'git-year-added #'git-lafrenierejm-year-added)
+#+END_SRC
+* Completion
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref completion
+:END:
+
+** Company
+
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following code after loading.
+  :config
+  <<company/config>>)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:DESCRIPTION: Code to be evaluated after Company has been loaded.
+:HEADER-ARGS+: :noweb-ref company/config
+:END:
+
+Enable ~company-mode~ globally.
+#+BEGIN_SRC emacs-lisp
+(global-company-mode)
+#+END_SRC
+
+** YASnippet
+
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following variable customizations.
+  :custom
+  ;; Enable `yas-minor-mode' globally.
+  (yas-snippet-dirs
+   (let ((dir (expand-file-name
+               "~/.guix-profile/share/emacs/yasnippet-snippets/"))
+         (append t))
+     (if (file-directory-p dir)
+         (add-to-list 'yas-snippet-dirs dir append)
+       yas-snippet-dirs)))
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  (yas-global-mode 1))
+#+END_SRC
+
+** Ivy YASnippet
+
+#+BEGIN_SRC emacs-lisp
+(use-package ivy-yasnippet
+  ;; Load this package after the following packages.
+  :after (ivy yasnippet)
+
+  ;; Load this package eagerly.
+  :demand)
 #+END_SRC
 
 * Footnotes
