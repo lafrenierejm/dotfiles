@@ -46,6 +46,9 @@
 ;;; Diff:
 <<diff>>
 
+;;; Command Interpretation:
+<<command-interpretation>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -1813,6 +1816,54 @@ Determine how Ediff windows are setup.
 (ediff-window-setup-function
  #'ediff-setup-windows-plain
  "Use a single frame for all buffers including the control panel.")
+#+END_SRC
+* Command Interpretation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref command-interpretation
+:END:
+
+** Comint
+
+#+BEGIN_SRC emacs-lisp
+(use-package comint
+  :demand
+
+  :commands
+  (init-comint/clear-buffer)
+
+  :general
+  <<comint/general>>
+
+  :config
+  <<comint/config>>)
+#+END_SRC
+
+*** Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref comint/general
+:END:
+
+Use =C-l= to clear the current buffer.
+#+BEGIN_SRC emacs-lisp
+(:keymaps 'comint-mode-map
+ "C-l" #'init-comint/clear-buffer)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref comint/config
+:END:
+
+**** Clear Buffers
+
+The following code is taken verbatim from [[https://emacsredux.com/blog/2015/01/18/clear-comint-buffers/]["Clear Comint Buffers"]] on /Emacs Redux/.
+The only addition is the doc string.
+#+BEGIN_SRC emacs-lisp
+(defun init-comint/clear-buffer ()
+  "Clear all scrollback for the current buffer."
+  (interactive)
+  (let ((comint-buffer-maximum-size 0))
+    (comint-truncate-buffer)))
 #+END_SRC
 
 * Footnotes
