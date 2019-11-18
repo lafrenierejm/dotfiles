@@ -1,0 +1,363 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: Joseph LaFreniere (lafrenierejm)
+#+EMAIL: joseph@lafreniere.xyz
+#+PROPERTY: header-args+ :noweb yes
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+;;; init.el --- Configure Emacs  -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2018 Joseph LaFreniere
+
+;; Author: Joseph LaFreniere <joseph@lafreniere.xyz>
+;; Version 0.1
+
+;; <<license>>
+
+;;; Commentary:
+;; <<commentary>>
+
+;;; Code:
+<<bootstrapping>>
+
+;;; Customization:
+<<customization>>
+
+;;; Visual Interface:
+<<interface>>
+
+(provide 'init)
+;;; init.el ends here
+#+END_SRC
+
+* License
+** Code
+All source code in this file is licensed under the [[http://www.gnu.org/licenses/gpl-3.0.html][GNU Public License v3]] or later.
+#+BEGIN_SRC text :noweb-ref license
+This file is not part of GNU Emacs.
+
+Init is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Init is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with GNU Emacs.
+If not, see <https://www.gnu.org/licenses/>.
+#+END_SRC
+
+** Prose
+All prose in this file is licensed under the [[http://www.gnu.org/licenses/fdl-1.3.html][GNU Free Documentation License (FDL) v1.3]].
+#+BEGIN_SRC text
+Copyright (C) 2019 Joseph LaFreniere.
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+#+END_SRC
+
+* Commentary
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref commentary
+:END:
+
+#+BEGIN_SRC text
+This is tangled source of Joseph LaFreniere (lafrenierejm)'s literate Emacs initialization file.
+Please refer to `init.org' in this same file for full commentary.
+#+END_SRC
+
+* Bootstrapping
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref bootstrapping
+:END:
+
+GNU Emacs does not have the capability to use an Org file directly as its initialization file.
+As such, this file needs to be tangled manually for its first use on a new system.
+The following code ensures that this step is only needed once.
+
+Before any other installed packages can be configured, Package must be loaded and \src_emacs-lisp{package-initialize} called.
+#+BEGIN_SRC emacs-lisp :noweb-ref dependencies
+(require 'package)
+(package-initialize)
+#+END_SRC
+
+** Use Package
+
+Next, Use Package is loaded.
+This package provides the \src_emacs-lisp{use-package} macro for declarative loading of other packages.
+#+BEGIN_SRC emacs-lisp
+(require 'use-package)
+#+END_SRC
+
+Loading every package during Emacs's initialization is unnecessary and increases load time.
+Instead, packages should only be loaded when a feature they provide is actually needed.
+Use Package provides a feature to lazy-load packages by default:
+#+BEGIN_SRC emacs-lisp
+(setq use-package-always-defer t)
+#+END_SRC
+
+** Org
+After Use Package has been loaded, we can use it to configure all other packages.
+Tangling this Org file for use as Emacs's initialization file requires features from the Org package.
+As such, the below function is specified to belong to the =:config= section of Org's \src_emacs-lisp{use-package} declaration.
+The process of tangling this file is to
+1. Compare the modification time of this file to its tangled source, =./init.el=.
+2. If this file is the more recent of the two, tangle this file then byte compile and load the result.
+3. Otherwise the tangled file is the more recent, so byte compile and load it directly.
+
+#+BEGIN_SRC emacs-lisp :noweb-ref org/config
+(defun org-babel-tangle-init ()
+  "Tangle Emacs's init file."
+  (let ((el-file user-init-file)
+        (org-file "~/.config/emacs/init.org")
+        (load-byte-compile t))
+    (if (not (file-exists-p el-file))
+        ;; If the Emacs Lisp file does not exist, tangle the Org file.
+        (org-babel-tangle-file org-file)
+      ;; If the Emacs Lisp file does exist, compare the modification times.
+      (let* ((org-modify (modify-time org-file))
+             (el-modify (modify-time el-file)))
+        ;; If the Org file was modified more recently, tangle it.
+        (when (< el-modify org-modify)
+          (org-babel-tangle-file org-file))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :noweb-ref org/config
+(defun modify-time (file)
+  (-> (file-attributes file)
+      (file-attribute-modification-time)
+      (float-time)))
+#+END_SRC
+
+** General
+General provides convenience wrappers for setting keybindings and adding hooks.
+It is highly compatible with Use Package and provides additional keywords to the \src_emacs-lisp{use-package} macro.
+General is loaded now just so it can be used in all further \src_emacs-lisp{use-package} declarations.
+The ~:demand~ keyword is used to ensure General is loaded eagerly.
+#+BEGIN_SRC emacs-lisp
+(use-package general
+  :demand)
+#+END_SRC
+
+* Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref customization
+:END:
+
+Emacs has a customization system distinct from simply \src_emacs-lisp{setq}-ing variables.
+By default, any customizations made using that system are appended to the bottom of Emacs's init file.
+This is controlled by the value of the \src_emacs-lisp{custom-file} variable.
+That variable is provided as part of the Cus Edit package, so we will perform modifications inside the \src_emacs-lisp{use-package} declaration of Cus Edit.
+
+Viewing the help documentation for \src_emacs-lisp{custom-file} (via =C-h v custom-file RET=) tells us
+#+BEGIN_QUOTE
+The default is nil, which means to use your init file as specified by \src_emacs-lisp{user-init-file}.
+If the value is not \src_emacs-lisp{nil}, it should be an absolute file name.
+
+You can set this option through Custom, if you carefully read the last paragraph below.
+However, usually it is simpler to write something like the following in your init file:
+
+#+BEGIN_EXAMPLE emacs-lisp
+(setq custom-file "~/.emacs-custom.el")
+(load custom-file)
+#+END_EXAMPLE
+#+END_QUOTE
+
+That \src_emacs-lisp{setq} and \src_emacs-lisp{load} need to be evaluated /after/ Cus Edit has been loaded, so the expressions should go in the ~:config~ block of the \src_emacs-lisp{use-package} declaration.
+Additionally, \src_emacs-lisp{custom-file} needs to exist before it is loaded.
+The file can be created with the function \src_emacs-lisp{f-touch}.
+
+\src_emacs-lisp{f-touch}, in turn, is provided by the package F.
+Since we are relying a function from an external package when we're loading Cus Edit, we need to inform \src_emacs-lisp{use-package} of that fact and tell it to load Cus Edit only after F has been loaded.
+This is done with the ~:after~ keyword of \src_emacs-lisp{use-package}.
+
+Additionally, we want Cus Edit to always be loaded (not just when we interactively use something it provides).
+\src_emacs-lisp{use-package} needs to told to load Cus Edit eagerly (as opposed to lazily), which is accomplished with the ~:demand~ keyword.
+
+#+BEGIN_SRC emacs-lisp
+(use-package cus-edit
+  :after f
+
+  :demand
+
+  :config
+  (let ((path (expand-file-name
+               "custom.el"
+               (file-name-directory user-init-file))))
+    (f-touch path)
+    (setq custom-file path)
+    (load custom-file)))
+#+END_SRC
+
+/F/ is not built-in to GNU Emacs, so it must be downloaded by some package manager separately.
+Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/ (this too can be discovered by viewing the function's help), so /F/ must also be loaded eagerly.
+
+#+BEGIN_SRC emacs-lisp
+(use-package f
+  :demand)
+#+END_SRC
+
+* Interface
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref interface
+:END:
+
+Emacs is fundamentally a user interface built around plain text.
+Given the focus on plain text, several of Emacs's default modes can be disabled.
+These are
+- \src_emacs-lisp{menu-bar-mode},
+- \src_emacs-lisp{tool-bar-mode}, and
+- \src_emacs-lisp{scroll-bar-mode}.
+
+
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+END_SRC
+
+The splash screen, startup message, and scratch message also serve little use, so they too can be disabled.
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-splash-screen t
+      inhibit-startup-message t
+      initial-scratch-message nil)
+#+END_SRC
+
+** Font
+What are colloquially known as "fonts" Emacs refers to "faces".
+Google's Noto family of has the best glyph coverage that I am aware of, so I try to use it everywhere I can.
+Alan Third has a nice write-up in his [[https://idiocy.org/emacs-fonts-and-fontsets.html]["Emacs, fonts and fontsets" post on idiocy.org]] of how to enable Noto fonts everywhere and simultaneously reduce Emacs's need to scour the system for fallback font sets.
+The /Faces/ package provides this functionality, so all font setup can can occur within /Faces/'s \src_emacs-lisp{use-package}.
+
+#+BEGIN_SRC emacs-lisp
+(use-package faces
+  :demand
+
+  :config
+  (when (member "Noto Sans" (font-family-list))
+    (set-face-attribute 'default nil :font "Noto Sans Mono")
+    (set-fontset-font t 'latin "Noto Sans")
+
+    ;; East Asia: 你好, 早晨, こんにちは, 안녕하세요
+    (set-fontset-font t 'han "Noto Sans CJK SC Regular")
+    (set-fontset-font t 'kana "Noto Sans CJK JP Regular")
+    (set-fontset-font t 'hangul "Noto Sans CJK KR Regular")
+    (set-fontset-font t 'cjk-misc "Noto Sans CJK KR Regular")
+
+    ;; South East Asia: ជំរាបសួរ, ສະບາຍດີ, မင်္ဂလာပါ, สวัสดีครับ
+    (set-fontset-font t 'khmer "Noto Sans Khmer")
+    (set-fontset-font t 'lao "Noto Sans Lao")
+    (set-fontset-font t 'burmese "Noto Sans Myanmar")
+    (set-fontset-font t 'thai "Noto Sans Thai")
+
+    ;; Africa: ሠላም
+    (set-fontset-font t 'ethiopic "Noto Sans Ethiopic")
+
+    ;; Middle/Near East: שלום, السّلام عليكم
+    (set-fontset-font t 'hebrew "Noto Sans Hebrew")
+    (set-fontset-font t 'arabic "Noto Sans Arabic")
+
+    ;;  South Asia: નમસ્તે, नमस्ते, ನಮಸ್ಕಾರ, നമസ്കാരം, ଶୁଣିବେ,
+    ;;              ආයුබෝවන්, வணக்கம், నమస్కారం, བཀྲ་ཤིས་བདེ་ལེགས༎
+    (set-fontset-font t 'gujarati "Noto Sans Gujarati")
+    (set-fontset-font t 'devanagari "Noto Sans Devanagari")
+    (set-fontset-font t 'kannada "Noto Sans Kannada")
+    (set-fontset-font t 'malayalam "Noto Sans Malayalam")
+    (set-fontset-font t 'oriya "Noto Sans Oriya")
+    (set-fontset-font t 'sinhala "Noto Sans Sinhala")
+    (set-fontset-font t 'tamil "Noto Sans Tamil")
+    (set-fontset-font t 'telugu "Noto Sans Telugu")
+    (set-fontset-font t 'tibetan "Noto Sans Tibetan")))
+#+END_SRC
+
+When working with prose, I prefer to use a variable-pitch (as opposed to monospace) face.
+Frequently, though, some aspects of a mostly-prose document are better presented in monospace.
+An example of this is the code blocks in this Org file.
+For mixing the two pitches I use the /Mixed Pitch/ package by Alex Branham.
+
+#+BEGIN_SRC emacs-lisp
+(use-package mixed-pitch
+  :ghook
+  ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode))
+#+END_SRC
+
+** Rainbow Identifiers
+Rainbow Identifiers provides a minor mode that highlights identifiers based on their names.
+The highlight color of each identifier is chosen based on the hash of the identifier's name.
+The package's source is available at [[https://github.com/Fanael/rainbow-identifiers][github.com/Fanael/rainbow-identifiers]].
+
+I want this package to be enabled when programming, so I enable it for \src_emacs-lisp{prog-mode} and all major modes that inherit from \src_emacs-lisp{prog-mode}, which effectively covers all programming language major modes.
+This is done by adding \src_emacs-lisp{rainbow-identifiers-mode} to \src_emacs-mode{prog-mode-hook}, performed below by the arguments to the ~:ghook~ keyword[fn:1].
+
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-identifiers
+  :ghook
+  ('prog-mode-hook #'rainbow-identifiers-mode)
+
+  :custom
+  <<rainbow-identifiers/custom>>)
+#+END_SRC
+
+*** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref rainbow-identifiers/custom
+:END:
+
+Only use Rainbow Identifiers to highlight (read: color) variable names.
+
+#+BEGIN_SRC emacs-lisp
+(rainbow-identifiers-faces-to-override
+ '(font-lock-constant-face
+   font-lock-type-face
+   font-lock-function-name-face
+   font-lock-variable-name-face
+   font-lock-keyword-face
+   font-lock-builtin-face))
+#+END_SRC
+
+** Rainbow Delimiters
+Rainbow Delimters provides a minor mode that highlights delimeters such as parantheses based on their depth.
+The highlight color of each level is distinct.
+The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimeters]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+  ;; Load this package eagerly.
+  :demand
+
+  :ghook
+  ('prog-mode-hook #'rainbow-delimiters-mode))
+#+END_SRC
+
+** Line Wrapping
+Out of the box, Emacs will fill paragraph to 72 characters.
+Most projects that care about line width adhere to an 80 character (79 + line feed) maximum width, so to reduce the amount of per-project customization we can set the default value to 80.
+#+BEGIN_SRC emacs-lisp
+(custom-set-default 'fill-column 80)
+#+END_SRC
+
+** Display Line Numbers
+
+#+BEGIN_SRC emacs-lisp
+(use-package display-line-numbers
+  ;; Only load this package if the following code evaluates to non-nil.
+  :if
+  <<display-line-numbers/if>>
+
+  ;; Add the following auto-loading hooks.
+  :ghook
+  ('prog-mode-hook #'display-line-numbers-mode))
+#+END_SRC
+
+*** Conditional Loading
+:PROPERTIES:
+:DESCRIPTION: Define condition for loading ~display-line-numbers~.
+:HEADER-ARGS+: :noweb-ref display-line-numbers/if
+:END:
+
+~display-line-numbers~ was added in GNU Emacs 26.1.
+
+#+BEGIN_SRC emacs-lisp
+(version< "26.1" emacs-version)
+#+END_SRC
+
+* Footnotes
+
+[fn:1] ~:ghook~ is one of the keywords added to \src_emacs-lisp{use-package} by /General/.
