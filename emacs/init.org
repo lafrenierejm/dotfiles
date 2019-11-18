@@ -25,6 +25,9 @@
 ;;; Visual Interface:
 <<interface>>
 
+;;; Buffer Organization:
+<<buffer-organization>>
+
 ;;; Literate Programming:
 <<literate-programming>>
 
@@ -387,6 +390,111 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+BEGIN_SRC emacs-lisp
 (version< "26.1" emacs-version)
+#+END_SRC
+
+* Buffer Organization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref buffer-organization
+:END:
+
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Add the following keybindings.
+  :general
+  <<projectile/general>>
+
+  ;; Customize the following variables.
+  :custom
+  <<projectile/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<projectile/config>>)
+   #+END_SRC
+
+*** Auto-Loading Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref projectile/general
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(:keymaps 'projectile-mode-map
+ "C-c p" 'projectile-command-map)
+#+END_SRC
+
+*** Variable Customizations (~:custom~)
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref projectile/custom
+:END:
+
+Enable ~projectile-mode~ globally.
+#+BEGIN_SRC emacs-lisp
+(projectile-mode t)
+#+END_SRC
+
+When switching projects, default to opening the ~vc-dir~ at the root of the project.
+#+BEGIN_SRC emacs-lisp
+(projectile-switch-project-action #'projectile-vc)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref projectile/config
+:END:
+
+Use Ivy's integration.
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'ivy
+  (setq projectile-completion-system 'ivy))
+#+END_SRC
+
+** Counsel Projectile
+
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-projectile
+  ;; Load this package after the following packages.
+  :after (:all counsel projectile)
+
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Add the following keybindings.
+  :general
+  (:keymaps 'projectile-mode-map
+            "C-x C-f" #'counsel-projectile-find-file
+            "C-x C-b" #'counsel-projectile-switch-to-buffer
+            "C-x C-d" #'counsel-projectile-find-dir)
+
+  ;; Customize the following variables.
+  :custom
+  <<counsel-projectile/custom>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref counsel-projectile/custom
+:END:
+
+Enable ~counsel-projectile-mode~ globally.
+#+BEGIN_SRC emacs-lisp
+(counsel-projectile-mode t)
+#+END_SRC
+
+** Perspective
+
+/Perspective/ provides tagged workspaces.
+#+BEGIN_SRC emacs-lisp
+(use-package perspective
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Customize variables.
+  :custom
+  (persp-mode t "Enable perspective mode globally"))
 #+END_SRC
 
 * Literate Programming
