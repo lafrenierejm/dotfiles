@@ -507,6 +507,224 @@ Enable ~counsel-projectile-mode~ globally.
   (persp-mode t "Enable perspective mode globally"))
 #+END_SRC
 
+** Operations on Current Buffer
+*** Rename
+:PROPERTIES:
+:DESCRIPTION: Rename a buffer and its visited file, if any.
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer/rename (new-file-name &optional buffer ok-if-already-exists)
+  "Rename a buffer and the file it's visiting, if any, to NEW-FILE-NAME.
+
+If BUFFER is not provided, use the current buffer.
+If BUFFER is a string, use that string as the name of the buffer to rename.
+If BUFFER is a buffer object, use it as the subject of the rename.
+
+OK-IF-ALREADY-EXISTS is passed directly to `rename-file'."
+  ;; If called interactively...
+  (interactive (let* ((buffer (current-buffer~get-buffer "rename"))
+                      (new-file-name
+                       (current-buffer~read-file-name "rename"
+                                                      (buffer-name buffer)))
+                      (ok-if-already-exists 1)) ; Request confirmation before overwrite.
+                 (list new-file-name buffer ok-if-already-exists)))
+  (let* ((buffer (current-buffer~obj-to-buffer buffer))
+         (file (buffer-file-name buffer))
+         (orig-buffer-name (buffer-name buffer))
+         (new-buffer-name nil))
+    (cond
+     ;; If FILE is tracked in VC...
+     ((vc-backend file)
+      ;; Rename FILE through VC.
+      (vc-rename-file file new-file-name))
+     ;; Else if FILE exists at all...
+     ((file-exists-p file)
+      ;; Rename FILE normally.
+      (rename-file file new-file-name ok-if-already-exists)))
+    ;; Rename BUFFER, using `generate-new-buffer-name' if necessary.
+    ;; Record the name actually assigned.
+    (setq new-buffer-name (rename-buffer new-file-name t))
+    (set-visited-file-name new-file-name t t)
+    (message "Renamed buffer %s to %s and its file to %s."
+             orig-buffer-name new-buffer-name
+             new-file-name)))
+#+END_SRC
+
+Now bind the above function.
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-r") #'current-buffer/rename)
+#+END_SRC
+
+*** Delete
+:PROPERTIES:
+:DESCRIPTION: Delete a buffer and its visited file, if any.
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer/delete (&optional buffer)
+  "Delete the file a buffer is visiting, if any, then kill the buffer.
+
+If no optional BUFFER is provided, use the current buffer.
+If the optional BUFFER is a string, use that string as the name of the buffer to use.
+If the optional BUFFER is a symbol, prompt the user for the name of the buffer to use."
+  ;; If called interactively...
+  (interactive (list (current-buffer~get-buffer "delete")))
+  (let* ((buffer (current-buffer~obj-to-buffer buffer))
+         (file (buffer-file-name buffer)))
+    (when file
+      (cond
+       ;; If FILE is tracked in VC, delete it through VC.
+       ((vc-backend file)
+        (vc-delete-file file))
+       ;; Else if FILE exists, delete it normally.
+       ((file-exists-p file)
+        (delete-file file 'trash)))
+      (message "Deleted file %s" file))
+    (kill-buffer buffer)))
+#+END_SRC
+
+Now bind the above function.
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-S-d") #'current-buffer/delete)
+#+END_SRC
+
+*** Copy
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer/copy
+    (new-file-name
+     &optional buffer confirm-overwrite keep-time preserve-uid-gid perserve-permissions)
+  "Copy the file a buffer is visiting, if any, to NEW-FILE-NAME and open the copy in a new buffer.
+
+If BUFFER is not provided, use the current buffer.
+If BUFFER is a string, use that string as the name of the buffer to rename.
+If BUFFER is a buffer object, use it as the subject of the rename.
+
+If the specified buffer is not visiting a file, write the buffer's contents to NEW-FILE-NAME.
+
+If CONFIRM-OVERWRITE is non-nil, this function asks for confirmation before overwiting an existing file at NEW-FILE-NAME.
+Interactively, confirmation is required unless a prefix argument is supplied.
+
+KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS are passed directly to `copy-file'."
+  ;; If called interactively...
+  (interactive (let* ((buffer (current-buffer~get-buffer "copy"))
+                      (new-file-name (current-buffer~read-file-name "copy" (buffer-name buffer)))
+                      ;; Request confirmation before overwriting an existing file, unless called with a prefix argument.
+                      (confirm-overwrite (if current-prefix-arg t 1)))
+                 (list new-file-name buffer confirm-overwrite)))
+  (let* ((buffer (current-buffer~obj-to-buffer buffer))
+         (file (buffer-file-name buffer))
+         (new-buffer-name (buffer-name buffer)))
+    ;; If BUFFER is not visiting a file...
+    (if (not (file-exists-p file))
+        ;; Write the content of BUFFER to NEW-FILE-NAME.
+        (write-file new-file-name confirm-overwrite)
+      ;; Else...
+      ;; Copy the visited file FILE to NEW-FILE-NAME.
+      (copy-file file
+                 new-file-name
+                 ;; If CONFIRM-OVERWRITE is non-nil...
+                 (if confirm-overwrite
+                     ;; Ask for confirmation before overwriting.
+                     1
+                   ;; Else overwrite without prompting.
+                   t)
+                 keep-time
+                 preserve-uid-gid
+                 perserve-permissions)
+      ;; Open NEW-FILE-NAME in a separate buffer.
+      (setq new-buffer-name (buffer-name (find-file-noselect new-file-name))))
+    (message "Wrote buffer %s to %s and opened the new file as %s."
+             (buffer-name buffer) new-file-name new-buffer-name)))
+#+END_SRC
+
+Now bind the above function.
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-c") #'current-buffer/copy)
+#+END_SRC
+
+*** Revert
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer/revert (&optional noconfirm)
+  "Replace current buffer text with the text of the visited file on disk.
+
+If NOCONFIRM is nil, prompt the user before reverting a modified buffer.
+NOCONFIRM is set to t when called interactively with a prefix argument."
+  (interactive (list current-prefix-arg))
+  (revert-buffer :ignore-auto (or noconfirm (not (buffer-modified-p)))))
+#+END_SRC
+
+Now bind the above function.
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-g") #'current-buffer/revert)
+#+END_SRC
+
+*** Kill
+
+**** Define Function
+:PROPERTIES:
+:DESCRIPTION: Kill the current buffer.
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer/kill (&optional ignore-buffer-modified-p)
+  "Kill the current buffer.
+
+If IGNORE-BUFFER-MODIFIED-P is nil, prompt the user before killing a modified buffer.
+IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a prefix argument."
+  (interactive (list current-prefix-arg))
+  (when ignore-buffer-modified-p
+    (set-buffer-modified-p nil))
+  (kill-this-buffer))
+#+END_SRC
+
+**** Bind Function
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-k") #'current-buffer/kill)
+#+END_SRC
+
+*** Place Visited File Name on Kill Ring
+
+**** Define Function
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer/yank-path ()
+  "Place the path of the current buffer's visited file on the kill ring."
+  (interactive)
+  (when-let* ((filepath (or (buffer-file-name) default-directory))
+              (expanded-filename (expand-file-name filepath)))
+    (kill-new expanded-filename)
+    (message "Copied buffer path '%s' to the clipboard." expanded-filename)))
+#+END_SRC
+
+**** Bind Function
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-y") #'current-buffer/yank-path)
+#+END_SRC
+
+*** Visit Current Directory in Dired
+
+**** Define Function
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer/dired ()
+  "Open the current directory in Dired."
+  (interactive)
+  (when-let* ((file-path (or (buffer-file-name) default-directory))
+              (directory-path (file-name-directory file-path)))
+    (dired directory-path)))
+#+END_SRC
+
+**** Bind Function
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-d") #'current-buffer/dired)
+#+END_SRC
+
 * Literate Programming
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref literate-programming
