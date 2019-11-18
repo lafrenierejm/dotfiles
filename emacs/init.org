@@ -34,6 +34,9 @@
 ;;; Minibuffer:
 <<minibuffer>>
 
+;;; TRAMP:
+<<tramp>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -1356,6 +1359,23 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
 
 (add-hook 'minibuffer-setup-hook #'my-ivy-fly-time-travel)
 #+END_SRC
+
+* TRAMP
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref tramp
+:END:
+
+TRAMP allows Emacs to transparently access remote files as if they were local files.
+#+BEGIN_SRC emacs-lisp
+(use-package tramp
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following variable customizations.
+  :custom
+  <<tramp/custom>>)
+#+END_SRC
+
 * Footnotes
 
 [fn:1] ~:ghook~ is one of the keywords added to \src_emacs-lisp{use-package} by /General/.
