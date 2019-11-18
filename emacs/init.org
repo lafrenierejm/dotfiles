@@ -59,6 +59,9 @@
 ;;; Programming Languages:
 <<programming-languages>>
 
+;;; Windows and Frames
+<<windows-and-frames>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -3306,6 +3309,224 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :custom
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable))
+#+END_SRC
+
+* Windows and Frames
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref windows-and-frames
+:END:
+
+** Minions
+#+BEGIN_QUOTE
+A minor-mode menu for the mode line.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package minions
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following variable customizations.
+  :custom
+  (minions-mode-line-lighter "…")
+  (minions-mode t "Enable `minions-mode' globally."))
+#+END_SRC
+
+** EXWM
+From the package's README:
+#+BEGIN_QUOTE
+EXWM (Emacs X Window Manager) is a full-featured tiling X window manager for Emacs built on top of XELB.
+It features:
+
+- Fully keyboard-driven operations
+- Hybrid layout modes (tiling & stacking)
+- Dynamic workspace support
+- ICCCM/EWMH compliance
+- (Optional) RandR (multi-monitor) support
+- (Optional) Built-in system tray
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package exwm
+  ;; Do not load the package lazily.
+  :demand
+
+  ;; Inform the bytecode compiler of the following functions.
+  :commands
+  (init-window-and-frame/start-process)
+
+  ;; Customize the following variables.
+  :custom
+  <<exwm/custom>>
+
+  ;; Add the following function hooks.
+  :gfhook
+  <<exwm/gfhook>>
+
+  ;; Execute the following code after the package has been loaded.
+  :config
+  <<exwm/config>>)
+#+END_SRC
+
+*** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref exwm/custom
+:END:
+
+Only enable a single workspace.
+Buffer switching with e.g. Counsel is preferred to using multiple workspaces.
+
+#+BEGIN_SRC emacs-lisp
+(exwm-workspace-number 1)
+#+END_SRC
+
+*** Non-Auto-Loading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref exwm/gfhook
+:END:
+
+Use Firefox windows' names as the windows' buffers names.
+
+#+BEGIN_SRC emacs-lisp
+('exwm-update-title-hook
+ (defun init-window-and-frame/update-title ()
+   "Use Firefox windows' names as the windows' buffers names."
+   (when (or (string-match "Icecat" exwm-class-name)
+             (string-match "Next" exwm-class-name))
+     (exwm-workspace-rename-buffer exwm-title))))
+   #+END_SRC
+
+Add simulation keys for Firefox windows.
+
+#+BEGIN_SRC emacs-lisp
+('exwm-manage-finish-hook
+ (defun init-window-and-frame/set-firefox-simulation-keys ()
+   (when (and exwm-class-name (string= exwm-class-name "Icecat"))
+     (exwm-input-set-local-simulation-keys
+      '(([?\C-s] . [?\C-f])
+        ([?\C-q] . [?\C-w])
+        ([?\C-t] . [?\C-n]))))))
+   #+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref exwm/config
+:END:
+
+Define a function to launch applications from the shell.
+Launching applications is performed by calling ~start-process-shell-command~.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-window-and-frame/start-process (command)
+  "Start a process via a shell COMMAND."
+  (interactive (list (read-shell-command "$ ")))
+  (start-process-shell-command command nil command))
+#+END_SRC
+
+**** Keybindings
+Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
+This will be performed with =s-r=.
+
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "s-r") #'exwm-reset)
+#+END_SRC
+
+Hide all windows except the current one.
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "s-o") #'delete-other-windows)
+#+END_SRC
+
+Close the current window and kill its buffer.
+
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "C-s-x") #'kill-buffer-and-window)
+#+END_SRC
+
+Close the current window without killing its buffer.
+
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "s-x") #'delete-window)
+#+END_SRC
+
+Run a shell command.
+
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "<s-return>") #'init-window-and-frame/start-process)
+#+END_SRC
+
+Open an Eshell buffer in the current buffer's location.
+
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "C-z") #'init-eshell/find-eshell-here)
+#+END_SRC
+
+Move =point= to the windows immediately around the current window.
+
+#+BEGIN_SRC emacs-lisp
+(exwm-input-set-key (kbd "s-h") #'windmove-left)
+(exwm-input-set-key (kbd "s-j") #'windmove-down)
+(exwm-input-set-key (kbd "s-k") #'windmove-up)
+(exwm-input-set-key (kbd "s-l") #'windmove-right)
+#+END_SRC
+
+** Ace Window
+From the README of Oleh Krehel (abo-abo)'s Ace Window package:
+#+BEGIN_QUOTE
+This package aims to take the speed and predictability of ~windmove~ and pack it into a single key binding, similar to ~other-window~.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Add the following keybindings.
+  :general
+  ("s-a" #'ace-window)
+
+  ;; Apply the following customizations.
+  :custom
+  <<ace-window/custom>>
+
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<ace-window/init>>)
+#+END_SRC
+
+*** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ace-window/custom
+:END:
+
+Use home row characters to label windows.
+
+#+BEGIN_SRC emacs-lisp
+(aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+#+END_SRC
+
+Issue a read-char even for one window.
+This allows more flexibility in what action is performed, i.e. more than just changing focus, at the cost of requiring more keystrokes for the single most common task of changing focus.
+
+#+BEGIN_SRC emacs-lisp
+(aw-dispatch-always t)
+#+END_SRC
+
+Show the ace window key in the mode line.
+This is useful for EXWM buffers which cannot display keys in the buffer itself.
+
+#+BEGIN_SRC emacs-lisp
+(ace-window-display-mode t)
+#+END_SRC
+
+*** Pre-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ace-window/init
+:END:
+
+Bind Ace Window to =s-a= in EXWM.
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'exwm
+  (exwm-input-set-key (kbd "s-a") #'ace-window))
 #+END_SRC
 
 * Footnotes
