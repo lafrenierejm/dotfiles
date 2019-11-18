@@ -1405,6 +1405,15 @@ Determine where Emacs creates backups for files edited via TRAMP.
 :HEADER-ARGS+: :noweb-ref version-control
 :END:
 
+** Autorevert
+
+#+BEGIN_SRC emacs-lisp
+(use-package autorevert
+  ;; Customize the following variables.
+  :custom
+  (auto-revert-verbose nil "Do not display messages when buffers are reverted."))
+#+END_SRC
+
 ** Diff HL
 
 #+BEGIN_SRC emacs-lisp
