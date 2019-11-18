@@ -1866,6 +1866,900 @@ The only addition is the doc string.
     (comint-truncate-buffer)))
 #+END_SRC
 
+** Emacs Shell
+*** Esh Mode
+#+BEGIN_SRC emacs-lisp
+(use-package esh-mode
+  ;; Load this package eagerly.
+  :demand
+
+  :preface
+  <<esh-mode/preface>>
+
+  :config
+  <<esh-mode/config>>)
+#+END_SRC
+
+**** Pre-Evaluation Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref esh-mode/preface
+:END:
+
+Define the format of the timestamp to prefix prompts with.
+By default, this follows ISO 8601.
+#+NAME: init-eshell/prompt-timestamp-format-string
+#+BEGIN_SRC emacs-lisp
+(defcustom init-eshell/prompt-timestamp-format-string
+  "%FT%T%z"
+  "The format-string used for Eshell prompts' timestamps.
+
+See `help format-time-string' for the definition of the constructs.
+The default value follows ISO 8601."
+  :type '(string))
+#+END_SRC
+
+Define the regexp to match the result of the above format string.
+#+NAME: init-eshell/prompt-timestamp-regexp
+#+BEGIN_SRC emacs-lisp
+(defcustom init-eshell/prompt-timestamp-regexp
+  (rx
+   (repeat 4 digit) ?- (repeat 2 digit) ?- (repeat 2 digit)
+   ?T (repeat 2 digit) (repeat 2 (and ?: (repeat 2 digit)))
+   (or ?- ?+) (repeat 4 digit))
+  "A regular expression that matches `init-eshell/prompt-timestamp-format-string'."
+  :type '(regexp))
+#+END_SRC
+
+**** Post-Load Execution
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref esh-mode/config
+:END:
+
+***** Define Eshell-Specific ~beginning-of-maybe-line~
+[[../minor-mode/init-evil.org][init-evil.org]] defines ~init/beginning-of-maybe-line~.
+That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
+
+=init-eshell/beginning-of-maybe-line= moves =point= toward the beginning of the current line incrementally by semantic region.
+1. If point is in the text of a command, point will be moved to the beginning of the command.
+2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
+3. Point will be moved to the beginning of the line.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/beginning-of-maybe-line ()
+  "Move point to the start of the command beginning of the line."
+  (interactive)
+  (let ((old-point (point)))   ; Get current position.
+    (eshell-bol)               ; Move to beginning of current command.
+    (when (or (<= old-point (point))
+              (= (point-at-bol) (point)))
+      (back-to-indentation) ; Go to the first significant column
+      ;; If already at or before the first significant column...
+      (when (<= old-point (point))
+        ;; Then go to the beginning of the line.
+        (beginning-of-line)))))
+#+END_SRC
+
+***** Accurate Prompt Timestamp
+:PROPERTIES:
+:DESCRIPTION: Before sending input, update the current prompt with a timestamp.
+:END:
+
+A common practice among users of command line interface (CLI) shells is to include timestamps in their shells' prompts.
+
+In Bash, for example, timestamping one's prompt is frequently accomplished by using the ~date~ command as part of the prompt variable.
+For example, the prompt src_sh[:exports code]{PS1="(\$date +%H:%M:%S) $"} would result in a prompt such as =21:43:41 $=.
+
+I find the information by such a prompt to be misleading, however.
+
+****** The Problem
+My motivation for timestamping my prompts was to be able to easily answer the question, "When did I run this command?"
+But rather than providing context for when the corresponding command was submitted, most =PS1=-inserted timestamps actually indicate when the /previous/ command finished executing.
+
+Answering the question about when an arbitrary command \(c_n\) was submitted, then, involves
+1. ignoring the timestamp \(t_n\) that is next to \(c_n\);
+2. scrolling down to where the next command \(c_{n+1}\) was entered;
+3. removing the timestamp \(t_{n+1}\) that is next to \(c_{n+1}\) from the context conferred upon it by its proximity to \(c_{n+1}\); and
+4. mentally linking \(t_{n+1}\) back to \(c_n\).
+
+Clearly, the task is not so complicated as to be impossible.
+It is far less efficient and more error-prone than it could be, though.
+That inefficiency results from requiring the user to
+- consciously splitting then re-pairing timestamps and
+- visually --- and, if scrolling is required, phsyically --- navigate between two prompts.
+
+
+****** The Solution
+The primary difficulty in establishing accurate timestamps is that doing so requires modifying the prompt text /after/ its input has been sent.
+Some shells have workaround for this, such as Zsh's ~preexec~.
+Rather than implementing such a function for Eshell, we can instead take advantage of the fact that Eshell is written in Emacs Lisp and outputs directly to an Emacs buffer.
+
+Define a function to update the most recent prompt's timestamp.
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/timestamp-prompt ()
+  "Update the timestamp at the beginning of the current prompt."
+  (interactive)
+  (let ((cur-pos (point)))
+    ;; Move to the end of the buffer.
+    (goto-char (point-max))
+    ;; Move POINT to the end of the previous prompt, then to end of the next prompt.
+    ;; This handles cases of multi-line input and ensures POINT is at the most recent prompt.
+    (eshell-previous-prompt 1)
+    (eshell-next-prompt 1)
+    ;; Move POINT to the beginning of the line.
+    (forward-line 0)
+    (let ((inhibit-read-only t)
+          (prompt-properties
+           (list 'font-lock-face 'eshell-prompt
+                 'font-sticky '(font-lock-face 'read-only)
+                 'read-only t
+                 'rear-nonsticky '(font-lock-face read-only))))
+      ;; Remove the existing timestamp.
+      (when (re-search-forward init-eshell/prompt-timestamp-regexp)
+        (replace-match ""))
+      ;; Insert the timestamp, propertized to match the rest of the prompt.
+      (insert (apply #'propertize
+                     (format-time-string init-eshell/prompt-timestamp-format-string)
+                     prompt-properties)))
+    ;; Restore POINT to its original location.
+    (goto-char cur-pos)))
+#+END_SRC
+Where ~init-eshell/prompt-timestamp-format-string~ and ~init-eshell/prompt-timestamp-regexp~ are defined in ref:init-eshell/prompt-timestamp-format-string and ref:init-eshell/prompt-timestamp-regexp, respectively.
+
+Call the above function before sending input.
+#+BEGIN_SRC emacs-lisp
+(advice-add 'eshell-send-input :before #'init-eshell/timestamp-prompt)
+#+END_SRC
+
+***** Narrow to Command
+
+Narrow the buffer to the context ~point~ is currently in:
+- command output :: narrow to the preceding command and the current output
+- last prompt/command :: do nothing
+- other prompt/command :: narrow to the prompt, command, and the command's output
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/narrow-to-command ()
+  "Make text outside the current command invisible.
+
+- If `point' is in the last prompt or last command, do nothing.
+- If `point' is in command output, narrow to the output and the corresponding
+  prompt and command.
+- if `point' is in a prompt or command that's not the last, narrow to that
+  prompt, command, and the corresponding output."
+  (interactive)
+  (let ((orig (point))
+        (line-orig (line-number-at-pos (point)))
+        (line-later-prompt (progn (eshell-next-prompt 2)
+                                  (line-number-at-pos (point)))))
+    ;; Restore original position.
+    (goto-char orig)
+    ;; If not in the last command...
+    (if (not (= line-orig line-later-prompt))
+        (let* ((command-beg (progn (eshell-bol) (point)))
+               (line-beg (progn (beginning-of-line) (point)))
+               (start (cond
+                       ;; If not in a command...
+                       ((= command-beg line-beg)
+                        (eshell-previous-prompt 1)
+                        (beginning-of-line)
+                        (point))
+                       ;; Else in a command...
+                       (t
+                        line-beg)))
+               (end (progn
+                      (eshell-next-prompt 2) ; next prompt
+                      (previous-line 1) ; up one line
+                      (end-of-line) ; end of line
+                      (point))))
+          (narrow-to-region start end)))))
+#+END_SRC
+
+*** Em Hist
+#+BEGIN_SRC emacs-lisp
+(use-package em-hist
+  ;; Load eagerly.
+  :demand
+
+  ;; Customize the following variables.
+  :custom
+  <<em-hist/custom>>)
+#+END_SRC
+
+**** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-hist/custom
+:END:
+
+Determine whether duplicates are skipped when traversing command history.
+#+BEGIN_SRC emacs-lisp
+(eshell-hist-ignoredups t "Skip duplicates when traversing command history.")
+#+END_SRC
+
+*** Em Dirs
+#+BEGIN_SRC emacs-lisp
+(use-package em-dirs
+  :config
+  <<em-dirs/config>>)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-dirs/config
+:END:
+
+***** Return Path Relative to Project Root
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/pwd-relative-to-project (directory)
+  "Print DIRECTORY relative to its Projectile root, if any.
+
+If DIRECTORY is in a project as determined by Projectile, return DIRECTORY's
+path starting starting at the project's root.
+
+If DIRECTORY is _not_ in a project, return the abbreviated form of DIRECTORY's
+path."
+  (s-chop-suffix
+   "/"
+   (if-let (((fboundp #'projectile-project-name))
+            ((fboundp #'projectile-project-root))
+            (project-root (projectile-project-root directory))
+            (project-name (projectile-project-name project-root)))
+       ;; If in a project:
+       (if (string=
+            (file-name-as-directory (expand-file-name directory))
+            project-root)
+           ;; If at a project's root: use the project's name
+           project-name
+         ;; Else not at project's root: use path starting with project's root
+         (concat (file-name-as-directory project-name)
+                 (file-relative-name
+                  (expand-file-name directory)
+                  project-root)))
+     ;; Else not in project: use abbreviated path
+     (abbreviate-file-name directory))))
+#+END_SRC
+
+***** Abbreviate Path Elements
+Printing the path to the current directory in the shell prompt helps me keep track of the context.
+However, if the path is long this can result in unwieldy prompts.
+The following functions can be used to abbreviate a path by shortening each element in the path to that element's first non-period character;
+only the last directory in the path is shown in full.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/abbreviate-dirname (filename)
+  (cond
+   ((string-empty-p filename)
+    "")
+   ((string= (substring filename 0 1) ".")
+    (substring filename 0 2))
+   (t
+    (substring filename 0 1))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/abbreviate-path (path)
+  "Abbreviate each element in PATH except for the last.
+
+Abbreviated path elements are represented by their first non-period
+character. For example, the path \"/home/user/.config/curdir\" will become
+\"/h/u/.c/curdir\"."
+  (let* ((split-path (split-string path "/")))
+    (if (< (length split-path) 2)
+        (or (car split-path) "")
+      (concat
+       (file-name-as-directory
+        (cl-reduce
+         (lambda (directory filename)
+           (concat (if (string-empty-p directory)
+                       "/"
+                     (file-name-as-directory directory))
+                   filename))
+         (mapcar
+          #'init-eshell/abbreviate-dirname
+          split-path)
+         :end (- (length split-path) 1)))
+       (car (last split-path)))
+      path)))
+#+END_SRC
+
+***** Create Eshell Buffer Names
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/name-buffer (directory &optional process-name)
+  "Create a name for an Eshell buffer in DIRECTORY."
+  (concat "*eshell "
+          (init-eshell/pwd-relative-to-project directory)
+          (when process-name
+            (concat " <" process-name ">"))
+          "*"))
+#+END_SRC
+
+***** Prefer Changing Buffers to Changing Directories
+Redefine ~eshell/cd~ to prefer switching to an Eshell buffer in the new directory (if such a buffer exists) over changing the directory of the buffer where ~eshell/cd~ was called.
+Whether or not an Eshell buffer exists at the specified location is determined by the name of existing Eshell buffers.
+
+The following code is derived directly from code in GNU Emacs's Em Dirs and Files packages.
+As such, it is licensed under GPLv3.
+
+#+BEGIN_SRC emacs-lisp
+(defun eshell/cd (&rest args)
+  "Alias to extend the behavior of `cd'.
+
+If an Eshell buffer already exists at the target directory, switch to that
+buffer.  Otherwise, change the working directory of the current buffer to the
+target directory then rename the current buffer to reflect its new working
+directory.
+
+The presence of an existing Eshell buffer at the new location is determined by
+comparing the name of buffers to the result of `init-eshell/name-buffer'."
+  (setq args (eshell-flatten-list args))
+  (let ((path (car args))
+        (subpath (car (cdr args)))
+        (case-fold-search (eshell-under-windows-p))
+        handled)
+    (if (numberp path)
+        (setq path (number-to-string path)))
+    (if (numberp subpath)
+        (setq subpath (number-to-string subpath)))
+    (cond
+     (subpath
+      (let ((curdir (eshell/pwd)))
+        (if (string-match path curdir)
+            (setq path (replace-match subpath nil nil curdir))
+          (error "Path substring `%s' not found" path))))
+     ((and path (string-match "^-\\([0-9]*\\)$" path))
+      (let ((index (match-string 1 path)))
+        (setq path
+              (ring-remove eshell-last-dir-ring
+                           (if index
+                               (string-to-number index)
+                             0)))))
+     ((and path (string-match "^=\\(.*\\)$" path))
+      (let ((oldpath (eshell-find-previous-directory
+                      (match-string 1 path))))
+        (if oldpath
+            (setq path oldpath)
+          (let ((len (ring-length eshell-last-dir-ring))
+                (index 0))
+            (if (= len 0)
+                (error "Directory ring empty"))
+            (eshell-init-print-buffer)
+            (while (< index len)
+              (eshell-buffered-print
+               (concat (number-to-string index) ": "
+                       (ring-ref eshell-last-dir-ring index) "\n"))
+              (setq index (1+ index)))
+            (eshell-flush)
+            (setq handled t)))))
+     (path
+      (setq path (eshell-expand-multiple-dots path))))
+    (unless handled
+      (let* ((cd-path (or (parse-colon-path (getenv "CDPATH"))
+                          (list "./")))
+             (curdir (eshell/pwd))
+             (newdir (expand-file-name (file-name-as-directory (or path "~"))))
+             (newname (init-eshell/name-buffer newdir)))
+        (unless (equal curdir newdir)
+          (eshell-add-to-dir-ring curdir))
+        ;; If an Eshell buffer already exists in the new directory...
+        (if-let ((newbuf (get-buffer newname)))
+            ;; Then switch to the existing Eshell buffer.
+            (switch-to-buffer newbuf)
+          ;; Else change to the new directory.
+          (let ((result (cd newdir)))
+            ;; Change the buffer's name.
+            (rename-buffer newname)
+            ;; If `eshell-cd-shows-directory' is non-nil...
+            (when eshell-cd-shows-directory
+              ;; Then print the new directory.
+              (eshell-printn result))))
+        (run-hooks 'eshell-directory-change-hook)
+        (if eshell-list-files-after-cd
+            ;; Let-bind eshell-last-command around this?
+            (eshell-plain-command "ls" (cdr args)))
+        nil))))
+    #+END_SRC
+
+*** Eshell
+#+BEGIN_SRC emacs-lisp
+(use-package eshell
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Load this package after the following packages.
+  :after (:all evil ivy)
+
+  ;; Inform the bytecode compiler of the following functions.
+  :commands
+  (init-eshell/add-visual-commands
+   init-eshell/beginning-of-maybe-line
+   init-eshell/find-eshell
+   init-eshell/find-eshell-here
+   init-eshell/prompt)
+
+  ;; Add the following keybindings.
+  :general
+  <<eshell/general>>
+
+  ;; Add the following non-autoloading hooks.
+  :gfhook
+  <<eshell/gfhook>>
+
+  ;; Customize the following variables.
+  :custom
+  <<eshell/custom>>
+
+  ;; Execute the following code before loading this package.
+  :init
+  <<eshell/init>>
+
+  ;; Execute the following code after loading this package.
+  :config
+  <<eshell/config>>)
+#+END_SRC
+
+**** Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref eshell/general
+:END:
+
+Map the opening an Eshell buffer to =C-x z=.
+This keybinding mirrors the defaults for ~find-file~ and ~dired~.
+
+#+BEGIN_SRC emacs-lisp
+("C-x z" #'init-eshell/find-eshell)
+#+END_SRC
+
+Map ~init-eshell/find-eshell-here~ to =C-z=.
+This imitates the behavior of *NIX terminal applications.
+In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
+
+#+BEGIN_SRC emacs-lisp
+("C-z" #'init-eshell/find-eshell-here)
+#+END_SRC
+
+**** Non-Autoloading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref eshell/gfhook
+:END:
+
+Build the list of commands to be run in Term mode buffers.
+
+#+BEGIN_SRC emacs-lisp
+(nil #'init-eshell/add-visual-commands)
+#+END_SRC
+
+Add the following keybindings:
+- =C-l= :: clear the buffer's scrollback
+- =C-x n c= :: narrow to the current command
+- =C-z= :: "background" the current process
+
+#+BEGIN_SRC emacs-lisp
+(nil (lambda ()
+       (general-define-key
+        :keymaps 'eshell-mode-map
+        "C-l" #'init-eshell/clear-scrollback
+        "C-x n c" #'init-eshell/narrow-to-command
+        "C-z" #'init-eshell/background-process-maybe
+        :states '(insert)
+        "C-r" #'counsel-esh-history)))
+#+END_SRC
+
+**** Customize Variables
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref eshell/custom
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(eshell-prefer-lisp-functions nil "Prefer external commands to Lisp functions.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(eshell-prefer-lisp-variables nil "Prefer environment variables to Lisp variables.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(eshell-prompt-function #'init-eshell/prompt)
+#+END_SRC
+
+**** Pre-Load Execution
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref eshell/init
+:END:
+
+***** Eshell Prompt
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/prompt ()
+  "Prefix \"$USER@$(hostname):\" if on remote host."
+  (concat
+   (format-time-string
+    (concat init-eshell/prompt-timestamp-format-string " "))
+   (if (file-remote-p default-directory 'host)
+       (with-parsed-tramp-file-name default-directory nil
+         (concat
+          (when user
+            (concat user "@"))
+          host ":"
+          localname))
+     (init-eshell/abbreviate-path
+      (init-eshell/pwd-relative-to-project
+       (expand-file-name default-directory))))
+   (if (= (user-uid) 0)
+       " # "
+     " $ ")))
+#+END_SRC
+
+***** Set =$PAGER=
+Because Eshell runs entirely within an Emacs buffer, Eshell does not need an external pager.
+Instead, text can be dumped directly into the buffer.
+This is accomplished by setting ~PAGER~ to ~cat~.
+
+#+BEGIN_SRC emacs-lisp
+(setenv "PAGER" "cat")
+#+END_SRC
+
+***** Use Magit for Some Git Commands
+The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.rulez.org][<algernon@bonehunter.rulez.org>]] and shared under GPLv3.
+
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'magit
+  (defun eshell/git (command &rest args)
+    (pcase command
+      ;; Use magit's log.
+      ("log" (apply #'algernon/git-log args))
+      ;; Use magit's status.
+      ("status" (progn
+                  (magit-status)
+                  (eshell/echo)))
+      ;; Run all other commands directly in `git'.
+      (_ (let ((command (s-join " " (append (list "git" command) args))))
+           (message command)
+           (shell-command-to-string command))))))
+#+END_SRC
+
+Run ~magit-log~ after determining if the argument to ~git log~ was a file or branch.
+
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'magit
+  (defun algernon/git-log (&rest args)
+    (let* ((branch-or-file (car args))
+           (file-list (if (and branch-or-file (f-file-p branch-or-file))
+                          args
+                        (cdr args)))
+           (branch (if (and branch-or-file (f-file-p branch-or-file))
+                       "HEAD"
+                     branch-or-file)))
+      (message branch-or-file)
+      (if branch-or-file
+          (magit-log (list branch)
+                     '()
+                     (mapcar
+                      (lambda (f) (concat (file-name-as-directory (eshell/pwd)) f))
+                      file-list))
+        (magit-log-head)))
+    (eshell/echo)))
+#+END_SRC
+
+**** Post-Load Execution
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref eshell/config
+:END:
+
+***** "Visual" Commands
+Run the following commands in a =term= buffer:
+#+NAME: visual-commands
+- alsamixer
+- ssh
+- top
+- tail
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/add-visual-commands ()
+  "Add commands to `eshell-visual-commands'."
+  (let ((commands (list "alsamixer" "ssh" "top" "tail")))
+    (dolist (command commands)
+      (add-to-list 'eshell-visual-commands command))))
+#+END_SRC
+
+***** Custom Functions
+****** Open Eshell in a Given Directory
+Open or switch to an Eshell buffer in a given directory.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/find-eshell (directory)
+  "Open Eshell in DIRECTORY.
+
+If an Eshell instance for the directory already exists, switch to it.  If no
+such instance exists, start a new instance whose name includes the directory."
+  (interactive "DOpen Eshell in: ")
+  ;; Set the directory to open Eshell in.
+  (let* ((eshell-buffer-name (init-eshell/name-buffer directory))
+         (buffer (get-buffer-create eshell-buffer-name)))
+    (pop-to-buffer-same-window buffer)
+    (unless (derived-mode-p 'eshell-mode)
+      (eshell-mode))
+    buffer))
+#+END_SRC
+
+****** Open Eshell in the Current Directory
+
+Define a function to open an Eshell instance in the current directory.
+If an Eshell instance already exists in that directory, switch to its buffer.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/find-eshell-here ()
+  "Open Eshell in the current working directory.
+
+If an Eshell instance for the directory already exists, switch to it. If no such
+instance exists, start a new instance whose name includes the directory."
+  (interactive)
+  (let ((cwd (abbreviate-file-name (if (buffer-file-name)
+                                       (file-name-directory (buffer-file-name))
+                                     default-directory))))
+    (init-eshell/find-eshell cwd)))
+     #+END_SRC
+
+****** "Background" the Current Process
+
+If a long-running process is started from an Eshell prompt without explicitly backgrounding the process, that process will block any further input to the prompt.
+Because having access to long-running processes' stdout and stderr is useful, there is a need for an interactive function that can
+1. preserve the buffer belonging to that long-running process;
+2. rename the buffer belonging to the process; and
+3. open a new Eshell buffer in the same directory.
+
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/background-process-maybe ()
+  "Rename the Eshell BUFFER with its process and reopen the directory."
+  (interactive)
+  (when-let ((path default-directory)
+             (process (get-buffer-process (current-buffer)))
+             (process-name (process-name process)))
+    (rename-buffer (init-eshell/name-buffer path process-name))
+    (init-eshell/find-eshell path)))
+#+END_SRC
+
+UNIX shells use the chord =C-z= to background the current process.
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/bind-background-process-maybe ()
+  "Add a keybinding for `init-eshell/background-process-maybe'."
+  (general-define-key
+   :keymaps 'eshell-mode-map
+   "C-z" #'init-eshell/background-process-maybe))
+#+END_SRC
+
+****** Clear Buffer
+
+#+BEGIN_SRC emacs-lisp
+(defun init-eshell/clear-scrollback ()
+  "Clear the scrollback content of the eshell window."
+  (interactive)
+  (let ((input (eshell-get-old-input)))
+    (eshell/clear-scrollback)
+    (eshell-emit-prompt)
+    (insert input)))
+#+END_SRC
+
+*** Esh Module
+
+From the package group's docstring:
+#+BEGIN_QUOTE
+The ~eshell-module~ group is for Eshell extension modules, which provide optional behavior which the user can enable or disable by customizing the variable ~eshell-modules-list~.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package esh-module
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Load this package after the following packages.
+  :after (validate)
+
+  ;; Customize the following variables.
+  :custom
+  <<esh-module/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<esh-module/config>>)
+#+END_SRC
+
+**** Post-Load Execution
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref esh-module/config
+:END:
+
+Disable the greeting banner.
+
+#+BEGIN_SRC emacs-lisp
+(validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
+#+END_SRC
+
+**** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref esh-module/custom
+:END:
+
+Determine whether input causes window to scroll.
+#+BEGIN_SRC emacs-lisp
+(eshell-scroll-to-bottom-on-input
+ 'this
+ "On input, scroll the selected Eshell window to the bottom.")
+#+END_SRC
+
+*** Em Smart
+
+Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
+
+#+BEGIN_SRC emacs-lisp
+(use-package em-smart
+  ;; Load this package after the following packages.
+  :after (esh-module)
+
+  :custom
+  (eshell-where-to-jump 'begin)
+  (eshell-review-quick-commands nil)
+
+  :config
+  <<em-smart/config>>)
+#+END_SRC
+
+**** Config
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-smart/config
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'eshell-modules-list 'eshell-smart)
+#+END_SRC
+
+*** Em Tramp
+
+Em Tramp is an Eshell modules that provides TRAMP features.
+
+#+BEGIN_SRC emacs-lisp
+(use-package em-tramp
+  ;; Load this package after the following packages.
+  :after (esh-module)
+
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<em-tramp/config>>)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-tramp/config
+:END:
+
+Load Em Tramp as an Eshell module.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'eshell-modules-list 'eshell-tramp)
+#+END_SRC
+
+***** Redefine ~eshell/sudo~
+
+For ease of use with Emacs's authentication mechanisms, the full hostname of the machine should be resolved in all cases, even when the Eshell prompt is running locally.
+
+The following code is derived from the Em Tramp package distributed with GNU Emacs.
+As such, it is licensed under the same conditions as GNU Emacs itself (namely, GPLv3 or later).
+
+#+BEGIN_SRC emacs-lisp
+(defun eshell/sudo (&rest args)
+  "Alias \"sudo\" to call Tramp.
+
+Uses the system sudo through TRAMP's sudo method."
+  (setq args (eshell-stringify-list (eshell-flatten-list args)))
+  (let ((orig-args (copy-tree args)))
+    (eshell-eval-using-options
+     "sudo" args
+     '((?h "help" nil nil "show this usage screen")
+       (?u "user" t user "execute a command as another USER")
+       :show-usage
+       :usage "[(-u | --user) USER] COMMAND
+      Execute a COMMAND as the superuser or another USER.")
+     (throw 'eshell-external
+            (let ((user (or user "root"))
+                  (host (or (file-remote-p default-directory 'host)
+                            (system-name)))
+                  (dir (file-local-name (expand-file-name default-directory)))
+                  (prefix (file-remote-p default-directory)))
+              ;; `eshell-eval-using-options' reads options of COMMAND.
+              (while (and (stringp (car orig-args))
+                          (member (car orig-args) '("-u" "--user")))
+                (setq orig-args (cddr orig-args)))
+              (let ((default-directory
+                      (if (and prefix
+                               (or
+                                (not
+                                 (string-equal
+                                  "sudo"
+                                  (file-remote-p default-directory 'method)))
+                                (not
+                                 (string-equal
+                                  user
+                                  (file-remote-p default-directory 'user)))))
+                          (format "%s|sudo:%s@%s:%s"
+                                  (substring prefix 0 -1) user host dir)
+                        (format "/sudo:%s@%s:%s" user host dir))))
+                (eshell-named-command (car orig-args) (cdr orig-args))))))))
+#+END_SRC
+
+*** Em Rebind
+
+#+BEGIN_SRC emacs-lisp
+(use-package em-rebind
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Load this package after the following packages.
+  :after (esh-module)
+
+  ;; Apply the following variable customizations.
+  :custom
+  <<em-rebind/custom>>
+
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<em-rebind/init>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<em-rebind/config>>)
+#+END_SRC
+
+**** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-rebind/custom
+:END:
+
+Determine whether movement commands can cause the point to leave the current input.
+#+BEGIN_SRC emacs-lisp
+(eshell-confine-point-to-input
+ nil
+ "Allow movement commands to move `point' out of the current input.")
+#+END_SRC
+
+**** Pre-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-rebind/init
+:END:
+
+Add this module to the list of Eshell modules to load.
+
+#+BEGIN_SRC emacs-lisp
+(push 'eshell-rebind eshell-modules-list)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref em-rebind/config
+:DESCRIPTION: The code to be evaluated after ~em-rebind~ has been loaded.
+:END:
+
+Rebind Emacs's vertical movement keys to search through history.
+Normal buffer movement is performed using keybindings provided by ~evil~.
+
+#+BEGIN_SRC emacs-lisp
+(push '([(control ?n)] . eshell-previous-matching-input-from-input)
+      eshell-rebind-keys-alist)
+#+END_SRC
+
+*** Em Cmpl
+
+#+BEGIN_SRC emacs-lisp
+(use-package em-cmpl
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following variable customizations.
+  :custom
+  (eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
+#+END_SRC
+
 * Footnotes
 
 [fn:1] ~:ghook~ is one of the keywords added to \src_emacs-lisp{use-package} by /General/.
