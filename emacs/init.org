@@ -56,6 +56,9 @@
 ;;; Static Analysis:
 <<static-analysis>>
 
+;;; Programming Languages:
+<<programming-languages>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -2957,6 +2960,10 @@ If =aspell= is not available, disable Ispell.
 #+END_SRC
 
 * Programming Languages
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref programming-languages
+:END:
+
 ** Lisps
 It is desirable to have slightly different character matching behavior when editing Lisps.
 The following is a list of the Lisp modes I edit in.
@@ -3279,6 +3286,26 @@ Lisp-2 languages have a separate namespace for functions.
   :general
   (:keymaps 'emacs-lisp-mode-map
    "C-c C-c" #'eval-buffer))
+#+END_SRC
+
+**** Helpful
+
+From the package's README:
+#+BEGIN_QUOTE
+Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package helpful
+  :general
+  ("C-h c" #'helpful-command
+   "C-h f" #'helpful-callable
+   "C-h k" #'helpful-key
+   "C-h v" #'helpful-variable)
+
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable))
 #+END_SRC
 
 * Footnotes
