@@ -31,6 +31,9 @@
 ;;; Evil:
 <<evil>>
 
+;;; Minibuffer:
+<<minibuffer>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -491,6 +494,8 @@ If =latexmk= and its Perl dependency exist in =PATH=, use =latexmk= with a LuaLa
 #+END_SRC
 
 *** Smartparens
+:PROPERTIES:
+:END:
 
 :PROPERTIES:
 :HEADER-ARGS+: smartparents/config
@@ -511,7 +516,7 @@ Meanwhile, when writing prose I tend to use the single prime (') primarily as an
 
 *** Evil Org
 
-/Evil Org/ adds a minor mode that provides Evil keybindings for common Org mode actions.
+/Evil Org/ adds a minor mode that provides [[Evil]] keybindings for common Org mode actions.
 #+BEGIN_SRC emacs-lisp
 (use-package evil-org
   ;; Load this package after the following packages.
@@ -902,6 +907,455 @@ It adds a "surround" verb to Evil's modal editing.
   (evil-indent-plus-default-bindings))
 #+END_SRC
 
+* Minibuffer
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref minibuffer
+:END:
+
+The minibuffer is a persistent buffer in Emacs that is used for interactive input and messages.
+
+** Recursive Minibuffers
+
+Allowing one to have more than one minibuffer active allows for more sophisticated workflows.
+#+BEGIN_SRC emacs-lisp
+(setq enable-recursive-minibuffers t)
+#+END_SRC
+
+Once having multiple active minibuffers is possible, it is helpful to keep track of the depth of recursion.
+#+BEGIN_SRC emacs-lisp
+(minibuffer-depth-indicate-mode +1)
+#+END_SRC
+
+** Flx
+
+/Flx/ provides fuzzy searching algorithms.
+Ivy's fuzzy finding will use Flx's scoring mechanism if /Flx/ is loaded.
+
+#+BEGIN_SRC emacs-lisp
+(use-package flx
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<flx/config>>)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref flx/config
+:DESCRIPTION: Code to evaluated after ~flx~ has been loaded.
+:END:
+
+Run Emacs's garbage collector only when at least 20 MB have been allocated.
+Doing so greatly improves ~flx~'s performance when working with large sets.
+
+#+BEGIN_SRC emacs-lisp
+(when (> 20000000 gc-cons-threshold)
+  (setq gc-cons-threshold 20000000))
+#+END_SRC
+
+** Ivy
+From the project's readme:
+#+BEGIN_QUOTE
+Ivy is a generic completion mechanism for Emacs.
+While it operates similarly to other completion schemes such as =icomplete-mode=, Ivy aims to be more efficient, smaller, simpler, and smoother to use yet highly customizable.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+  ;; Load this package after the following packages.
+  :after (flx)
+
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Inform the byte-compiler of the following interactive functions.
+  :commands
+  (ivy-mode)
+
+  ;; Inform the byte-code compiler of the following non-interactive functions.
+  :functions
+  (ivy-format-function-line)
+
+  ;; Add the following keybindings.
+  :general
+  <<ivy/general>>
+
+  ;; Apply the following customizations.
+  :custom
+  <<ivy/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<ivy/config>>)
+#+END_SRC
+
+*** Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ivy/general
+:END:
+
+Shadow ~switch-to-buffer~ with ~ivy-switch-buffer~.
+#+BEGIN_SRC emacs-lisp
+("C-x C-b" #'ivy-switch-buffer)
+#+END_SRC
+
+When in an Ivy buffer:
+- =M-<return>= sends the current input verbatim.
+- =C-u= restarts the minibuffer with a prefix argument.
+
+
+#+BEGIN_SRC emacs-lisp
+(:keymaps 'ivy-minibuffer-map
+ "M-<return>" #'ivy-immediate-done
+ "C-u" #'init-minibuffer/restart-with-prefix)
+#+END_SRC
+
+When in the minibuffer:
+- =C-u= restarts the minibuffer with a prefix argument.
+
+
+#+BEGIN_SRC emacs-lisp
+(:keymaps 'minibuffer-inactive-mode-map
+ "C-u" #'init-minibuffer/restart-with-prefix)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ivy/custom
+:END:
+
+Determine how matched parts of the options are highlighted.
+#+BEGIN_SRC emacs-lisp
+(ivy-display-style 'fancy "Highlight the matching parts of the regexp in the minibuffer.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(ivy-use-virtual-buffers t "Show recently killed buffers when calling `ivy-switch-buffer'.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(ivy-re-builders-alist '((t . ivy--regex-plus)) "Use `ivy--regex-plus' as the default matching function.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:DESCRIPTION: Code to evaluate after ~ivy~ has been loaded.
+:HEADER-ARGS+: :noweb-ref ivy/config
+:END:
+
+Enable ~ivy-mode~ globally.
+#+BEGIN_SRC emacs-lisp
+(ivy-mode +1)
+#+END_SRC
+
+Do not include TRAMP buffers in Ivy's buffer lists.
+#+BEGIN_SRC emacs-lisp
+(setq ivy-ignore-buffers
+      (cons (rx line-start "*tramp/"
+                (one-or-more (not whitespace))
+                whitespace
+                (one-or-more anything)
+                "*" line-end)
+            ivy-ignore-buffers))
+#+END_SRC
+
+**** Restart the Minibuffer with a Prefix Argument
+:PROPERTIES:
+:AUTHOR: Clemens Radermacher (clemera) <clemera@posteo.net>
+:COPYRIGHT: Copyright (C) 2019 Clemens Radermacher
+:END:
+
+Out of the box, Emacs does not provide a graceful way to add a prefix argument after the user has already started entering a command.
+The following code posted by u/clemera on Reddit provides a workaround by restarting the minibuffer with same text.
+
+First, a variable is defined to hold the minibuffer contents that were typed before entering a prefix.
+#+BEGIN_SRC emacs-lisp
+(defvar init-minibuffer/original-command nil
+  "Command the minibuffer was started with.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun init-minibuffer/restart-with-prefix ()
+  "Restart the minibuffer with a prefix argument."
+  (interactive)
+  (let ((input (ivy--input)))
+    (cond ((memq #'ivy--queue-exhibit post-command-hook)
+           (ivy-quit-and-run
+             (let ((current-prefix-arg '(4))
+                   (ivy-initial-inputs-alist `((,(ivy-state-caller ivy-last) . ,input))))
+               (call-interactively (ivy-state-caller ivy-last))))
+           (t
+            (ivy-quit-and-run
+              (let ((current-prefix-arg '(4)))
+                (minibuffer-with-setup-hook
+                    (lambda ()
+                      (insert input)
+                      (minibuffer-message "C-u"))
+                  (call-interactively init-minibuffer/current-command)))))))))
+#+END_SRC
+
+** Counsel
+#+BEGIN_SRC emacs-lisp
+(use-package counsel
+
+  ;; Load this package after the following packages.
+  :after (ivy)
+
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Perform the following keybindings.
+  :general
+  ("C-h k" #'counsel-descbinds)
+  ("C-x C-4 C-b" #'switch-to-buffer-other-window)
+  ("C-x C-4 C-f" #'find-file-other-window)
+  ("C-x C-4 b" #'switch-to-buffer-other-window)
+  ("C-x C-f" #'counsel-find-file)
+  ("C-x f" #'counsel-find-file)
+  ("M-x" #'counsel-M-x)
+  (:keymaps '(minibuffer-local-map minibuffer-inactive-mode-map)
+   :states '(insert movement)
+   "C-r" #'counsel-minibuffer-history)
+  (:keymaps 'shell-mode-map
+   "C-r" #'counsel-shell-history))
+#+END_SRC
+
+** Swiper
+#+BEGIN_SRC emacs-lisp
+(use-package swiper
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Load this package after the following packages.
+  :after ivy
+
+  ;; Perform the following keybindings.
+  :general
+  ("C-s" #'swiper-isearch)
+  (:keymaps '(normal movement visual)
+   "/" #'swiper-isearch))
+#+END_SRC
+
+** Ivy Rich
+#+BEGIN_SRC emacs-lisp
+(use-package ivy-rich
+  ;; Load this package after the following packages.
+  :after ivy
+
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following customizations.
+  :custom
+  <<ivy-rich/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<ivy-rich/config>>)
+#+END_SRC
+
+*** Variable Customizations
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ivy-rich/custom
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(ivy-virtual-abbreviate 'abbreviate "Abbreviate virtual buffer names.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(ivy-rich-path-style 'relative "Show paths relative their the project home.")
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
+:HEADER-ARGS+: :noweb-ref ivy-rich/config
+:END:
+
+Enable ~ivy-rich-mode~ globally.
+#+BEGIN_SRC emacs-lisp
+(ivy-rich-mode 1)
+#+END_SRC
+
+Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-switch-buffer~.
+#+BEGIN_SRC emacs-lisp
+(setq ivy-rich--display-transformers-list
+      (plist-put
+       ivy-rich--display-transformers-list
+       'counsel-projectile-switch-to-buffer
+       (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
+#+END_SRC
+
+** Minibuffer Line
+:PROPERTIES:
+:DESCRIPTION: Display status info in the minibuffer
+:END:
+
+From /Minibuffer Line/'s readme:
+#+BEGIN_QUOTE
+This package lets you display various status information in the minibuffer window instead of the mode-line.
+Of course, this is only displayed when the minibuffer window is not already used for other things (e.g. a minibuffer or an each area message).
+The contents and aspect is controlled by the src_emacs-lisp{minibuffer-line-format} variable and the src_emacs-lisp{minibuffer-line} face.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package minibuffer-line
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following code before loading this package.
+  :init
+  <<minibuffer-line/init>>
+
+  ;; Inform the bytecode compiler of the following non-autoloading functions.
+  :functions
+  (format-time-string-8601 minibuffer-line-align)
+
+  ;; Inform the bytecode compiler of the following autoloading functions.
+  :commands
+  minibuffer-line-mode
+
+  ;; Apply the following variable customizations.
+  :custom
+  <<minibuffer-line/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  (minibuffer-line-mode))
+#+END_SRC
+
+*** Pre-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref minibuffer-line/init
+:DESCRIPTION: Code to evaluate before loading src_emacs-lisp{minibuffer-line}
+:END:
+
+Define a function to print the date and time in ISO 8601 format.
+#+BEGIN_SRC emacs-lisp
+(defun format-time-string-minibuffer-line ()
+  "Print the current date and time in ISO 8601-like format."
+  (format-time-string "%Y-%m-%d %T"))
+#+END_SRC
+
+Define a function to left- and right-align elements using mode-line formatting.
+#+BEGIN_SRC emacs-lisp
+(defun minibuffer-line-align (left right)
+  "Return a string containing LEFT and RIGHT aligned across the frame."
+  (let* ((width-total (frame-text-cols))
+         (width-space (- width-total
+                         (+ (string-width (format-mode-line left))
+                            (string-width (format-mode-line right))))))
+    (append left
+            (list (propertize
+                   (format (format "%%%ds" width-space) "")
+                   'face 'default))
+            right)))
+#+END_SRC
+
+Define a the format to use for displaying battery information in the minibuffer.
+#+BEGIN_SRC emacs-lisp
+(defvar minibuffer-line-battery-format
+  "battery %L %p%%"
+  "Control string formatting the battery status to display in the minibuffer.")
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:DESCRIPTION: Variable customizations to apply when loading src_emacs-lisp{minibuffer-line}
+:HEADER-ARGS+: :noweb-ref minibuffer-line/custom
+:END:
+
+Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is recalculated.
+#+BEGIN_SRC emacs-lisp
+(minibuffer-line-refresh-interval 1 "Refresh the minibuffer-line every second.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(minibuffer-line-format
+ '((:eval
+    (minibuffer-line-align
+     '()
+     '((:eval (propertize
+               (battery-format
+                minibuffer-line-battery-format
+                (funcall battery-status-function))
+               'face 'default))
+       (:eval (propertize " | " 'face 'default))
+       (:eval (propertize system-name 'face 'default))
+       (:eval (propertize " | " 'face 'default))
+       (:eval (propertize (format-time-string-minibuffer-line) 'face 'default)))))))
+#+END_SRC
+
+** McFly
+:PROPERTIES:
+:COPYRIGHT_YEAR: 2019
+:COPYRIGHT_AUTHOR: Vincent Zhang (seagle0128)
+:COPYRIGHT_EMAIL: seagle0128@gmail.com
+:LICENSE: GPLv3+
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defvar my-ivy-fly-commands '(query-replace-regexp
+                              flush-lines
+                              keep-lines
+                              ivy-read
+                              swiper
+                              swiper-backward
+                              swiper-all
+                              swiper-isearch
+                              swiper-isearch-backward
+                              counsel-grep-or-swiper
+                              counsel-grep-or-swiper-backward
+                              counsel-grep
+                              counsel-ack
+                              counsel-ag
+                              counsel-rg
+                              counsel-pt))
+
+(defun my-ivy-fly-back-to-present ()
+  ;; (remove-hook 'pre-command-hook 'my-ivy-fly-back-to-present t)
+  (cond ((and (memq last-command my-ivy-fly-commands)
+              (equal (this-command-keys-vector) (kbd "M-p")))
+         ;; repeat one time to get straight to the first history item
+         (setq unread-command-events
+               (append unread-command-events
+                       (listify-key-sequence (kbd "M-p")))))
+        ((or (memq this-command '(self-insert-command
+                                  yank
+                                  ivy-yank-word
+                                  counsel-yank-pop))
+             (equal (this-command-keys-vector) (kbd "M-n")))
+         (delete-region (point)
+                        (point-max)))))
+
+(defun my-ivy-fly-time-travel ()
+  (when (memq this-command my-ivy-fly-commands)
+    (let* ((kbd (kbd "M-n"))
+           (cmd (key-binding kbd))
+           (future (and cmd
+                        (with-temp-buffer
+                          (when (ignore-errors
+                                  (call-interactively cmd) t)
+                            (buffer-string))))))
+      (when future
+        (save-excursion
+          (insert (propertize (replace-regexp-in-string
+                               "\\\\_<" ""
+                               (replace-regexp-in-string
+                                "\\\\_>" ""
+                                future))
+                              'face 'shadow)))
+        (add-hook 'pre-command-hook 'my-ivy-fly-back-to-present nil t)))))
+
+(add-hook 'minibuffer-setup-hook #'my-ivy-fly-time-travel)
+#+END_SRC
 * Footnotes
 
 [fn:1] ~:ghook~ is one of the keywords added to \src_emacs-lisp{use-package} by /General/.
