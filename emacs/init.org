@@ -49,6 +49,9 @@
 ;;; Command Interpretation:
 <<command-interpretation>>
 
+;;; Static Analysis:
+<<static-analysis>>
+
 (provide 'init)
 ;;; init.el ends here
 #+END_SRC
@@ -2758,6 +2761,78 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   ;; Apply the following variable customizations.
   :custom
   (eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
+#+END_SRC
+
+* Static Analysis
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref static-analysis
+:END:
+
+** Flyspell
+
+#+BEGIN_SRC emacs-lisp
+(use-package flyspell
+  :ghook
+  ('prog-mode-hook #'flyspell-prog-mode))
+#+END_SRC
+
+** Ispell
+
+#+BEGIN_SRC emacs-lisp
+(use-package ispell
+  ;; Only load this package if the following code evaluates to non-nil.
+  :if
+  <<ispell/if>>
+
+  ;; Do not load this package lazily.
+  :demand
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<ispell/config>>)
+#+END_SRC
+
+*** Conditional Loading
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ispell/if
+:DESCRIPTION: Define condition for loading Ispell.
+:END:
+
+Ispell provides interfaces for third-party spellchecking binaries.
+If no such binaries exist, Ispell does not need to be downloaded.
+
+#+BEGIN_SRC emacs-lisp
+(executable-find "aspell")
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ispell/config
+:DESCRIPTION: Code to be evaluated after Ispell has been loaded.
+:END:
+
+Set the executable to use for spellchecking.
+If =aspell= is not available, disable Ispell.
+
+#+BEGIN_SRC emacs-lisp
+(cond
+ ((executable-find "aspell")
+  (setq ispell-program-name "aspell"))
+ (t
+  (setq ispell-program-name nil)))
+#+END_SRC
+
+** Flycheck
+
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  ;; Enable `flycheck-mode' globally.
+  (global-flycheck-mode))
 #+END_SRC
 
 * Footnotes
