@@ -59,6 +59,9 @@
 ;;; Programming Languages:
 <<programming-languages>>
 
+;;; RESTful APIs:
+<<restful-apis>>
+
 ;;; Windows and Frames
 <<windows-and-frames>>
 
@@ -3527,6 +3530,93 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :custom
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable))
+#+END_SRC
+
+* RESTful APIs
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref restful-apis
+:END:
+
+** REST Client
+
+#+BEGIN_SRC emacs-lisp
+(use-package restclient
+  :preface
+  (defconst init-web/http-extension
+    (rx ".http" string-end)
+    "The filename extension \".http\".")
+
+  :mode
+  ("\\.http\\'" . restclient-mode))
+#+END_SRC
+
+** Company REST Client
+
+#+BEGIN_SRC emacs-lisp
+(use-package company-restclient
+  :after (:all company restclient)
+
+  :demand
+
+  :config
+  (add-to-list 'company-backends 'company-restclient))
+#+END_SRC
+
+** Polymode for REST Client
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref polymode/config
+:END:
+
+**** Emacs Lisp Inner Mode
+Define the inner mode for Emacs Lisp sections of REST Client buffers.
+
+#+BEGIN_SRC emacs-lisp
+(define-innermode poly-restclient/emacs-lisp-innermode
+  :mode 'emacs-lisp-mode
+  :head-mode 'host
+  :tail-mode 'host)
+#+END_SRC
+
+Define a matcher for single-line expressions.
+#+BEGIN_SRC emacs-lisp
+(define-innermode poly-restclient/emacs-lisp/single-line-innermode poly-restclient/emacs-lisp-innermode
+  :head-matcher (rx line-start ":" (one-or-more (not (any " "))) " :=")
+  :tail-matcher (rx "\n"))
+#+END_SRC
+
+Define a matcher for multi-line expressions.
+#+BEGIN_SRC emacs-lisp
+(define-innermode poly-restclient/emacs-lisp/multi-line-innermode poly-restclient/emacs-lisp-innermode
+  :head-matcher (rx line-start ":" (one-or-more (not (any " "))) " := <<\n")
+  :tail-matcher (rx line-start "#\n"))
+#+END_SRC
+
+**** JSON Inner Mode
+Define the inner mode for JSON sections.
+
+#+BEGIN_SRC emacs-lisp
+(define-innermode poly-restclient/json-innermode
+  :mode 'json-mode
+  :head-mode 'body
+  :tail-mode 'body
+  :head-matcher (rx line-start "{" line-end)
+  :tail-matcher (rx line-start "}" line-end))
+#+END_SRC
+
+**** Rest Client Parent Mode
+#+BEGIN_SRC emacs-lisp
+(define-hostmode poly-restclient-hostmode
+  :mode 'restclient-mode)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(define-polymode poly-restclient-mode
+  :hostmode 'poly-restclient-hostmode
+  :innermodes '(poly-restclient/emacs-lisp/single-line-innermode
+                poly-restclient/emacs-lisp/multi-line-innermode
+                poly-restclient/json-innermode))
 #+END_SRC
 
 * Windows and Frames
