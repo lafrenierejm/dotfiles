@@ -1827,6 +1827,12 @@ Perform Diff HL highlighting on-the-fly.
 #+END_SRC
 
 ** Git
+*** Git Attributes Mode
+
+#+BEGIN_SRC
+(use-package gitattributes-mode)
+#+END_SRC
+
 *** Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
