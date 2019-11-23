@@ -3811,7 +3811,8 @@ The function \src_emacs-lisp{derived-mode-hook-name} is provided by /Derived/, w
 #+BEGIN_SRC emacs-lisp :noweb-ref dependencies
 (require 'derived)
 #+END_SRC
-** Indent Tabs Mode
+
+*** Indent Tabs Mode
 For sexp-based languages it is desirable to disallow tabs for line indentation.
 
 #+BEGIN_SRC emacs-lisp
@@ -3826,19 +3827,19 @@ Add above function to all Lisp major modes' hooks.
 (general-add-hook init-prog-lisp/major-mode-hooks #'init-prog-lisp/use-spaces)
 #+END_SRC
 
-** Lisp Mode
+*** Lisp Mode
 #+BEGIN_SRC emacs-lisp
 (use-package lisp-mode
   :config
   <<lisp-mode/config>>)
 #+END_SRC
 
-*** Post-Load Evaluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref lisp-mode/config
 :END:
 
-**** Fuco1's Indentation
+***** Fuco1's Indentation
 :PROPERTIES:
 :COPYRIGHT_AUTHOR: Matus Goljer (Fuco1)
 :COPYRIGHT_EMAIL: matus.goljer@gmail.com
@@ -3925,7 +3926,7 @@ Lisp function does not specify a special indentation."
                (funcall method indent-point state))))))))
 #+END_SRC
 
-** Aggressive Indent
+*** Aggressive Indent
 Aggressive Indent provides a minor mode to re-indent code after every change.
 
 #+BEGIN_SRC emacs-lisp
@@ -3934,8 +3935,8 @@ Aggressive Indent provides a minor mode to re-indent code after every change.
   (init-prog-lisp/major-mode-hooks #'aggressive-indent-mode))
 #+END_SRC
 
-** Character Matching
-*** Smartparens
+*** Character Matching
+**** Smartparens
 
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
@@ -3944,7 +3945,7 @@ Aggressive Indent provides a minor mode to re-indent code after every change.
   <<smartparens/config>>)
 #+END_SRC
 
-**** Post-Load Evaluation
+***** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref smartparens/config
 :END:
@@ -3954,7 +3955,7 @@ Lisps use the single quote (='=) for quoting, where it is not paired with a clos
 (sp-local-pair lisp-major-modes "'" nil :actions nil)
 #+END_SRC
 
-*** Evil Cleverparens
+**** Evil Cleverparens
 Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "Evil normal-state minor-mode for editing lisp-like languages".
 
 #+BEGIN_SRC emacs-lisp
@@ -3978,7 +3979,7 @@ Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "E
   <<evil-cleverparens/config>>)
 #+END_SRC
 
-**** Autoloading Hooks
+***** Autoloading Hooks
 :PROPERTIES:
 :DESCRIPTION: Add auto-loading hooks related to Evil Cleverparens.
 :HEADER-ARGS+: :noweb-ref evil-cleverparens/ghook
@@ -3989,7 +3990,7 @@ Enable ~evil-cleverparens-mode~ for Lisps.
 (lisp-major-mode-hooks #'evil-cleverparens-mode)
 #+END_SRC
 
-**** Non-Autoloading Hooks
+***** Non-Autoloading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil-cleverparens/gfhook
 :END:
@@ -3999,7 +4000,7 @@ Let the cursor move past the end of lines in Lisp source code.
 (lisp-major-mode-hooks #'init-prog-lisp/evil-move-beyond-eol)
 #+END_SRC
 
-**** Post-Load Evaluation
+***** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil-cleverparens/config
 :END:
@@ -4010,11 +4011,11 @@ Let the cursor move past the end of lines in Lisp source code.
   (setq evil-move-beyond-eol t))
 #+END_SRC
 
-** Lisp-1
+*** Lisp-1
 
 Lisp-1 languages have a single namespace for all names.
 
-*** Geiser Guile
+**** Geiser Guile
 
 #+BEGIN_SRC emacs-lisp
 (use-package geiser-guile
@@ -4026,7 +4027,7 @@ Lisp-1 languages have a single namespace for all names.
     (add-to-list 'geiser-guile-load-path path)))
 #+END_SRC
 
-*** Guix
+**** Guix
 
 From the package's commentary:
 #+BEGIN_QUOTE
@@ -4060,7 +4061,7 @@ It allows you:
    "Directory or directories to prepend to Guile's `%load-path' and `load-compiled-path'."))
 #+END_SRC
 
-**** Conditions for Loading
+***** Conditions for Loading
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref guix/if
 :END:
@@ -4070,7 +4071,7 @@ The package relies on =guix= being available on =$PATH=.
 (executable-find "guix")
 #+END_SRC
 
-**** Auto-Loading Hooks
+***** Auto-Loading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref guix/ghook
 :END:
@@ -4080,10 +4081,16 @@ Replace hash symbols with ellipses.
 ('(dired-mode-hook shell-mode-hook) #'guix-prettify-mode)
 #+END_SRC
 
-** Lisp-2
+**** Racket
+
+#+BEGIN_SRC emacs-lisp
+(use-package racket-mode)
+#+END_SRC
+
+*** Lisp-2
 Lisp-2 languages have a separate namespace for functions.
 
-*** Superior Lisp Interaction Mode (SLIME)
+**** Superior Lisp Interaction Mode (SLIME)
 
 #+BEGIN_SRC emacs-lisp
 (use-package slime
@@ -4098,7 +4105,7 @@ Lisp-2 languages have a separate namespace for functions.
   (slime-setup init-prog-lisp/slime-extra))
 #+END_SRC
 
-*** Emacs Lisp
+**** Emacs Lisp
 
 #+BEGIN_SRC emacs-lisp
 (use-package elisp-mode
@@ -4108,7 +4115,7 @@ Lisp-2 languages have a separate namespace for functions.
    "C-c C-c" #'eval-buffer))
 #+END_SRC
 
-**** Helpful
+***** Helpful
 
 From the package's README:
 #+BEGIN_QUOTE
