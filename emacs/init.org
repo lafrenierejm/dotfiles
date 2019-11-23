@@ -1791,7 +1791,7 @@ Enable ~company-mode~ globally.
 #+END_SRC
 * Diff
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref diff-hl/config
+:HEADER-ARGS+: :noweb-ref diff
 :END:
 
 ** Ediff
