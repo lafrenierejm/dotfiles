@@ -2247,6 +2247,40 @@ Determine how Ediff windows are setup.
  #'ediff-setup-windows-plain
  "Use a single frame for all buffers including the control panel.")
 #+END_SRC
+
+** Whitespace
+
+*** WS Butler
+
+From the package's description:
+#+BEGIN_QUOTE
+- Only lines touched get trimmed.
+  If the white space at end of buffer is changed, then blank lines at the end of buffer are truncated respecting require-final-newline.
+- Trimming only happens when saving.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package ws-butler
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<ws-butler/config>>)
+#+END_SRC
+
+**** Post-Load Evluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref ws-butler/config
+:DESCRIPTION: Code to be evaluated after loading ~ws-butler~.
+:END:
+
+Enable ws-butler globally.
+
+#+BEGIN_SRC emacs-lisp
+(ws-butler-global-mode)
+#+END_SRC
+
 * Command Interpretation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref command-interpretation
