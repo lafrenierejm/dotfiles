@@ -4135,6 +4135,79 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (counsel-describe-variable-function #'helpful-variable))
 #+END_SRC
 
+** UNIX Shell
+*** Sh Script
+
+#+BEGIN_SRC emacs-lisp
+(use-package sh-script
+  ;; Evaluate the following code before everything except `:disabled'.
+  :preface
+  <<sh-script/preface>>
+
+  ;; Add the following non-autoloading hooks.
+  :gfhook
+  ('shell-script-mode #'sh-script-set-shell-type)
+
+  ;; Inform the bytecode compiler of the following functions.
+  :functions sh-script-set-shell-type
+
+  ;; Evaluate the following code after loading `shell-script-mode'.
+  :config
+  <<sh-script/config>>)
+#+END_SRC
+
+*** Pre-Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref sh-script/preface
+:END:
+
+Describe a regexp that matches Zsh dotfile filenames.
+
+#+BEGIN_SRC emacs-lisp
+(defconst sh-script--zsh-dotfile-regexp
+  (rx "/.z"
+      (one-or-more (not (any ".")))
+      string-end)
+  "Regular expression matching Zsh dotfile filenames.")
+#+END_SRC
+
+Describe a regexp that matches Zsh script filenames.
+
+#+BEGIN_SRC emacs-lisp
+(defconst sh-script--zsh-script-regexp
+  (rx ".zsh" string-end)
+  "Regular expression matching Zsh script filenames.")
+#+END_SRC
+
+Define a list of regexps that match Zsh dotfiles and script filenames.
+
+#+BEGIN_SRC emacs-lisp
+(defconst sh-script--zsh-regexps
+  '(sh-script--zsh-dotfile-regexp
+    sh-script--zsh-script-regexp)
+  "A list of regexps describing known Zsh filenames.")
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref sh-script/config
+:END:
+
+**** Set Shell Type
+
+Define a function that sets the shell type to Zsh when working with a Zsh file.
+
+#+BEGIN_SRC emacs-lisp
+(defun sh-script-set-shell-type ()
+  "Set the shell type based on variable `buffer-file-name'."
+  ;; Loop over the list of Zsh filenames.
+  (dolist (regexp sh-script--zsh-regexps)
+    ;; If the regexp matches the name of the file the buffer is visiting...
+    (when (string-match regexp buffer-file-name)
+      ;; Then set the shell type to Zsh.
+      (sh-set-shell "zsh"))))
+#+END_SRC
+
 * RESTful APIs
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref restful-apis
