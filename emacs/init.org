@@ -32,8 +32,8 @@
 ;;; Literate Programming:
 <<literate-programming>>
 
-;;; Evil:
-<<evil>>
+;;; Keybindings:
+<<keybindings>>
 
 ;;; Minibuffer:
 <<minibuffer>>
@@ -861,9 +861,6 @@ If =latexmk= and its Perl dependency exist in =PATH=, use =latexmk= with a LuaLa
 
 *** Smartparens
 :PROPERTIES:
-:END:
-
-:PROPERTIES:
 :HEADER-ARGS+: smartparents/config
 :END:
 
@@ -968,11 +965,12 @@ Apply the keybindings specified in ~evil-org-key-theme~.
     (setq indent-tabs-mode nil)))
 #+END_SRC
 
-* Evil
+* Keybindings
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil
-:CUSTOM_ID: evil
+:HEADER-ARGS+: :noweb-ref keybindings
 :END:
+
+** Evil
 
 /Evil/ aims to implement Vi's user features, most notably Vi's modal keyboard interface, in Emacs Lisp for use in Emacs.
 I prefer Vi's keybindings to Emacs's, so I enable Evil everywhere I can.
@@ -1002,7 +1000,7 @@ I prefer Vi's keybindings to Emacs's, so I enable Evil everywhere I can.
   <<evil/config>>)
 #+END_SRC
 
-*** Variable Customization
+**** Variable Customization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil/custom
 :END:
@@ -1012,7 +1010,7 @@ Determine whether to enable Evil in minibuffers.
 (evil-want-minibuffer t "Enable Evil in minibuffers.")
 #+END_SRC
 
-*** Set Keybindings (~:general~)
+**** Set Keybindings (~:general~)
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil/general
 :END:
@@ -1043,7 +1041,7 @@ Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
  "Y" #'init-evil/evil-yank-to-end-of-line)
 #+END_SRC
 
-*** Pre-Load Evaluation
+**** Pre-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil/init
 :END:
@@ -1054,7 +1052,7 @@ Allow use of Evil Collection.
 (setq-default evil-want-keybinding nil)
 #+END_SRC
 
-*** Post-Load Evaluation (~:config~)
+**** Post-Load Evaluation (~:config~)
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil/config
 :END:
@@ -1064,7 +1062,7 @@ Enable Evil by default in all modes.
 (evil-mode 1)
 #+END_SRC
 
-**** Define =evil-yank-to-end-of-line=
+***** Define =evil-yank-to-end-of-line=
 #+BEGIN_SRC emacs-lisp
 (defun init-evil/evil-yank-to-end-of-line ()
   "Yank the characters from point to the end of the current line."
@@ -1072,8 +1070,8 @@ Enable Evil by default in all modes.
   (evil-yank (point) (point-at-eol)))
 #+END_SRC
 
-**** Semantic Movement Within Lines
-***** Define ~back-to-comment~
+***** Semantic Movement Within Lines
+****** Define ~back-to-comment~
 The following code is based on [[http://stackoverflow.com/a/14245964%0A][a StackOverflow answer]] by user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
 All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
@@ -1110,7 +1108,7 @@ will return t."
         nil))))
 #+END_SRC
 
-***** Define ~init-evil/back-totext~
+****** Define ~init-evil/back-totext~
 #+BEGIN_SRC emacs-lisp
 (defun init-evil/back-totext ()
   "Move point to the last non-whitespace character on this line."
@@ -1123,7 +1121,7 @@ will return t."
   (forward-char))
 #+END_SRC
 
-***** Define ~beginning-of-maybe-line~
+****** Define ~beginning-of-maybe-line~
 ~beginning-of-maybe-line~ moves ~point~ toward the beginning of the current line incrementally by semantic region.
 The following semantic elements are considered:
 1. Comment
@@ -1154,7 +1152,7 @@ line."
         (beginning-of-line)))))
 #+END_SRC
 
-***** Define ~end-of-maybe-line~
+****** Define ~end-of-maybe-line~
 ~end-of-maybe-line~ incrementally moves ~point~ to the right within a line by semantic region.
 The following semantic elements are considered in ~end-of-maybe-line~'s movement:
 1. Source code
@@ -1183,7 +1181,7 @@ The syntactic blocks are as follows, ordered from right to left:
       (init-evil/back-totext))))
 #+END_SRC
 
-** Evil Collection
+*** Evil Collection
 
 /Evil Collection/ offers a collection of Evil keybindings for modes that Evil does not support by default.
 
@@ -1204,7 +1202,7 @@ The syntactic blocks are as follows, ordered from right to left:
   <<evil-collection/config>>)
 #+END_SRC
 
-*** Apply Customizations
+**** Apply Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil-collection/custom
 :END:
@@ -1236,7 +1234,7 @@ Set up debugger keys.
 (evil-collection-setup-debugger-keys t)
 #+END_SRC
 
-*** Post-Load Evaluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil-collection/config
 :END:
@@ -1246,7 +1244,7 @@ Enable Evil Collection globally.
 (evil-collection-init)
 #+END_SRC
 
-** Evil Matchit
+*** Evil Matchit
 
 [[https://github.com/redguardtoo/evil-matchit][Evil Matchit]] is a port of Tim Pope's [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] to Evil.
 It enables jumping between matched tags, e.g. =<div>= and =</div>=.
@@ -1265,7 +1263,7 @@ It enables jumping between matched tags, e.g. =<div>= and =</div>=.
   (global-evil-matchit-mode 1))
 #+END_SRC
 
-** Evil Surround
+*** Evil Surround
 
 [[https://github.com/emacs-evil/evil-surround][Evil Surround]] is a port of [[https://github.com/tpope/vim-surround][vim-surround]] to Evil.
 It adds a "surround" verb to Evil's modal editing.
@@ -1279,7 +1277,7 @@ It adds a "surround" verb to Evil's modal editing.
   (global-evil-surround-mode 1))
 #+END_SRC
 
-** Evil Indent Plus
+*** Evil Indent Plus
 =[[https://github.com/TheBB/evil-indent-plus]]= adds indentation levels as a text object for Evil.
 
 - =i= is same or higher indentation.
@@ -1295,6 +1293,48 @@ It adds a "surround" verb to Evil's modal editing.
   ;; Evaluate the following code after loading this package.
   :config
   (evil-indent-plus-default-bindings))
+#+END_SRC
+** Smartparens
+
+[[https://github.com/Fuco1/smartparens][Matus Goljer (Fuco1)'s package]] provides a minor mode "that deals with parens pairs and tries to be smart about it".
+
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens
+  ;; Load this package eagerly.
+  :demand
+
+  :custom
+  <<smartparens/custom>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref smartparens/custom
+:END:
+
+Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
+
+#+BEGIN_SRC emacs-lisp
+(sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
+#+END_SRC
+
+Enable ~smartparens-mode~ globally.
+
+#+BEGIN_SRC emacs-lisp
+(smartparens-global-mode t)
+#+END_SRC
+
+** Smartparens Config
+
+Smartparens Config configures Smartparens for various programming languages.
+
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens-config
+  ;; Load this package after the following packages.
+  :after smartparens
+
+  ;; Load this package eagerly.
+  :demand)
 #+END_SRC
 
 * Minibuffer
