@@ -935,6 +935,30 @@ Apply the keybindings specified in ~evil-org-key-theme~.
 (evil-org-set-key-theme)
 #+END_SRC
 
+** Markdown
+
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  ;; Inform the bytecode compiler of the following variables.
+  :defines markdown-mode-hook
+
+  ;; Inform the bytecode compiler of the following functions.
+  :functions markdown-mode-spaces-only
+
+  ;; Established deferred binding within `auto-mode-alist'.
+  :mode
+  (("README\\.md\\'" . gfm-mode)
+   ("\\.md\\'" . markdown-mode))
+
+  ;; Add the following non-autoloading hooks.
+  :gfhook
+  ('markdown-mode-hook #'markdown-mode-spaces)
+
+  :config
+  (defun markdown-mode-spaces-only ()
+    (setq indent-tabs-mode nil)))
+#+END_SRC
+
 * Evil
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil
