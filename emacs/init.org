@@ -121,18 +121,15 @@ GNU Emacs does not have the capability to use an Org file directly as its initia
 As such, this file needs to be tangled manually for its first use on a new system.
 The following code ensures that this step is only needed once.
 
-Before any other installed packages can be configured, Package must be loaded and \src_emacs-lisp{package-initialize} called.
+Before any other installed packages can be configured, /Package/ must be loaded and initialized.
 #+BEGIN_SRC emacs-lisp :noweb-ref dependencies
 (require 'package)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
 (package-initialize)
 #+END_SRC
 
 ** Use Package
 
-Next, Use Package is loaded.
+Next, /Use Package/ is loaded.
 This package provides the \src_emacs-lisp{use-package} macro for declarative loading of other packages.
 #+BEGIN_SRC emacs-lisp
 (require 'use-package)
@@ -140,7 +137,7 @@ This package provides the \src_emacs-lisp{use-package} macro for declarative loa
 
 Loading every package during Emacs's initialization is unnecessary and increases load time.
 Instead, packages should only be loaded when a feature they provide is actually needed.
-Use Package provides a feature to lazy-load packages by default:
+/Use Package/ provides a feature to lazy-load packages by default:
 #+BEGIN_SRC emacs-lisp
 (setq use-package-always-defer t)
 #+END_SRC
@@ -150,9 +147,9 @@ Use Package provides a feature to lazy-load packages by default:
 :CUSTOM_ID: bootstrap/org
 :END:
 
-After Use Package has been loaded, we can use it to configure all other packages.
-Tangling this Org file for use as Emacs's initialization file requires features from the Org package.
-As such, the below function is specified to belong to the =:config= section of Org's \src_emacs-lisp{use-package} declaration.
+After /Use Package/ has been loaded, we can use it to configure all other packages.
+Tangling this Org file for use as Emacs's initialization file requires features from the /Org/ package.
+As such, the below function is specified to belong to the =:config= section of /Org/'s \src_emacs-lisp{use-package} declaration.
 The process of tangling this file is to
 1. Compare the modification time of this file to its tangled source, =./init.el=.
 2. If this file is the more recent of the two, tangle this file then byte compile and load the result.
@@ -183,9 +180,9 @@ The process of tangling this file is to
 #+END_SRC
 
 ** General
-General provides convenience wrappers for setting keybindings and adding hooks.
-It is highly compatible with Use Package and provides additional keywords to the \src_emacs-lisp{use-package} macro.
-General is loaded now just so it can be used in all further \src_emacs-lisp{use-package} declarations.
+/General/ provides convenience wrappers for setting keybindings and adding hooks.
+It is highly compatible with /Use Package/ and provides additional keywords to the \src_emacs-lisp{use-package} macro.
+/General/ is loaded now just so it can be used in all further \src_emacs-lisp{use-package} declarations.
 The ~:demand~ keyword is used to ensure General is loaded eagerly.
 #+BEGIN_SRC emacs-lisp
 (use-package general
