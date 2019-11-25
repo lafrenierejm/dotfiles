@@ -3012,9 +3012,6 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
   ;; Load this package eagerly.
   :demand
 
-  ;; Load this package after the following packages.
-  :after (validate)
-
   ;; Customize the following variables.
   :custom
   <<esh-module/custom>>
@@ -3032,7 +3029,7 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
 Disable the greeting banner.
 
 #+BEGIN_SRC emacs-lisp
-(validate-setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
+(setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
 #+END_SRC
 
 **** Variable Customization
@@ -3303,7 +3300,7 @@ If =aspell= is not available, disable Ispell.
 #+BEGIN_SRC emacs-lisp
 (use-package mu4e
   ;; Load `mu4e' after the following packages.
-  :after (flyspell ispell s validate)
+  :after (flyspell ispell s)
 
   ;; Inform the bytecode compiler of the following functions.
   :commands (mu4e-choose-msmtp-account mu4e-show-trailing-whitespace)
@@ -3477,8 +3474,8 @@ If isync is installed, use =mbsync= to fetch all mail and rename filenames when 
 
 #+BEGIN_SRC emacs-lisp
 (when (executable-find "mbsync")
-  (validate-setq mu4e-get-mail-command "mbsync -a")
-  (validate-setq mu4e-change-filenames-when-moving t))
+  (setq mu4e-get-mail-command "mbsync -a")
+  (setq mu4e-change-filenames-when-moving t))
 #+END_SRC
 
 **** Sending Mail
@@ -3499,7 +3496,7 @@ Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
 Use =msmtp= as the sender.
 
 #+BEGIN_SRC emacs-lisp
-(validate-setq
+(setq
  sendmail-program (executable-find "msmtp")
  message-send-mail-function #'message-send-mail-with-sendmail)
 #+END_SRC
@@ -3513,7 +3510,7 @@ Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
     (let ((account-name
            ;; Replace "@" with "." in the current context name.
            (s-replace "@" "." (mu4e-context-name (mu4e-context-current)))))
-      (validate-setq
+      (setq
        message-sendmail-extra-arguments (list '"-a" account-name)))))
 #+END_SRC
 
