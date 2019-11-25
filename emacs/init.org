@@ -1455,19 +1455,27 @@ When in the minibuffer:
 
 Determine how matched parts of the options are highlighted.
 #+BEGIN_SRC emacs-lisp
-(ivy-display-style 'fancy "Highlight the matching parts of the regexp in the minibuffer.")
+(ivy-display-style
+ 'fancy
+ "Highlight the matching parts of the regexp in the minibuffer.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(ivy-use-virtual-buffers t "Show recently killed buffers when calling `ivy-switch-buffer'.")
+(ivy-use-virtual-buffers
+ t
+ "Show recently killed buffers when calling `ivy-switch-buffer'.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(ivy-re-builders-alist '((t . ivy--regex-plus)) "Use `ivy--regex-plus' as the default matching function.")
+(ivy-re-builders-alist
+ '((t . ivy--regex-plus))
+ "Use `ivy--regex-plus' as the default matching function.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(ivy-extra-directories nil "Do not show './' or '../' in the filename completion list.")
+(ivy-extra-directories
+ nil
+ "Do not show './' or '../' in the filename completion list.")
 #+END_SRC
 
 *** Post-Load Evaluation
@@ -1593,11 +1601,15 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
 :END:
 
 #+BEGIN_SRC emacs-lisp
-(ivy-virtual-abbreviate 'abbreviate "Abbreviate virtual buffer names.")
+(ivy-virtual-abbreviate
+ 'abbreviate
+ "Abbreviate virtual buffer names.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(ivy-rich-path-style 'relative "Show paths relative their the project home.")
+(ivy-rich-path-style
+ 'relative
+ "Show paths relative their the project home.")
 #+END_SRC
 
 *** Post-Load Evaluation
