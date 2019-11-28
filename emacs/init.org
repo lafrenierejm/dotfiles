@@ -95,6 +95,7 @@ If not, see <https://www.gnu.org/licenses/>.
 #+END_SRC
 
 ** Prose
+
 All prose in this file is licensed under the [[http://www.gnu.org/licenses/fdl-1.3.html][GNU Free Documentation License (FDL) v1.3]].
 #+BEGIN_SRC text
 Copyright (C) 2019 Joseph LaFreniere.
@@ -433,7 +434,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   ;; Evaluate the following code after loading this package.
   :config
   <<projectile/config>>)
-   #+END_SRC
+#+END_SRC
 
 *** Auto-Loading Keybindings
 :PROPERTIES:
@@ -484,9 +485,9 @@ Use Ivy's integration.
   ;; Add the following keybindings.
   :general
   (:keymaps 'projectile-mode-map
-            "C-x C-f" #'counsel-projectile-find-file
-            "C-x C-b" #'counsel-projectile-switch-to-buffer
-            "C-x C-d" #'counsel-projectile-find-dir)
+   "C-x C-f" #'counsel-projectile-find-file
+   "C-x C-b" #'counsel-projectile-switch-to-buffer
+   "C-x C-d" #'counsel-projectile-find-dir)
 
   ;; Customize the following variables.
   :custom
@@ -1389,6 +1390,7 @@ Doing so greatly improves ~flx~'s performance when working with large sets.
 #+END_SRC
 
 ** Ivy
+
 From the project's readme:
 #+BEGIN_QUOTE
 Ivy is a generic completion mechanism for Emacs.
@@ -1508,7 +1510,7 @@ Do not include TRAMP buffers in Ivy's buffer lists.
 
 **** Restart the Minibuffer with a Prefix Argument
 :PROPERTIES:
-:AUTHOR: Clemens Radermacher (clemera) <clemera@posteo.net>
+:AUTHOR:   Clemens Radermacher (clemera) <clemera@posteo.net>
 :COPYRIGHT: Copyright (C) 2019 Clemens Radermacher
 :END:
 
@@ -1745,7 +1747,7 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
 :COPYRIGHT_YEAR: 2019
 :COPYRIGHT_AUTHOR: Vincent Zhang (seagle0128)
 :COPYRIGHT_EMAIL: seagle0128@gmail.com
-:LICENSE: GPLv3+
+:LICENSE:  GPLv3+
 :END:
 
 #+BEGIN_SRC emacs-lisp
