@@ -754,7 +754,11 @@ This can benefit both literate and traditional programming by allowing one to co
 
 #+BEGIN_SRC emacs-lisp
 (use-package polymode
-  :demand)
+  :demand
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<polymode/config>>)
 #+END_SRC
 
 ** Org Mode
@@ -4246,6 +4250,175 @@ Define a function that sets the shell type to Zsh when working with a Zsh file.
     (when (string-match regexp buffer-file-name)
       ;; Then set the shell type to Zsh.
       (sh-set-shell "zsh"))))
+#+END_SRC
+
+** Python VM
+
+*** Python
+
+#+BEGIN_SRC emacs-lisp
+(use-package python
+  ;; Inform the bytecode compiler of the following functions.
+  :functions python-set-comment-inline-offset
+
+  ;; Add the following non-autoloading hooks.
+  :gfhook
+  <<python/gfhook>>
+
+  ;; Evaluate the following code after loading `python'.
+  :config
+  <<python/config>>)
+#+END_SRC
+
+**** Non-Autoloading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref python/gfhook
+:END:
+
+#+BEGIN_SRC emacs-lisp
+('python-mode-hook #'python-set-comment-inline-offset)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref python/config
+:END:
+
+Precede inline (i.e. end-of-line) comments with two spaces, per PEP 8.
+#+BEGIN_SRC emacs-lisp
+(defun python-set-comment-inline-offset ()
+  (set (make-local-variable 'comment-inline-offset) 2)
+  (setq comment-column 0))
+#+END_SRC
+
+**** Polymode
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref polymode/config
+:END:
+
+Use \src_emacs-lisp{python-mode} as primary (host) mode for Python buffers.
+#+BEGIN_SRC emacs-lisp
+(define-hostmode poly-python-hostmode
+  :mode 'python-mode)
+#+END_SRC
+
+***** reStructuredText for Doctstrings
+:PROPERTIES:
+:DESCRIPTION: Use \src_emacs-lisp{rst-mode} for Python's docstrings.
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defun poly-python-docstring-head (count)
+  "Search for in direction specified by COUNT for Python docstring."
+  (when (re-search-forward
+         (rx line-start
+             (zero-or-more blank) (group (= 3 "\""))
+             (minimal-match (zero-or-more anything)) (group (= 3 "\""))
+             (| line-end
+                (sequence (zero-or-more blank) "#" (zero-or-more not-newline) line-end)))
+         nil t count)
+    (cons (match-beginning 1) (match-end 1))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun poly-python-docstring-tail (count)
+  (cons (match-beginning 2) (match-end 2)))
+#+END_SRC
+
+Define the secondary (inner) mode.
+The delimiters are Python's plain (i.e. non-raw) multi-line string delimiters: three consecutive double quotes.
+#+BEGIN_SRC emacs-lisp
+(define-innermode poly-rst-python-innermode
+  :mode 'rst-mode
+  :head-matcher #'poly-python-docstring-head
+  :tail-matcher #'poly-python-docstring-tail
+  :head-mode 'host
+  :tail-mode 'host)
+#+END_SRC
+
+Define the actual Polymode.
+#+BEGIN_SRC emacs-lisp
+(define-polymode poly-python-rst-mode
+  :hostmode 'poly-python-hostmode
+  :innermodes '(poly-rst-python-innermode))
+#+END_SRC
+
+*** Pyvenv
+
+#+BEGIN_SRC emacs-lisp
+(use-package pyvenv
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Evaluate the following after loading this package.
+  :config
+  <<pyvenv/config>>)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref pyvenv/config
+:END:
+
+Enable \src_emacs-lisp{pyvenv-mode} globally.
+#+BEGIN_SRC emacs-lisp
+(pyvenv-mode t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun pyvenv-lafrenierejm-create-virtualenv (version)
+  "Create a virtual environment using Python VERSION."
+  (interactive "MVirtual environment base: ")
+  (let* ((git-url (magit-git-string "remote" "get-url" "origin"))
+         (git-urlobj (url-generic-parse-url git-url)))
+    (let ((dns-name (->> (s-split (rx ".") (url-host git-urlobj) t)
+                         (seq-reverse)
+                         (s-join ".")))
+          (repo-path (-as-> (url-filename git-urlobj) var
+                            (s-replace-regexp (rx ".git" string-end) "" var)
+                            (s-split (rx "/") var t)
+                            (s-join "." var))))
+      (let ((venv-name (s-join "." (list dns-name repo-path version))))
+        (shell-command (format "pyenv virtualenv %s %s"
+                               version
+                               venv-name))
+        (add-dir-local-variable
+         nil
+         'pyvenv-activate
+         (f-join (getenv "HOME")
+                 ".pyenv/versions/"
+                 venv-name))))))
+#+END_SRC
+
+*** Blacken
+
+#+BEGIN_SRC emacs-lisp
+(use-package blacken
+  ;; Load this package after the following packages.
+  :after python
+
+  ;; Load this package eagerly.
+  :demand)
+#+END_SRC
+
+*** YAPFify
+
+#+BEGIN_SRC emacs-lisp
+(use-package yapfify
+  ;; Load this package after the following packages.
+  :after python
+
+  ;; Load this package eagerly.
+  :demand)
+#+END_SRC
+
+*** Hy Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package hy-mode
+  :general
+  (:keymaps 'hy-mode-map
+   "C-c C-c" #'hy-shell-eval-buffer))
 #+END_SRC
 
 * RESTful APIs
