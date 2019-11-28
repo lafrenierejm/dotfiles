@@ -3346,9 +3346,6 @@ If =aspell= is not available, disable Ispell.
   :bind
   (("C-x m" . mu4e-compose-new))
 
-  ;; Add the following directories to `load-path'.
-  :load-path ("site-lisp/mu4e")
-
   ;; Evaluate the following code after loading this package.
   :config
   <<mu4e/config>>)
