@@ -1719,7 +1719,9 @@ Define a the format to use for displaying battery information in the minibuffer.
 
 Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is recalculated.
 #+BEGIN_SRC emacs-lisp
-(minibuffer-line-refresh-interval 1 "Refresh the minibuffer-line every second.")
+(minibuffer-line-refresh-interval
+ 1
+ "Refresh the minibuffer-line every second.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
