@@ -3778,9 +3778,9 @@ I have reached out to Borkowski asking how he would like the code to be licensed
   :general
   <<pdf-tools/general>>
 
-  ;; Add the following non-autoloading hooks.
-  :gfhook
-  <<pdf-tools/gfhook>>)
+  ;; Evalutate the following code before loading this package.
+  :init
+  (pdf-tools-install t))
 #+END_SRC
 
 *** Filename Mapping
