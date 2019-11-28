@@ -17,6 +17,8 @@
 	unstage = "reset HEAD --"
 [diff]
 	indentHeuristic = on
+	minimal = on
+	patience = on
 [user]
 	name = "Joseph LaFreniere"
 	email = "joseph@lafreniere.xyz"
