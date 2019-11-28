@@ -2217,17 +2217,6 @@ Enable ~company-mode~ globally.
   ;; Load this package eagerly.
   :demand
 
-  ;; Apply the following variable customizations.
-  :custom
-  ;; Enable `yas-minor-mode' globally.
-  (yas-snippet-dirs
-   (let ((dir (expand-file-name
-               "~/.guix-profile/share/emacs/yasnippet-snippets/"))
-         (append t))
-     (if (file-directory-p dir)
-         (add-to-list 'yas-snippet-dirs dir append)
-       yas-snippet-dirs)))
-
   ;; Evaluate the following code after loading this package.
   :config
   (yas-global-mode 1))
