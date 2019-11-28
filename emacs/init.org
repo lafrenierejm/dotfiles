@@ -1830,6 +1830,10 @@ Determine where Emacs creates backups for files edited via TRAMP.
 
 #+BEGIN_SRC emacs-lisp
 (use-package autorevert
+  ;; Add the following auto-loading hooks.
+  :ghook
+  ('pdf-tools-mode-hook #'auto-revert-mode)
+
   ;; Customize the following variables.
   :custom
   (auto-revert-verbose nil "Do not display messages when buffers are reverted."))
@@ -3766,9 +3770,6 @@ I have reached out to Borkowski asking how he would like the code to be licensed
 
 #+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
-  ;; Load this package after the following packages.
-  :after (autorevert)
-
   ;; Establish deferred binding within `auto-mode-alist'.
   :mode
   <<pdf-tools/mode>>
