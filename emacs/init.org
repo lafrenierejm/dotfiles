@@ -1214,8 +1214,6 @@ Enable =TAB=-based bindings in Outline mode.
 (evil-collection-outline-bind-tab t)
 #+END_SRC
 
-*** Conditional Loading
-
 Synchronize insert and normal states with char and line modes, respectively, in Term mode.
 #+BEGIN_SRC emacs-lisp
 (evil-collection-term-sync-state-and-mode-p t)
@@ -1301,7 +1299,10 @@ It adds a "surround" verb to Evil's modal editing.
   :demand
 
   :custom
-  <<smartparens/custom>>)
+  <<smartparens/custom>>
+
+  :config
+  <<smartparens/config>>)
 #+END_SRC
 
 *** Variable Customization
@@ -1309,16 +1310,21 @@ It adds a "surround" verb to Evil's modal editing.
 :HEADER-ARGS+: :noweb-ref smartparens/custom
 :END:
 
-Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
-
-#+BEGIN_SRC emacs-lisp
-(sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
-#+END_SRC
-
 Enable ~smartparens-mode~ globally.
 
 #+BEGIN_SRC emacs-lisp
 (smartparens-global-mode t)
+#+END_SRC
+
+*** Post-Load Evluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref smartparens/config
+:END:
+
+Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
+
+#+BEGIN_SRC emacs-lisp
+(setq sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
 #+END_SRC
 
 ** Smartparens Config
