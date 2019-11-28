@@ -2370,9 +2370,9 @@ The only addition is the doc string.
 
 Define the format of the timestamp to prefix prompts with.
 By default, this follows ISO 8601.
-#+NAME: init-eshell/prompt-timestamp-format-string
+#+NAME: esh-mode-prompt-timestamp-format-string
 #+BEGIN_SRC emacs-lisp
-(defcustom init-eshell/prompt-timestamp-format-string
+(defcustom esh-mode-prompt-timestamp-format-string
   "%FT%T%z"
   "The format-string used for Eshell prompts' timestamps.
 
@@ -2382,14 +2382,14 @@ The default value follows ISO 8601."
 #+END_SRC
 
 Define the regexp to match the result of the above format string.
-#+NAME: init-eshell/prompt-timestamp-regexp
+#+NAME: esh-mode-prompt-timestamp-regexp
 #+BEGIN_SRC emacs-lisp
-(defcustom init-eshell/prompt-timestamp-regexp
+(defcustom esh-mode-prompt-timestamp-regexp
   (rx
    (repeat 4 digit) ?- (repeat 2 digit) ?- (repeat 2 digit)
    ?T (repeat 2 digit) (repeat 2 (and ?: (repeat 2 digit)))
    (or ?- ?+) (repeat 4 digit))
-  "A regular expression that matches `init-eshell/prompt-timestamp-format-string'."
+  "A regular expression that matches `esh-mode-prompt-timestamp-format-string'."
   :type '(regexp))
 #+END_SRC
 
@@ -2402,13 +2402,13 @@ Define the regexp to match the result of the above format string.
 [[../minor-mode/init-evil.org][init-evil.org]] defines ~init/beginning-of-maybe-line~.
 That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
 
-=init-eshell/beginning-of-maybe-line= moves =point= toward the beginning of the current line incrementally by semantic region.
+=esh-mode-beginning-of-line-maybe= moves =point= toward the beginning of the current line incrementally by semantic region.
 1. If point is in the text of a command, point will be moved to the beginning of the command.
 2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
 3. Point will be moved to the beginning of the line.
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/beginning-of-maybe-line ()
+(defun esh-mode-beginning-of-line-maybe ()
   "Move point to the start of the command beginning of the line."
   (interactive)
   (let ((old-point (point)))   ; Get current position.
@@ -2435,6 +2435,7 @@ For example, the prompt src_sh[:exports code]{PS1="(\$date +%H:%M:%S) $"} would 
 I find the information by such a prompt to be misleading, however.
 
 ****** The Problem
+
 My motivation for timestamping my prompts was to be able to easily answer the question, "When did I run this command?"
 But rather than providing context for when the corresponding command was submitted, most =PS1=-inserted timestamps actually indicate when the /previous/ command finished executing.
 
@@ -2452,13 +2453,14 @@ That inefficiency results from requiring the user to
 
 
 ****** The Solution
+
 The primary difficulty in establishing accurate timestamps is that doing so requires modifying the prompt text /after/ its input has been sent.
 Some shells have workaround for this, such as Zsh's ~preexec~.
 Rather than implementing such a function for Eshell, we can instead take advantage of the fact that Eshell is written in Emacs Lisp and outputs directly to an Emacs buffer.
 
 Define a function to update the most recent prompt's timestamp.
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/timestamp-prompt ()
+(defun esh-mode-timestamp-prompt ()
   "Update the timestamp at the beginning of the current prompt."
   (interactive)
   (let ((cur-pos (point)))
@@ -2477,20 +2479,20 @@ Define a function to update the most recent prompt's timestamp.
                  'read-only t
                  'rear-nonsticky '(font-lock-face read-only))))
       ;; Remove the existing timestamp.
-      (when (re-search-forward init-eshell/prompt-timestamp-regexp)
+      (when (re-search-forward esh-mode-prompt-timestamp-regexp)
         (replace-match ""))
       ;; Insert the timestamp, propertized to match the rest of the prompt.
       (insert (apply #'propertize
-                     (format-time-string init-eshell/prompt-timestamp-format-string)
+                     (format-time-string esh-mode-prompt-timestamp-format-string)
                      prompt-properties)))
     ;; Restore POINT to its original location.
     (goto-char cur-pos)))
 #+END_SRC
-Where ~init-eshell/prompt-timestamp-format-string~ and ~init-eshell/prompt-timestamp-regexp~ are defined in ref:init-eshell/prompt-timestamp-format-string and ref:init-eshell/prompt-timestamp-regexp, respectively.
+Where ~esh-mode-prompt-timestamp-format-string~ and ~esh-mode-prompt-timestamp-regexp~ are defined in ref:esh-mode-prompt-timestamp-format-string and ref:esh-mode-prompt-timestamp-regexp, respectively.
 
 Call the above function before sending input.
 #+BEGIN_SRC emacs-lisp
-(advice-add 'eshell-send-input :before #'init-eshell/timestamp-prompt)
+(advice-add 'eshell-send-input :before #'esh-mode-timestamp-prompt)
 #+END_SRC
 
 ***** Narrow to Command
@@ -2501,7 +2503,7 @@ Narrow the buffer to the context ~point~ is currently in:
 - other prompt/command :: narrow to the prompt, command, and the command's output
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/narrow-to-command ()
+(defun esh-mode-narrow-to-command ()
   "Make text outside the current command invisible.
 
 - If `point' is in the last prompt or last command, do nothing.
@@ -2561,8 +2563,13 @@ Determine whether duplicates are skipped when traversing command history.
 *** Em Dirs
 #+BEGIN_SRC emacs-lisp
 (use-package em-dirs
+  :demand
+
   :config
-  <<em-dirs/config>>)
+  <<em-dirs/config>>
+
+  :commands
+  (em-dirs-name-buffer))
 #+END_SRC
 
 **** Post-Load Evaluation
@@ -2572,7 +2579,7 @@ Determine whether duplicates are skipped when traversing command history.
 
 ***** Return Path Relative to Project Root
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/pwd-relative-to-project (directory)
+(defun em-dirs-pwd-relative-to-project (directory)
   "Print DIRECTORY relative to its Projectile root, if any.
 
 If DIRECTORY is in a project as determined by Projectile, return DIRECTORY's
@@ -2608,7 +2615,7 @@ The following functions can be used to abbreviate a path by shortening each elem
 only the last directory in the path is shown in full.
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/abbreviate-dirname (filename)
+(defun em-dirs-abbreviate-dirname (filename)
   (cond
    ((string-empty-p filename)
     "")
@@ -2619,7 +2626,7 @@ only the last directory in the path is shown in full.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/abbreviate-path (path)
+(defun em-dirs-abbreviate-path (path)
   "Abbreviate each element in PATH except for the last.
 
 Abbreviated path elements are represented by their first non-period
@@ -2637,7 +2644,7 @@ character. For example, the path \"/home/user/.config/curdir\" will become
                      (file-name-as-directory directory))
                    filename))
          (mapcar
-          #'init-eshell/abbreviate-dirname
+          #'em-dirs-abbreviate-dirname
           split-path)
          :end (- (length split-path) 1)))
        (car (last split-path)))
@@ -2646,10 +2653,10 @@ character. For example, the path \"/home/user/.config/curdir\" will become
 
 ***** Create Eshell Buffer Names
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/name-buffer (directory &optional process-name)
+(defun em-dirs-name-buffer (directory &optional process-name)
   "Create a name for an Eshell buffer in DIRECTORY."
   (concat "*eshell "
-          (init-eshell/pwd-relative-to-project directory)
+          (em-dirs-pwd-relative-to-project directory)
           (when process-name
             (concat " <" process-name ">"))
           "*"))
@@ -2672,7 +2679,7 @@ target directory then rename the current buffer to reflect its new working
 directory.
 
 The presence of an existing Eshell buffer at the new location is determined by
-comparing the name of buffers to the result of `init-eshell/name-buffer'."
+comparing the name of buffers to the result of `em-dirs-name-buffer'."
   (setq args (eshell-flatten-list args))
   (let ((path (car args))
         (subpath (car (cdr args)))
@@ -2719,7 +2726,7 @@ comparing the name of buffers to the result of `init-eshell/name-buffer'."
                           (list "./")))
              (curdir (eshell/pwd))
              (newdir (expand-file-name (file-name-as-directory (or path "~"))))
-             (newname (init-eshell/name-buffer newdir)))
+             (newname (em-dirs-name-buffer newdir)))
         (unless (equal curdir newdir)
           (eshell-add-to-dir-ring curdir))
         ;; If an Eshell buffer already exists in the new directory...
@@ -2748,15 +2755,15 @@ comparing the name of buffers to the result of `init-eshell/name-buffer'."
   :demand
 
   ;; Load this package after the following packages.
-  :after (:all evil ivy)
+  :after (:all evil ivy em-dirs em-hist)
 
   ;; Inform the bytecode compiler of the following functions.
   :commands
-  (init-eshell/add-visual-commands
-   init-eshell/beginning-of-maybe-line
-   init-eshell/find-eshell
-   init-eshell/find-eshell-here
-   init-eshell/prompt)
+  (eshell-add-visual-commands
+   esh-mode-beginning-of-line-maybe
+   eshell-find-eshell
+   eshell-find-eshell-here
+   eshell-prompt)
 
   ;; Add the following keybindings.
   :general
@@ -2788,15 +2795,15 @@ Map the opening an Eshell buffer to =C-x z=.
 This keybinding mirrors the defaults for ~find-file~ and ~dired~.
 
 #+BEGIN_SRC emacs-lisp
-("C-x z" #'init-eshell/find-eshell)
+("C-x z" #'eshell-find-eshell)
 #+END_SRC
 
-Map ~init-eshell/find-eshell-here~ to =C-z=.
+Map ~eshell-find-eshell-here~ to =C-z=.
 This imitates the behavior of *NIX terminal applications.
 In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
 
 #+BEGIN_SRC emacs-lisp
-("C-z" #'init-eshell/find-eshell-here)
+("C-z" #'eshell-find-eshell-here)
 #+END_SRC
 
 **** Non-Autoloading Hooks
@@ -2807,7 +2814,7 @@ In most terminal applications, =C-z= is the key combination to suspend the curre
 Build the list of commands to be run in Term mode buffers.
 
 #+BEGIN_SRC emacs-lisp
-(nil #'init-eshell/add-visual-commands)
+(nil #'eshell-add-visual-commands)
 #+END_SRC
 
 Add the following keybindings:
@@ -2819,9 +2826,9 @@ Add the following keybindings:
 (nil (lambda ()
        (general-define-key
         :keymaps 'eshell-mode-map
-        "C-l" #'init-eshell/clear-scrollback
-        "C-x n c" #'init-eshell/narrow-to-command
-        "C-z" #'init-eshell/background-process-maybe
+        "C-l" #'eshell/clear-scrollback
+        "C-x n c" #'esh-mode-narrow-to-command
+        "C-z" #'eshell/background-process-maybe
         :states '(insert)
         "C-r" #'counsel-esh-history)))
 #+END_SRC
@@ -2840,7 +2847,7 @@ Add the following keybindings:
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(eshell-prompt-function #'init-eshell/prompt)
+(eshell-prompt-function #'eshell-prompt)
 #+END_SRC
 
 **** Pre-Load Execution
@@ -2850,11 +2857,11 @@ Add the following keybindings:
 
 ***** Eshell Prompt
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/prompt ()
+(defun eshell-prompt ()
   "Prefix \"$USER@$(hostname):\" if on remote host."
   (concat
    (format-time-string
-    (concat init-eshell/prompt-timestamp-format-string " "))
+    (concat esh-mode-prompt-timestamp-format-string " "))
    (if (file-remote-p default-directory 'host)
        (with-parsed-tramp-file-name default-directory nil
          (concat
@@ -2862,8 +2869,8 @@ Add the following keybindings:
             (concat user "@"))
           host ":"
           localname))
-     (init-eshell/abbreviate-path
-      (init-eshell/pwd-relative-to-project
+     (em-dirs-abbreviate-path
+      (em-dirs-pwd-relative-to-project
        (expand-file-name default-directory))))
    (if (= (user-uid) 0)
        " # "
@@ -2935,7 +2942,7 @@ Run the following commands in a =term= buffer:
 - tail
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/add-visual-commands ()
+(defun eshell-add-visual-commands ()
   "Add commands to `eshell-visual-commands'."
   (let ((commands (list "alsamixer" "ssh" "top" "tail")))
     (dolist (command commands)
@@ -2947,14 +2954,14 @@ Run the following commands in a =term= buffer:
 Open or switch to an Eshell buffer in a given directory.
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/find-eshell (directory)
+(defun eshell-find-eshell (directory)
   "Open Eshell in DIRECTORY.
 
 If an Eshell instance for the directory already exists, switch to it.  If no
 such instance exists, start a new instance whose name includes the directory."
   (interactive "DOpen Eshell in: ")
   ;; Set the directory to open Eshell in.
-  (let* ((eshell-buffer-name (init-eshell/name-buffer directory))
+  (let* ((eshell-buffer-name (em-dirs-name-buffer directory))
          (buffer (get-buffer-create eshell-buffer-name)))
     (pop-to-buffer-same-window buffer)
     (unless (derived-mode-p 'eshell-mode)
@@ -2968,7 +2975,7 @@ Define a function to open an Eshell instance in the current directory.
 If an Eshell instance already exists in that directory, switch to its buffer.
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/find-eshell-here ()
+(defun eshell-find-eshell-here ()
   "Open Eshell in the current working directory.
 
 If an Eshell instance for the directory already exists, switch to it. If no such
@@ -2977,8 +2984,8 @@ instance exists, start a new instance whose name includes the directory."
   (let ((cwd (abbreviate-file-name (if (buffer-file-name)
                                        (file-name-directory (buffer-file-name))
                                      default-directory))))
-    (init-eshell/find-eshell cwd)))
-     #+END_SRC
+    (eshell-find-eshell cwd)))
+    #+END_SRC
 
 ****** "Background" the Current Process
 
@@ -2990,30 +2997,30 @@ Because having access to long-running processes' stdout and stderr is useful, th
 
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/background-process-maybe ()
+(defun eshell/background-process-maybe ()
   "Rename the Eshell BUFFER with its process and reopen the directory."
   (interactive)
   (when-let ((path default-directory)
              (process (get-buffer-process (current-buffer)))
              (process-name (process-name process)))
-    (rename-buffer (init-eshell/name-buffer path process-name))
-    (init-eshell/find-eshell path)))
+    (rename-buffer (em-dirs-name-buffer path process-name))
+    (eshell-find-eshell path)))
 #+END_SRC
 
 UNIX shells use the chord =C-z= to background the current process.
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/bind-background-process-maybe ()
-  "Add a keybinding for `init-eshell/background-process-maybe'."
+(defun eshell-bind-background-process-maybe ()
+  "Add a keybinding for `eshell/background-process-maybe'."
   (general-define-key
    :keymaps 'eshell-mode-map
-   "C-z" #'init-eshell/background-process-maybe))
+   "C-z" #'eshell/background-process-maybe))
 #+END_SRC
 
 ****** Clear Buffer
 
 #+BEGIN_SRC emacs-lisp
-(defun init-eshell/clear-scrollback ()
+(defun eshell/clear-scrollback ()
   "Clear the scrollback content of the eshell window."
   (interactive)
   (let ((input (eshell-get-old-input)))
@@ -4484,7 +4491,7 @@ Run a shell command.
 Open an Eshell buffer in the current buffer's location.
 
 #+BEGIN_SRC emacs-lisp
-(exwm-input-set-key (kbd "C-z") #'init-eshell/find-eshell-here)
+(exwm-input-set-key (kbd "C-z") #'eshell-find-eshell-here)
 #+END_SRC
 
 Move =point= to the windows immediately around the current window.
