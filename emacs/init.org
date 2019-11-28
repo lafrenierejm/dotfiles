@@ -110,7 +110,7 @@ with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
 
 #+BEGIN_SRC text
 This is tangled source of Joseph LaFreniere (lafrenierejm)'s literate Emacs initialization file.
-Please refer to `init.org' in this same file for full commentary.
+Please refer to `init.org' in this same directory for full commentary.
 #+END_SRC
 
 * Bootstrapping
