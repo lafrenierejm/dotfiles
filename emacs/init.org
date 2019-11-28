@@ -3815,28 +3815,37 @@ Create an alist whose keys are regexps matching filenames and whose values are t
  "y" #'kill-region)
 #+END_SRC
 
-*** Non-Autoloading Hooks
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref pdf-tools/gfhook
-:END:
-
-Because PDF Tools is used to render binary files, its buffers should automatically refresh when the contents of their corresponding files are changed.
-
-#+BEGIN_SRC emacs-lisp
-('pdf-tools-mode-hook #'auto-revert-mode)
-#+END_SRC
-
 * Programming Languages
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref programming-languages
 :END:
 
 ** Lisps
+
+*** Lisp Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package lisp-mode
+  ;; Load this package eagerly.
+  :demand
+
+  :preface
+  <<lisp-mode/preface>>
+
+  :config
+  <<lisp-mode/config>>)
+#+END_SRC
+
+**** Preface
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref lisp-mode/preface
+:END:
+
 It is desirable to have slightly different character matching behavior when editing Lisps.
 The following is a list of the Lisp modes I edit in.
 
 #+BEGIN_SRC emacs-lisp
-(defconst init-prog-lisp/major-modes
+(defconst lisp-major-modes
   '(cider-repl-mode
     clojure-mode
     emacs-lisp-mode
@@ -3849,8 +3858,8 @@ The following is a list of the Lisp modes I edit in.
 
 And the above modes' hooks:
 #+BEGIN_SRC emacs-lisp
-(defconst init-prog-lisp/major-mode-hooks
-  (mapcar #'derived-mode-hook-name init-prog-lisp/major-modes)
+(defconst lisp-major-mode-hooks
+  (mapcar #'derived-mode-hook-name lisp-major-modes)
   "A list of Lisp major mode hooks.")
 #+END_SRC
 
@@ -3859,32 +3868,25 @@ The function \src_emacs-lisp{derived-mode-hook-name} is provided by /Derived/, w
 (require 'derived)
 #+END_SRC
 
-*** Indent Tabs Mode
-For sexp-based languages it is desirable to disallow tabs for line indentation.
-
-#+BEGIN_SRC emacs-lisp
-(defun init-prog-lisp/use-spaces ()
-  "Only use spaces (as opposed to tabs) for indentation."
-  (setq indent-tabs-mode nil))
-#+END_SRC
-
-Add above function to all Lisp major modes' hooks.
-
-#+BEGIN_SRC emacs-lisp
-(general-add-hook init-prog-lisp/major-mode-hooks #'init-prog-lisp/use-spaces)
-#+END_SRC
-
-*** Lisp Mode
-#+BEGIN_SRC emacs-lisp
-(use-package lisp-mode
-  :config
-  <<lisp-mode/config>>)
-#+END_SRC
 
 **** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref lisp-mode/config
 :END:
+
+***** Indent Using Spaces
+
+For sexp-based languages it is desirable to disallow tabs for line indentation.
+#+BEGIN_SRC emacs-lisp
+(defun use-spaces ()
+  "Only use spaces (as opposed to tabs) for indentation."
+  (setq indent-tabs-mode nil))
+#+END_SRC
+
+The above function should be added to all Lisp major mode hooks.
+#+BEGIN_SRC emacs-lisp
+(general-add-hook lisp-major-mode-hooks #'use-spaces)
+#+END_SRC
 
 ***** Fuco1's Indentation
 :PROPERTIES:
@@ -3979,18 +3981,11 @@ Aggressive Indent provides a minor mode to re-indent code after every change.
 #+BEGIN_SRC emacs-lisp
 (use-package aggressive-indent
   :ghook
-  (init-prog-lisp/major-mode-hooks #'aggressive-indent-mode))
+  (lisp-major-mode-hooks #'aggressive-indent-mode))
 #+END_SRC
 
 *** Character Matching
 **** Smartparens
-
-#+BEGIN_SRC emacs-lisp
-(use-package smartparens
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<smartparens/config>>)
-#+END_SRC
 
 ***** Post-Load Evaluation
 :PROPERTIES:
@@ -3999,7 +3994,8 @@ Aggressive Indent provides a minor mode to re-indent code after every change.
 
 Lisps use the single quote (='=) for quoting, where it is not paired with a closing character.
 #+BEGIN_SRC emacs-lisp
-(sp-local-pair lisp-major-modes "'" nil :actions nil)
+(with-eval-after-load 'lisp-mode
+  (sp-local-pair lisp-major-modes "'" nil :actions nil))
 #+END_SRC
 
 **** Evil Cleverparens
@@ -4009,7 +4005,7 @@ Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "E
 (use-package evil-cleverparens
   ;; Delay loading this package until after the following packages.
   :after
-  (:all evil smartparens)
+  (:all evil smartparens lisp-mode)
 
   ;; Inform the byte compiler of the following functions.
   :functions evil-move-beyond-eol
@@ -4044,7 +4040,7 @@ Enable ~evil-cleverparens-mode~ for Lisps.
 
 Let the cursor move past the end of lines in Lisp source code.
 #+BEGIN_SRC emacs-lisp
-(lisp-major-mode-hooks #'init-prog-lisp/evil-move-beyond-eol)
+(lisp-major-mode-hooks #'evil-move-beyond-eol)
 #+END_SRC
 
 ***** Post-Load Evaluation
