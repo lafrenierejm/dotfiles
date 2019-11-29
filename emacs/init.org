@@ -4120,6 +4120,15 @@ Replace hash symbols with ellipses.
 (use-package racket-mode)
 #+END_SRC
 
+**** Hy Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package hy-mode
+  :general
+  (:keymaps 'hy-mode-map
+   "C-c C-c" #'hy-shell-eval-buffer))
+#+END_SRC
+
 *** Lisp-2
 Lisp-2 languages have a separate namespace for functions.
 
@@ -4241,7 +4250,7 @@ Define a function that sets the shell type to Zsh when working with a Zsh file.
       (sh-set-shell "zsh"))))
 #+END_SRC
 
-** Python VM
+** Python
 
 *** Python
 
@@ -4399,15 +4408,6 @@ Enable \src_emacs-lisp{pyvenv-mode} globally.
 
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
-
-*** Hy Mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package hy-mode
-  :general
-  (:keymaps 'hy-mode-map
-   "C-c C-c" #'hy-shell-eval-buffer))
 #+END_SRC
 
 * RESTful APIs
