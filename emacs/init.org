@@ -1052,6 +1052,13 @@ Apply the keybindings specified in ~evil-org-key-theme~.
 :HEADER-ARGS+: :noweb-ref keybindings
 :END:
 
+** macOS-specific
+
+#+BEGIN_SRC emacs-lisp
+(when (eq system-type 'darwin)
+  (setq mac-option-modifier 'super))
+#+END_SRC
+
 ** "Yes Or No" Selection
 
 Avoid having to type out "yes" and "no" by replacing them with "y" and "n", respectively.
