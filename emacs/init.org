@@ -1905,6 +1905,9 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
 :END:
 
 TRAMP allows Emacs to transparently access remote files as if they were local files.
+
+** TRAMP
+
 #+BEGIN_SRC emacs-lisp
 (use-package tramp
   :straight (:type built-in)
@@ -1917,7 +1920,7 @@ TRAMP allows Emacs to transparently access remote files as if they were local fi
   <<tramp/custom>>)
 #+END_SRC
 
-** Variable Customizations
+*** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref tramp/custom
 :END:
@@ -1926,6 +1929,15 @@ Determine where Emacs creates backups for files edited via TRAMP.
 #+BEGIN_SRC emacs-lisp
 (tramp-backup-directory-alist backup-directory-alist "Create TRAMP backups locally.")
 #+END_SRC
+
+** Counsel Tramp
+
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-tramp
+  :general
+  ("C-x t" #'counsel-tramp))
+#+END_SRC
+
 * Version Control
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref version-control
