@@ -52,6 +52,9 @@
 ;;; Diff:
 <<diff>>
 
+;;; Directories:
+<<directories>>
+
 ;;; Command Interpretation:
 <<command-interpretation>>
 
@@ -2481,6 +2484,118 @@ Enable ws-butler globally.
 
 #+BEGIN_SRC emacs-lisp
 (ws-butler-global-mode)
+#+END_SRC
+
+* Directories
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref directories
+:END:
+
+Emacs is a robust tool for operating on directory objects.
+The built-in package provided for doing so is /Dired/.
+Most other directory-centric packages provide functionality on top of /Dired/.
+
+** Dired
+
+#+BEGIN_SRC emacs-lisp
+(use-package dired
+  :straight (:type built-in)
+
+  ;; Load Dired eagerly.
+  :demand
+
+  ;; Inform the bytecode compiler of the following interactive functions.
+  :commands dired-here
+
+  ;; Add the following auto-loading keybindings.
+  :general
+  (:states '(motion normal visual)
+   "C-d" #'dired-here)
+  (:keymaps 'dired-mode-map
+   "G" #'evil-goto-line)
+  (:keymaps 'dired-mode-map
+   :states '(motion normal visual)
+   "g g" #'evil-goto-first-line)
+
+  ;; Perform the following variable customizations.
+  :custom
+  (dired-listing-switches
+   (string-join
+    '("-l" ; use a long listing format
+      "-A" ; do not list implied . and ..
+      "-h" ; with -l and -s, print sizes like 1K 234M 2G etc.
+      "-v" ; natural sort of (version) numbers within text
+      )
+    " "))
+  (dired-dwim-target t)
+
+  ;; Evaluate the following code after loading Dired.
+  :config
+  <<dired/config>>)
+#+END_SRC
+
+*** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref dired/config
+:END:
+
+Define a function to create an empty file.
+This behaves as a subset of =touch=;
+it will not update the modified time of existing files.
+#+BEGIN_SRC emacs-lisp
+(defun dired-lafrenierejm-touch (filename)
+  "Create a new, empty file."
+  (interactive "FFile to create: ")
+  (let (filename-expanded (expand-file-name filename))
+    (if (file-exists-p filename-expanded)
+        (error "File '%s' already exists" filename-expanded)
+      (with-temp-buffer (write-file filename-expanded)))))
+#+END_SRC
+
+Define a function to open the current directory in a Dired buffer.
+#+BEGIN_SRC emacs-lisp
+(defun dired-here ()
+  "\"Edit\" the current directory."
+  (interactive)
+  (dired default-directory))
+#+END_SRC
+
+** Writable Dired
+
+#+BEGIN_SRC emacs-lisp
+(use-package wdired
+  :straight (:type built-in)
+
+  :custom
+  (wdired-allow-to-change-permissions t))
+#+END_SRC
+
+** Dired Collapse
+
+/Dired Collapse/ provides a minor mode \src_emacs-lisp{dired-collapse-mode} that provides visibility into directories with a single child.
+This visibility is provided recursively, so the view provided will extend arbitrarily deep provided each directory in the view has exactly one child.
+
+#+BEGIN_SRC emacs-lisp
+(use-package dired-collapse
+  ;; Load Dired Collapse after the following packages.
+  :after dired
+
+  ;; Add the following auto-loading hooks.
+  :ghook
+  ('dired-mode-hook #'dired-collapse-mode))
+#+END_SRC
+
+** Dired Narrow
+
+#+BEGIN_SRC emacs-lisp
+(use-package dired-narrow
+  ;; Inform the bytecode compiler of the following interactive functions.
+  :commands dired-narrow
+
+  ;; Add the following auto-loading keybindings.
+  :general
+  (:keymaps 'dired-mode-map
+   "C-x n n" #'dired-narrow))
 #+END_SRC
 
 * Command Interpretation
