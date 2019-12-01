@@ -968,6 +968,13 @@ Apply the keybindings specified in ~evil-org-key-theme~.
 :HEADER-ARGS+: :noweb-ref keybindings
 :END:
 
+** "Yes Or No" Selection
+
+Avoid having to type out "yes" and "no" by replacing them with "y" and "n", respectively.
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
 ** Evil
 
 /Evil/ aims to implement Vi's user features, most notably Vi's modal keyboard interface, in Emacs Lisp for use in Emacs.
