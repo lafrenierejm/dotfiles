@@ -2300,6 +2300,14 @@ Alias the above function to remove my username.
 #+BEGIN_SRC
 (defalias 'git-year-added #'git-lafrenierejm-year-added)
 #+END_SRC
+
+** Git Link
+
+#+BEGIN_SRC emacs-lisp
+(use-package git-link
+  :demand)
+#+END_SRC
+
 * Completion
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref completion
