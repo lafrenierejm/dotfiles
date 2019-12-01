@@ -4978,6 +4978,18 @@ My username is used above just to demarcate the function as a custom one.
 (defalias 'sql-truncate-lines #'sql-lafrenierejm-truncate-lines)
 #+END_SRC
 
+*** SQL Up Mode
+
+By convention, SQL uses all uppercase characters for the names of keywords and built-in functions.
+/SQL Up Mode/ provides a minor mode that will automatically "upcase" known keywords and function names.
+
+#+BEGIN_SRC emacs-lisp
+(use-package sqlup-mode
+  ;; Add the following auto-loading hooks.
+  :ghook
+  ('(sql-interactive-mode sql-mode) #'sqlup-mode))
+#+END_SRC
+
 * RESTful APIs
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref restful-apis
