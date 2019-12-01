@@ -584,6 +584,16 @@ Enable ~counsel-projectile-mode~ globally.
 (counsel-projectile-mode t)
 #+END_SRC
 
+Do not display the current project when switching projects.
+#+BEGIN_SRC emacs-lisp
+(counsel-projectile-remove-current-project t)
+#+END_SRC
+
+Do not display the current buffer when switching buffers..
+#+BEGIN_SRC emacs-lisp
+(counsel-projectile-remove-current-buffer t)
+#+END_SRC
+
 ** Perspective
 
 /Perspective/ provides tagged workspaces.
