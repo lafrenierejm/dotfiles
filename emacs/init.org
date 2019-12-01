@@ -440,6 +440,18 @@ The package's source is available at [[https://github.com/Fanael/rainbow-delimit
   ('prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
+** Loaddefs
+
+#+BEGIN_SRC emacs-lisp
+(use-package loaddefs
+  :straight (:type built-in)
+
+  :demand
+
+  :config
+  (show-paren-mode +1))
+#+END_SRC
+
 ** Line Wrapping
 Out of the box, Emacs will fill paragraph to 72 characters.
 Most projects that care about line width adhere to an 80 character (79 + line feed) maximum width, so to reduce the amount of per-project customization we can set the default value to 80.
