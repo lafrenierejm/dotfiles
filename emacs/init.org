@@ -857,6 +857,9 @@ Note that although \src_emacs-lisp{use-package} is used below, the /Org/ package
   :gfhook
   <<org/gfhook>>
 
+  :custom
+  <<org/custom>>
+
   :config
   <<org/config>>)
 #+END_SRC
