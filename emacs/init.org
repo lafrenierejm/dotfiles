@@ -4035,6 +4035,20 @@ Create an alist whose keys are regexps matching filenames and whose values are t
 :HEADER-ARGS+: :noweb-ref programming-languages
 :END:
 
+** Applescript
+
+*** Apples Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package apples-mode
+  :mode
+  ("\\.\\(applescri\\|sc\\)pt\\'")
+
+  :general
+  (:keymap 'apples-mode-map
+   "C-c C-c" #'apples-run-region/buffer))
+#+END_SRC
+
 ** Lisps
 
 It is desirable to have slightly different character matching behavior when editing Lisps.
