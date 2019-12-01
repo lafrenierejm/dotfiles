@@ -913,7 +913,7 @@ Set the workflow states.
 *** Poly Org
 
 /Poly Org/ provides Polymode definitions for Org buffers.
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 (use-package poly-org)
 #+END_SRC
 
