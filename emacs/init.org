@@ -592,6 +592,64 @@ Enable ~counsel-projectile-mode~ globally.
 #+END_SRC
 
 ** Operations on Current Buffer
+
+*** Get Arguments for Interactive Call
+
+**** Get a Buffer to Use
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer~obj-to-buffer (&optional buffer)
+  "Get the buffer to use.
+
+If BUFFER is nil, use the current buffer.
+Else if BUFFER is a string, use that string as the name of the buffer.
+Else throw an error."
+  (cond
+   ;; If no BUFFER was provided...
+   ((not buffer)
+    ;; Return the current buffer.
+    (get-buffer (buffer-name)))
+   ;; Else if BUFFER is an editor buffer...
+   ((bufferp buffer)
+    ;; Return BUFFER as-is.
+    buffer)
+   ;; Else if BUFFER is a string...
+   ((stringp buffer)
+    ;; Return the corresponding buffer object.
+    (get-buffer buffer))
+   ;; Else...
+   (t
+    ;; Throw an error.
+    (error "Invalid BUFFER argument %s of type %s passed"
+           buffer
+           (type-of buffer)))))
+   #+END_SRC
+
+**** Buffer to Rename
+
+If called as part of an interactive function with a prefix argument, prompt the user to provide a buffer.
+Otherwise use the current buffer.
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer~get-buffer (verb)
+  (if current-prefix-arg
+      (get-buffer (read-buffer (format "Buffer to %s with visiting file: "
+                                       verb)
+                               (get-buffer (buffer-name))))))
+#+END_SRC
+
+**** New File Name
+
+The user shall be prompted for the new file path.
+
+#+BEGIN_SRC emacs-lisp
+(defun current-buffer~read-file-name (verb buffer-name)
+  "Prompt the user for the destination of applying VERB to BUFFER-NAME's visiting file."
+  (read-file-name (format "%s the file visited by buffer %s to: "
+                          verb
+                          buffer-name)))
+#+END_SRC
+
 *** Rename
 :PROPERTIES:
 :DESCRIPTION: Rename a buffer and its visited file, if any.
