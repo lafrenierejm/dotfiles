@@ -526,7 +526,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
  "C-c p" 'projectile-command-map)
 #+END_SRC
 
-*** Variable Customizations (~:custom~)
+*** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref projectile/custom
 :END:
