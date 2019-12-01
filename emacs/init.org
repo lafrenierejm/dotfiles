@@ -818,6 +818,9 @@ This can benefit both literate and traditional programming by allowing one to co
 (use-package polymode
   :demand
 
+  :mode
+  <<polymode/mode>>
+
   ;; Evaluate the following code after loading this package.
   :config
   <<polymode/config>>)
@@ -4524,6 +4527,82 @@ Enable \src_emacs-lisp{pyvenv-mode} globally.
 
   ;; Load this package eagerly.
   :demand)
+#+END_SRC
+
+** Groovy
+
+*** Groovy Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package groovy-mode
+  :mode (("\\.gdsl\\'" . groovy-mode))
+
+  :general
+  (:keymaps 'groovy-mode-map
+   "C-c C-p" #'run-groovy))
+#+END_SRC
+
+*** Polymode
+
+**** Auto-Mode Alist
+
+#+BEGIN_SRC emacs-lisp :noweb-ref polymode/mode
+("\\(\\.g\\(?:ant\\|roovy\\|radle\\)\\'\\)|Jenkinsfile" . poly-groovy-mode)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref polymode/config
+:END:
+
+***** Sh Inner Mode
+:PROPERTIES:
+:DESCRIPTION: Use ~sh-mode~ for Groovey's ~sh~ strings.
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(defun poly-groovy-sh-head (count)
+  "Search in direction specified by COUNT for sh commands."
+  (when (re-search-forward
+         (rx (seq line-start (zero-or-more blank) "sh "
+                  (group (seq (or (= 3 "\"") (= 3 "'")) (optional "\\\n")))
+                  (minimal-match (zero-or-more anything))
+                  (group (or (= 3 "\"") (= 3 "'")))))
+         nil t count)
+    (cons (match-beginning 1) (match-end 1))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun poly-groovy-sh-tail (count)
+  "Use match from `poly-groovy-sh-head' to determine end of sh command."
+  (cons (match-beginning 2) (match-end 2)))
+#+END_SRC
+
+Define the secondary (inner) mode.
+The delimiters are Groovy's multi-line string delimiters:
+- three consecutive double quotes (") or
+- three consecutive single quotes (').
+#+BEGIN_SRC emacs-lisp
+(define-innermode poly-groovy-innermode
+  :mode 'sh-mode
+  :head-matcher #'poly-groovy-sh-head
+  :tail-matcher #'poly-groovy-sh-tail
+  :head-mode 'host
+  :tail-mode 'host)
+#+END_SRC
+
+***** Groovy Host Mode
+Define the primary (host) mode for Groovy files.
+#+BEGIN_SRC emacs-lisp
+(define-hostmode poly-groovy-hostmode
+  :mode 'groovy-mode)
+#+END_SRC
+
+Define the actual Polymode.
+#+BEGIN_SRC emacs-lisp
+(define-polymode poly-groovy-mode
+  :hostmode 'poly-groovy-hostmode
+  :innermodes '(poly-groovy-innermode))
 #+END_SRC
 
 * RESTful APIs
