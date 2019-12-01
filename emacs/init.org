@@ -1397,6 +1397,9 @@ It adds a "surround" verb to Evil's modal editing.
   ;; Load this package eagerly.
   :demand
 
+  :preface
+  <<smartparens/preface>>
+
   :custom
   <<smartparens/custom>>
 
