@@ -4333,6 +4333,50 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (counsel-describe-variable-function #'helpful-variable))
 #+END_SRC
 
+**** Clojure
+
+***** Clojure Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package clojure-mode)
+#+END_SRC
+
+***** Clojure Refactor
+
+#+BEGIN_SRC emacs-lisp
+(use-package clj-refactor
+  :ghook
+  ('clojure-mode-hook #'clj-refactor-mode)
+
+  :gfhook
+  ('clojure-mode-hook #'yas-minor-mode)
+
+  :config
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
+#+END_SRC
+
+***** CIDER
+
+#+BEGIN_SRC emacs-lisp
+(use-package cider
+
+  :commands
+  cider-jack-in
+
+  :general
+  (:keymaps 'cider-repl-mode-map
+   [remap current-buffer/kill] #'cider-quit
+   "C-x C-k" #'cider-quit))
+#+END_SRC
+
+***** CIDER Hydra
+
+#+BEGIN_SRC emacs-lisp
+(use-package cider-hydra
+  :ghook
+  ('clojure-mode-hook #'cider-hydra-mode))
+#+END_SRC
+
 ** UNIX Shell
 *** Sh Script
 
