@@ -4993,6 +4993,19 @@ Bind Ace Window to =s-a= in EXWM.
   (exwm-input-set-key (kbd "s-a") #'ace-window))
 #+END_SRC
 
+** Window
+
+Add top-level =super= bindings to window management functions.
+This allows the keys to be useful whenever the =s= modifier is made available to Emacs.
+#+BEGIN_SRC emacs-lisp
+(general-define-key
+ "s-o" #'delete-other-windows
+ "s-h" #'windmove-left
+ "s-j" #'windmove-down
+ "s-k" #'windmove-up
+ "s-l" #'windmove-right)
+#+END_SRC
+
 * Secret Management
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref secret-management
