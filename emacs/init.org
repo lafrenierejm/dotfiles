@@ -49,6 +49,9 @@
 ;;; Completion
 <<completion>>
 
+;;; Containers:
+<<containers>>
+
 ;;; Diff:
 <<diff>>
 
@@ -2012,6 +2015,23 @@ Determine where Emacs creates backups for files edited via TRAMP.
   ("C-x t" #'counsel-tramp))
 #+END_SRC
 
+** Docker Tramp
+
+/Docker Tramp/ provides a TRAMP method for accessing Docker containers.
+
+#+BEGIN_SRC emacs-lisp
+(use-package docker-tramp
+  ;; Only load Docker Tramp if the following code evaluates to non-nil.
+  :if
+  <<docker/if>>
+
+  ;; Load Docker Tramp package after the following packages.
+  :after tramp
+
+  ;; Load Docker Tramp eagerly.
+  :demand)
+#+END_SRC
+
 * Version Control
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref version-control
@@ -2425,6 +2445,35 @@ Enable ~company-mode~ globally.
   ;; Load this package eagerly.
   :demand)
 #+END_SRC
+
+* Containers
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref containers
+:END:
+
+** Docker
+
+#+BEGIN_SRC emacs-lisp
+(use-package docker
+  ;; Only load Docker if the following code evaluates to non-nil.
+  :if
+  <<docker/if>>
+
+  ;; Add the following auto-loading keybindings.
+  :general
+  ("C-c d" #'docker))
+#+END_SRC
+
+*** Conditional Loading
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref docker/if
+:END:
+
+/Docker/'s features are only usable if the =docker= command is present in =$PATH=.
+#+BEGIN_SRC emacs-lisp
+(executable-find "docker")
+#+END_SRC
+
 * Diff
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref diff
