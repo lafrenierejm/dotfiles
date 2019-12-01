@@ -4766,6 +4766,54 @@ Define the actual Polymode.
   :innermodes '(poly-groovy-innermode))
 #+END_SRC
 
+** Structured Query Language (SQL)
+
+*** SQL
+
+#+BEGIN_SRC emacs-lisp
+(use-package sql
+  :straight (:type built-in)
+
+  :demand
+
+  :commands
+  (init-sql/enable-truncate-lines)
+
+  :gfhook
+  <<sql/gfhook>>
+
+  :config
+  <<sql/config>>)
+#+END_SRC
+
+**** Non-Autoloading Hooks
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref sql/gfhook
+:END:
+
+Restrict each line of text to a single screen line.
+#+BEGIN_SRC emacs-lisp
+('(sql-mode-hook sql-interactive-mode-hook) #'sql-truncate-lines)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref sql/config
+:END:
+
+Define a function to restrict each line of text to a single screen line.
+#+BEGIN_SRC emacs-lisp
+(defun sql-lafrenierejm-truncate-lines ()
+  "Restrict each line of text to a single visual line."
+  (setq truncate-lines t))
+#+END_SRC
+
+Alias the above function to remove my username.
+My username is used above just to demarcate the function as a custom one.
+#+BEGIN_SRC emacs-lisp
+(defalias 'sql-truncate-lines #'sql-lafrenierejm-truncate-lines)
+#+END_SRC
+
 * RESTful APIs
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref restful-apis
