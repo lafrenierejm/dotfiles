@@ -17,8 +17,10 @@
 ;; <<commentary>>
 
 ;;; Code:
-<<dependencies>>
 <<bootstrapping>>
+
+;;; Dependencies:
+<<dependencies>>
 
 ;;; Customization:
 <<customization>>
@@ -122,10 +124,64 @@ GNU Emacs does not have the capability to use an Org file directly as its initia
 As such, this file needs to be tangled manually for its first use on a new system.
 The following code ensures that this step is only needed once.
 
+** Package Management
+
+#+BEGIN_SRC emacs-lisp
+(cond
+ ((executable-find "guix")
+  <<bootstrapping/guix>>)
+ (t
+  <<bootstrapping/straight>>))
+#+END_SRC
+
+*** Guix
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref bootstrapping/guix
+:END:
+
+Emacs packages can be managed as any other package with Guix.
+As such, Emacs's native package management tools can be used.
 Before any other installed packages can be configured, /Package/ must be loaded and initialized.
-#+BEGIN_SRC emacs-lisp :noweb-ref dependencies
+#+BEGIN_SRC emacs-lisp
 (require 'package)
 (package-initialize)
+#+END_SRC
+
+*** Straight
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref bootstrapping/straight
+:END:
+
+Specify the branch to download /Straight/ from.
+#+BEGIN_SRC emacs-lisp
+(setq straight-repository-branch "develop")
+#+END_SRC
+
+Download and load /Straight/.
+#+BEGIN_SRC emacs-lisp
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         (format
+          "https://raw.githubusercontent.com/raxod502/straight.el/%s/install.el"
+          straight-repository-branch)
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+#+END_SRC
+
+Download /Use Package/.
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'use-package)
+#+END_SRC
+
+Configure \src_emacs-lisp{use-package} to download packages with /Straight/ by default.
+#+BEGIN_SRC emacs-lisp
+(setq straight-use-package-by-default t)
 #+END_SRC
 
 ** Use Package
@@ -227,6 +283,8 @@ Additionally, we want Cus Edit to always be loaded (not just when we interactive
 
 #+BEGIN_SRC emacs-lisp
 (use-package cus-edit
+  :straight (:type built-in)
+
   :after f
 
   :demand
@@ -282,6 +340,8 @@ The /Faces/ package provides this functionality, so all font setup can can occur
 
 #+BEGIN_SRC emacs-lisp
 (use-package faces
+  :straight (:type built-in)
+
   :demand
 
   :config
@@ -391,6 +451,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+BEGIN_SRC emacs-lisp
 (use-package display-line-numbers
+  :straight (:type built-in)
+
   ;; Only load this package if the following code evaluates to non-nil.
   :if
   <<display-line-numbers/if>>
@@ -773,6 +835,8 @@ Note that although \src_emacs-lisp{use-package} is used below, the /Org/ package
 
 #+BEGIN_SRC emacs-lisp
 (use-package org
+  :straight (:type built-in)
+
   :demand
 
   :gfhook
@@ -845,6 +909,7 @@ Set the workflow states.
 
 #+BEGIN_SRC emacs-lisp
 (use-package ox-latex
+  :straight (:type built-in)
   :config
   <<ox-latex/config>>)
 #+END_SRC
@@ -1345,6 +1410,8 @@ Smartparens Config configures Smartparens for various programming languages.
 
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens-config
+  :straight smartparens
+
   ;; Load this package after the following packages.
   :after smartparens
 
@@ -1825,6 +1892,8 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
 TRAMP allows Emacs to transparently access remote files as if they were local files.
 #+BEGIN_SRC emacs-lisp
 (use-package tramp
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -1851,6 +1920,8 @@ Determine where Emacs creates backups for files edited via TRAMP.
 
 #+BEGIN_SRC emacs-lisp
 (use-package autorevert
+  :straight (:type built-in)
+
   ;; Add the following auto-loading hooks.
   :ghook
   ('pdf-tools-mode-hook #'auto-revert-mode)
@@ -2254,6 +2325,8 @@ Enable ~company-mode~ globally.
 
 #+BEGIN_SRC emacs-lisp
 (use-package ediff
+  :straight (:type built-in)
+
   ;; Evaluate the following code after loading this package.
   :custom
   <<ediff/custom>>)
@@ -2313,6 +2386,8 @@ Enable ws-butler globally.
 
 #+BEGIN_SRC emacs-lisp
 (use-package comint
+  :straight (:type built-in)
+
   :demand
 
   :commands
@@ -2357,6 +2432,8 @@ The only addition is the doc string.
 *** Esh Mode
 #+BEGIN_SRC emacs-lisp
 (use-package esh-mode
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -2546,6 +2623,8 @@ Narrow the buffer to the context ~point~ is currently in:
 *** Em Hist
 #+BEGIN_SRC emacs-lisp
 (use-package em-hist
+  :straight (:type built-in)
+
   ;; Load eagerly.
   :demand
 
@@ -2567,6 +2646,8 @@ Determine whether duplicates are skipped when traversing command history.
 *** Em Dirs
 #+BEGIN_SRC emacs-lisp
 (use-package em-dirs
+  :straight (:type built-in)
+
   :demand
 
   :config
@@ -2755,6 +2836,8 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
 *** Eshell
 #+BEGIN_SRC emacs-lisp
 (use-package eshell
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -3042,6 +3125,8 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
 
 #+BEGIN_SRC emacs-lisp
 (use-package esh-module
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -3083,6 +3168,8 @@ Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
 
 #+BEGIN_SRC emacs-lisp
 (use-package em-smart
+  :straight (:type built-in)
+
   ;; Load this package after the following packages.
   :after (esh-module)
 
@@ -3109,6 +3196,8 @@ Em Tramp is an Eshell modules that provides TRAMP features.
 
 #+BEGIN_SRC emacs-lisp
 (use-package em-tramp
+  :straight (:type built-in)
+
   ;; Load this package after the following packages.
   :after (esh-module)
 
@@ -3183,6 +3272,8 @@ Uses the system sudo through TRAMP's sudo method."
 
 #+BEGIN_SRC emacs-lisp
 (use-package em-rebind
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -3243,6 +3334,8 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
 
 #+BEGIN_SRC emacs-lisp
 (use-package em-cmpl
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -3260,6 +3353,8 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
 
 #+BEGIN_SRC emacs-lisp
 (use-package flyspell
+  :straight (:type built-in)
+
   :ghook
   ('prog-mode-hook #'flyspell-prog-mode))
 #+END_SRC
@@ -3268,6 +3363,8 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
 
 #+BEGIN_SRC emacs-lisp
 (use-package ispell
+  :straight (:type built-in)
+
   ;; Only load this package if the following code evaluates to non-nil.
   :if
   <<ispell/if>>
@@ -3664,6 +3761,8 @@ This is helpful when composing =format=flowed= mail.
 
 #+BEGIN_SRC emacs-lisp
 (use-package message
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -3738,6 +3837,8 @@ Despite the attachment code never having (publicly) been a part of mbork/message
 
 #+BEGIN_SRC emacs-lisp
 (use-package mml
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -4059,6 +4160,10 @@ Lisp-1 languages have a single namespace for all names.
 
 #+BEGIN_SRC emacs-lisp
 (use-package geiser-guile
+  :if (executable-find "guile")
+
+  :straight nil
+
   :config
   (when-let ((path (expand-file-name
                     "org.gnu.savannah.git/guix/"
@@ -4158,6 +4263,8 @@ Lisp-2 languages have a separate namespace for functions.
 
 #+BEGIN_SRC emacs-lisp
 (use-package elisp-mode
+  :straight (:type built-in)
+
   ;; Add the following keybindings.
   :general
   (:keymaps 'emacs-lisp-mode-map
@@ -4263,6 +4370,8 @@ Define a function that sets the shell type to Zsh when working with a Zsh file.
 
 #+BEGIN_SRC emacs-lisp
 (use-package python
+  :straight (:type built-in)
+
   ;; Inform the bytecode compiler of the following functions.
   :functions python-set-comment-inline-offset
 
@@ -4731,6 +4840,8 @@ Bind Ace Window to =s-a= in EXWM.
 
 #+BEGIN_SRC emacs-lisp
 (use-package password-cache
+  :straight (:type built-in)
+
   ;; Load this package eagerly.
   :demand
 
@@ -4830,6 +4941,8 @@ Ivy Pass is an Ivy interface for Password Store.
 
 #+BEGIN_SRC emacs-lisp
 (use-package epa
+  :straight (:type built-in)
+
   ;; Apply the following customizations.
   :custom
   <<epa/custom>>)
