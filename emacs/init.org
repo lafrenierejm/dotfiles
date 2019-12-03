@@ -1800,6 +1800,12 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
  "Show paths relative their the project home.")
 #+END_SRC
 
+Reduce the amount of information displayed for remote buffers (i.e. buffers whose contents were accessed via TRAMP).
+This improves performance of operations that involve Ivy Rich.
+#+BEGIN_SRC emacs-lisp
+(ivy-rich-parse-remote-buffer nil)
+#+END_SRC
+
 *** Post-Load Evaluation
 :PROPERTIES:
 :DESCRIPTION: Code to evaluate after loading ~ivy-rich~.
