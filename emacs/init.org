@@ -2296,6 +2296,27 @@ it is everything before the first hyphen.
   (car (split-string (magit-version) "-")))
 #+END_SRC
 
+***** Current Branch Name
+
+Magit has built-in functions \src_emacs-lisp{magit-copy-section-value} and \src_emacs-lisp{magit-copy-buffer-revision} for placing values on the kill ring.
+I often want to refer to the name of the current branch, so I define a counterpart to the above commands that accomplishes this.
+#+BEGIN_SRC emacs-lisp
+(defun magit-lafrenierejm-copy-branch-name ()
+  "Save the name of the current branch for later use.
+
+Save the section value to the `kill-ring'."
+
+  (interactive)
+  (let ((branch-name (magit-get-current-branch)))
+    (message "%s" branch-name)
+    (kill-new (magit-get-current-branch))))
+#+END_SRC
+
+Alias the above command to remove my username "namespace".
+#+BEGIN_SRC emacs-lisp
+(defalias 'magit-copy-branch-name #'magit-lafrenierejm-copy-branch-name)
+#+END_SRC
+
 *** Forge
 From the project's README:
 #+BEGIN_QUOTE
