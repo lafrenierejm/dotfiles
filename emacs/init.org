@@ -4873,6 +4873,23 @@ Enable \src_emacs-lisp{pyvenv-mode} globally.
   :demand)
 #+END_SRC
 
+*** Isort
+
+isort is a utility for sorting Python imports.
+
+The /[[Reformatter]]/ package is used to create an Emacs formatter using isort's command-line interface.
+#+BEGIN_SRC emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+ isort-format
+ :program "isort"
+ :args '("--atomic" "-"))
+#+END_SRC
+
+The defined hook can be added to all Python files.
+#+BEGIN_SRC emacs-lisp :noweb-ref reformatter/ghook
+('python-mode-hook #'isort-format-on-save-mode)
+#+END_SRC
+
 ** Groovy
 
 *** Groovy Mode
@@ -5007,6 +5024,25 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
   ;; Add the following auto-loading hooks.
   :ghook
   ('(sql-interactive-mode sql-mode) #'sqlup-mode))
+#+END_SRC
+
+
+* Refactoring
+
+** Reformatter
+
+#+BEGIN_SRC emacs-lisp
+(use-package reformatter
+  ;; Add the following auto-loading hooks.
+  :ghook
+  <<reformatter/ghook>>
+
+  ;; Inform the bytecode compiler of the following non-autoloaded functions.
+  :functions reformatter-define
+
+  ;; Evaluate the following code after this package has been loaded.
+  :config
+  <<reformatter/config>>)
 #+END_SRC
 
 * RESTful APIs
