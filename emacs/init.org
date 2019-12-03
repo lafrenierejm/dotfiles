@@ -4536,6 +4536,9 @@ Replace hash symbols with ellipses.
 
 #+BEGIN_SRC emacs-lisp
 (use-package hy-mode
+  :mode
+  ("\\.hy\\'" . hy-mode)
+
   :general
   (:keymaps 'hy-mode-map
    "C-c C-c" #'hy-shell-eval-buffer))
