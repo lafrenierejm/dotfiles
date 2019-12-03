@@ -2353,7 +2353,10 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   <<evil-magit/ghook>>
 
   :custom
-  <<evil-magit/custom>>)
+  <<evil-magit/custom>>
+
+  :config
+  <<evil-magit/config>>)
 #+END_SRC
 
 **** Auto-Loading Hooks
@@ -2378,6 +2381,17 @@ Determine which Evil state Evil Magit starts in.
 Determine whether Evil Magit uses Evil's movement keys.
 #+BEGIN_SRC emacs-lisp
 (evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref evil-magit/config
+:END:
+
+Add new sequences for copying Git information.
+#+BEGIN_SRC emacs-lisp
+(evil-define-key* evil-magit-state magit-mode-map "yb" #'magit-copy-branch-name)
+(evil-define-key* evil-magit-state magit-mode-map "yc" #'magit-copy-buffer-revision)
 #+END_SRC
 
 *** SSH Agency
