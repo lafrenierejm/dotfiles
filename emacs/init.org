@@ -4586,7 +4586,6 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :general
   ("C-h c" #'helpful-command
    "C-h f" #'helpful-callable
-   "C-h k" #'helpful-key
    "C-h v" #'helpful-variable)
 
   :custom
