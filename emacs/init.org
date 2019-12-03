@@ -1745,7 +1745,7 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
   (:keymaps '(minibuffer-local-map minibuffer-inactive-mode-map)
    :states '(insert movement)
    "C-r" #'counsel-minibuffer-history)
-  (:keymaps 'shell-mode-map
+  (:keymaps '(comint-mode-map shell-mode-map)
    "C-r" #'counsel-shell-history))
 #+END_SRC
 
