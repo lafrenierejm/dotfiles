@@ -3199,7 +3199,7 @@ Add the following keybindings:
 (nil (lambda ()
        (general-define-key
         :keymaps 'eshell-mode-map
-        "C-l" #'eshell/clear-scrollback
+        "C-l" #'eshell/clear-scrollback-keep-input
         "C-x n c" #'esh-mode-narrow-to-command
         "C-z" #'eshell/background-process-maybe
         :states '(insert)
@@ -3393,8 +3393,8 @@ UNIX shells use the chord =C-z= to background the current process.
 ****** Clear Buffer
 
 #+BEGIN_SRC emacs-lisp
-(defun eshell/clear-scrollback ()
-  "Clear the scrollback content of the eshell window."
+(defun eshell/clear-scrollback-keep-input ()
+  "Clear the scrollback content of the eshell window but keep any current input."
   (interactive)
   (let ((input (eshell-get-old-input)))
     (eshell/clear-scrollback)
