@@ -4839,6 +4839,11 @@ Define the actual Polymode.
   :innermodes '(poly-rst-python-innermode))
 #+END_SRC
 
+Use the above Polymode as the default mode for Python buffers.
+#+BEGIN_SRC emacs-lisp :noweb-ref polymode/mode
+("\\.py\\'" . poly-python-rst-mode)
+#+END_SRC
+
 *** Pyvenv
 
 #+BEGIN_SRC emacs-lisp
