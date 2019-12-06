@@ -2,6 +2,7 @@
 
 user_resources="${HOME}/.config/X11/Xresources"
 user_modmap="${HOME}/.config/X11/Xmodmap"
+user_xcape="${HOME}/.config/X11/xcape"
 sys_resources='/etc/X11/xinit/.Xresources'
 sys_modmap='/etc/X11/xinit/.Xmodmap'
 
@@ -20,6 +21,10 @@ fi
 if [ -f "${user_modmap}" ]; then
 	xmodmap "${user_modmap}"
 fi
+if [ -f "$user_xcape" ]; then
+	. "$user_xcape"
+fi
+
 
 # Daemonize Emacs and start EXWM
 emacs --daemon -f exwm-enable
