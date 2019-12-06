@@ -153,6 +153,18 @@ Before any other installed packages can be configured, /Package/ must be loaded 
 (package-initialize)
 #+END_SRC
 
+**** ~:straight~ keyword in \src_emacs-lisp{use-package}
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref use-package/guix
+:END:
+
+Because I also use /Straight/ to manage packages on non-Guix systems, I need to account for instances where I use the ~:straight~ keyword in \src_emacs-lisp{use-package} macros.
+This is accomplished by requesting \src_emacs-lisp{use-package} to just ignore any unkown keywords rather than raise errors.
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'use-package-core
+  (setq use-package-ignore-unknown-keywords t))
+#+END_SRC
+
 *** Straight
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref bootstrapping/straight
@@ -180,6 +192,11 @@ Download and load /Straight/.
   (load bootstrap-file nil 'nomessage))
 #+END_SRC
 
+**** Use Package
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref use-package/straight
+:END:
+
 Download /Use Package/.
 #+BEGIN_SRC emacs-lisp
 (straight-use-package 'use-package)
@@ -192,6 +209,11 @@ Configure \src_emacs-lisp{use-package} to download packages with /Straight/ by d
 
 ** Use Package
 
+#+BEGIN_SRC emacs-lisp
+(when (not (executable-find "guix"))
+  <<use-package/straight>>)
+#+END_SRC
+
 Next, /Use Package/ is loaded.
 This package provides the \src_emacs-lisp{use-package} macro for declarative loading of other packages.
 #+BEGIN_SRC emacs-lisp
@@ -203,6 +225,11 @@ Instead, packages should only be loaded when a feature they provide is actually 
 /Use Package/ provides a feature to lazy-load packages by default:
 #+BEGIN_SRC emacs-lisp
 (setq use-package-always-defer t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(when (executable-find "guix")
+  <<use-package/guix>>)
 #+END_SRC
 
 ** Org
@@ -5401,6 +5428,26 @@ This allows the keys to be useful whenever the =s= modifier is made available to
  "s-j" #'windmove-down
  "s-k" #'windmove-up
  "s-l" #'windmove-right)
+#+END_SRC
+
+** Desktop Environment
+
+#+BEGIN_SRC emacs-lisp
+(use-package desktop-environment
+  :if (eq system-type 'gnu/linux)
+
+  :general
+  ("<XF86MonBrightnessUp>" #'desktop-environment-brightness-increment
+   "<XF86MonBrightnessDown>" #'desktop-environment-brightness-decrement
+   "<XF86AudioRaiseVolume>" #'desktop-environment-volume-increment
+   "<XF86AudioLowerVolume>" #'desktop-environment-volume-decrement
+   "<XF86AudioMute>" #'desktop-environment-toggle-mute
+   "<XF86AudioMicMute>" #'desktop-environment-toggle-microphone-mute
+   "S-<print>" #'desktop-environment-screenshot-part
+   "<print>" #'desktop-environment-screenshot
+   "C-s-l" #'desktop-environment-lock-screen
+   "<XF86WLAN>" #'desktop-environment-toggle-wifi
+   "<XF86Bluetooth>" #'desktop-environment-toggle-bluetooth))
 #+END_SRC
 
 * Secret Management
