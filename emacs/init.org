@@ -3489,10 +3489,10 @@ Open or switch to an Eshell buffer in a given directory.
 If an Eshell instance for the directory already exists, switch to it.  If no
 such instance exists, start a new instance whose name includes the directory."
   (interactive "DOpen Eshell in: ")
-  ;; Set the directory to open Eshell in.
   (let* ((eshell-buffer-name (em-dirs-name-buffer directory))
          (buffer (get-buffer-create eshell-buffer-name)))
     (pop-to-buffer-same-window buffer)
+    (cd directory)
     (unless (derived-mode-p 'eshell-mode)
       (eshell-mode))
     buffer))
