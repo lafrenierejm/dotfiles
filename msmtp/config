@@ -13,7 +13,7 @@ tls_starttls on
 # List of trusted CAs for TLS
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
 # Log file location
-logfile "${HOME}/.local/share/msmtp/log.txt"
+logfile "~/.local/share/msmtp/log.txt"
 
 # ##############################################################################
 # Settings specfific to lafrenierejm@gmail.com
