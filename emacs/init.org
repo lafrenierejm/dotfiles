@@ -2080,6 +2080,32 @@ Determine where Emacs creates backups for files edited via TRAMP.
 :HEADER-ARGS+: :noweb-ref version-control
 :END:
 
+** Backup Files
+
+Emacs has built-in functionality to create backup files.
+By default, such files are created in the same directory as the actual file and simply have a tilde appended to the filename.
+This is functional, but results in messy directories.
+
+#+BEGIN_SRC emacs-lisp
+(use-package files
+  :straight (:type built-in)
+
+  :custom
+  <<files/custom>>)
+#+END_SRC
+
+*** Variable Customization
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref files/custom
+:END:
+
+\src_emacs-lisp{backup-directory-alist} determines where backup files are created.
+By using mapping a wildcard filename to a single directory, all backup files will be created in that directory.
+#+BEGIN_SRC emacs-lisp
+(backup-directory-alist
+ `((".*" . ,temporary-file-directory)))
+#+END_SRC
+
 ** Autorevert
 
 #+BEGIN_SRC emacs-lisp
