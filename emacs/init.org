@@ -4302,7 +4302,9 @@ The following is a list of the Lisp modes I edit in.
   '(cider-repl-mode
     clojure-mode
     emacs-lisp-mode
+    hy-mode
     ielm-mode
+    inferior-hy-mode
     lisp-mode
     minibuffer-inactive-mode
     scheme-mode)
