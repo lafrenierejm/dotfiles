@@ -2497,7 +2497,71 @@ Alias the above function to remove my username.
 
 #+BEGIN_SRC emacs-lisp
 (use-package git-link
-  :demand)
+  ;; load Git Link eagerly
+  :demand
+
+  ;; inform the bytecode compiler of the following functions
+  :functions
+  (git-link-lafrenierejm-bitbucket-hosted
+   git-link-commit-lafrenierejm-bitbucket-hosted
+   git-link-commit-bitbucket-hosted
+   git-link-bitbucket-hosted)
+
+  :config
+  <<git-link/config>>)
+#+END_SRC
+
+**** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref git-link/config
+:END:
+
+***** Hosted Bitbucket
+****** Branch
+#+BEGIN_SRC emacs-lisp
+(defun git-link-lafrenierejm-bitbucket-hosted (hostname dirname filename branch commit start end)
+  "A `git-link' type for hosted Bitbucket instances."
+  (let* ((dirname-split (s-split "/" dirname))
+         (project (car dirname-split))
+         (repo (cadr dirname-split))
+         (filepath (s-join "/" (append
+                                (seq-subseq dirname-split 2)
+                                (list filename)))))
+    (concat
+     (format "https://%s/projects/%s/repos/%s/browse/%s"
+             hostname
+             project
+             repo
+             filepath)
+     ;; lines
+     (cond
+      ((and start end)
+       (format "#%s-%s" start end))
+      (start
+       (format "#%s" start)))
+     "?"
+     ;; branch/commit
+     (cond
+      (branch
+       (concat "at="
+               (url-hexify-string "refs/heads/")
+               branch))
+      (commit
+       (concat "at=" commit))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defalias 'git-link-bitbucket-hosted #'git-link-lafrenierejm-bitbucket-hosted)
+#+END_SRC
+
+****** Commit
+#+BEGIN_SRC emacs-lisp
+(defun git-link-commit-lafrenierejm-bitbucket-hosted (hostname dirname commit)
+  (git-link-lafrenierejm-bitbucket-hosted hostname dirname nil nil commit nil nil))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defalias 'git-link-commit-bitbucket-hosted #'git-link-commit-lafrenierejm-bitbucket-hosted)
 #+END_SRC
 
 * Completion
