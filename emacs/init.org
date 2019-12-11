@@ -76,6 +76,9 @@
 ;;; RESTful APIs:
 <<restful-apis>>
 
+;;; Project Management:
+<<project-management>>
+
 ;;; Windows and Frames
 <<windows-and-frames>>
 
@@ -5289,6 +5292,54 @@ Define the inner mode for JSON sections.
   :innermodes '(poly-restclient/emacs-lisp/single-line-innermode
                 poly-restclient/emacs-lisp/multi-line-innermode
                 poly-restclient/json-innermode))
+#+END_SRC
+
+* Project Management
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref project-management
+:END:
+
+** Jira
+
+I often want to link directly to a Jira ticket from an Org buffer.
+The following functions allow me to do so.
+
+#+BEGIN_SRC emacs-lisp
+(defcustom jira-hostname nil
+  "The hostname of the Jira server.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun jira-lafrenierejm-url-of-ticket (name)
+  "Return a Jira ticket's url given the ticket's NAME or &OPTION region from BEG to END."
+  (interactive "MTicket: ")
+  (format "https://%s/browse/%s" jira-hostname name))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defalias 'jira-url-of-ticket #'jira-lafrenierejm-url-of-ticket)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun jira-lafrenierejm-org-link-ticket (name &optional beg end)
+  "Create an Org link to the ticket NAME or &OPTION contained in region from BEG to END."
+  (interactive
+   (if (use-region-p)
+       (list nil (region-beginning) (region-end))
+     (list (read-string "Ticket: ") nil nil)))
+  (let* ((name (or name
+                   (buffer-substring-no-properties beg end)))
+         (url (jira-url-of-ticket name)))
+    (when (and beg end)
+      (save-excursion
+        (delete-region beg end)
+        (goto-char beg)))
+    (insert (format "[[%s][%s]]" url name))
+    url))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defalias 'jira-org-link-ticket #'jira-lafrenierejm-org-link-ticket)
 #+END_SRC
 
 * Windows and Frames
