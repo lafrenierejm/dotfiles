@@ -342,6 +342,26 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
   :demand)
 #+END_SRC
 
+** XDG
+
+/XDG/ provides functions for working with XDG standards and specifications.
+It is loaded to override \src_emacs-lisp{xdg-line-regexp}.
+By default, that variable only allows reading a few of the most common directory types even though the XDG spec allows setting an arbitrary number of directories in =$XDG_CONFIG_DIR/user-dirs.dirs=.
+
+#+BEGIN_SRC emacs-lisp
+(use-package xdg
+  :straight (:type built-in)
+
+  :demand
+
+  :config
+  (setq xdg-line-regexp
+        (rx line-start
+            "XDG_" (group (one-or-more upper)) "_DIR="
+            "\"" (group (minimal-match (one-or-more anything))) "\""
+            line-end)))
+#+END_SRC
+
 * Visual Interface
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref interface
