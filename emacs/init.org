@@ -64,8 +64,8 @@
 ;;; Static Analysis:
 <<static-analysis>>
 
-;;; Email:
-<<email>>
+;;; Feeds:
+<<feeds>>
 
 ;;; PDF:
 <<pdf>>
@@ -3862,12 +3862,13 @@ If =aspell= is not available, disable Ispell.
   (global-flycheck-mode))
 #+END_SRC
 
-* Email
+* Feeds
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref email
+:HEADER-ARGS+: :noweb-ref feeds
 :END:
 
-** mu4e
+** Email
+*** mu4e
 
 #+BEGIN_SRC emacs-lisp
 (use-package mu4e
@@ -3894,7 +3895,7 @@ If =aspell= is not available, disable Ispell.
   <<mu4e/config>>)
 #+END_SRC
 
-*** Variable Customizations
+**** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/custom
 :END:
@@ -3905,7 +3906,7 @@ Use ISO-esque timestamps for ~:human-date~.
 (mu4e-headers-date-format "%Y-%m-%d %H:%M")
 #+END_SRC
 
-**** Account Contexts
+***** Account Contexts
 Do not prompt for the context when starting mu4e.
 Being in the proper context is unnecessary except when composing messages.
 
@@ -3919,7 +3920,7 @@ If no context matches (using its match function) when beginning to compose a mes
 (mu4e-compose-context-policy 'ask)
 #+END_SRC
 
-**** Fetching and Indexing
+***** Fetching and Indexing
 Display the update status in the modeline.
 This helps keep track of the current update status.
 
@@ -3934,7 +3935,7 @@ These messages are generally uninteresting.
 (mu4e-hide-index-messages t "Do not display messages related to updating or indexing.")
 #+END_SRC
 
-**** Sending
+***** Sending
 #+BEGIN_SRC emacs-lisp
 (message-sendmail-envelope-from 'header "Use the value from the mail's header as the FROM field.")
 #+END_SRC
@@ -3943,7 +3944,7 @@ These messages are generally uninteresting.
 (message-kill-buffer-on-exit t "Close the message buffer after sending its message.")
 #+END_SRC
 
-**** Composing
+***** Composing
 Use =[[https://joeclark.org/ffaq.html][format=flowed]]= for nicer viewing of plaintext mail.
 
 #+BEGIN_SRC emacs-lisp
@@ -3962,7 +3963,7 @@ If a signature is set, automatically include it.
 (mu4e-compose-signature-auto-include t "Automatically include signatures.")
 #+END_SRC
 
-**** Message View
+***** Message View
 Show senders' full addresses.
 
 #+BEGIN_SRC emacs-lisp
@@ -3975,7 +3976,7 @@ View messages in their own window.
 (mu4e-split-view 'single-window)
 #+END_SRC
 
-**** Header View
+***** Header View
 Display the following fields in the headers buffer:
 - date
 - mailing list
@@ -4002,15 +4003,14 @@ Use Unicode box-drawing characters for the prefixes.
 (mu4e-headers-default-prefix '("-" . "─"))
 #+END_SRC
 
-**** Mail Directory
-Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
+***** Mail Directory
 
+Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
 #+BEGIN_SRC emacs-lisp
-(mu4e-maildir (or (getenv "XDG_MAIL_DIR")
-                  (getenv "MAILDIR")))
+(mu4e-maildir (xdg-user-dir "MAIL"))
 #+END_SRC
 
-*** Non-Autoloading Hooks
+**** Non-Autoloading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/gfhook
 :END:
@@ -4033,12 +4033,12 @@ Specify the SMTP account to use before sending mail.
 ('message-send-mail #'mu4e-choose-msmtp-account)
 #+END_SRC
 
-*** Post-Load Execution
+**** Post-Load Execution
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/config
 :END:
 
-**** Fetching and Indexing
+***** Fetching and Indexing
 If isync is installed, use =mbsync= to fetch all mail and rename filenames when moving mail.
 
 #+BEGIN_SRC emacs-lisp
@@ -4047,7 +4047,7 @@ If isync is installed, use =mbsync= to fetch all mail and rename filenames when 
   (setq mu4e-change-filenames-when-moving t))
 #+END_SRC
 
-**** Sending Mail
+***** Sending Mail
 Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
 
 #+BEGIN_SRC emacs-lisp
@@ -4057,7 +4057,7 @@ Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
        <<mu4e/config/sending/smtpmail-send-it>>))
 #+END_SRC
 
-***** =msmtp= Configuration
+****** =msmtp= Configuration
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/config/sending/msmtp
 :END:
@@ -4083,7 +4083,7 @@ Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
        message-sendmail-extra-arguments (list '"-a" account-name)))))
 #+END_SRC
 
-***** ~smtpmail-send-it~ Configuration
+****** ~smtpmail-send-it~ Configuration
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/config/sending/smtpmail-send-it
 :END:
@@ -4100,7 +4100,7 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
  smtpmail-stream-type 'starttls)
 #+END_SRC
 
-**** Multiple Accounts
+***** Multiple Accounts
 #+BEGIN_SRC emacs-lisp
 (setq
  mu4e-contexts `( ,(make-mu4e-context
@@ -4174,7 +4174,7 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
                                                      (mu4e-message-field msg :maildir)))))))
 #+END_SRC
 
-***** My Addresses
+****** My Addresses
 mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
 In such cases, display the To address(es).
 
@@ -4188,7 +4188,7 @@ In such cases, display the To address(es).
                                "lafrenierejm@utdallas.edu"))
 #+END_SRC
 
-**** Composing Mail
+***** Composing Mail
 
 Show trailing whitespace.
 This is helpful when composing =format=flowed= mail.
@@ -4199,7 +4199,7 @@ This is helpful when composing =format=flowed= mail.
   (setq show-trailing-whitespace t))
 #+END_SRC
 
-** Message
+*** Message
 
 #+BEGIN_SRC emacs-lisp
 (use-package message
@@ -4217,7 +4217,7 @@ This is helpful when composing =format=flowed= mail.
   <<message/config>>)
 #+END_SRC
 
-*** Non-Autoloading Hooks
+**** Non-Autoloading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref message/gfhook
 :END:
@@ -4228,12 +4228,12 @@ Prompt the user before sending a message without an attachment.
 ('message-send-hook #'mbork/message-warn-if-no-attachments)
 #+END_SRC
 
-*** Post-Load Evaluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref message/config
 :END:
 
-**** Attachment Reminders
+***** Attachment Reminders
 The following code is taken from Marcin Borkowski's 2016-02-06 post [[http://mbork.pl/2016-02-06_An_attachment_reminder_in_mu4e]["An attachment reminder in mu4e"]].
 Borkowski's post links to the [[https://github.com/mbork/message][mbork/message]] repository on GitHub as the host for the attachment reminder code.
 Interestingly, the repository appears to contain neither the attachment code nor any commits that hint at the code having ever been committed into the repository's mbork-message package.
@@ -4275,7 +4275,7 @@ Despite the attachment code never having (publicly) been a part of mbork/message
       (keyboard-quit))))
 #+END_SRC
 
-** Mml
+*** Mml
 
 #+BEGIN_SRC emacs-lisp
 (use-package mml
@@ -4289,12 +4289,12 @@ Despite the attachment code never having (publicly) been a part of mbork/message
   <<mml/config>>)
 #+END_SRC
 
-*** Post-Load Evaluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mml/config
 :END:
 
-**** Add Attachments at Ends of Buffers
+***** Add Attachments at Ends of Buffers
 ~mml-attach-file~, the function used by ~mu4e-compose-mode~ to add attachments to mail, attaches the specified file wherever point happens to be.
 [[http://emacs.1067599.n8.nabble.com/Why-does-mml-attach-file-put-the-attachment-at-the-very-end-of-the-message-td373798.html][This thread]], authored by Marcin Borkowski, explores the problems that attachments anywhere but the end of a message buffer can cause.
 In light of that, it is desirable to only /ever/ insert attachments at the end of the buffer.
@@ -4317,6 +4317,35 @@ Borkowsi provided code to do so in [[http://mbork.pl/2015-11-28_Fixing_mml-attac
 
 The license of the code hosted on Borkowsi's blog does not appear to be specified anywhere in the blog.
 I have reached out to Borkowski asking how he would like the code to be licensed.
+
+** Atom and RSS
+
+I Use Chris Wellons's /Elfeed/ for managing my web feeds.
+
+*** /Elfeed/
+
+#+BEGIN_SRC emacs-lisp
+(use-package elfeed)
+#+END_SRC
+
+*** /Elfeed Org/
+
+/Elfeed Org/ allows the use of an Org file to specify feeds for /Elfeed/.
+I set it to load =elfeed.org= from my Emacs directory.
+The primary advantage of doing so is that it allows me to version-control the file along with the rest of my Emacs configuration.
+
+#+BEGIN_SRC emacs-lisp
+(use-package elfeed-org
+  :demand
+
+  :custom
+  (rmh-elfeed-org-files
+   (list (expand-file-name "elfeed.org" user-emacs-directory)))
+
+  :config
+  ;; load feeds from `rmh-elfeed-org-files' when elfeed starts
+  (elfeed-org))
+#+END_SRC
 
 * PDF
 :PROPERTIES:
