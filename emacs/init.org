@@ -4771,14 +4771,42 @@ Lisp-2 languages have a separate namespace for functions.
 
 **** Emacs Lisp
 
+***** /Elisp Mode/
+
 #+BEGIN_SRC emacs-lisp
 (use-package elisp-mode
   :straight (:type built-in)
 
   ;; Add the following keybindings.
   :general
+  ("C-x C-e" #'elisp-eval-last-sexp)
   (:keymaps 'emacs-lisp-mode-map
-   "C-c C-c" #'eval-buffer))
+   "C-c C-c" #'eval-buffer)
+
+  :commands elisp-eval-last-sexp
+
+  :config
+  <<elisp-mode/config>>)
+#+END_SRC
+
+****** Post-Load Evaluation
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref elisp-mode/config
+:END:
+
+Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a prefix argument, replaces the expression being evaluated with the result of its evaluation.
+#+BEGIN_SRC emacs-lisp
+(defun elisp-eval-last-sexp (&optional replace)
+  "Evaluate the preceding sexp, OPTIONally replacing it with its result."
+  (interactive "P")
+  (if (not replace)
+      (eval-last-sexp replace)
+    (backward-kill-sexp)
+    (condition-case nil
+        (prin1 (eval (read (current-kill 0)))
+               (current-buffer))
+      (error (message "Invalid expression")
+             (insert (current-kill 0))))))
 #+END_SRC
 
 ***** Helpful
