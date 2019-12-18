@@ -2,6 +2,12 @@
 /elpa/
 /straight/
 /forge-database.sqlite
+.cask
+.org-id-locations
+debbugs
+projectile-bookmarks.eld
+recentf
+tramp
 *.el
 *.elc
 *#
