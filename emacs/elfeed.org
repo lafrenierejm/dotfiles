@@ -1,0 +1,13 @@
+* elfeed                                                             :elfeed:
+** blogs                                                              :blog:
+*** [[https://waitbutwhy.com/feed][Wait But Why]]
+*** programming                                             :software:tech:
+**** [[https://ambrevar.xyz/atom.xml][ambrevar.xyz]]
+**** [[https://with-emacs.com/rss.xml][with-emacs.com]]                                                :emacs:
+**** [[https://oremacs.com/atom.xml][oremacs.com]]                                                   :emacs:
+**** [[http://pragmaticemacs.com/feed/][Pragmatic Emacs]]                                               :emacs:
+**** [[https://metaredux.com/feed.xml][Metaredux]]                                                     :emacs:
+** aggregators                                                   :aggregate:
+*** tech                                                             :tech:
+**** [[https://lobste.rs/rss][lobste.rs]]
+**** [[https://sachachua.com/blog/category/weekly/feed][Sacha Cua]]                                                     :emacs:
