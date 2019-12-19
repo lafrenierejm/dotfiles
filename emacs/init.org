@@ -2144,6 +2144,26 @@ By using mapping a wildcard filename to a single directory, all backup files wil
   (auto-revert-verbose nil "Do not display messages when buffers are reverted."))
 #+END_SRC
 
+** /VC/
+
+/VC/ is a built-in package that provides an interface for generic version control operations, abstracting over many different version control systems.
+The only action performed below is changing the binding of \src_emacs-lisp{vc-revert}.
+The new binding is harder to accidentally press and opens up a convenient binding for /Brose at Remote/'s command.
+
+#+BEGIN_SRC emacs-lisp
+(use-package vc
+  :straight (:type built-in)
+
+  ;; Load VC eagerly.
+  :demand
+
+  ;; Bind the following keys.
+  :general
+  (:keymaps 'vc-prefix-map
+   "U" #'vc-revert
+   "u" nil))
+#+END_SRC
+
 ** Diff HL
 
 #+BEGIN_SRC emacs-lisp
@@ -2516,75 +2536,16 @@ Alias the above function to remove my username.
 (defalias 'git-year-added #'git-lafrenierejm-year-added)
 #+END_SRC
 
-*** Git Link
+*** /Browse at Remote/
+
+The command provided by /Browse at Remote /to copy the URL is added to /VC/'s leaf keymap.
+This has the effect of making that command easily accessible alongside other /VC/ commands.
 
 #+BEGIN_SRC emacs-lisp
-(use-package git-link
-  ;; load Git Link eagerly
-  :demand
-
-  ;; inform the bytecode compiler of the following functions
-  :functions
-  (git-link-lafrenierejm-bitbucket-hosted
-   git-link-commit-lafrenierejm-bitbucket-hosted
-   git-link-commit-bitbucket-hosted
-   git-link-bitbucket-hosted)
-
-  :config
-  <<git-link/config>>)
-#+END_SRC
-
-**** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref git-link/config
-:END:
-
-***** Hosted Bitbucket
-****** Branch
-#+BEGIN_SRC emacs-lisp
-(defun git-link-lafrenierejm-bitbucket-hosted (hostname dirname filename branch commit start end)
-  "A `git-link' type for hosted Bitbucket instances."
-  (let* ((dirname-split (s-split "/" dirname))
-         (project (car dirname-split))
-         (repo (cadr dirname-split))
-         (filepath (s-join "/" (append
-                                (seq-subseq dirname-split 2)
-                                (list filename)))))
-    (concat
-     (format "https://%s/projects/%s/repos/%s/browse/%s"
-             hostname
-             project
-             repo
-             filepath)
-     ;; lines
-     (cond
-      ((and start end)
-       (format "#%s-%s" start end))
-      (start
-       (format "#%s" start)))
-     "?"
-     ;; branch/commit
-     (cond
-      (branch
-       (concat "at="
-               (url-hexify-string "refs/heads/")
-               branch))
-      (commit
-       (concat "at=" commit))))))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defalias 'git-link-bitbucket-hosted #'git-link-lafrenierejm-bitbucket-hosted)
-#+END_SRC
-
-****** Commit
-#+BEGIN_SRC emacs-lisp
-(defun git-link-commit-lafrenierejm-bitbucket-hosted (hostname dirname commit)
-  (git-link-lafrenierejm-bitbucket-hosted hostname dirname nil nil commit nil nil))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defalias 'git-link-commit-bitbucket-hosted #'git-link-commit-lafrenierejm-bitbucket-hosted)
+(use-package browse-at-remote
+  :general
+  (:keymaps 'vc-prefix-map
+   "u"  #'browse-at-remote-kill))
 #+END_SRC
 
 * Completion
