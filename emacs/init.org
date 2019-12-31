@@ -3088,6 +3088,49 @@ Narrow the buffer to the context ~point~ is currently in:
           (narrow-to-region start end)))))
 #+END_SRC
 
+***** Delete Whole Line
+
+****** Define the Function
+
+#+BEGIN_SRC emacs-lisp
+(defun eshell-kill-whole-line ()
+  "Kill the whole Eshell buffer line."
+  (interactive)
+  (kill-region (progn (eshell-bol) (point)) (line-end-position)))
+#+END_SRC
+
+****** Define an Evil Operator
+:PROPERTIES:
+:COPYRIGHT_AUTHOR: Alexander Shukaev
+:COPYRIGHT_YEAR: 2015
+:COPYRIGHT_URL: https://emacs.stackexchange.com/a/14958
+:END:
+
+
+.emacs.d/init.el: ‘evil-called-interactively-p’ is an obsolete macro (as of Git commit 222b791); please use (called-interactively-p ’any) instead.
+
+#+BEGIN_SRC emacs-lisp
+(evil-define-operator eshell-delete  (beg end type register yank-handler)
+  "Delete text from BEG to END with TYPE.
+
+Save in REGISTER or in the kill-ring with YANK-HANDLER."
+  (interactive "<R><x><y>")
+  (if (eq type 'line)
+      (progn
+        (unless register
+          (let ((text (filter-buffer-substring beg end)))
+            (unless (string-match-p "\n" text)
+              (evil-set-register ?- text))))
+        (let ((evil-was-yanked-without-register nil))
+          (evil-yank beg end type register yank-handler))
+        (dotimes (var (count-lines beg end))
+          (eshell-kill-whole-line)))
+    (evil-delete beg end type register yank-handler))
+  (when (and (evil-called-interactively-p)
+             (eq type 'line))
+    (evil-first-non-blank)))
+#+END_SRC
+
 *** Em Hist
 #+BEGIN_SRC emacs-lisp
 (use-package em-hist
@@ -3372,20 +3415,9 @@ Build the list of commands to be run in Term mode buffers.
 (nil #'eshell-add-visual-commands)
 #+END_SRC
 
-Add the following keybindings:
-- =C-l= :: clear the buffer's scrollback
-- =C-x n c= :: narrow to the current command
-- =C-z= :: "background" the current process
-
+Bind keys.
 #+BEGIN_SRC emacs-lisp
-(nil (lambda ()
-       (general-define-key
-        :keymaps 'eshell-mode-map
-        "C-l" #'eshell/clear-scrollback-keep-input
-        "C-x n c" #'esh-mode-narrow-to-command
-        "C-z" #'eshell/background-process-maybe
-        :states '(insert)
-        "C-r" #'counsel-esh-history)))
+(nil #'eshell-define-keys)
 #+END_SRC
 
 **** Customize Variables
@@ -3582,6 +3614,33 @@ UNIX shells use the chord =C-z= to background the current process.
     (eshell/clear-scrollback)
     (eshell-emit-prompt)
     (insert input)))
+#+END_SRC
+
+***** Keybindings
+
+Add the following keybindings:
+- =d= :: custom Evil deletion operator
+- =C-l= :: clear the buffer's scrollback
+- =C-x n c= :: narrow to the current command
+- =C-z= :: "background" the current process
+
+#+BEGIN_SRC emacs-lisp
+(defun eshell-define-keys ()
+  "Define keys for eshell."
+  (with-eval-after-load 'general
+    (general-define-key
+     :keymaps 'eshell-mode-map
+     "C-l" #'eshell/clear-scrollback-keep-input
+     "C-x n c" #'esh-mode-narrow-to-command
+     "C-z" #'eshell/background-process-maybe)
+    (general-define-key
+     :keymaps 'eshell-mode-map
+     :states '(movement normal visual)
+     "d" #'eshell-delete)
+    (general-define-key
+     :keymaps 'eshell-mode-map
+     :states 'insert
+     "C-r" #'counsel-esh-history)))
 #+END_SRC
 
 *** Esh Module
