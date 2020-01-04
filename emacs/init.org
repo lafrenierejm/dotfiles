@@ -2576,6 +2576,20 @@ Enable ~company-mode~ globally.
 (global-company-mode)
 #+END_SRC
 
+*** /Company Posframe/
+
+Use child frames for /Company/'s candidate menus.
+#+begin_src emacs-lisp
+(use-package company-posframe
+  :demand
+  :after company
+  :config
+  (company-posframe-mode +1)
+  (with-eval-after-load 'desktop
+    (push '(company-posframe-mode . nil)
+          desktop-minor-mode-table)))
+#+end_src
+
 ** YASnippet
 
 #+BEGIN_SRC emacs-lisp
