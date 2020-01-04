@@ -573,7 +573,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+BEGIN_SRC emacs-lisp
 (:keymaps 'projectile-mode-map
- "C-c p" 'projectile-command-map)
+ "C-c p" 'projectile-command-map
+ "C-x g" #'projectile-vc)
 #+END_SRC
 
 *** Variable Customizations
@@ -2251,16 +2252,15 @@ Perform Diff HL highlighting on-the-fly.
   :if
   <<magit/if>>
 
+  ;; Load this package eagerly.
+  :demand
+
   ;; Inform the bytecode compiler of the following autoloaded functions.
   :commands magit-clone-to-xdg-source
 
   ;; Perform the following customizations.
   :custom
   <<magit/custom>>
-
-  ;; Add the following keybindings.
-  :general
-  <<magit/general>>
 
   ;; Evaluate the following code after loading `magit'.
   :config
@@ -2277,15 +2277,6 @@ Perform Diff HL highlighting on-the-fly.
 As such, the package is unusable is worthless if =git= is not in the user's ~PATH~.
 #+BEGIN_SRC emacs-lisp
 (executable-find "git")
-#+END_SRC
-
-**** Keybindings
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref magit/general
-:END:
-
-#+BEGIN_SRC emacs-lisp
-("C-x g" #'magit-status)
 #+END_SRC
 
 **** Customize Variables
