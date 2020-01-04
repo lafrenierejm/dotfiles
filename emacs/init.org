@@ -1572,6 +1572,14 @@ Smartparens Config configures Smartparens for various programming languages.
   :demand)
 #+END_SRC
 
+** /Smart Dash/
+
+/Smart Dash/ a minor mode which redefines the dash key ("-") to insert an underscore within C-style identifiers and a dash otherwise.
+#+begin_src emacs-lisp
+(use-package smart-dash
+  :demand)
+#+end_src
+
 * Minibuffer
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref minibuffer
@@ -4913,7 +4921,7 @@ Define a function that sets the shell type to Zsh when working with a Zsh file.
 
 ** Python
 
-*** Python
+*** /Python/
 
 #+BEGIN_SRC emacs-lisp
 (use-package python
@@ -4939,6 +4947,10 @@ Define a function that sets the shell type to Zsh when working with a Zsh file.
 #+BEGIN_SRC emacs-lisp
 ('python-mode-hook #'python-set-comment-inline-offset)
 #+END_SRC
+
+#+begin_src emacs-lisp
+('python-mode-hook #'smart-dash-mode)
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
