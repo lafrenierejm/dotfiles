@@ -1168,7 +1168,7 @@ Apply the keybindings specified in ~evil-org-key-theme~.
 
   ;; Add the following non-autoloading hooks.
   :gfhook
-  ('markdown-mode-hook #'markdown-mode-spaces)
+  ('markdown-mode-hook #'markdown-mode-spaces-only)
 
   :config
   (defun markdown-mode-spaces-only ()
