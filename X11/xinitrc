@@ -28,4 +28,4 @@ fi
 
 # Daemonize Emacs and start EXWM
 emacs --daemon -f exwm-enable
-exec emacsclient --create-frame --eval '(eshell)'
+exec emacsclient --create-frame --eval '(eshell-find-eshell-here)'
