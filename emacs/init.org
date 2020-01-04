@@ -2547,6 +2547,15 @@ This has the effect of making that command easily accessible alongside other /VC
    "u"  #'browse-at-remote-kill))
 #+END_SRC
 
+** Mercurial (Hg)
+
+*** /Monky/
+
+#+begin_src emacs-lisp
+(use-package monky
+  :demand)
+#+end_src
+
 * Completion
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref completion
