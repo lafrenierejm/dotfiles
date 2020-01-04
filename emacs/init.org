@@ -3971,7 +3971,7 @@ These messages are generally uninteresting.
 #+END_SRC
 
 ***** Composing
-Use =[[https://joeclark.org/ffaq.html][format=flowed]]= for nicer viewing of plaintext mail.
+Use [[https://joeclark.org/ffaq.htm][format\=flowed]] for nicer viewing of plaintext mail.
 
 #+BEGIN_SRC emacs-lisp
 (mu4e-compose-format-flowed t "Use format=flowed when composing mail.")
