@@ -26,3 +26,5 @@
 	path = "include/gpg"
 [github]
 	user = lafrenierejm
+[gitlab]
+	user = lafrenierejm
