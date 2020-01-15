@@ -28,3 +28,5 @@
 	user = lafrenierejm
 [gitlab]
 	user = lafrenierejm
+[includeIf "gitdir:~/source/com.jcpenney.stash/"]
+	email = "jlafreni@jcp.com"
