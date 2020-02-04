@@ -3154,6 +3154,12 @@ Determine whether duplicates are skipped when traversing command history.
 (eshell-hist-ignoredups t "Skip duplicates when traversing command history.")
 #+END_SRC
 
+Determine how many commands are saved in history.
+The default is 128.
+#+BEGIN_SRC emacs-lisp
+(eshell-history-size 10000)
+#+END_SRC
+
 *** Em Dirs
 #+BEGIN_SRC emacs-lisp
 (use-package em-dirs
