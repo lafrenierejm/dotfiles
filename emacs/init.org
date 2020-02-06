@@ -73,6 +73,9 @@
 ;;; Programming Languages:
 <<programming-languages>>
 
+;;; Refactoring:
+<<refactoring>>
+
 ;;; RESTful APIs:
 <<restful-apis>>
 
@@ -5364,6 +5367,9 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 
 
 * Refactoring
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref refactoring
+:END:
 
 ** Reformatter
 
