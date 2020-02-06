@@ -5387,6 +5387,26 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
   <<reformatter/config>>)
 #+END_SRC
 
+** /RE Builder/
+
+#+BEGIN_SRC emacs-lisp
+(use-package re-builder
+  :custom
+  (reb-re-syntax 'rx)
+
+  :config
+  (defun reb-query-replace (to-string)
+    (interactive
+     (progn
+       (barf-if-buffer-read-only)
+       (list (query-replace-read-to
+              (reb-target-binding reb-regexp)
+              "Query replace"
+              t))))
+    (with-current-buffer reb-target-buffer
+      (query-replace-regexp (reb-target-binding reb-regexp) to-string))))
+#+END_SRC
+
 * RESTful APIs
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref restful-apis
