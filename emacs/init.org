@@ -5416,6 +5416,51 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
   ('(sql-interactive-mode sql-mode) #'sqlup-mode))
 #+END_SRC
 
+** YAML
+
+*** /YAML Mode/
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode)
+#+END_SRC
+
+Enable line numbers in YAML buffers.
+#+BEGIN_SRC emacs-lisp :noweb-ref display-line-numbers/ghook
+('yaml-mode-hook #'display-line-numbers-mode)
+#+END_SRC
+
+*** /Company Ansible/
+
+#+BEGIN_SRC emacs-lisp
+(use-package company-ansible
+  :after (:all company yaml-mode)
+  :demand
+  :config
+  (add-to-list 'company-backends 'company-ansible))
+#+END_SRC
+
+*** /Ansible Vault Mode/
+
+#+BEGIN_SRC emacs-lisp
+(use-package ansible-vault
+  :after yaml-mode
+  :demand)
+#+END_SRC
+
+*** Prettier
+
+[[https://prettier.io/blog/2018/07/29/1.14.0.html][As of 1.1.4]], the [[https://prettier.io/][Prettier]] code formatter supports for YAML files.
+Prettier's CLI be used via the /Reformatter/ package to automatically format YAML in a consistent way.
+#+BEGIN_SRC emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  yaml-format
+  :program "prettier"
+  :args '("--parser" "yaml"
+          "--write" ; perform changes
+          "--prose-wrap" "always"
+          "--no-config"
+          "--stdin")
+#+END_SRC
 
 * Refactoring
 :PROPERTIES:
