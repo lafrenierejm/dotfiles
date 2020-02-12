@@ -465,7 +465,7 @@ This is done by adding \src_emacs-lisp{rainbow-identifiers-mode} to \src_emacs-m
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-identifiers
   :ghook
-  ('prog-mode-hook #'rainbow-identifiers-mode)
+  <<rainbow-identifiers/ghook>>
 
   :custom
   <<rainbow-identifiers/custom>>)
@@ -499,7 +499,7 @@ The package's source is available at [[https://github.com/Fanael/rainbow-delimit
   :demand
 
   :ghook
-  ('prog-mode-hook #'rainbow-delimiters-mode))
+  <<rainbow-delimiters/ghook>>)
 #+END_SRC
 
 ** Loaddefs
@@ -533,7 +533,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
   ;; Add the following auto-loading hooks.
   :ghook
-  ('prog-mode-hook #'display-line-numbers-mode))
+  <<display-line-numbers/ghook>>)
 #+END_SRC
 
 *** Conditional Loading
@@ -3917,7 +3917,7 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   :straight (:type built-in)
 
   :ghook
-  ('prog-mode-hook #'flyspell-prog-mode))
+  <<flyspell/ghook>>)
 #+END_SRC
 
 ** Ispell
@@ -5146,6 +5146,13 @@ Use the above Polymode as the default mode for Python buffers.
 ("\\.py\\'" . poly-python-rst-mode)
 #+END_SRC
 
+**** Rainbow Identifiers
+
+Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode} buffers.
+#+BEGIN_SRC emacs-lisp :noweb-ref rainbow-identifiers/ghook
+('python-mode-hook nil)
+#+END_SRC
+
 *** Pyvenv
 
 #+BEGIN_SRC emacs-lisp
@@ -5230,6 +5237,26 @@ The /[[Reformatter]]/ package is used to create an Emacs formatter using isort's
 The defined hook can be added to all Python files.
 #+BEGIN_SRC emacs-lisp :noweb-ref reformatter/ghook
 ('python-mode-hook #'isort-format-on-save-mode)
+#+END_SRC
+
+*** /Rainbow Delimiters/
+
+Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} buffers.
+#+BEGIN_SRC emacs-lisp :noweb-ref rainbow-delimiters/ghook
+('python-mode-hook nil)
+#+END_SRC
+
+*** /Display Line Numbers/
+
+Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode} buffers.
+#+BEGIN_SRC emacs-lisp :noweb-ref display-line-numbers/ghook
+('python-mode-hook nil)
+#+END_SRC
+
+*** /Flyspell/
+
+#+BEGIN_SRC emacs-lisp :noweb-ref flyspell/ghook
+('python-mode-hook #'flyspell-prog-mode)
 #+END_SRC
 
 ** Groovy
