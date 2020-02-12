@@ -548,6 +548,18 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 (version< "26.1" emacs-version)
 #+END_SRC
 
+** /Highlight Indent Guides/
+
+#+BEGIN_SRC emacs-lisp
+(use-package highlight-indent-guides
+  :ghook
+  <<highlight-indent-guides/ghook>>
+
+  :custom
+  (highlight-indent-guides-method 'character)
+  (highlight-indent-guides-character ?│))
+#+END_SRC
+
 * Buffer Organization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref buffer-organization
@@ -5260,6 +5272,12 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode
 
 #+BEGIN_SRC emacs-lisp :noweb-ref flyspell/ghook
 ('python-mode-hook #'flyspell-prog-mode)
+#+END_SRC
+
+*** /Highlight Indent Guides/
+
+#+BEGIN_SRC emacs-lisp :noweb-ref highlight-indent-guides/ghook
+('python-mode-hook #'highlight-indent-guides-mode)
 #+END_SRC
 
 ** Groovy
