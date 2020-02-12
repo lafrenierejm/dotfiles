@@ -282,7 +282,10 @@ It is highly compatible with /Use Package/ and provides additional keywords to t
 The ~:demand~ keyword is used to ensure General is loaded eagerly.
 #+BEGIN_SRC emacs-lisp
 (use-package general
-  :demand)
+  :demand
+
+  :config
+  <<general/config>>)
 #+END_SRC
 
 * Customization
