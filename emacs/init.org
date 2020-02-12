@@ -2559,7 +2559,7 @@ If the file has not been added to the repository, use the current year."
 #+END_SRC
 
 Alias the above function to remove my username.
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 (defalias 'git-year-added #'git-lafrenierejm-year-added)
 #+END_SRC
 
