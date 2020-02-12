@@ -2277,7 +2277,7 @@ Perform Diff HL highlighting on-the-fly.
 ** Git
 *** Git Attributes Mode
 
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 (use-package gitattributes-mode)
 #+END_SRC
 
