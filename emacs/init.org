@@ -5424,6 +5424,10 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
   :custom
   (reb-re-syntax 'rx)
 
+  :general
+  (:keymaps 'reb-lisp-mode-map
+   "C-x C-k" #'reb-quit)
+
   :config
   (defun reb-query-replace (to-string)
     (interactive
