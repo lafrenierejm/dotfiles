@@ -7,6 +7,7 @@
 **** [[https://oremacs.com/atom.xml][oremacs.com]]                                                   :emacs:
 **** [[http://pragmaticemacs.com/feed/][Pragmatic Emacs]]                                               :emacs:
 **** [[https://metaredux.com/feed.xml][Metaredux]]                                                     :emacs:
+**** [[https://buttondown.email/hillelwayne/rss][hillelwayne]]
 ** aggregators                                                   :aggregate:
 *** tech                                                             :tech:
 **** [[https://lobste.rs/rss][lobste.rs]]
