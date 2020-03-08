@@ -2587,7 +2587,12 @@ This has the effect of making that command easily accessible alongside other /VC
 (use-package browse-at-remote
   :general
   (:keymaps 'vc-prefix-map
-   "u"  #'browse-at-remote-kill))
+   "u"  #'browse-at-remote-kill)
+
+  :custom
+  (browse-at-remote-add-line-number-if-no-region-selected
+   nil
+   "Only include line number when there's an active region."))
 #+END_SRC
 
 ** Mercurial (Hg)
