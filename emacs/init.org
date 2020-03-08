@@ -4885,7 +4885,7 @@ It allows you:
   (guix-load-path
    (when-let ((path (expand-file-name
                      "org.gnu.savannah.git/guix/"
-                     (or (getenv "XDG_SOURCE_DIR") "~/source")))
+                     (xdg-user-dir "SOURCE")))
               ((file-directory-p path)))
      path)
    "Directory or directories to prepend to Guile's `%load-path' and `load-compiled-path'."))
