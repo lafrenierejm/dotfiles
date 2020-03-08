@@ -4467,7 +4467,9 @@ I Use Chris Wellons's /Elfeed/ for managing my web feeds.
 *** /Elfeed/
 
 #+BEGIN_SRC emacs-lisp
-(use-package elfeed)
+(use-package elfeed
+  :custom
+  (elfeed-db-directory "~/.local/share/elfeed"))
 #+END_SRC
 
 *** /Elfeed Org/
