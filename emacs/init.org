@@ -28,11 +28,11 @@
 ;;; Visual Interface:
 <<interface>>
 
+;;; Working with Documentation:
+<<documentation>>
+
 ;;; Buffer Organization:
 <<buffer-organization>>
-
-;;; Literate Programming:
-<<literate-programming>>
 
 ;;; Keybindings:
 <<keybindings>>
@@ -70,8 +70,8 @@
 ;;; PDF:
 <<pdf>>
 
-;;; Programming Languages:
-<<programming-languages>>
+;;; Programming:
+<<programming>>
 
 ;;; Refactoring:
 <<refactoring>>
@@ -952,34 +952,37 @@ IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a prefix arg
 (global-set-key (kbd "C-d") #'current-buffer/dired)
 #+END_SRC
 
-* Literate Programming
+* Documentation
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref literate-programming
+:HEADER-ARGS+: :noweb-ref documentation
 :END:
 
-The [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] programming is a programming paradigm introduced by Donald Knuth in which the standard precedence of code and explanatory prose are flipped.
-Whereas the standard programming paradigm has a source documents' text "defaulting" to source code, literate programming assumes that text is intended for human consumption (the role normally filled by comments) unless it is explicitly demarcated as source code.
-A literate document can then be /tangled/ into a source-only file.
+** AsciiDoc
 
-** Polymode
-:PROPERTIES:
-:CUSTOM_ID: polymode
-:END:
+From [[https://asciidoc.org/][its website:]]
+#+begin_quote
+AsciiDoc is a text document format for writing notes, documentation, articles, books, ebooks, slideshows, web pages, man pages and blogs.
+AsciiDoc files can be translated to many formats including HTML, PDF, EPUB, man page.
 
-Polymode is a framework for supporting multiple major modes (MMM) inside a single Emacs buffer.
-This can benefit both literate and traditional programming by allowing one to code blocks and docstrings, respectively, with the full features of dedicated major modes.
+AsciiDoc is highly configurable: both the AsciiDoc source file syntax and the backend output markups (which can be almost any type of SGML/XML markup) can be customized and extended by the user.
 
-#+BEGIN_SRC emacs-lisp
-(use-package polymode
-  :demand
+AsciiDoc is free software and is licenced under the terms of the GNU General Public License version 2 (GPLv2).
+#+end_quote
 
-  :mode
-  <<polymode/mode>>
+*** /ADoc Mode/
 
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<polymode/config>>)
-#+END_SRC
+From [[https://github.com/sensorflo/adoc-mode/wiki][the package's wiki:]]
+#+begin_quote
+\src_emacs-lisp{adoc-mode} is an Emacs major mode for editing AsciiDoc files.
+It emphasizes on the idea that the document is highlighted so it pretty much looks like the final output.
+What must be bold is bold, what must be italic is italic etc.
+Meta characters are naturally still visible, but in a faint way, so they can be easily ignored.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package adoc-mode
+  :mode ("\\.adoc\\'" . adoc-mode))
+#+end_src
 
 ** Org Mode
 Strong support for literate programming is provided by Org mode's features.
@@ -4534,10 +4537,36 @@ Create an alist whose keys are regexps matching filenames and whose values are t
  "y" #'kill-region)
 #+END_SRC
 
-* Programming Languages
+* Programming
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref programming-languages
+:HEADER-ARGS+: :noweb-ref programming
 :END:
+
+** Literate Programming
+
+[[https://en.wikipedia.org/wiki/Literate_programming][Literate programming]] programming is a programming paradigm introduced by Donald Knuth in which the standard precedence of code and explanatory prose are flipped.
+Whereas the standard programming paradigm has a source documents' text "defaulting" to source code, literate programming assumes that text is intended for human consumption (the role normally filled by comments) unless it is explicitly demarcated as source code.
+A literate document can then be /tangled/ into a source-only file.
+
+*** Polymode
+:PROPERTIES:
+:CUSTOM_ID: polymode
+:END:
+
+Polymode is a framework for supporting multiple major modes (MMM) inside a single Emacs buffer.
+This can benefit both literate and traditional programming by allowing one to code blocks and docstrings, respectively, with the full features of dedicated major modes.
+
+#+BEGIN_SRC emacs-lisp
+(use-package polymode
+  :demand
+
+  :mode
+  <<polymode/mode>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  <<polymode/config>>)
+#+END_SRC
 
 ** Applescript
 
