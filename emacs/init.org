@@ -4489,6 +4489,34 @@ The primary advantage of doing so is that it allows me to version-control the fi
   (elfeed-org))
 #+END_SRC
 
+** Internet Relay Chat (IRC)
+
+*** /ERC/
+
+#+begin_src emacs-lisp
+(use-package erc
+  :custom
+  <<erc/custom>>)
+#+end_src
+
+**** Use Auth-Source for Passwords
+
+\src_emacs-lisp{erc-prompt-for-password} determines whether passwords are prompted for (non-\src_emacs-lisp{nil} )or obtained via auth-source (\src_emacs-lisp{nil}).
+I prefer to use auth-source.
+#+begin_src emacs-lisp :noweb-ref erc/custom
+(erc-prompt-for-password nil "Use auth-source for login passwords.")
+#+end_src
+
+**** Hide Messages
+
+Hide the following message types across all networks and channels:
+- JOIN
+- PART
+- QUIT
+#+begin_src emacs-lisp :noweb-ref erc/custom
+(erc-hide-list '("JOIN" "PART" "QUIT"))
+#+end_src
+
 * PDF
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref pdf
