@@ -5523,7 +5523,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
           "--write" ; perform changes
           "--prose-wrap" "always"
           "--no-config"
-          "--stdin")
+          "--stdin"))
 #+END_SRC
 
 * Refactoring
