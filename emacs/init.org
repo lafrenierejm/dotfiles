@@ -76,8 +76,8 @@
 ;;; Refactoring:
 <<refactoring>>
 
-;;; RESTful APIs:
-<<restful-apis>>
+;;; Web:
+<<web>>
 
 ;;; Project Management:
 <<project-management>>
@@ -5580,12 +5580,14 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
       (query-replace-regexp (reb-target-binding reb-regexp) to-string))))
 #+END_SRC
 
-* RESTful APIs
+* Web
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref restful-apis
+:HEADER-ARGS+: :noweb-ref web
 :END:
 
-** REST Client
+** REST
+
+*** REST Client
 
 #+BEGIN_SRC emacs-lisp
 (use-package restclient
@@ -5598,7 +5600,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   ("\\.http\\'" . restclient-mode))
 #+END_SRC
 
-** Company REST Client
+*** Company REST Client
 
 #+BEGIN_SRC emacs-lisp
 (use-package company-restclient
@@ -5610,14 +5612,14 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   (add-to-list 'company-backends 'company-restclient))
 #+END_SRC
 
-** Polymode for REST Client
+*** Polymode for REST Client
 
-*** Post-Load Evaluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref polymode/config
 :END:
 
-**** Emacs Lisp Inner Mode
+***** Emacs Lisp Inner Mode
 Define the inner mode for Emacs Lisp sections of REST Client buffers.
 
 #+BEGIN_SRC emacs-lisp
@@ -5641,7 +5643,7 @@ Define a matcher for multi-line expressions.
   :tail-matcher (rx line-start "#\n"))
 #+END_SRC
 
-**** JSON Inner Mode
+***** JSON Inner Mode
 Define the inner mode for JSON sections.
 
 #+BEGIN_SRC emacs-lisp
@@ -5653,7 +5655,7 @@ Define the inner mode for JSON sections.
   :tail-matcher (rx line-start "}" line-end))
 #+END_SRC
 
-**** Rest Client Parent Mode
+***** Rest Client Parent Mode
 #+BEGIN_SRC emacs-lisp
 (define-hostmode poly-restclient-hostmode
   :mode 'restclient-mode)
@@ -5666,6 +5668,26 @@ Define the inner mode for JSON sections.
                 poly-restclient/emacs-lisp/multi-line-innermode
                 poly-restclient/json-innermode))
 #+END_SRC
+
+** Browsing
+
+*** /Counsel Web/
+
+#+begin_src emacs-lisp
+(use-package counsel-web
+  :general
+  <<counsel-web/general>>)
+#+end_src
+
+**** Minibuffer Web Searching
+
+#+begin_src emacs-lisp :noweb-ref counsel-web/general
+("s-s" #'counsel-web-suggest)
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref exwm/config
+(exwm-input-set-key (kbd "s-s") #'counsel-web-suggest)
+#+end_src
 
 * Project Management
 :PROPERTIES:
