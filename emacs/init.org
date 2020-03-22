@@ -2299,7 +2299,8 @@ Perform Diff HL highlighting on-the-fly.
 (use-package gitattributes-mode)
 #+END_SRC
 
-*** Magit
+*** /Magit/
+
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   ;; Load this package if the following code evaluates to non-nil.
@@ -2457,6 +2458,14 @@ Alias the above command to remove my username "namespace".
 #+BEGIN_SRC emacs-lisp
 (defalias 'magit-copy-branch-name #'magit-lafrenierejm-copy-branch-name)
 #+END_SRC
+
+*** /Magit Diff/
+
+#+begin_src emacs-lisp
+(use-package magit-diff
+  :custom
+  (magit-diff-refine-hunk t "Show fine differences for the current diff hunk only."))
+#+end_src
 
 *** Forge
 From the project's README:
