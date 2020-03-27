@@ -560,6 +560,15 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   (highlight-indent-guides-character ?│))
 #+END_SRC
 
+** Theme
+
+#+begin_src emacs-lisp
+(use-package modus-operandi-theme
+  :demand
+  :config
+  (load-theme 'modus-operandi 'no-confim))
+#+end_src
+
 * Buffer Organization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref buffer-organization
