@@ -5905,6 +5905,62 @@ Move =point= to the windows immediately around the current window.
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
 #+END_SRC
 
+*** /EXWM RandR/
+
+/EXWM RandR/ adds support for multiple monitors to /EXWM/.
+
+#+begin_src emacs-lisp
+(use-package exwm-randr
+  :if (executable-find "xrandr")
+
+  :after (:all dash exwm rx s subr)
+
+  ;; Load this package eagerly.
+  :demand
+
+  :functions
+  <<exwm-randr/functions>>
+
+  ;; Non-autoloading hooks.
+  :gfhook
+  <<exwm-randr/gfhook>>
+
+  :config
+  <<exwm-randr/config>>
+  (exwm-randr-enable))
+#+end_src
+
+Define a function to automatically enable an external monitor.
+https://github.com/ch11ng/exwm/wiki/EXWM-User-Guide
+#+begin_src emacs-lisp :noweb-ref exwm-randr/config
+(defun exwm-randr-assign-workspaces ()
+  (let ((xrandr-regexp-connected (rx line-start (group (one-or-more (not " "))) " connected"))
+        displays-connected)
+    ;; get all currently connected monitors
+    (with-temp-buffer
+      ;; populate the buffer with the output of xrandr
+      (call-process "xrandr" nil t nil)
+      (goto-char (point-min))
+      ;; iterate over the output, building the list of displays
+      (while (re-search-forward xrandr-regexp-connected nil 'noerror)
+        (push (match-string 1) displays-connected)))
+    ;; use only the currently connected monitors
+    (customize-set-value 'exwm-workspace-number (length displays-connected))
+    (->> (-zip-pair (number-sequence 0 (1- (length displays-connected))) displays-connected)
+         (flatten-list)
+         (customize-set-value 'exwm-randr-workspace-monitor-plist))))
+#+end_src
+
+Inform the bytecode compiler of the above functions.
+#+begin_src emacs-lisp :noweb-ref exwm-randr/functions
+exwm-randr-assign-workspaces
+#+end_src
+
+Add the above function to be run whenever randr detects changes to screen configuration.
+#+begin_src emacs-lisp :noweb-ref exwm-randr/gfhook
+('exwm-randr-screen-change-hook #'exwm-randr-assign-workspaces)
+#+end_src
+
 ** Ace Window
 From the README of Oleh Krehel (abo-abo)'s Ace Window package:
 #+BEGIN_QUOTE
