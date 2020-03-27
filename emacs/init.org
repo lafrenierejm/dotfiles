@@ -5758,7 +5758,8 @@ A minor-mode menu for the mode line.
   (minions-mode t "Enable `minions-mode' globally."))
 #+END_SRC
 
-** EXWM
+** Window Management
+*** /EXWM/
 From the package's README:
 #+BEGIN_QUOTE
 EXWM (Emacs X Window Manager) is a full-featured tiling X window manager for Emacs built on top of XELB.
@@ -5777,9 +5778,14 @@ It features:
   ;; Do not load the package lazily.
   :demand
 
-  ;; Inform the bytecode compiler of the following functions.
+  ;; Inform the bytecode compiler of the following commands.
   :commands
-  (init-window-and-frame/start-process)
+  ( ; open a list to allow an arbitrary number of commands
+   <<exwm/commands>>)
+
+  ;; Keybindings
+  :general
+  <<exwm/general>>
 
   ;; Customize the following variables.
   :custom
@@ -5794,7 +5800,7 @@ It features:
   <<exwm/config>>)
 #+END_SRC
 
-*** Variable Customizations
+**** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref exwm/custom
 :END:
@@ -5806,7 +5812,7 @@ Buffer switching with e.g. Counsel is preferred to using multiple workspaces.
 (exwm-workspace-number 1)
 #+END_SRC
 
-*** Non-Auto-Loading Hooks
+**** Non-Auto-Loading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref exwm/gfhook
 :END:
@@ -5834,25 +5840,37 @@ Add simulation keys for Firefox windows.
         ([?\C-t] . [?\C-n]))))))
    #+END_SRC
 
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref exwm/config
-:END:
+**** Launch Applications from Shell
 
 Define a function to launch applications from the shell.
 Launching applications is performed by calling ~start-process-shell-command~.
-
-#+BEGIN_SRC emacs-lisp
-(defun init-window-and-frame/start-process (command)
+#+BEGIN_SRC emacs-lisp :noweb-ref exwm/config
+(defun exwm-start-process (command)
   "Start a process via a shell COMMAND."
   (interactive (list (read-shell-command "$ ")))
   (start-process-shell-command command nil command))
 #+END_SRC
 
+Inform the bytecode compiler of the above command.
+#+begin_src emacs-lisp :noweb-ref exwm/commands
+exwm-start-process
+#+end_src
+
+Bind the command to =s-<return>=.
+#+begin_src emacs-lisp :noweb-ref exwm/general
+((kbd "<s-return>") #'exwm-start-process)
+#+end_src
+#+begin_src emacs-lisp :noweb-ref exwm/config
+(exwm-input-set-key (kbd "<s-return>") #'exwm-start-process)
+#+end_src
+
 **** Keybindings
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref exwm/config
+:END:
+
 Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
 This will be performed with =s-r=.
-
 #+BEGIN_SRC emacs-lisp
 (exwm-input-set-key (kbd "s-r") #'exwm-reset)
 #+END_SRC
@@ -5863,21 +5881,13 @@ Hide all windows except the current one.
 #+END_SRC
 
 Close the current window and kill its buffer.
-
 #+BEGIN_SRC emacs-lisp
 (exwm-input-set-key (kbd "C-s-x") #'kill-buffer-and-window)
 #+END_SRC
 
 Close the current window without killing its buffer.
-
 #+BEGIN_SRC emacs-lisp
 (exwm-input-set-key (kbd "s-x") #'delete-window)
-#+END_SRC
-
-Run a shell command.
-
-#+BEGIN_SRC emacs-lisp
-(exwm-input-set-key (kbd "<s-return>") #'init-window-and-frame/start-process)
 #+END_SRC
 
 Open an Eshell buffer in the current buffer's location.
