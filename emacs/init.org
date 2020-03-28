@@ -67,8 +67,8 @@
 ;;; Feeds:
 <<feeds>>
 
-;;; PDF:
-<<pdf>>
+;;; Multimedia:
+<<multimedia>>
 
 ;;; Programming:
 <<programming>>
@@ -4537,12 +4537,14 @@ Hide the following message types across all networks and channels:
 (erc-hide-list '("JOIN" "PART" "QUIT"))
 #+end_src
 
-* PDF
+* Multimedia
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref pdf
+:HEADER-ARGS+: :noweb-ref multimedia
 :END:
 
-** PDF Tools
+** Portable Document Format (PDF)
+
+*** /PDF Tools/
 
 #+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
@@ -4559,7 +4561,7 @@ Hide the following message types across all networks and channels:
   (pdf-tools-install t))
 #+END_SRC
 
-*** Filename Mapping
+**** Filename Mapping
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref pdf-tools/mode
 :END:
@@ -4570,7 +4572,7 @@ Create an alist whose keys are regexps matching filenames and whose values are t
 ("\\.pdf\\'" . pdf-view-mode)
 #+END_SRC
 
-*** Keybindings
+**** Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref pdf-tools/general
 :END:
@@ -4584,6 +4586,16 @@ Create an alist whose keys are regexps matching filenames and whose values are t
  "q" nil
  "y" #'kill-region)
 #+END_SRC
+
+** Video
+
+*** /YouTube DL/
+
+#+begin_src emacs-lisp
+(use-package youtube-dl
+  :custom
+  (youtube-dl-directory (xdg-user-dir "VIDEOS")))
+#+end_src
 
 * Programming
 :PROPERTIES:
