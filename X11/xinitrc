@@ -25,7 +25,6 @@ if [ -f "$user_xcape" ]; then
 	. "$user_xcape"
 fi
 
-
-# Daemonize Emacs and start EXWM
-emacs --daemon -f exwm-enable
-exec emacsclient --create-frame --eval '(eshell-find-eshell-here)'
+emacs --daemon -f exwm-enable # daemonize emacs
+redshift & # start redshift
+exec emacsclient --create-frame --eval '(eshell-find-eshell-here)'  # start EXWM
