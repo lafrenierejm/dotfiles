@@ -454,6 +454,21 @@ For mixing the two pitches I use the /Mixed Pitch/ package by Alex Branham.
   ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode))
 #+END_SRC
 
+** /Form Feeds/
+
+Display ^L glyphs as horizontal lines.
+#+begin_src emacs-lisp
+(use-package form-feed
+  :demand
+
+  :config
+  (define-globalized-minor-mode form-feed-global-mode form-feed-mode
+    (lambda ()
+      (form-feed-mode +1)))
+
+  (form-feed-global-mode +1))
+#+end_src
+
 ** Rainbow Identifiers
 Rainbow Identifiers provides a minor mode that highlights identifiers based on their names.
 The highlight color of each identifier is chosen based on the hash of the identifier's name.
