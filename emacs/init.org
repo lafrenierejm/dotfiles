@@ -22,6 +22,9 @@
 ;;; Dependencies:
 <<dependencies>>
 
+;;; Constants
+<<constants>>
+
 ;;; Customization:
 <<customization>>
 
@@ -1587,9 +1590,6 @@ It adds a "surround" verb to Evil's modal editing.
   ;; Load this package eagerly.
   :demand
 
-  :preface
-  <<smartparens/preface>>
-
   :custom
   <<smartparens/custom>>
 
@@ -1608,7 +1608,7 @@ Enable ~smartparens-mode~ globally.
 (smartparens-global-mode t)
 #+END_SRC
 
-*** Post-Load Evluation
+*** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref smartparens/config
 :END:
@@ -4702,7 +4702,7 @@ This can benefit both literate and traditional programming by allowing one to co
 It is desirable to have slightly different character matching behavior when editing Lisps.
 The following is a list of the Lisp modes I edit in.
 
-#+BEGIN_SRC emacs-lisp :noweb-ref smartparens/preface
+#+BEGIN_SRC emacs-lisp :noweb-ref constants
 (defconst lisp-major-modes
   '(cider-repl-mode
     clojure-mode
@@ -4717,7 +4717,7 @@ The following is a list of the Lisp modes I edit in.
 #+END_SRC
 
 And the above modes' hooks:
-#+BEGIN_SRC emacs-lisp :noweb-ref smartparens/preface
+#+BEGIN_SRC emacs-lisp :noweb-ref constants
 (defconst lisp-major-mode-hooks
   (mapcar #'derived-mode-hook-name lisp-major-modes)
   "A list of Lisp major mode hooks.")
