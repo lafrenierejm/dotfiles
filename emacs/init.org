@@ -2914,6 +2914,46 @@ This visibility is provided recursively, so the view provided will extend arbitr
    "C-x n n" #'dired-narrow))
 #+END_SRC
 
+** /Dired Subtree/
+
+#+begin_src emacs-lisp
+(use-package dired-subtree
+  :after dired
+
+  :demand
+
+  :config
+  <<dired-subtree/config>>)
+#+end_src
+
+*** Set \src_emacs-lisp{default-directory} Based on \src_emacs-lisp{point}'s'
+:PROPERTIES:
+:COPYRIGHT_AUTHOR: Göktuğ Kayaalp
+:COPYRIGHT_EMAIL: [[mailto:self@gkayaalp.com][self@gkayaalp.com]]
+:COPYRIGHT_URL: https://old.reddit.com/r/emacs/comments/fs93hk/weekly_tipstricketc_thread/fmfesda/
+:HEADER-ARGS+: :noweb-ref dired-subtree/config
+:END:
+
+Posted by Göktuğ Kayaalp (u/gkayaalp) in a "Weekly tips/trick/etc/" thread on the r/emacs Subreddit.
+#+begin_quote
+I really like =dired-subtree.el=, but I don't like that when you try to visit a new file or run a command thinking ~default-directory~ will be relative to where the point is at, but it's still the toplevel directory the dired buffer is visiting.
+This little advice makes sure that ~default-directory~ is the parent directory of the file or directory under point.
+#+end_quote
+
+#+begin_src emacs-lisp
+(defun gk-dired-update-default-directory-from-current-line (ret)
+  "Set ‘default-directory’ to dirname of entity under point.
+
+Useful when using dired-subtree."
+  (ignore ret)
+  (ignore-errors
+    (setq-local default-directory
+                (file-name-directory (dired-get-file-for-visit)))))
+
+(advice-add 'dired-previous-line :after #'gk-dired-update-default-directory-from-current-line)
+(advice-add 'dired-next-line :after #'gk-dired-update-default-directory-from-current-line)
+#+end_src
+
 * Command Interpretation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref command-interpretation
