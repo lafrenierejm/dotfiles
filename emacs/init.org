@@ -4697,6 +4697,19 @@ This can benefit both literate and traditional programming by allowing one to co
    "C-c C-c" #'apples-run-region/buffer))
 #+END_SRC
 
+** JavaScript
+
+*** /JSON Mode/
+
+From [[https://github.com/joshwnj/json-mode][the project's README]]:
+#+begin_quote
+Extends the builtin js-mode to add better syntax highlighting for JSON and some nice editing keybindings.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package json-mode)
+#+end_src
+
 ** Lisps
 
 It is desirable to have slightly different character matching behavior when editing Lisps.
