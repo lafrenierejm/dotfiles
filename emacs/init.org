@@ -373,6 +373,28 @@ By default, that variable only allows reading a few of the most common directory
             line-end)))
 #+END_SRC
 
+** /Directories/
+
+/Directories/ provides platform-specific paths for configuration, cache, and other data.
+#+begin_src emacs-lisp
+(use-package directories
+  :straight (:type git :host github :repo "lafrenierejm/directories-elisp")
+  :demand)
+#+end_src
+
+** /No Littering/
+
+/No Littering/ configures various packages' paths to unify where data is saved.
+#+begin_src emacs-lisp
+(use-package no-littering
+  :demand
+  :after (directories)
+  :init
+  (setq
+   no-littering-etc-directory (directories-project-config "org" "gnu" "emacs")
+   no-littering-var-directory (directories-project-data-local "org" "gnu" "emacs")))
+#+end_src
+
 * Visual Interface
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref interface
