@@ -296,6 +296,8 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
 :HEADER-ARGS+: :noweb-ref customization
 :END:
 
+** /Cus Edit/
+
 Emacs has a customization system distinct from simply \src_emacs-lisp{setq}-ing variables.
 By default, any customizations made using that system are appended to the bottom of Emacs's init file.
 This is controlled by the value of the \src_emacs-lisp{custom-file} variable.
@@ -315,7 +317,7 @@ However, usually it is simpler to write something like the following in your ini
 #+END_EXAMPLE
 #+END_QUOTE
 
-That \src_emacs-lisp{setq} and \src_emacs-lisp{load} need to be evaluated /after/ Cus Edit has been loaded, so the expressions should go in the ~:config~ block of the \src_emacs-lisp{use-package} declaration.
+That \src_emacs-lisp{setq} and \src_emacs-lisp{load} need to be evaluated /after/ /Cus Edit/ has been loaded, so the expressions should go in the ~:config~ block of the \src_emacs-lisp{use-package} declaration.
 Additionally, \src_emacs-lisp{custom-file} needs to exist before it is loaded.
 The file can be created with the function \src_emacs-lisp{f-touch}.
 
@@ -351,9 +353,9 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
   :demand)
 #+END_SRC
 
-** XDG
+** /XDG/
 
-/XDG/ provides functions for working with XDG standards and specifications.
+The /XDG/ package provides functions for working with XDG standards and specifications.
 It is loaded to override \src_emacs-lisp{xdg-line-regexp}.
 By default, that variable only allows reading a few of the most common directory types even though the XDG spec allows setting an arbitrary number of directories in =$XDG_CONFIG_DIR/user-dirs.dirs=.
 
