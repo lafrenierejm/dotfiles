@@ -1666,6 +1666,47 @@ Smartparens Config configures Smartparens for various programming languages.
   :demand)
 #+end_src
 
+** Caps Lock
+
+#+begin_src emacs-lisp
+(use-package caps-lock
+  :general
+  <<caps-lock/general>>
+
+  :ghook
+  <<caps-lock/ghook>>
+
+  :functions
+  <<caps-lock/functions>>
+
+  :config
+  <<caps-lock/config>>)
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref caps-lock/general
+(:states 'insert
+ "C-l" #'caps-lock-mode)
+#+end_src
+
+*** Disable When Exiting Insert State
+
+Define a function to disable \src_emacs-lisp{caps-lack-mode}.
+#+begin_src emacs-lisp :noweb-ref caps-lock/config
+(defun caps-lock-disable ()
+  "Disable `caps-lock-mode'."
+  (caps-lock-mode -1))
+#+end_src
+
+Inform the bytecode compiler of the above function.
+#+begin_src emacs-lisp :noweb-ref caps-lock/functions
+caps-lock-disable
+#+end_src
+
+Run the above function whenever Insert state is existed…
+#+begin_src emacs-lisp :noweb-ref caps-lock/ghook
+('evil-insert-state-exit-hook #'caps-lock-disable)
+#+end_src
+
 * Minibuffer
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref minibuffer
