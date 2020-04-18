@@ -5321,26 +5321,36 @@ And another variable stores the above modes' hooks:
   <<python/config>>)
 #+END_SRC
 
-**** Non-Autoloading Hooks
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref python/gfhook
-:END:
-
-#+BEGIN_SRC emacs-lisp
-('python-mode-hook #'python-set-comment-inline-offset)
-#+END_SRC
-
-**** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref python/config
-:END:
+**** PEP 8-Compliant Comment Spacing
 
 Precede inline (i.e. end-of-line) comments with two spaces, per PEP 8.
-#+BEGIN_SRC emacs-lisp
+
+#+BEGIN_SRC emacs-lisp :noweb-ref python/config
 (defun python-set-comment-inline-offset ()
   (set (make-local-variable 'comment-inline-offset) 2)
   (setq comment-column 0))
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp :noweb-ref python/gfhook
+(python-major-mode-hooks #'python-set-comment-inline-offset)
+#+END_SRC
+
+**** PEP 8-Compliant Indentation
+
+PEP 8 specifies that indentation should use units of 4 space characters.
+
+#+begin_src emacs-lisp :noweb-ref python/config
+(defun python-set-indent ()
+  "Set PEP 8-compliant indentation settings."
+  (setq-local indent-tabs-mode nil)
+  (setq-local tab-width 4)
+  (setq-local tab-stop-list nil))
+#+end_src
+
+It's not desirable to enforce this in Python files (where there may be an existing standard that differs from PEP 8), but it is useful to force in Python REPLs.
+#+begin_src emacs-lisp :noweb-ref python/gfhook
+('inferior-python-mode-hook #'python-set-indent)
+#+end_src
 
 **** Polymode
 :PROPERTIES:
