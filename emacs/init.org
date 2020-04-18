@@ -6375,7 +6375,7 @@ Ivy Pass is an Ivy interface for Password Store.
 
 *** Variable Customization
 :PROPERTIES:
-:HEADER-ARGS: :noweb-ref epa/custom
+:HEADER-ARGS+: :noweb-ref epa/custom
 :END:
 
 #+BEGIN_SRC emacs-lisp
