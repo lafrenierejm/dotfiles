@@ -5301,6 +5301,13 @@ Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
 ('sh-mode-hook #'sh-script-set-shell-type)
 #+end_src
 
+*** /Display Line Numbers/
+
+Display line numbers for all \src_emacs-lisp{sh-mode} buffers.
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+('sh-mode-hook nil)
+#+end_src
+
 ** Python
 
 To make it easier to apply settings to all major modes I edit Python code in, a variable is defined with the list of the modes:
