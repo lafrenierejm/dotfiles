@@ -3322,6 +3322,7 @@ Save in REGISTER or in the kill-ring with YANK-HANDLER."
 #+END_SRC
 
 *** Em Hist
+
 #+BEGIN_SRC emacs-lisp
 (use-package em-hist
   :straight (:type built-in)
@@ -3884,6 +3885,18 @@ Determine whether input causes window to scroll.
  'this
  "On input, scroll the selected Eshell window to the bottom.")
 #+END_SRC
+
+*** /Em Alias/
+
+#+begin_src emacs-lisp
+(use-package em-alias
+  :straight (:type built-in)
+
+  :after (:all esh-module)
+
+  :config
+  (setq eshell-aliases-file (expand-file-name "eshell/alias" user-emacs-directory)))
+#+end_src
 
 *** Em Smart
 
