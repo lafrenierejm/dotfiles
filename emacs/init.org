@@ -1663,7 +1663,8 @@ Smartparens Config configures Smartparens for various programming languages.
 /Smart Dash/ a minor mode which redefines the dash key ("-") to insert an underscore within C-style identifiers and a dash otherwise.
 #+begin_src emacs-lisp
 (use-package smart-dash
-  :demand)
+  :ghook
+  <<smart-dash/ghook>>)
 #+end_src
 
 ** Caps Lock
@@ -5329,10 +5330,6 @@ And another variable stores the above modes' hooks:
 ('python-mode-hook #'python-set-comment-inline-offset)
 #+END_SRC
 
-#+begin_src emacs-lisp
-('python-mode-hook #'smart-dash-mode)
-#+end_src
-
 **** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref python/config
@@ -5408,6 +5405,12 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 #+BEGIN_SRC emacs-lisp :noweb-ref rainbow-identifiers/ghook
 (python-major-mode-hooks nil)
 #+END_SRC
+
+**** /Smart Dash/
+
+#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
+(python-major-mode-hooks nil)
+#+end_src
 
 *** Pyvenv
 
