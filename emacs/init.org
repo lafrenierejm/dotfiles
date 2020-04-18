@@ -5288,6 +5288,20 @@ Define a function that sets the shell type to Zsh when working with a Zsh file.
 
 ** Python
 
+To make it easier to apply settings to all major modes I edit Python code in, a variable is defined with the list of the modes:
+#+BEGIN_SRC emacs-lisp :noweb-ref constants
+(defconst python-major-modes
+  '(inferior-python-mode python-mode)
+  "A list of Python major modes.")
+#+END_SRC
+
+And another variable stores the above modes' hooks:
+#+BEGIN_SRC emacs-lisp :noweb-ref constants
+(defconst python-major-mode-hooks
+  (mapcar #'derived-mode-hook-name python-major-modes)
+  "A list of Python major mode hooks.")
+#+END_SRC
+
 *** /Python/
 
 #+BEGIN_SRC emacs-lisp
@@ -5392,7 +5406,7 @@ Use the above Polymode as the default mode for Python buffers.
 
 Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode} buffers.
 #+BEGIN_SRC emacs-lisp :noweb-ref rainbow-identifiers/ghook
-('python-mode-hook nil)
+(python-major-mode-hooks nil)
 #+END_SRC
 
 *** Pyvenv
