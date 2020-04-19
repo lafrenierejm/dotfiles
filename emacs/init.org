@@ -481,17 +481,20 @@ For mixing the two pitches I use the /Mixed Pitch/ package by Alex Branham.
   ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode))
 #+END_SRC
 
-** /Form Feeds/
+** /Form Feed/
 
 Display ^L glyphs as horizontal lines.
 #+begin_src emacs-lisp
 (use-package form-feed
   :demand
 
+  :after s
+
   :config
   (define-globalized-minor-mode form-feed-global-mode form-feed-mode
     (lambda ()
-      (form-feed-mode +1)))
+      (unless (s-starts-with? "magit" (symbol-name major-mode))
+        (form-feed-mode +1))))
 
   (form-feed-global-mode +1))
 #+end_src
