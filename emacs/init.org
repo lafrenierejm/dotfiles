@@ -2916,6 +2916,7 @@ Most other directory-centric packages provide functionality on top of /Dired/.
 
   ;; Perform the following variable customizations.
   :custom
+  (dired-auto-revert-buffer t "Automatically revert Dired buffers on visit.")
   (dired-listing-switches
    (string-join
     '("-l" ; use a long listing format
