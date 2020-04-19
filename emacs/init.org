@@ -1375,6 +1375,13 @@ Enable Evil by default in all modes.
 (evil-mode 1)
 #+END_SRC
 
+Define a function to enable \src_emacs-lisp{evil-move-beyond-eol}.
+#+BEGIN_SRC emacs-lisp
+(defun evil-move-beyond-eol ()
+  "Allow the cursor to move beyond the end of the line."
+  (set (make-local-variable 'evil-move-beyond-eol) t))
+#+END_SRC
+
 ***** Define =evil-yank-to-end-of-line=
 #+BEGIN_SRC emacs-lisp
 (defun evil-yank-to-end-of-line ()
@@ -5026,18 +5033,7 @@ Enable ~evil-cleverparens-mode~ for Lisps.
 
 Let the cursor move past the end of lines in Lisp source code.
 #+BEGIN_SRC emacs-lisp
-(lisp-major-mode-hooks #'evil-move-beyond-eol)
-#+END_SRC
-
-***** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil-cleverparens/config
-:END:
-
-#+BEGIN_SRC emacs-lisp
-(defun evil-move-beyond-eol ()
-  "Allow the cursor to move beyond the end of the line."
-  (setq evil-move-beyond-eol t))
+('evil-cleverparens-mode-hook #'evil-move-beyond-eol)
 #+END_SRC
 
 *** Lisp-1
