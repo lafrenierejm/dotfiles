@@ -3,7 +3,7 @@
 #+EMAIL: joseph@lafreniere.xyz
 #+PROPERTY: header-args+ :noweb yes
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
 ;;; init.el --- Configure Emacs  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018 Joseph LaFreniere
@@ -93,12 +93,12 @@
 
 (provide 'init)
 ;;; init.el ends here
-#+END_SRC
+#+end_src
 
 * License
 ** Code
 All source code in this file is licensed under the [[http://www.gnu.org/licenses/gpl-3.0.html][GNU Public License v3]] or later.
-#+BEGIN_SRC text :noweb-ref license
+#+begin_src text :noweb-ref license
 This file is not part of GNU Emacs.
 
 Init is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -109,26 +109,26 @@ See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with GNU Emacs.
 If not, see <https://www.gnu.org/licenses/>.
-#+END_SRC
+#+end_src
 
 ** Prose
 
 All prose in this file is licensed under the [[http://www.gnu.org/licenses/fdl-1.3.html][GNU Free Documentation License (FDL) v1.3]].
-#+BEGIN_SRC text
+#+begin_src text
 Copyright (C) 2019 Joseph LaFreniere.
 Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation;
 with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-#+END_SRC
+#+end_src
 
 * Commentary
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref commentary
 :END:
 
-#+BEGIN_SRC text
+#+begin_src text
 This is tangled source of Joseph LaFreniere (lafrenierejm)'s literate Emacs initialization file.
 Please refer to `init.org' in this same directory for full commentary.
-#+END_SRC
+#+end_src
 
 * Bootstrapping
 :PROPERTIES:
@@ -141,13 +141,13 @@ The following code ensures that this step is only needed once.
 
 ** Package Management
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (cond
  ((executable-find "guix")
   <<bootstrapping/guix>>)
  (t
   <<bootstrapping/straight>>))
-#+END_SRC
+#+end_src
 
 *** Guix
 :PROPERTIES:
@@ -157,10 +157,10 @@ The following code ensures that this step is only needed once.
 Emacs packages can be managed as any other package with Guix.
 As such, Emacs's native package management tools can be used.
 Before any other installed packages can be configured, /Package/ must be loaded and initialized.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (require 'package)
 (package-initialize)
-#+END_SRC
+#+end_src
 
 **** ~:straight~ keyword in \src_emacs-lisp{use-package}
 :PROPERTIES:
@@ -169,10 +169,10 @@ Before any other installed packages can be configured, /Package/ must be loaded 
 
 Because I also use /Straight/ to manage packages on non-Guix systems, I need to account for instances where I use the ~:straight~ keyword in \src_emacs-lisp{use-package} macros.
 This is accomplished by requesting \src_emacs-lisp{use-package} to just ignore any unkown keywords rather than raise errors.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'use-package-core
   (setq use-package-ignore-unknown-keywords t))
-#+END_SRC
+#+end_src
 
 *** Straight
 :PROPERTIES:
@@ -180,12 +180,12 @@ This is accomplished by requesting \src_emacs-lisp{use-package} to just ignore a
 :END:
 
 Specify the branch to download /Straight/ from.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq straight-repository-branch "develop")
-#+END_SRC
+#+end_src
 
 Download and load /Straight/.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
@@ -199,7 +199,7 @@ Download and load /Straight/.
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-#+END_SRC
+#+end_src
 
 **** Use Package
 :PROPERTIES:
@@ -207,39 +207,39 @@ Download and load /Straight/.
 :END:
 
 Download /Use Package/.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (straight-use-package 'use-package)
-#+END_SRC
+#+end_src
 
 Configure \src_emacs-lisp{use-package} to download packages with /Straight/ by default.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq straight-use-package-by-default t)
-#+END_SRC
+#+end_src
 
 ** Use Package
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (not (executable-find "guix"))
   <<use-package/straight>>)
-#+END_SRC
+#+end_src
 
 Next, /Use Package/ is loaded.
 This package provides the \src_emacs-lisp{use-package} macro for declarative loading of other packages.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (require 'use-package)
-#+END_SRC
+#+end_src
 
 Loading every package during Emacs's initialization is unnecessary and increases load time.
 Instead, packages should only be loaded when a feature they provide is actually needed.
 /Use Package/ provides a feature to lazy-load packages by default:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq use-package-always-defer t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (executable-find "guix")
   <<use-package/guix>>)
-#+END_SRC
+#+end_src
 
 ** Org
 :PROPERTIES:
@@ -254,7 +254,7 @@ The process of tangling this file is to
 2. If this file is the more recent of the two, tangle this file then byte compile and load the result.
 3. Otherwise the tangled file is the more recent, so byte compile and load it directly.
 
-#+BEGIN_SRC emacs-lisp :noweb-ref org/config
+#+begin_src emacs-lisp :noweb-ref org/config
 (defun org-babel-tangle-init ()
   "Tangle Emacs's init file."
   (let ((el-file user-init-file)
@@ -269,27 +269,27 @@ The process of tangling this file is to
         ;; If the Org file was modified more recently, tangle it.
         (when (< el-modify org-modify)
           (org-babel-tangle-file org-file))))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp :noweb-ref org/config
+#+begin_src emacs-lisp :noweb-ref org/config
 (defun modify-time (file)
   (-> (file-attributes file)
       (file-attribute-modification-time)
       (float-time)))
-#+END_SRC
+#+end_src
 
 ** General
 /General/ provides convenience wrappers for setting keybindings and adding hooks.
 It is highly compatible with /Use Package/ and provides additional keywords to the \src_emacs-lisp{use-package} macro.
 /General/ is loaded now just so it can be used in all further \src_emacs-lisp{use-package} declarations.
 The ~:demand~ keyword is used to ensure General is loaded eagerly.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package general
   :demand
 
   :config
   <<general/config>>)
-#+END_SRC
+#+end_src
 
 * Customization
 :PROPERTIES:
@@ -328,7 +328,7 @@ This is done with the ~:after~ keyword of \src_emacs-lisp{use-package}.
 Additionally, we want Cus Edit to always be loaded (not just when we interactively use something it provides).
 \src_emacs-lisp{use-package} needs to told to load Cus Edit eagerly (as opposed to lazily), which is accomplished with the ~:demand~ keyword.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package cus-edit
   :straight (:type built-in)
 
@@ -343,15 +343,15 @@ Additionally, we want Cus Edit to always be loaded (not just when we interactive
     (f-touch path)
     (setq custom-file path)
     (load custom-file)))
-#+END_SRC
+#+end_src
 
 /F/ is not built-in to GNU Emacs, so it must be downloaded by some package manager separately.
 Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/ (this too can be discovered by viewing the function's help), so /F/ must also be loaded eagerly.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package f
   :demand)
-#+END_SRC
+#+end_src
 
 ** /XDG/
 
@@ -359,7 +359,7 @@ The /XDG/ package provides functions for working with XDG standards and specific
 It is loaded to override \src_emacs-lisp{xdg-line-regexp}.
 By default, that variable only allows reading a few of the most common directory types even though the XDG spec allows setting an arbitrary number of directories in =$XDG_CONFIG_DIR/user-dirs.dirs=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package xdg
   :straight (:type built-in)
 
@@ -371,7 +371,7 @@ By default, that variable only allows reading a few of the most common directory
             "XDG_" (group (one-or-more upper)) "_DIR="
             "\"" (group (minimal-match (one-or-more anything))) "\""
             line-end)))
-#+END_SRC
+#+end_src
 
 ** /Directories/
 
@@ -408,18 +408,18 @@ These are
 - \src_emacs-lisp{scroll-bar-mode}.
 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-#+END_SRC
+#+end_src
 
 The splash screen, startup message, and scratch message also serve little use, so they too can be disabled.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq inhibit-splash-screen t
       inhibit-startup-message t
       initial-scratch-message nil)
-#+END_SRC
+#+end_src
 
 ** Font
 What are colloquially known as "fonts" Emacs refers to "faces".
@@ -427,7 +427,7 @@ Google's Noto family of has the best glyph coverage that I am aware of, so I try
 Alan Third has a nice write-up in his [[https://idiocy.org/emacs-fonts-and-fontsets.html]["Emacs, fonts and fontsets" post on idiocy.org]] of how to enable Noto fonts everywhere and simultaneously reduce Emacs's need to scour the system for fallback font sets.
 The /Faces/ package provides this functionality, so all font setup can can occur within /Faces/'s \src_emacs-lisp{use-package}.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package faces
   :straight (:type built-in)
 
@@ -468,18 +468,18 @@ The /Faces/ package provides this functionality, so all font setup can can occur
     (set-fontset-font t 'tamil "Noto Sans Tamil")
     (set-fontset-font t 'telugu "Noto Sans Telugu")
     (set-fontset-font t 'tibetan "Noto Sans Tibetan")))
-#+END_SRC
+#+end_src
 
 When working with prose, I prefer to use a variable-pitch (as opposed to monospace) face.
 Frequently, though, some aspects of a mostly-prose document are better presented in monospace.
 An example of this is the code blocks in this Org file.
 For mixing the two pitches I use the /Mixed Pitch/ package by Alex Branham.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package mixed-pitch
   :ghook
   ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode))
-#+END_SRC
+#+end_src
 
 ** /Form Feed/
 
@@ -507,14 +507,14 @@ The package's source is available at [[https://github.com/Fanael/rainbow-identif
 I want this package to be enabled when programming, so I enable it for \src_emacs-lisp{prog-mode} and all major modes that inherit from \src_emacs-lisp{prog-mode}, which effectively covers all programming language major modes.
 This is done by adding \src_emacs-lisp{rainbow-identifiers-mode} to \src_emacs-mode{prog-mode-hook}, performed below by the arguments to the ~:ghook~ keyword[fn:1].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package rainbow-identifiers
   :ghook
   <<rainbow-identifiers/ghook>>
 
   :custom
   <<rainbow-identifiers/custom>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customizations
 :PROPERTIES:
@@ -523,7 +523,7 @@ This is done by adding \src_emacs-lisp{rainbow-identifiers-mode} to \src_emacs-m
 
 Only use Rainbow Identifiers to highlight (read: color) variable names.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (rainbow-identifiers-faces-to-override
  '(font-lock-constant-face
    font-lock-type-face
@@ -531,25 +531,25 @@ Only use Rainbow Identifiers to highlight (read: color) variable names.
    font-lock-variable-name-face
    font-lock-keyword-face
    font-lock-builtin-face))
-#+END_SRC
+#+end_src
 
 ** Rainbow Delimiters
 Rainbow Delimters provides a minor mode that highlights delimeters such as parantheses based on their depth.
 The highlight color of each level is distinct.
 The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimeters]].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package rainbow-delimiters
   ;; Load this package eagerly.
   :demand
 
   :ghook
   <<rainbow-delimiters/ghook>>)
-#+END_SRC
+#+end_src
 
 ** Loaddefs
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package loaddefs
   :straight (:type built-in)
 
@@ -557,18 +557,18 @@ The package's source is available at [[https://github.com/Fanael/rainbow-delimit
 
   :config
   (show-paren-mode +1))
-#+END_SRC
+#+end_src
 
 ** Line Wrapping
 Out of the box, Emacs will fill paragraph to 72 characters.
 Most projects that care about line width adhere to an 80 character (79 + line feed) maximum width, so to reduce the amount of per-project customization we can set the default value to 80.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (custom-set-default 'fill-column 80)
-#+END_SRC
+#+end_src
 
 ** Display Line Numbers
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package display-line-numbers
   :straight (:type built-in)
 
@@ -579,7 +579,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   ;; Add the following auto-loading hooks.
   :ghook
   <<display-line-numbers/ghook>>)
-#+END_SRC
+#+end_src
 
 *** Conditional Loading
 :PROPERTIES:
@@ -589,13 +589,13 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 ~display-line-numbers~ was added in GNU Emacs 26.1.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (version< "26.1" emacs-version)
-#+END_SRC
+#+end_src
 
 ** /Highlight Indent Guides/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package highlight-indent-guides
   :ghook
   <<highlight-indent-guides/ghook>>
@@ -603,7 +603,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :custom
   (highlight-indent-guides-method 'character)
   (highlight-indent-guides-character ?│))
-#+END_SRC
+#+end_src
 
 ** Theme
 
@@ -620,7 +620,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 :END:
 
 ** Projectile
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package projectile
   ;; Load this package eagerly.
   :demand
@@ -636,18 +636,18 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   ;; Evaluate the following code after loading this package.
   :config
   <<projectile/config>>)
-#+END_SRC
+#+end_src
 
 *** Auto-Loading Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref projectile/general
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:keymaps 'projectile-mode-map
  "C-c p" 'projectile-command-map
  "C-x g" #'projectile-vc)
-#+END_SRC
+#+end_src
 
 *** Variable Customizations
 :PROPERTIES:
@@ -655,14 +655,14 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 :END:
 
 Enable ~projectile-mode~ globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (projectile-mode t)
-#+END_SRC
+#+end_src
 
 When switching projects, default to opening the ~vc-dir~ at the root of the project.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (projectile-switch-project-action #'projectile-vc)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -670,14 +670,14 @@ When switching projects, default to opening the ~vc-dir~ at the root of the proj
 :END:
 
 Use Ivy's integration.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'ivy
   (setq projectile-completion-system 'ivy))
-#+END_SRC
+#+end_src
 
 ** Counsel Projectile
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package counsel-projectile
   ;; Load this package after the following packages.
   :after (:all counsel projectile)
@@ -695,7 +695,7 @@ Use Ivy's integration.
   ;; Customize the following variables.
   :custom
   <<counsel-projectile/custom>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customization
 :PROPERTIES:
@@ -703,24 +703,24 @@ Use Ivy's integration.
 :END:
 
 Enable ~counsel-projectile-mode~ globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (counsel-projectile-mode t)
-#+END_SRC
+#+end_src
 
 Do not display the current project when switching projects.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (counsel-projectile-remove-current-project t)
-#+END_SRC
+#+end_src
 
 Do not display the current buffer when switching buffers..
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (counsel-projectile-remove-current-buffer t)
-#+END_SRC
+#+end_src
 
 ** Perspective
 
 /Perspective/ provides tagged workspaces.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package perspective
   ;; Load this package eagerly.
   :demand
@@ -728,7 +728,7 @@ Do not display the current buffer when switching buffers..
   ;; Customize variables.
   :custom
   (persp-mode t "Enable perspective mode globally"))
-#+END_SRC
+#+end_src
 
 ** Operations on Current Buffer
 
@@ -736,7 +736,7 @@ Do not display the current buffer when switching buffers..
 
 **** Get a Buffer to Use
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer~obj-to-buffer (&optional buffer)
   "Get the buffer to use.
 
@@ -762,39 +762,39 @@ Else throw an error."
     (error "Invalid BUFFER argument %s of type %s passed"
            buffer
            (type-of buffer)))))
-   #+END_SRC
+   #+end_src
 
 **** Buffer to Rename
 
 If called as part of an interactive function with a prefix argument, prompt the user to provide a buffer.
 Otherwise use the current buffer.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer~get-buffer (verb)
   (if current-prefix-arg
       (get-buffer (read-buffer (format "Buffer to %s with visiting file: "
                                        verb)
                                (get-buffer (buffer-name))))))
-#+END_SRC
+#+end_src
 
 **** New File Name
 
 The user shall be prompted for the new file path.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer~read-file-name (verb buffer-name)
   "Prompt the user for the destination of applying VERB to BUFFER-NAME's visiting file."
   (read-file-name (format "%s the file visited by buffer %s to: "
                           verb
                           buffer-name)))
-#+END_SRC
+#+end_src
 
 *** Rename
 :PROPERTIES:
 :DESCRIPTION: Rename a buffer and its visited file, if any.
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer/rename (new-file-name &optional buffer ok-if-already-exists)
   "Rename a buffer and the file it's visiting, if any, to NEW-FILE-NAME.
 
@@ -830,19 +830,19 @@ OK-IF-ALREADY-EXISTS is passed directly to `rename-file'."
     (message "Renamed buffer %s to %s and its file to %s."
              orig-buffer-name new-buffer-name
              new-file-name)))
-#+END_SRC
+#+end_src
 
 Now bind the above function.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-r") #'current-buffer/rename)
-#+END_SRC
+#+end_src
 
 *** Delete
 :PROPERTIES:
 :DESCRIPTION: Delete a buffer and its visited file, if any.
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer/delete (&optional buffer)
   "Delete the file a buffer is visiting, if any, then kill the buffer.
 
@@ -863,16 +863,16 @@ If the optional BUFFER is a symbol, prompt the user for the name of the buffer t
         (delete-file file 'trash)))
       (message "Deleted file %s" file))
     (kill-buffer buffer)))
-#+END_SRC
+#+end_src
 
 Now bind the above function.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-S-d") #'current-buffer/delete)
-#+END_SRC
+#+end_src
 
 *** Copy
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer/copy
     (new-file-name
      &optional buffer confirm-overwrite keep-time preserve-uid-gid perserve-permissions)
@@ -918,16 +918,16 @@ KEEP-TIME, PRESERVE-UID-GID, and PRESERVE-PERMISSIONS are passed directly to `co
       (setq new-buffer-name (buffer-name (find-file-noselect new-file-name))))
     (message "Wrote buffer %s to %s and opened the new file as %s."
              (buffer-name buffer) new-file-name new-buffer-name)))
-#+END_SRC
+#+end_src
 
 Now bind the above function.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-c") #'current-buffer/copy)
-#+END_SRC
+#+end_src
 
 *** Revert
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer/revert (&optional noconfirm)
   "Replace current buffer text with the text of the visited file on disk.
 
@@ -935,12 +935,12 @@ If NOCONFIRM is nil, prompt the user before reverting a modified buffer.
 NOCONFIRM is set to t when called interactively with a prefix argument."
   (interactive (list current-prefix-arg))
   (revert-buffer :ignore-auto (or noconfirm (not (buffer-modified-p)))))
-#+END_SRC
+#+end_src
 
 Now bind the above function.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-g") #'current-buffer/revert)
-#+END_SRC
+#+end_src
 
 *** Kill
 
@@ -949,7 +949,7 @@ Now bind the above function.
 :DESCRIPTION: Kill the current buffer.
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer/kill (&optional ignore-buffer-modified-p)
   "Kill the current buffer.
 
@@ -959,19 +959,19 @@ IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a prefix arg
   (when ignore-buffer-modified-p
     (set-buffer-modified-p nil))
   (kill-this-buffer))
-#+END_SRC
+#+end_src
 
 **** Bind Function
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-k") #'current-buffer/kill)
-#+END_SRC
+#+end_src
 
 *** Place Visited File Name on Kill Ring
 
 **** Define Function
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer/yank-path ()
   "Place the path of the current buffer's visited file on the kill ring."
   (interactive)
@@ -979,32 +979,32 @@ IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a prefix arg
               (expanded-filename (expand-file-name filepath)))
     (kill-new expanded-filename)
     (message "Copied buffer path '%s' to the clipboard." expanded-filename)))
-#+END_SRC
+#+end_src
 
 **** Bind Function
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-y") #'current-buffer/yank-path)
-#+END_SRC
+#+end_src
 
 *** Visit Current Directory in Dired
 
 **** Define Function
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun current-buffer/dired ()
   "Open the current directory in Dired."
   (interactive)
   (when-let* ((file-path (or (buffer-file-name) default-directory))
               (directory-path (file-name-directory file-path)))
     (dired directory-path)))
-#+END_SRC
+#+end_src
 
 **** Bind Function
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-d") #'current-buffer/dired)
-#+END_SRC
+#+end_src
 
 * Documentation
 :PROPERTIES:
@@ -1048,7 +1048,7 @@ Strong support for literate programming is provided by Org mode's features.
 
 Note that although \src_emacs-lisp{use-package} is used below, the /Org/ package should already be loaded due to the \src_emacs-lisp{require} call in [[#bootstrap/org]].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package org
   :straight (:type built-in)
 
@@ -1062,7 +1062,7 @@ Note that although \src_emacs-lisp{use-package} is used below, the /Org/ package
 
   :config
   <<org/config>>)
-#+END_SRC
+#+end_src
 
 **** Non-Autoloading Hooks
 :PROPERTIES:
@@ -1075,9 +1075,9 @@ Enable the following minor modes in all Org buffers:
 - \src_emacs-lisp{visual-line-mode} to naturally wrap long lines.
 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('org-mode-hook (list #'flyspell-mode #'org-indent-mode #'visual-line-mode))
-#+END_SRC
+#+end_src
 
 **** Variable Customizations
 :PROPERTIES:
@@ -1085,52 +1085,52 @@ Enable the following minor modes in all Org buffers:
 :END:
 
 Determine how leading whitespace characters in source blocks are treated.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (org-src-preserve-indentation t "Preserve source blocks' indentation.")
 (org-edit-src-content-indentation 0 "Do not add any additional indentation to source blocks in Org buffers.")
-#+END_SRC
+#+end_src
 
 Determine where source blocks are opened.
 Note that this is effectively deprecated by Polymode;  I set it here only as a fallback.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (org-src-window-setup 'current-window "Edit source blocks in the current window.")
-#+END_SRC
+#+end_src
 
 Determine what is required to follow links.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (org-return-follows-link t "Follow links with just RET.")
-#+END_SRC
+#+end_src
 
 Set whether confirmation is required before evaluating source blocks.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (org-confirm-babel-evaluate nil "Do not require confirmation before evaluating source blocks.")
-#+END_SRC
+#+end_src
 
 Set the workflow states.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
                                "DELEGATED" "DONE(d!/!)" "|"
                                "CANCELED")))
-#+END_SRC
+#+end_src
 
 *** Poly Org
 
 /Poly Org/ provides Polymode definitions for Org buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package poly-org)
-#+END_SRC
+#+end_src
 
 *** Ox LaTeX
 
 /Ox/ (Org eXport) allows exporting Org files such as this one.
 /Ox LaTeX/ builds uses that framework to export to (La)TeX.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ox-latex
   :straight (:type built-in)
   :config
   <<ox-latex/config>>)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -1138,11 +1138,11 @@ Set the workflow states.
 :END:
 
 If =latexmk= and its Perl dependency exist in =PATH=, use =latexmk= with a LuaLaTeX backend to compile TeX files.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (and (executable-find "latexmk")
            (executable-find "perl"))
   (general-setq-default org-latex-pdf-process '("latexmk -lualatex -f %f")))
-#+END_SRC
+#+end_src
 
 *** Smartparens
 :PROPERTIES:
@@ -1151,21 +1151,21 @@ If =latexmk= and its Perl dependency exist in =PATH=, use =latexmk= with a LuaLa
 
 The equals sign (\=), tilde (\~), and forward slash (/) are used by Org syntax to wrap inline monospace, code, text, and italics respectively.
 I want them to be automatically paired in Org buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (sp-local-pair 'org-mode "=" "=")
 (sp-local-pair 'org-mode "~" "~")
 (sp-local-pair 'org-mode "/" "/")
-#+END_SRC
+#+end_src
 
 Meanwhile, when writing prose I tend to use the single prime (') primarily as an apostrophe in English prose so I want it to /not/ be paired.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (sp-local-pair 'org-mode "'" nil :actions nil)
-#+END_SRC
+#+end_src
 
 *** Evil Org
 
 /Evil Org/ adds a minor mode that provides [[Evil]] keybindings for common Org mode actions.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil-org
   ;; Load this package after the following packages.
   :after (:all evil org)
@@ -1189,7 +1189,7 @@ Meanwhile, when writing prose I tend to use the single prime (') primarily as an
   ;; Evaluate the following code after loading this package.
   :config
   <<evil-org/config>>)
-#+END_SRC
+#+end_src
 
 **** Auto-Loading Hooks
 :PROPERTIES:
@@ -1197,9 +1197,9 @@ Meanwhile, when writing prose I tend to use the single prime (') primarily as an
 :END:
 
 Enable Evil Org mode in all Org mode buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('( org-agenda-mode-hook org-mode-hook) #'evil-org-mode)
-#+END_SRC
+#+end_src
 
 **** Non-Auto-Loading Hooks
 :PROPERTIES:
@@ -1217,18 +1217,18 @@ Set keys for \src_emacs-lisp{org-mode} and \src_emacs-lisp{org-agenda-mode}.
 :END:
 
 Specify the key themes to enable.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-org-key-theme
  '(calendar
    navigation
    insert
    textobjects))
-#+END_SRC
+#+end_src
 
 Retain selection after typing =<= or =>= in visual state.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-org-retain-visual-state-on-shift t)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -1236,13 +1236,13 @@ Retain selection after typing =<= or =>= in visual state.
 :END:
 
 Apply the keybindings specified in ~evil-org-key-theme~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-org-agenda-set-keys)
-#+END_SRC
+#+end_src
 
 ** Markdown
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package markdown-mode
   ;; Inform the bytecode compiler of the following variables.
   :defines markdown-mode-hook
@@ -1262,7 +1262,7 @@ Apply the keybindings specified in ~evil-org-key-theme~.
   :config
   (defun markdown-mode-spaces-only ()
     (setq indent-tabs-mode nil)))
-#+END_SRC
+#+end_src
 
 * Keybindings
 :PROPERTIES:
@@ -1271,23 +1271,23 @@ Apply the keybindings specified in ~evil-org-key-theme~.
 
 ** macOS-specific
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'super))
-#+END_SRC
+#+end_src
 
 ** "Yes Or No" Selection
 
 Avoid having to type out "yes" and "no" by replacing them with "y" and "n", respectively.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defalias 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
+#+end_src
 
 ** Evil
 
 /Evil/ aims to implement Vi's user features, most notably Vi's modal keyboard interface, in Emacs Lisp for use in Emacs.
 I prefer Vi's keybindings to Emacs's, so I enable Evil everywhere I can.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil
   ;; Load this package eagerly.
   :demand
@@ -1311,7 +1311,7 @@ I prefer Vi's keybindings to Emacs's, so I enable Evil everywhere I can.
   ;; Evaluate the following code after loading this package.
   :config
   <<evil/config>>)
-#+END_SRC
+#+end_src
 
 **** Variable Customization
 :PROPERTIES:
@@ -1319,9 +1319,9 @@ I prefer Vi's keybindings to Emacs's, so I enable Evil everywhere I can.
 :END:
 
 Determine whether to enable Evil in minibuffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-want-minibuffer t "Enable Evil in minibuffers.")
-#+END_SRC
+#+end_src
 
 **** Set Keybindings (~:general~)
 :PROPERTIES:
@@ -1330,29 +1330,29 @@ Determine whether to enable Evil in minibuffers.
 
 Do not allow =C-z= to enter Emacs mode.
 Instead, make it a noop as far as Evil is concerned.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:states (list 'normal 'insert 'visual 'replace 'operator 'motion)
  "C-z" nil)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:states '(motion normal visual)
  "H" #'evil-beginning-of-line-maybe
  "L" #'evil-end-of-line-maybe
  (kbd "SPC") #'evil-toggle-fold)
-#+END_SRC
+#+end_src
 
 Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:states '(motion normal replace visual)
  ":" #'eval-expression)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:states 'normal
  "Y" #'evil-evil-yank-to-end-of-line)
-#+END_SRC
+#+end_src
 
 **** Pre-Load Evaluation
 :PROPERTIES:
@@ -1360,10 +1360,10 @@ Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
 :END:
 
 Allow use of Evil Collection.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq-default evil-want-integration t)
 (setq-default evil-want-keybinding nil)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation (~:config~)
 :PROPERTIES:
@@ -1371,31 +1371,31 @@ Allow use of Evil Collection.
 :END:
 
 Enable Evil by default in all modes.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-mode 1)
-#+END_SRC
+#+end_src
 
 Define a function to enable \src_emacs-lisp{evil-move-beyond-eol}.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun evil-move-beyond-eol ()
   "Allow the cursor to move beyond the end of the line."
   (set (make-local-variable 'evil-move-beyond-eol) t))
-#+END_SRC
+#+end_src
 
 ***** Define =evil-yank-to-end-of-line=
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun evil-yank-to-end-of-line ()
   "Yank the characters from point to the end of the current line."
   (interactive)
   (evil-yank (point) (point-at-eol)))
-#+END_SRC
+#+end_src
 
 ***** Semantic Movement Within Lines
 ****** Define ~back-to-comment~
 The following code is based on [[http://stackoverflow.com/a/14245964%0A][a StackOverflow answer]] by user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
 All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun evil-back-to-comment ()
   "Move point to the beginning of the comment in the current line.
 
@@ -1426,10 +1426,10 @@ will return t."
         (goto-char old-point)
         ;; Return nil.
         nil))))
-#+END_SRC
+#+end_src
 
 ****** Define ~evil-back-to-text~
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun evil-back-to-text ()
   "Move point to the last non-whitespace character on this line."
   (interactive)
@@ -1439,7 +1439,7 @@ will return t."
   (re-search-backward "^\\|[^[:space:]]")
   ;; Move forward one character.
   (forward-char))
-#+END_SRC
+#+end_src
 
 ****** Define ~beginning-of-line-maybe~
 ~beginning-of-line-maybe~ moves ~point~ toward the beginning of the current line incrementally by semantic region.
@@ -1451,7 +1451,7 @@ The following semantic elements are considered:
 The following code is based on [[https://stackoverflow.com/a/145359/8468492][a StackOverflow answer]] by user [[https://stackoverflow.com/users/8355/cjm][cjm]].
 All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun evil-beginning-of-line-maybe ()
   "Move point to first non-whitespace character or beginning of the line.
 
@@ -1470,7 +1470,7 @@ line."
       (when (<= old-point (point))
         ;; Go to the beginning of the line.
         (beginning-of-line)))))
-#+END_SRC
+#+end_src
 
 ****** Define ~evil-end-of-line-maybe~
 ~end-of-line-maybe~ incrementally moves ~point~ to the right within a line by semantic region.
@@ -1483,7 +1483,7 @@ The following semantic elements are considered in ~end-of-line-maybe~'s movement
 The following is licensed CC BY-SA 3.0-licensed by StackOverflow user [[https://stackoverflow.com/users/387076/gilles][Gilles]].
 It is based on [[http://stackoverflow.com/a/14245964][Gilles's StackOverflow answer]].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun evil-end-of-line-maybe ()
   "Incrementally move point to the ends of syntactic blocks within the line.
 
@@ -1499,13 +1499,13 @@ The syntactic blocks are as follows, ordered from right to left:
     (when (>= old-point (point))
       ;; ...then go to the beginning of trailing whitespace.
       (evil-back-to-text))))
-#+END_SRC
+#+end_src
 
 *** Evil Collection
 
 /Evil Collection/ offers a collection of Evil keybindings for modes that Evil does not support by default.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil-collection
   ;; Load this package eagerly.
   :demand
@@ -1523,7 +1523,7 @@ The syntactic blocks are as follows, ordered from right to left:
   ;; Evaluate the following code after loading this package.
   :config
   <<evil-collection/config>>)
-#+END_SRC
+#+end_src
 
 **** Apply Customizations
 :PROPERTIES:
@@ -1531,29 +1531,29 @@ The syntactic blocks are as follows, ordered from right to left:
 :END:
 
 Set up autocompletion to be similar to Vim's YouCompleteMe.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-collection-company-use-tng t)
-#+END_SRC
+#+end_src
 
 Enable =TAB=-based bindings in Outline mode.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-collection-outline-bind-tab t)
-#+END_SRC
+#+end_src
 
 Synchronize insert and normal states with char and line modes, respectively, in Term mode.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-collection-term-sync-state-and-mode-p t)
-#+END_SRC
+#+end_src
 
 Set up Vim-style keybindings in the minibuffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-collection-setup-minibuffer t)
-#+END_SRC
+#+end_src
 
 Set up debugger keys.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-collection-setup-debugger-keys t)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -1561,15 +1561,15 @@ Set up debugger keys.
 :END:
 
 Enable Evil Collection globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-collection-init)
-#+END_SRC
+#+end_src
 
 *** Evil Matchit
 
 [[https://github.com/redguardtoo/evil-matchit][Evil Matchit]] is a port of Tim Pope's [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] to Evil.
 It enables jumping between matched tags, e.g. =<div>= and =</div>=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil-matchit
   ;; Load this package eagerly.
   :demand
@@ -1582,13 +1582,13 @@ It enables jumping between matched tags, e.g. =<div>= and =</div>=.
 
   :config
   (global-evil-matchit-mode 1))
-#+END_SRC
+#+end_src
 
 *** Evil Surround
 
 [[https://github.com/emacs-evil/evil-surround][Evil Surround]] is a port of [[https://github.com/tpope/vim-surround][vim-surround]] to Evil.
 It adds a "surround" verb to Evil's modal editing.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil-surround
   ;; Load eagerly.
   :demand
@@ -1596,7 +1596,7 @@ It adds a "surround" verb to Evil's modal editing.
   ;; Evaluate the following code after loading this package.
   :config
   (global-evil-surround-mode 1))
-#+END_SRC
+#+end_src
 
 *** Evil Indent Plus
 =[[https://github.com/TheBB/evil-indent-plus]]= adds indentation levels as a text object for Evil.
@@ -1606,7 +1606,7 @@ It adds a "surround" verb to Evil's modal editing.
 - =J= is same or higher indentation, including the first line above and below with less indentation.
 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil-indent-plus
   ;; Load this package eagerly.
   :demand
@@ -1614,12 +1614,12 @@ It adds a "surround" verb to Evil's modal editing.
   ;; Evaluate the following code after loading this package.
   :config
   (evil-indent-plus-default-bindings))
-#+END_SRC
+#+end_src
 ** Smartparens
 
 [[https://github.com/Fuco1/smartparens][Matus Goljer (Fuco1)'s package]] provides a minor mode "that deals with parens pairs and tries to be smart about it".
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package smartparens
   ;; Load this package eagerly.
   :demand
@@ -1629,7 +1629,7 @@ It adds a "surround" verb to Evil's modal editing.
 
   :config
   <<smartparens/config>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customization
 :PROPERTIES:
@@ -1638,9 +1638,9 @@ It adds a "surround" verb to Evil's modal editing.
 
 Enable ~smartparens-mode~ globally.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (smartparens-global-mode t)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -1649,15 +1649,15 @@ Enable ~smartparens-mode~ globally.
 
 Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
-#+END_SRC
+#+end_src
 
 ** Smartparens Config
 
 Smartparens Config configures Smartparens for various programming languages.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package smartparens-config
   :straight smartparens
 
@@ -1666,7 +1666,7 @@ Smartparens Config configures Smartparens for various programming languages.
 
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
+#+end_src
 
 ** /Smart Dash/
 
@@ -1728,21 +1728,21 @@ The minibuffer is a persistent buffer in Emacs that is used for interactive inpu
 ** Recursive Minibuffers
 
 Allowing one to have more than one minibuffer active allows for more sophisticated workflows.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq enable-recursive-minibuffers t)
-#+END_SRC
+#+end_src
 
 Once having multiple active minibuffers is possible, it is helpful to keep track of the depth of recursion.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (minibuffer-depth-indicate-mode +1)
-#+END_SRC
+#+end_src
 
 ** Flx
 
 /Flx/ provides fuzzy searching algorithms.
 Ivy's fuzzy finding will use Flx's scoring mechanism if /Flx/ is loaded.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package flx
   ;; Load this package eagerly.
   :demand
@@ -1750,7 +1750,7 @@ Ivy's fuzzy finding will use Flx's scoring mechanism if /Flx/ is loaded.
   ;; Evaluate the following code before loading this package.
   :init
   <<flx/config>>)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -1761,10 +1761,10 @@ Ivy's fuzzy finding will use Flx's scoring mechanism if /Flx/ is loaded.
 Run Emacs's garbage collector only when at least 20 MB have been allocated.
 Doing so greatly improves ~flx~'s performance when working with large sets.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (> 20000000 gc-cons-threshold)
   (setq gc-cons-threshold 20000000))
-#+END_SRC
+#+end_src
 
 ** Ivy
 
@@ -1774,7 +1774,7 @@ Ivy is a generic completion mechanism for Emacs.
 While it operates similarly to other completion schemes such as =icomplete-mode=, Ivy aims to be more efficient, smaller, simpler, and smoother to use yet highly customizable.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ivy
   ;; Load this package after the following packages.
   :after (flx)
@@ -1801,7 +1801,7 @@ While it operates similarly to other completion schemes such as =icomplete-mode=
   ;; Evaluate the following code after loading this package.
   :config
   <<ivy/config>>)
-#+END_SRC
+#+end_src
 
 *** Keybindings
 :PROPERTIES:
@@ -1809,29 +1809,29 @@ While it operates similarly to other completion schemes such as =icomplete-mode=
 :END:
 
 Shadow ~switch-to-buffer~ with ~ivy-switch-buffer~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ("C-x C-b" #'ivy-switch-buffer)
-#+END_SRC
+#+end_src
 
 When in an Ivy buffer:
 - =M-<return>= sends the current input verbatim.
 - =C-u= restarts the minibuffer with a prefix argument.
 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:keymaps 'ivy-minibuffer-map
  "M-<return>" #'ivy-immediate-done
  "C-u" #'init-minibuffer/restart-with-prefix)
-#+END_SRC
+#+end_src
 
 When in the minibuffer:
 - =C-u= restarts the minibuffer with a prefix argument.
 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:keymaps 'minibuffer-inactive-mode-map
  "C-u" #'init-minibuffer/restart-with-prefix)
-#+END_SRC
+#+end_src
 
 *** Variable Customization
 :PROPERTIES:
@@ -1839,29 +1839,29 @@ When in the minibuffer:
 :END:
 
 Determine how matched parts of the options are highlighted.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-display-style
  'fancy
  "Highlight the matching parts of the regexp in the minibuffer.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-use-virtual-buffers
  t
  "Show recently killed buffers when calling `ivy-switch-buffer'.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-re-builders-alist
  '((t . ivy--regex-plus))
  "Use `ivy--regex-plus' as the default matching function.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-extra-directories
  nil
  "Do not show './' or '../' in the filename completion list.")
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -1870,12 +1870,12 @@ Determine how matched parts of the options are highlighted.
 :END:
 
 Enable ~ivy-mode~ globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-mode +1)
-#+END_SRC
+#+end_src
 
 Do not include TRAMP buffers in Ivy's buffer lists.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq ivy-ignore-buffers
       (cons (rx line-start "*tramp/"
                 (one-or-more (not whitespace))
@@ -1883,7 +1883,7 @@ Do not include TRAMP buffers in Ivy's buffer lists.
                 (one-or-more anything)
                 "*" line-end)
             ivy-ignore-buffers))
-#+END_SRC
+#+end_src
 
 **** Restart the Minibuffer with a Prefix Argument
 :PROPERTIES:
@@ -1895,12 +1895,12 @@ Out of the box, Emacs does not provide a graceful way to add a prefix argument a
 The following code posted by u/clemera on Reddit provides a workaround by restarting the minibuffer with same text.
 
 First, a variable is defined to hold the minibuffer contents that were typed before entering a prefix.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvar init-minibuffer/original-command nil
   "Command the minibuffer was started with.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun init-minibuffer/restart-with-prefix ()
   "Restart the minibuffer with a prefix argument."
   (interactive)
@@ -1918,10 +1918,10 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
                       (insert input)
                       (minibuffer-message "C-u"))
                   (call-interactively init-minibuffer/current-command)))))))))
-#+END_SRC
+#+end_src
 
 ** Counsel
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package counsel
 
   ;; Load this package after the following packages.
@@ -1944,10 +1944,10 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
    "C-r" #'counsel-minibuffer-history)
   (:keymaps '(comint-mode-map shell-mode-map)
    "C-r" #'counsel-shell-history))
-#+END_SRC
+#+end_src
 
 ** Swiper
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package swiper
   ;; Load this package eagerly.
   :demand
@@ -1960,10 +1960,10 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
   ("C-s" #'swiper-isearch)
   (:keymaps '(normal movement visual)
    "/" #'swiper-isearch))
-#+END_SRC
+#+end_src
 
 ** Ivy Rich
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ivy-rich
   ;; Load this package after the following packages.
   :after ivy
@@ -1978,30 +1978,30 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
   ;; Evaluate the following code after loading this package.
   :config
   <<ivy-rich/config>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customizations
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref ivy-rich/custom
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-virtual-abbreviate
  'abbreviate
  "Abbreviate virtual buffer names.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-rich-path-style
  'relative
  "Show paths relative their the project home.")
-#+END_SRC
+#+end_src
 
 Reduce the amount of information displayed for remote buffers (i.e. buffers whose contents were accessed via TRAMP).
 This improves performance of operations that involve Ivy Rich.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-rich-parse-remote-buffer nil)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -2010,18 +2010,18 @@ This improves performance of operations that involve Ivy Rich.
 :END:
 
 Enable ~ivy-rich-mode~ globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ivy-rich-mode 1)
-#+END_SRC
+#+end_src
 
 Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-switch-buffer~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq ivy-rich--display-transformers-list
       (plist-put
        ivy-rich--display-transformers-list
        'counsel-projectile-switch-to-buffer
        (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
-#+END_SRC
+#+end_src
 
 ** Minibuffer Line
 :PROPERTIES:
@@ -2035,7 +2035,7 @@ Of course, this is only displayed when the minibuffer window is not already used
 The contents and aspect is controlled by the src_emacs-lisp{minibuffer-line-format} variable and the src_emacs-lisp{minibuffer-line} face.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package minibuffer-line
   ;; Load this package eagerly.
   :demand
@@ -2059,7 +2059,7 @@ The contents and aspect is controlled by the src_emacs-lisp{minibuffer-line-form
   ;; Evaluate the following code after loading this package.
   :config
   (minibuffer-line-mode))
-#+END_SRC
+#+end_src
 
 *** Pre-Load Evaluation
 :PROPERTIES:
@@ -2068,14 +2068,14 @@ The contents and aspect is controlled by the src_emacs-lisp{minibuffer-line-form
 :END:
 
 Define a function to print the date and time in ISO 8601 format.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun format-time-string-minibuffer-line ()
   "Print the current date and time in ISO 8601-like format."
   (format-time-string "%Y-%m-%d %T"))
-#+END_SRC
+#+end_src
 
 Define a function to left- and right-align elements using mode-line formatting.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun minibuffer-line-align (left right)
   "Return a string containing LEFT and RIGHT aligned across the frame."
   (let* ((width-total (frame-text-cols))
@@ -2087,14 +2087,14 @@ Define a function to left- and right-align elements using mode-line formatting.
                    (format (format "%%%ds" width-space) "")
                    'face 'default))
             right)))
-#+END_SRC
+#+end_src
 
 Define a the format to use for displaying battery information in the minibuffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvar minibuffer-line-battery-format
   "battery %L %p%%"
   "Control string formatting the battery status to display in the minibuffer.")
-#+END_SRC
+#+end_src
 
 The \src_emacs-lisp{battery-status-function} used in \src_emacs-lisp{minibuffer-line-format} is provided by /Battery/.
 That package must be loaded.
@@ -2111,13 +2111,13 @@ That package must be loaded.
 :END:
 
 Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is recalculated.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (minibuffer-line-refresh-interval
  1
  "Refresh the minibuffer-line every second.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (minibuffer-line-format
  '((:eval
     (minibuffer-line-align
@@ -2131,7 +2131,7 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
        (:eval (propertize system-name 'face 'default))
        (:eval (propertize " | " 'face 'default))
        (:eval (propertize (format-time-string-minibuffer-line) 'face 'default)))))))
-#+END_SRC
+#+end_src
 
 ** McFly
 :PROPERTIES:
@@ -2141,7 +2141,7 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
 :LICENSE:  GPLv3+
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defvar my-ivy-fly-commands '(query-replace-regexp
                               flush-lines
                               keep-lines
@@ -2195,7 +2195,7 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
         (add-hook 'pre-command-hook 'my-ivy-fly-back-to-present nil t)))))
 
 (add-hook 'minibuffer-setup-hook #'my-ivy-fly-time-travel)
-#+END_SRC
+#+end_src
 
 * TRAMP
 :PROPERTIES:
@@ -2206,7 +2206,7 @@ TRAMP allows Emacs to transparently access remote files as if they were local fi
 
 ** TRAMP
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package tramp
   :straight (:type built-in)
 
@@ -2216,7 +2216,7 @@ TRAMP allows Emacs to transparently access remote files as if they were local fi
   ;; Apply the following variable customizations.
   :custom
   <<tramp/custom>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customizations
 :PROPERTIES:
@@ -2224,23 +2224,23 @@ TRAMP allows Emacs to transparently access remote files as if they were local fi
 :END:
 
 Determine where Emacs creates backups for files edited via TRAMP.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (tramp-backup-directory-alist backup-directory-alist "Create TRAMP backups locally.")
-#+END_SRC
+#+end_src
 
 ** Counsel Tramp
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package counsel-tramp
   :general
   ("C-x t" #'counsel-tramp))
-#+END_SRC
+#+end_src
 
 ** Docker Tramp
 
 /Docker Tramp/ provides a TRAMP method for accessing Docker containers.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package docker-tramp
   ;; Only load Docker Tramp if the following code evaluates to non-nil.
   :if
@@ -2251,7 +2251,7 @@ Determine where Emacs creates backups for files edited via TRAMP.
 
   ;; Load Docker Tramp eagerly.
   :demand)
-#+END_SRC
+#+end_src
 
 * Version Control
 :PROPERTIES:
@@ -2264,13 +2264,13 @@ Emacs has built-in functionality to create backup files.
 By default, such files are created in the same directory as the actual file and simply have a tilde appended to the filename.
 This is functional, but results in messy directories.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package files
   :straight (:type built-in)
 
   :custom
   <<files/custom>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customization
 :PROPERTIES:
@@ -2279,14 +2279,14 @@ This is functional, but results in messy directories.
 
 \src_emacs-lisp{backup-directory-alist} determines where backup files are created.
 By using mapping a wildcard filename to a single directory, all backup files will be created in that directory.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (backup-directory-alist
  `((".*" . ,temporary-file-directory)))
-#+END_SRC
+#+end_src
 
 ** Autorevert
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package autorevert
   :straight (:type built-in)
 
@@ -2297,7 +2297,7 @@ By using mapping a wildcard filename to a single directory, all backup files wil
   ;; Customize the following variables.
   :custom
   (auto-revert-verbose nil "Do not display messages when buffers are reverted."))
-#+END_SRC
+#+end_src
 
 ** /VC/
 
@@ -2305,7 +2305,7 @@ By using mapping a wildcard filename to a single directory, all backup files wil
 The only action performed below is changing the binding of \src_emacs-lisp{vc-revert}.
 The new binding is harder to accidentally press and opens up a convenient binding for /Brose at Remote/'s command.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package vc
   :straight (:type built-in)
 
@@ -2317,11 +2317,11 @@ The new binding is harder to accidentally press and opens up a convenient bindin
   (:keymaps 'vc-prefix-map
    "U" #'vc-revert
    "u" nil))
-#+END_SRC
+#+end_src
 
 ** Diff HL
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package diff-hl
   ;; Only load this package if the following condition is met.
   :if
@@ -2345,7 +2345,7 @@ The new binding is harder to accidentally press and opens up a convenient bindin
   ;; Evaluate the following code after loading this package.
   :config
   <<diff-hl/config>>)
-#+END_SRC
+#+end_src
 
 *** Conditional Loading
 :PROPERTIES:
@@ -2353,9 +2353,9 @@ The new binding is harder to accidentally press and opens up a convenient bindin
 :END:
 
 Diff HL depends on features added in Emacs 24.3.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (version<= "24.3" emacs-version)
-#+END_SRC
+#+end_src
 
 *** Auto-Loading Hooks
 :PROPERTIES:
@@ -2363,14 +2363,14 @@ Diff HL depends on features added in Emacs 24.3.
 :END:
 
 Enable Diff HL in Dired buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('dired-mode-hook #'diff-hl-dired-mode)
-#+END_SRC
+#+end_src
 
 Update Diff HL's status when refreshing with modern versions of Magit.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
-#+END_SRC
+#+end_src
 
 *** Pre-Load Evaluation
 :PROPERTIES:
@@ -2378,9 +2378,9 @@ Update Diff HL's status when refreshing with modern versions of Magit.
 :END:
 
 Enable Diff HL's base minor mode globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-diff-hl-mode)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -2388,20 +2388,20 @@ Enable Diff HL's base minor mode globally.
 :END:
 
 Perform Diff HL highlighting on-the-fly.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (diff-hl-flydiff-mode)
-#+END_SRC
+#+end_src
 
 ** Git
 *** Git Attributes Mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package gitattributes-mode)
-#+END_SRC
+#+end_src
 
 *** /Magit/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package magit
   ;; Load this package if the following code evaluates to non-nil.
   :if
@@ -2420,7 +2420,7 @@ Perform Diff HL highlighting on-the-fly.
   ;; Evaluate the following code after loading `magit'.
   :config
   <<magit/config>>)
-#+END_SRC
+#+end_src
 
 **** Conditional Loading
 :PROPERTIES:
@@ -2430,9 +2430,9 @@ Perform Diff HL highlighting on-the-fly.
 
 /Magit/ provides an interface for Git.
 As such, the package is unusable is worthless if =git= is not in the user's ~PATH~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (executable-find "git")
-#+END_SRC
+#+end_src
 
 **** Customize Variables
 :PROPERTIES:
@@ -2440,20 +2440,20 @@ As such, the package is unusable is worthless if =git= is not in the user's ~PAT
 :END:
 
 Set the list of messages Magit should not display.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (magit-no-message '("Turning on magit-auto-revert-mode...") "Suppress messages")
-#+END_SRC
+#+end_src
 
 Hide the stash and ignored file sections by default in status buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (magit-section-initial-visibility-alist
  '((ignored . hide)
    (stashes . hide)
    (untracked . hide)))
-#+END_SRC
+#+end_src
 
 Set the sections to be displayed in status buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (magit-status-sections-hook
  '(magit-insert-status-headers
    magit-insert-merge-log
@@ -2472,7 +2472,7 @@ Set the sections to be displayed in status buffers.
    magit-insert-unpushed-to-upstream-or-recent
    magit-insert-unpulled-from-pushremote
    magit-insert-unpulled-from-upstream))
-#+END_SRC
+#+end_src
 
 **** Pre-Load Evaluation
 :PROPERTIES:
@@ -2481,16 +2481,16 @@ Set the sections to be displayed in status buffers.
 :END:
 
 Store the usernames used by the current user.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst magit-push-usernames '("lafrenierejm")
   "The Git forge usernames whose repos this Emacs user has push access to.")
-#+END_SRC
+#+end_src
 
 Store the domains where this user has global Git push access.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst magit-push-domains '()
   "The domains where this Emacs user has global Git push access.")
-#+END_SRC
+#+end_src
 
 **** Post-Load Execution
 :PROPERTIES:
@@ -2501,30 +2501,30 @@ Store the domains where this user has global Git push access.
 ***** Return After Commit Message
 
 Return to the main Magit window after closing a commit message, regardless of whether that message is committed or aborted.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (advice-add 'git-commit-commit :after #'delete-window)
 (advice-add 'git-commit-abort :after #'delete-window)
-#+END_SRC
+#+end_src
 
 ***** Automatically Register Repositories with Projectile
 
 Define a function to perform the registration.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun init-version-control/magit-add-known-project (&rest _)
   "Register the current repository's root with Projectile."
   (interactive)
   (when (and (fboundp #'projectile-add-known-project)
              magit--default-directory)
     (projectile-add-known-project magit--default-directory)))
-#+END_SRC
+#+end_src
 
 Add the above function to be run after ~magit-status~.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (advice-add
  'magit-status-internal
  :after
  #'init-version-control/magit-add-known-project)
-#+END_SRC
+#+end_src
 
 ***** Comparable Version Number
 
@@ -2532,17 +2532,17 @@ The function ~magit-version~ provided by Magit does not return a version string 
 However, Magit's semver is /par/ of the string returned by ~magit-version~;
 it is everything before the first hyphen.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun init-magit/version ()
   "Return Magit's version for use in comparisons."
   (car (split-string (magit-version) "-")))
-#+END_SRC
+#+end_src
 
 ***** Current Branch Name
 
 Magit has built-in functions \src_emacs-lisp{magit-copy-section-value} and \src_emacs-lisp{magit-copy-buffer-revision} for placing values on the kill ring.
 I often want to refer to the name of the current branch, so I define a counterpart to the above commands that accomplishes this.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun magit-lafrenierejm-copy-branch-name ()
   "Save the name of the current branch for later use.
 
@@ -2552,12 +2552,12 @@ Save the section value to the `kill-ring'."
   (let ((branch-name (magit-get-current-branch)))
     (message "%s" branch-name)
     (kill-new (magit-get-current-branch))))
-#+END_SRC
+#+end_src
 
 Alias the above command to remove my username "namespace".
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defalias 'magit-copy-branch-name #'magit-lafrenierejm-copy-branch-name)
-#+END_SRC
+#+end_src
 
 *** /Magit Diff/
 
@@ -2573,19 +2573,19 @@ From the project's README:
 Work with Git forges, such as Github and Gitlab, from the comfort of Magit and the rest of Emacs.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package forge
   ;; Load this package after the following packages.
   :after magit
 
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
+#+end_src
 
 *** Evil Magit
 ~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures [[Evil]] and [[Magit]] to play well together.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil-magit
   ;; Load this package eagerly.
   :demand
@@ -2608,16 +2608,16 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 
   :config
   <<evil-magit/config>>)
-#+END_SRC
+#+end_src
 
 **** Auto-Loading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil-magit/ghook
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('magit-mode-hook #'evil-local-mode)
-#+END_SRC
+#+end_src
 
 **** Customize Variables
 :PROPERTIES:
@@ -2625,14 +2625,14 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 :END:
 
 Determine which Evil state Evil Magit starts in.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-magit-state 'motion "Start `evil-magit' in the motion state.")
-#+END_SRC
+#+end_src
 
 Determine whether Evil Magit uses Evil's movement keys.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -2640,14 +2640,14 @@ Determine whether Evil Magit uses Evil's movement keys.
 :END:
 
 Add new sequences for copying Git information.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-define-key* evil-magit-state magit-mode-map "yb" #'magit-copy-branch-name)
 (evil-define-key* evil-magit-state magit-mode-map "yc" #'magit-copy-buffer-revision)
-#+END_SRC
+#+end_src
 
 *** SSH Agency
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ssh-agency
   :after magit
 
@@ -2657,13 +2657,13 @@ Add new sequences for copying Git information.
   (ssh-agency-add-executable (executable-find "ssh-add"))
   (ssh-agency-agent-executable (executable-find "ssh-agent"))
   (ssh-agency-agent-exe-names '("ssh-agent")))
-#+END_SRC
+#+end_src
 
 *** Determine Year Added
 
 Define a function to determine when a file was first created.
 This is useful when adding determining information.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun git-lafrenierejm-year-added (filename)
   (interactive "f")
   "Determine the year when FILENAME was added to a Git repository.
@@ -2683,19 +2683,19 @@ If the file has not been added to the repository, use the current year."
            ((not (string-empty-p git-output))))
       git-output
     (format-time-string "%Y")))
-#+END_SRC
+#+end_src
 
 Alias the above function to remove my username.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defalias 'git-year-added #'git-lafrenierejm-year-added)
-#+END_SRC
+#+end_src
 
 *** /Browse at Remote/
 
 The command provided by /Browse at Remote /to copy the URL is added to /VC/'s leaf keymap.
 This has the effect of making that command easily accessible alongside other /VC/ commands.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package browse-at-remote
   :general
   (:keymaps 'vc-prefix-map
@@ -2705,7 +2705,7 @@ This has the effect of making that command easily accessible alongside other /VC
   (browse-at-remote-add-line-number-if-no-region-selected
    nil
    "Only include line number when there's an active region."))
-#+END_SRC
+#+end_src
 
 ** Mercurial (Hg)
 
@@ -2723,7 +2723,7 @@ This has the effect of making that command easily accessible alongside other /VC
 
 ** Company
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package company
   ;; Load this package eagerly.
   :demand
@@ -2731,7 +2731,7 @@ This has the effect of making that command easily accessible alongside other /VC
   ;; Evaluate the following code after loading.
   :config
   <<company/config>>)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -2740,9 +2740,9 @@ This has the effect of making that command easily accessible alongside other /VC
 :END:
 
 Enable ~company-mode~ globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-company-mode)
-#+END_SRC
+#+end_src
 
 *** /Company Posframe/
 
@@ -2760,7 +2760,7 @@ Use child frames for /Company/'s candidate menus.
 
 ** YASnippet
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package yasnippet
   ;; Load this package eagerly.
   :demand
@@ -2768,7 +2768,7 @@ Use child frames for /Company/'s candidate menus.
   ;; Evaluate the following code after loading this package.
   :config
   <<yasnippet/config>>)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -2776,14 +2776,14 @@ Use child frames for /Company/'s candidate menus.
 :END:
 
 Enable \src_emacs-lisp{yas-global-mode}.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (yas-global-mode 1)
-#+END_SRC
+#+end_src
 
 **** Guix Package /emacs-yasnippet-snippets/
 
 Add the snippets from the Guix package /emacs-yasnippet-snippets/.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'guix-profiles
   (when-let* (guix-user-profile
               (emacs-yasnippet-snippets-dir (expand-file-name
@@ -2791,18 +2791,18 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
                                              guix-user-profile))
               ((file-accessible-directory-p emacs-yasnippet-snippets-dir)))
     (add-to-list 'yas-snippet-dirs emacs-yasnippet-snippets-dir)))
-#+END_SRC
+#+end_src
 
 ** Ivy YASnippet
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ivy-yasnippet
   ;; Load this package after the following packages.
   :after (ivy yasnippet)
 
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
+#+end_src
 
 * Containers
 :PROPERTIES:
@@ -2811,7 +2811,7 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 
 ** Docker
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package docker
   ;; Only load Docker if the following code evaluates to non-nil.
   :if
@@ -2820,7 +2820,7 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
   ;; Add the following auto-loading keybindings.
   :general
   ("C-c d" #'docker))
-#+END_SRC
+#+end_src
 
 *** Conditional Loading
 :PROPERTIES:
@@ -2828,9 +2828,9 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 :END:
 
 /Docker/'s features are only usable if the =docker= command is present in =$PATH=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (executable-find "docker")
-#+END_SRC
+#+end_src
 
 * Diff
 :PROPERTIES:
@@ -2839,14 +2839,14 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 
 ** Ediff
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ediff
   :straight (:type built-in)
 
   ;; Evaluate the following code after loading this package.
   :custom
   <<ediff/custom>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customization
 :PROPERTIES:
@@ -2854,11 +2854,11 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 :END:
 
 Determine how Ediff windows are setup.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ediff-window-setup-function
  #'ediff-setup-windows-plain
  "Use a single frame for all buffers including the control panel.")
-#+END_SRC
+#+end_src
 
 ** Whitespace
 
@@ -2871,7 +2871,7 @@ From the package's description:
 - Trimming only happens when saving.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ws-butler
   ;; Load this package eagerly.
   :demand
@@ -2879,7 +2879,7 @@ From the package's description:
   ;; Evaluate the following code after loading this package.
   :config
   <<ws-butler/config>>)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evluation
 :PROPERTIES:
@@ -2889,9 +2889,9 @@ From the package's description:
 
 Enable ws-butler globally.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ws-butler-global-mode)
-#+END_SRC
+#+end_src
 
 * Directories
 :PROPERTIES:
@@ -2904,7 +2904,7 @@ Most other directory-centric packages provide functionality on top of /Dired/.
 
 ** Dired
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package dired
   :straight (:type built-in)
 
@@ -2940,7 +2940,7 @@ Most other directory-centric packages provide functionality on top of /Dired/.
   ;; Evaluate the following code after loading Dired.
   :config
   <<dired/config>>)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -2950,7 +2950,7 @@ Most other directory-centric packages provide functionality on top of /Dired/.
 Define a function to create an empty file.
 This behaves as a subset of =touch=;
 it will not update the modified time of existing files.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun dired-lafrenierejm-touch (filename)
   "Create a new, empty file."
   (interactive "FFile to create: ")
@@ -2958,32 +2958,32 @@ it will not update the modified time of existing files.
     (if (file-exists-p filename-expanded)
         (error "File '%s' already exists" filename-expanded)
       (with-temp-buffer (write-file filename-expanded)))))
-#+END_SRC
+#+end_src
 
 Define a function to open the current directory in a Dired buffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun dired-here ()
   "\"Edit\" the current directory."
   (interactive)
   (dired default-directory))
-#+END_SRC
+#+end_src
 
 ** Writable Dired
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package wdired
   :straight (:type built-in)
 
   :custom
   (wdired-allow-to-change-permissions t))
-#+END_SRC
+#+end_src
 
 ** Dired Collapse
 
 /Dired Collapse/ provides a minor mode \src_emacs-lisp{dired-collapse-mode} that provides visibility into directories with a single child.
 This visibility is provided recursively, so the view provided will extend arbitrarily deep provided each directory in the view has exactly one child.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package dired-collapse
   ;; Load Dired Collapse after the following packages.
   :after dired
@@ -2991,11 +2991,11 @@ This visibility is provided recursively, so the view provided will extend arbitr
   ;; Add the following auto-loading hooks.
   :ghook
   ('dired-mode-hook #'dired-collapse-mode))
-#+END_SRC
+#+end_src
 
 ** Dired Narrow
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package dired-narrow
   ;; Inform the bytecode compiler of the following interactive functions.
   :commands dired-narrow
@@ -3004,7 +3004,7 @@ This visibility is provided recursively, so the view provided will extend arbitr
   :general
   (:keymaps 'dired-mode-map
    "C-x n n" #'dired-narrow))
-#+END_SRC
+#+end_src
 
 ** /Dired Subtree/
 
@@ -3053,7 +3053,7 @@ Useful when using dired-subtree."
 
 ** Comint
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package comint
   :straight (:type built-in)
 
@@ -3067,7 +3067,7 @@ Useful when using dired-subtree."
 
   :config
   <<comint/config>>)
-#+END_SRC
+#+end_src
 
 *** Keybindings
 :PROPERTIES:
@@ -3075,10 +3075,10 @@ Useful when using dired-subtree."
 :END:
 
 Use =C-l= to clear the current buffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:keymaps 'comint-mode-map
  "C-l" #'init-comint/clear-buffer)
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -3089,17 +3089,17 @@ Use =C-l= to clear the current buffer.
 
 The following code is taken verbatim from [[https://emacsredux.com/blog/2015/01/18/clear-comint-buffers/]["Clear Comint Buffers"]] on /Emacs Redux/.
 The only addition is the doc string.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun init-comint/clear-buffer ()
   "Clear all scrollback for the current buffer."
   (interactive)
   (let ((comint-buffer-maximum-size 0))
     (comint-truncate-buffer)))
-#+END_SRC
+#+end_src
 
 ** Emacs Shell
 *** Esh Mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package esh-mode
   :straight (:type built-in)
 
@@ -3111,7 +3111,7 @@ The only addition is the doc string.
 
   :config
   <<esh-mode/config>>)
-#+END_SRC
+#+end_src
 
 **** Pre-Evaluation Evaluation
 :PROPERTIES:
@@ -3121,7 +3121,7 @@ The only addition is the doc string.
 Define the format of the timestamp to prefix prompts with.
 By default, this follows ISO 8601.
 #+NAME: esh-mode-prompt-timestamp-format-string
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defcustom esh-mode-prompt-timestamp-format-string
   "%FT%T%z"
   "The format-string used for Eshell prompts' timestamps.
@@ -3129,11 +3129,11 @@ By default, this follows ISO 8601.
 See `help format-time-string' for the definition of the constructs.
 The default value follows ISO 8601."
   :type '(string))
-#+END_SRC
+#+end_src
 
 Define the regexp to match the result of the above format string.
 #+NAME: esh-mode-prompt-timestamp-regexp
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defcustom esh-mode-prompt-timestamp-regexp
   (rx
    (repeat 4 digit) ?- (repeat 2 digit) ?- (repeat 2 digit)
@@ -3141,7 +3141,7 @@ Define the regexp to match the result of the above format string.
    (or ?- ?+) (repeat 4 digit))
   "A regular expression that matches `esh-mode-prompt-timestamp-format-string'."
   :type '(regexp))
-#+END_SRC
+#+end_src
 
 **** Post-Load Execution
 :PROPERTIES:
@@ -3157,7 +3157,7 @@ That function acts as a do-what-I-mean alternative to the built-in ~beginning-of
 2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
 3. Point will be moved to the beginning of the line.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun esh-mode-beginning-of-line-maybe ()
   "Move point to the start of the command beginning of the line."
   (interactive)
@@ -3170,7 +3170,7 @@ That function acts as a do-what-I-mean alternative to the built-in ~beginning-of
       (when (<= old-point (point))
         ;; Then go to the beginning of the line.
         (beginning-of-line)))))
-#+END_SRC
+#+end_src
 
 ***** Accurate Prompt Timestamp
 :PROPERTIES:
@@ -3209,7 +3209,7 @@ Some shells have workaround for this, such as Zsh's ~preexec~.
 Rather than implementing such a function for Eshell, we can instead take advantage of the fact that Eshell is written in Emacs Lisp and outputs directly to an Emacs buffer.
 
 Define a function to update the most recent prompt's timestamp.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun esh-mode-timestamp-prompt ()
   "Update the timestamp at the beginning of the current prompt."
   (interactive)
@@ -3237,13 +3237,13 @@ Define a function to update the most recent prompt's timestamp.
                      prompt-properties)))
     ;; Restore POINT to its original location.
     (goto-char cur-pos)))
-#+END_SRC
+#+end_src
 Where ~esh-mode-prompt-timestamp-format-string~ and ~esh-mode-prompt-timestamp-regexp~ are defined in ref:esh-mode-prompt-timestamp-format-string and ref:esh-mode-prompt-timestamp-regexp, respectively.
 
 Call the above function before sending input.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (advice-add 'eshell-send-input :before #'esh-mode-timestamp-prompt)
-#+END_SRC
+#+end_src
 
 ***** Narrow to Command
 
@@ -3252,7 +3252,7 @@ Narrow the buffer to the context ~point~ is currently in:
 - last prompt/command :: do nothing
 - other prompt/command :: narrow to the prompt, command, and the command's output
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun esh-mode-narrow-to-command ()
   "Make text outside the current command invisible.
 
@@ -3287,18 +3287,18 @@ Narrow the buffer to the context ~point~ is currently in:
                       (end-of-line) ; end of line
                       (point))))
           (narrow-to-region start end)))))
-#+END_SRC
+#+end_src
 
 ***** Delete Whole Line
 
 ****** Define the Function
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell-kill-whole-line ()
   "Kill the whole Eshell buffer line."
   (interactive)
   (kill-region (progn (eshell-bol) (point)) (line-end-position)))
-#+END_SRC
+#+end_src
 
 ****** Define an Evil Operator
 :PROPERTIES:
@@ -3310,7 +3310,7 @@ Narrow the buffer to the context ~point~ is currently in:
 
 .emacs.d/init.el: ‘evil-called-interactively-p’ is an obsolete macro (as of Git commit 222b791); please use (called-interactively-p ’any) instead.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (evil-define-operator eshell-delete  (beg end type register yank-handler)
   "Delete text from BEG to END with TYPE.
 
@@ -3330,11 +3330,11 @@ Save in REGISTER or in the kill-ring with YANK-HANDLER."
   (when (and (evil-called-interactively-p)
              (eq type 'line))
     (evil-first-non-blank)))
-#+END_SRC
+#+end_src
 
 *** Em Hist
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package em-hist
   :straight (:type built-in)
 
@@ -3344,7 +3344,7 @@ Save in REGISTER or in the kill-ring with YANK-HANDLER."
   ;; Customize the following variables.
   :custom
   <<em-hist/custom>>)
-#+END_SRC
+#+end_src
 
 **** Variable Customization
 :PROPERTIES:
@@ -3352,18 +3352,18 @@ Save in REGISTER or in the kill-ring with YANK-HANDLER."
 :END:
 
 Determine whether duplicates are skipped when traversing command history.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (eshell-hist-ignoredups t "Skip duplicates when traversing command history.")
-#+END_SRC
+#+end_src
 
 Determine how many commands are saved in history.
 The default is 128.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (eshell-history-size 10000)
-#+END_SRC
+#+end_src
 
 *** Em Dirs
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package em-dirs
   :straight (:type built-in)
 
@@ -3374,7 +3374,7 @@ The default is 128.
 
   :commands
   (em-dirs-name-buffer))
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -3382,7 +3382,7 @@ The default is 128.
 :END:
 
 ***** Return Path Relative to Project Root
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun em-dirs-pwd-relative-to-project (directory)
   "Print DIRECTORY relative to its Projectile root, if any.
 
@@ -3410,7 +3410,7 @@ path."
                   project-root)))
      ;; Else not in project: use abbreviated path
      (abbreviate-file-name directory))))
-#+END_SRC
+#+end_src
 
 ***** Abbreviate Path Elements
 Printing the path to the current directory in the shell prompt helps me keep track of the context.
@@ -3418,7 +3418,7 @@ However, if the path is long this can result in unwieldy prompts.
 The following functions can be used to abbreviate a path by shortening each element in the path to that element's first non-period character;
 only the last directory in the path is shown in full.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun em-dirs-abbreviate-dirname (filename)
   (cond
    ((string-empty-p filename)
@@ -3427,9 +3427,9 @@ only the last directory in the path is shown in full.
     (substring filename 0 2))
    (t
     (substring filename 0 1))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun em-dirs-abbreviate-path (path)
   "Abbreviate each element in PATH except for the last.
 
@@ -3453,10 +3453,10 @@ character. For example, the path \"/home/user/.config/curdir\" will become
          :end (- (length split-path) 1)))
        (car (last split-path)))
       path)))
-#+END_SRC
+#+end_src
 
 ***** Create Eshell Buffer Names
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun em-dirs-name-buffer (directory &optional process-name)
   "Create a name for an Eshell buffer in DIRECTORY."
   (concat "*eshell "
@@ -3464,7 +3464,7 @@ character. For example, the path \"/home/user/.config/curdir\" will become
           (when process-name
             (concat " <" process-name ">"))
           "*"))
-#+END_SRC
+#+end_src
 
 ***** Prefer Changing Buffers to Changing Directories
 Redefine ~eshell/cd~ to prefer switching to an Eshell buffer in the new directory (if such a buffer exists) over changing the directory of the buffer where ~eshell/cd~ was called.
@@ -3473,7 +3473,7 @@ Whether or not an Eshell buffer exists at the specified location is determined b
 The following code is derived directly from code in GNU Emacs's Em Dirs and Files packages.
 As such, it is licensed under GPLv3.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell/cd (&rest args)
   "Alias to extend the behavior of `cd'.
 
@@ -3550,10 +3550,10 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
             ;; Let-bind eshell-last-command around this?
             (eshell-plain-command "ls" (cdr args)))
         nil))))
-    #+END_SRC
+    #+end_src
 
 *** Eshell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package eshell
   :straight (:type built-in)
 
@@ -3590,7 +3590,7 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
   ;; Execute the following code after loading this package.
   :config
   <<eshell/config>>)
-#+END_SRC
+#+end_src
 
 **** Keybindings
 :PROPERTIES:
@@ -3600,17 +3600,17 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
 Map the opening an Eshell buffer to =C-x z=.
 This keybinding mirrors the defaults for ~find-file~ and ~dired~.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ("C-x z" #'eshell-find-eshell)
-#+END_SRC
+#+end_src
 
 Map ~eshell-find-eshell-here~ to =C-z=.
 This imitates the behavior of *NIX terminal applications.
 In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ("C-z" #'eshell-find-eshell-here)
-#+END_SRC
+#+end_src
 
 **** Non-Autoloading Hooks
 :PROPERTIES:
@@ -3619,31 +3619,31 @@ In most terminal applications, =C-z= is the key combination to suspend the curre
 
 Build the list of commands to be run in Term mode buffers.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (nil #'eshell-add-visual-commands)
-#+END_SRC
+#+end_src
 
 Bind keys.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (nil #'eshell-define-keys)
-#+END_SRC
+#+end_src
 
 **** Customize Variables
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref eshell/custom
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (eshell-prefer-lisp-functions nil "Prefer external commands to Lisp functions.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (eshell-prefer-lisp-variables nil "Prefer environment variables to Lisp variables.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (eshell-prompt-function #'eshell-prompt)
-#+END_SRC
+#+end_src
 
 **** Pre-Load Execution
 :PROPERTIES:
@@ -3651,7 +3651,7 @@ Bind keys.
 :END:
 
 ***** Eshell Prompt
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell-prompt ()
   "Prefix \"$USER@$(hostname):\" if on remote host."
   (concat
@@ -3670,21 +3670,21 @@ Bind keys.
    (if (= (user-uid) 0)
        " # "
      " $ ")))
-#+END_SRC
+#+end_src
 
 ***** Set =$PAGER=
 Because Eshell runs entirely within an Emacs buffer, Eshell does not need an external pager.
 Instead, text can be dumped directly into the buffer.
 This is accomplished by setting ~PAGER~ to ~cat~.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setenv "PAGER" "cat")
-#+END_SRC
+#+end_src
 
 ***** Use Magit for Some Git Commands
 The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.rulez.org][<algernon@bonehunter.rulez.org>]] and shared under GPLv3.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'magit
   (defun eshell/git (command &rest args)
     (pcase command
@@ -3698,11 +3698,11 @@ The code in this section is copyright Gergely Nagy [[mailto:algernon@bonehunter.
       (_ (let ((command (s-join " " (append (list "git" command) args))))
            (message command)
            (shell-command-to-string command))))))
-#+END_SRC
+#+end_src
 
 Run ~magit-log~ after determining if the argument to ~git log~ was a file or branch.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'magit
   (defun algernon/git-log (&rest args)
     (let* ((branch-or-file (car args))
@@ -3721,7 +3721,7 @@ Run ~magit-log~ after determining if the argument to ~git log~ was a file or bra
                       file-list))
         (magit-log-head)))
     (eshell/echo)))
-#+END_SRC
+#+end_src
 
 **** Post-Load Execution
 :PROPERTIES:
@@ -3736,19 +3736,19 @@ Run the following commands in a =term= buffer:
 - top
 - tail
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell-add-visual-commands ()
   "Add commands to `eshell-visual-commands'."
   (let ((commands (list "alsamixer" "ssh" "top" "tail")))
     (dolist (command commands)
       (add-to-list 'eshell-visual-commands command))))
-#+END_SRC
+#+end_src
 
 ***** Custom Functions
 ****** Open Eshell in a Given Directory
 Open or switch to an Eshell buffer in a given directory.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell-find-eshell (directory)
   "Open Eshell in DIRECTORY.
 
@@ -3762,14 +3762,14 @@ such instance exists, start a new instance whose name includes the directory."
     (unless (derived-mode-p 'eshell-mode)
       (eshell-mode))
     buffer))
-#+END_SRC
+#+end_src
 
 ****** Open Eshell in the Current Directory
 
 Define a function to open an Eshell instance in the current directory.
 If an Eshell instance already exists in that directory, switch to its buffer.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell-find-eshell-here ()
   "Open Eshell in the current working directory.
 
@@ -3780,7 +3780,7 @@ instance exists, start a new instance whose name includes the directory."
                                        (file-name-directory (buffer-file-name))
                                      default-directory))))
     (eshell-find-eshell cwd)))
-    #+END_SRC
+    #+end_src
 
 ****** "Background" the Current Process
 
@@ -3791,7 +3791,7 @@ Because having access to long-running processes' stdout and stderr is useful, th
 3. open a new Eshell buffer in the same directory.
 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell/background-process-maybe ()
   "Rename the Eshell BUFFER with its process and reopen the directory."
   (interactive)
@@ -3800,21 +3800,21 @@ Because having access to long-running processes' stdout and stderr is useful, th
              (process-name (process-name process)))
     (rename-buffer (em-dirs-name-buffer path process-name))
     (eshell-find-eshell path)))
-#+END_SRC
+#+end_src
 
 UNIX shells use the chord =C-z= to background the current process.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell-bind-background-process-maybe ()
   "Add a keybinding for `eshell/background-process-maybe'."
   (general-define-key
    :keymaps 'eshell-mode-map
    "C-z" #'eshell/background-process-maybe))
-#+END_SRC
+#+end_src
 
 ****** Clear Buffer
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell/clear-scrollback-keep-input ()
   "Clear the scrollback content of the eshell window but keep any current input."
   (interactive)
@@ -3822,7 +3822,7 @@ UNIX shells use the chord =C-z= to background the current process.
     (eshell/clear-scrollback)
     (eshell-emit-prompt)
     (insert input)))
-#+END_SRC
+#+end_src
 
 ***** Keybindings
 
@@ -3832,7 +3832,7 @@ Add the following keybindings:
 - =C-x n c= :: narrow to the current command
 - =C-z= :: "background" the current process
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell-define-keys ()
   "Define keys for eshell."
   (with-eval-after-load 'general
@@ -3849,7 +3849,7 @@ Add the following keybindings:
      :keymaps 'eshell-mode-map
      :states 'insert
      "C-r" #'counsel-esh-history)))
-#+END_SRC
+#+end_src
 
 *** Esh Module
 
@@ -3858,7 +3858,7 @@ From the package group's docstring:
 The ~eshell-module~ group is for Eshell extension modules, which provide optional behavior which the user can enable or disable by customizing the variable ~eshell-modules-list~.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package esh-module
   :straight (:type built-in)
 
@@ -3872,7 +3872,7 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
   ;; Evaluate the following code after loading this package.
   :config
   <<esh-module/config>>)
-#+END_SRC
+#+end_src
 
 **** Post-Load Execution
 :PROPERTIES:
@@ -3881,9 +3881,9 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
 
 Disable the greeting banner.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq eshell-modules-list (delq 'eshell-banner eshell-modules-list))
-#+END_SRC
+#+end_src
 
 **** Variable Customization
 :PROPERTIES:
@@ -3891,11 +3891,11 @@ Disable the greeting banner.
 :END:
 
 Determine whether input causes window to scroll.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (eshell-scroll-to-bottom-on-input
  'this
  "On input, scroll the selected Eshell window to the bottom.")
-#+END_SRC
+#+end_src
 
 *** /Em Alias/
 
@@ -3913,7 +3913,7 @@ Determine whether input causes window to scroll.
 
 Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package em-smart
   :straight (:type built-in)
 
@@ -3926,22 +3926,22 @@ Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
 
   :config
   <<em-smart/config>>)
-#+END_SRC
+#+end_src
 
 **** Config
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref em-smart/config
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-to-list 'eshell-modules-list 'eshell-smart)
-#+END_SRC
+#+end_src
 
 *** Em Tramp
 
 Em Tramp is an Eshell modules that provides TRAMP features.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package em-tramp
   :straight (:type built-in)
 
@@ -3954,7 +3954,7 @@ Em Tramp is an Eshell modules that provides TRAMP features.
   ;; Evaluate the following code after loading this package.
   :config
   <<em-tramp/config>>)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -3963,9 +3963,9 @@ Em Tramp is an Eshell modules that provides TRAMP features.
 
 Load Em Tramp as an Eshell module.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-to-list 'eshell-modules-list 'eshell-tramp)
-#+END_SRC
+#+end_src
 
 ***** Redefine ~eshell/sudo~
 
@@ -3974,7 +3974,7 @@ For ease of use with Emacs's authentication mechanisms, the full hostname of the
 The following code is derived from the Em Tramp package distributed with GNU Emacs.
 As such, it is licensed under the same conditions as GNU Emacs itself (namely, GPLv3 or later).
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun eshell/sudo (&rest args)
   "Alias \"sudo\" to call Tramp.
 
@@ -4013,11 +4013,11 @@ Uses the system sudo through TRAMP's sudo method."
                                   (substring prefix 0 -1) user host dir)
                         (format "/sudo:%s@%s:%s" user host dir))))
                 (eshell-named-command (car orig-args) (cdr orig-args))))))))
-#+END_SRC
+#+end_src
 
 *** Em Rebind
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package em-rebind
   :straight (:type built-in)
 
@@ -4038,7 +4038,7 @@ Uses the system sudo through TRAMP's sudo method."
   ;; Evaluate the following code after loading this package.
   :config
   <<em-rebind/config>>)
-#+END_SRC
+#+end_src
 
 **** Variable Customization
 :PROPERTIES:
@@ -4046,11 +4046,11 @@ Uses the system sudo through TRAMP's sudo method."
 :END:
 
 Determine whether movement commands can cause the point to leave the current input.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (eshell-confine-point-to-input
  nil
  "Allow movement commands to move `point' out of the current input.")
-#+END_SRC
+#+end_src
 
 **** Pre-Load Evaluation
 :PROPERTIES:
@@ -4059,9 +4059,9 @@ Determine whether movement commands can cause the point to leave the current inp
 
 Add this module to the list of Eshell modules to load.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (push 'eshell-rebind eshell-modules-list)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -4072,14 +4072,14 @@ Add this module to the list of Eshell modules to load.
 Rebind Emacs's vertical movement keys to search through history.
 Normal buffer movement is performed using keybindings provided by ~evil~.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (push '([(control ?n)] . eshell-previous-matching-input-from-input)
       eshell-rebind-keys-alist)
-#+END_SRC
+#+end_src
 
 *** Em Cmpl
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package em-cmpl
   :straight (:type built-in)
 
@@ -4089,7 +4089,7 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   ;; Apply the following variable customizations.
   :custom
   (eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
-#+END_SRC
+#+end_src
 
 * Static Analysis
 :PROPERTIES:
@@ -4098,17 +4098,17 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
 
 ** Flyspell
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package flyspell
   :straight (:type built-in)
 
   :ghook
   <<flyspell/ghook>>)
-#+END_SRC
+#+end_src
 
 ** Ispell
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ispell
   :straight (:type built-in)
 
@@ -4122,7 +4122,7 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   ;; Evaluate the following code after loading this package.
   :config
   <<ispell/config>>)
-#+END_SRC
+#+end_src
 
 *** Conditional Loading
 :PROPERTIES:
@@ -4133,9 +4133,9 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
 Ispell provides interfaces for third-party spellchecking binaries.
 If no such binaries exist, Ispell does not need to be downloaded.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (executable-find "aspell")
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -4146,17 +4146,17 @@ If no such binaries exist, Ispell does not need to be downloaded.
 Set the executable to use for spellchecking.
 If =aspell= is not available, disable Ispell.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (cond
  ((executable-find "aspell")
   (setq ispell-program-name "aspell"))
  (t
   (setq ispell-program-name nil)))
-#+END_SRC
+#+end_src
 
 ** Flycheck
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package flycheck
   ;; Load this package eagerly.
   :demand
@@ -4165,7 +4165,7 @@ If =aspell= is not available, disable Ispell.
   :config
   ;; Enable `flycheck-mode' globally.
   (global-flycheck-mode))
-#+END_SRC
+#+end_src
 
 * Feeds
 :PROPERTIES:
@@ -4173,9 +4173,9 @@ If =aspell= is not available, disable Ispell.
 :END:
 
 ** Email
-*** mu4e
+*** /mu4e/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package mu4e
   ;; Load `mu4e' after the following packages.
   :after (flyspell ispell s)
@@ -4198,7 +4198,7 @@ If =aspell= is not available, disable Ispell.
   ;; Evaluate the following code after loading this package.
   :config
   <<mu4e/config>>)
-#+END_SRC
+#+end_src
 
 **** Variable Customizations
 :PROPERTIES:
@@ -4207,79 +4207,79 @@ If =aspell= is not available, disable Ispell.
 
 Use ISO-esque timestamps for ~:human-date~.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-headers-date-format "%Y-%m-%d %H:%M")
-#+END_SRC
+#+end_src
 
 ***** Account Contexts
 Do not prompt for the context when starting mu4e.
 Being in the proper context is unnecessary except when composing messages.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-context-policy 'pick-first "Do not be concerned about context on startup.")
-#+END_SRC
+#+end_src
 
 If no context matches (using its match function) when beginning to compose a message, prompt the user to manually select a context.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-compose-context-policy 'ask)
-#+END_SRC
+#+end_src
 
 ***** Fetching and Indexing
 Display the update status in the modeline.
 This helps keep track of the current update status.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-display-update-status-in-modeline t "Display the update status in the modeline.")
-#+END_SRC
+#+end_src
 
 Do not display messages related to updating or indexing.
 These messages are generally uninteresting.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-hide-index-messages t "Do not display messages related to updating or indexing.")
-#+END_SRC
+#+end_src
 
 ***** Sending
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (message-sendmail-envelope-from 'header "Use the value from the mail's header as the FROM field.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (message-kill-buffer-on-exit t "Close the message buffer after sending its message.")
-#+END_SRC
+#+end_src
 
 ***** Composing
 Use [[https://joeclark.org/ffaq.htm][format\=flowed]] for nicer viewing of plaintext mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-compose-format-flowed t "Use format=flowed when composing mail.")
-#+END_SRC
+#+end_src
 
 Replace the current frame when writing mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-compose-in-new-frame nil "Do not open a new frame when composing mail.")
-#+END_SRC
+#+end_src
 
 If a signature is set, automatically include it.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-compose-signature-auto-include t "Automatically include signatures.")
-#+END_SRC
+#+end_src
 
 ***** Message View
 Show senders' full addresses.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-view-show-addresses t "Show senders' full addresses.")
-#+END_SRC
+#+end_src
 
 View messages in their own window.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-split-view 'single-window)
-#+END_SRC
+#+end_src
 
 ***** Header View
 Display the following fields in the headers buffer:
@@ -4289,31 +4289,31 @@ Display the following fields in the headers buffer:
 - subject
 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-headers-fields
  '((:human-date . 16)
    (:flags . 8)
    (:mailing-list . 10)
    (:from-or-to . 20)
    (:subject . nil)))
-#+END_SRC
+#+end_src
 
 Use Unicode box-drawing characters for the prefixes.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-headers-has-child-prefix '("-" . "─"))
 (mu4e-headers-empty-parent-prefix '("-" . "─"))
 (mu4e-headers-first-child-prefix '("-" . "─"))
 (mu4e-headers-duplicate-prefix '("=" . "═"))
 (mu4e-headers-default-prefix '("-" . "─"))
-#+END_SRC
+#+end_src
 
 ***** Mail Directory
 
 Use the value of ~$MAILDIR~ as the path to the mail directory if that environment variable exists.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (mu4e-maildir (xdg-user-dir "MAIL"))
-#+END_SRC
+#+end_src
 
 **** Non-Autoloading Hooks
 :PROPERTIES:
@@ -4322,21 +4322,21 @@ Use the value of ~$MAILDIR~ as the path to the mail directory if that environmen
 
 Enable Flyspell mode when composing mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('mu4e-compose-mode-hook #'flyspell-mode)
-#+END_SRC
+#+end_src
 
 Show trailing whitespace when composing mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('mu4e-compose-mode-hook #'mu4e-show-trailing-whitespace)
-#+END_SRC
+#+end_src
 
 Specify the SMTP account to use before sending mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('message-send-mail #'mu4e-choose-msmtp-account)
-#+END_SRC
+#+end_src
 
 **** Post-Load Execution
 :PROPERTIES:
@@ -4346,21 +4346,21 @@ Specify the SMTP account to use before sending mail.
 ***** Fetching and Indexing
 If isync is installed, use =mbsync= to fetch all mail and rename filenames when moving mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (when (executable-find "mbsync")
   (setq mu4e-get-mail-command "mbsync -a")
   (setq mu4e-change-filenames-when-moving t))
-#+END_SRC
+#+end_src
 
 ***** Sending Mail
 Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (cond ((executable-find "msmtp")
        <<mu4e/config/sending/msmtp>>)
       (t
        <<mu4e/config/sending/smtpmail-send-it>>))
-#+END_SRC
+#+end_src
 
 ****** =msmtp= Configuration
 :PROPERTIES:
@@ -4369,15 +4369,15 @@ Choose how mail is sent, preferring =msmtp= to the built-in =smtpmail-send-it=.
 
 Use =msmtp= as the sender.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq
  sendmail-program (executable-find "msmtp")
  message-send-mail-function #'message-send-mail-with-sendmail)
-#+END_SRC
+#+end_src
 
 Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun mu4e-choose-msmtp-account ()
   "Choose msmtp account label based on mu4e context name."
   (when (message-mail-p)
@@ -4386,7 +4386,7 @@ Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
            (s-replace "@" "." (mu4e-context-name (mu4e-context-current)))))
       (setq
        message-sendmail-extra-arguments (list '"-a" account-name)))))
-#+END_SRC
+#+end_src
 
 ****** ~smtpmail-send-it~ Configuration
 :PROPERTIES:
@@ -4395,7 +4395,7 @@ Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
 
 Provide settings for using ~smtpmail-send-it~ to send mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq
  message-send-mail-function 'smtpmail-send-it
  send-mail-function 'smtpmail-send-it
@@ -4403,10 +4403,10 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
  smtpmail-smtp-service 587
  ;; Set the type of connection.
  smtpmail-stream-type 'starttls)
-#+END_SRC
+#+end_src
 
 ***** Multiple Accounts
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq
  mu4e-contexts `( ,(make-mu4e-context
                     ;; Name of the context
@@ -4477,13 +4477,13 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
                                     (mu4e-message-field msg :maildir)
                                     (string-prefix-p "/com.gmail.lafrenierejm"
                                                      (mu4e-message-field msg :maildir)))))))
-#+END_SRC
+#+end_src
 
 ****** My Addresses
 mu4e maintains a list of addresses whose presence in a message's From field means that the message was sent by me.
 In such cases, display the To address(es).
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq
  mu4e-user-mail-address-list '("admin@lafreniere.xyz"
                                "jml140230@utdallas.edu"
@@ -4491,22 +4491,22 @@ In such cases, display the To address(es).
                                "joseph@lafreniere.xyz"
                                "lafrenierejm@gmail.com"
                                "lafrenierejm@utdallas.edu"))
-#+END_SRC
+#+end_src
 
 ***** Composing Mail
 
 Show trailing whitespace.
 This is helpful when composing =format=flowed= mail.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun mu4e-show-trailing-whitespace ()
   "Highlight trailing whitespace with face `trailing-whitespace'."
   (setq show-trailing-whitespace t))
-#+END_SRC
+#+end_src
 
 *** Message
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package message
   :straight (:type built-in)
 
@@ -4520,7 +4520,7 @@ This is helpful when composing =format=flowed= mail.
   ;; Evaluate the following code after loading this package.
   :config
   <<message/config>>)
-#+END_SRC
+#+end_src
 
 **** Non-Autoloading Hooks
 :PROPERTIES:
@@ -4529,9 +4529,9 @@ This is helpful when composing =format=flowed= mail.
 
 Prompt the user before sending a message without an attachment.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('message-send-hook #'mbork/message-warn-if-no-attachments)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -4544,7 +4544,7 @@ Borkowski's post links to the [[https://github.com/mbork/message][mbork/message]
 Interestingly, the repository appears to contain neither the attachment code nor any commits that hint at the code having ever been committed into the repository's mbork-message package.
 Despite the attachment code never having (publicly) been a part of mbork/message, the code is attributed here to Borkowsi under the same GPLv2 license as mbork-message.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun mbork/message-attachment-present-p ()
   "Return t if an attachment is found in the current message."
   (save-excursion
@@ -4553,21 +4553,21 @@ Despite the attachment code never having (publicly) been a part of mbork/message
       (goto-char (point-min))
       (when (search-forward "<#part" nil t)
         t))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defcustom mbork/message-attachment-intent-re
   (regexp-opt '("attachment" "attached"))
   "If this regex is matched then the message should have an attachment.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defcustom mbork/message-attachment-reminder
   "Are you sure you want to send this message without any attachment? "
   "The question asked when trying to send a message with a missing attachment.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun mbork/message-warn-if-no-attachments ()
   "Ask if the user wants to send even though the message has no attachment."
   (when (and (save-excursion
@@ -4578,11 +4578,11 @@ Despite the attachment code never having (publicly) been a part of mbork/message
              (not (mbork/message-attachment-present-p)))
     (unless (y-or-n-p mbork/message-attachment-reminder)
       (keyboard-quit))))
-#+END_SRC
+#+end_src
 
 *** Mml
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package mml
   :straight (:type built-in)
 
@@ -4592,7 +4592,7 @@ Despite the attachment code never having (publicly) been a part of mbork/message
   ;; Evaluate the following code after loading this package.
   :config
   <<mml/config>>)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -4606,7 +4606,7 @@ In light of that, it is desirable to only /ever/ insert attachments at the end o
 This can be accomplished by advising ~mml-attach-file~ to automatically move and restore ~point~.
 Borkowsi provided code to do so in [[http://mbork.pl/2015-11-28_Fixing_mml-attach-file_using_advice][a blog post]]:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun init-email/mml-attach-file-at-eob (orig-fun &rest args)
   "Go to the end of the buffer before attaching files."
   (save-excursion
@@ -4614,11 +4614,11 @@ Borkowsi provided code to do so in [[http://mbork.pl/2015-11-28_Fixing_mml-attac
       (widen)
       (goto-char (point-max))
       (apply orig-fun args))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (advice-add 'mml-attach-file :around #'init-email/mml-attach-file-at-eob)
-#+END_SRC
+#+end_src
 
 The license of the code hosted on Borkowsi's blog does not appear to be specified anywhere in the blog.
 I have reached out to Borkowski asking how he would like the code to be licensed.
@@ -4629,11 +4629,11 @@ I Use Chris Wellons's /Elfeed/ for managing my web feeds.
 
 *** /Elfeed/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package elfeed
   :custom
   (elfeed-db-directory "~/.local/share/elfeed"))
-#+END_SRC
+#+end_src
 
 *** /Elfeed Org/
 
@@ -4641,7 +4641,7 @@ I Use Chris Wellons's /Elfeed/ for managing my web feeds.
 I set it to load =elfeed.org= from my Emacs directory.
 The primary advantage of doing so is that it allows me to version-control the file along with the rest of my Emacs configuration.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package elfeed-org
   :demand
 
@@ -4652,7 +4652,7 @@ The primary advantage of doing so is that it allows me to version-control the fi
   :config
   ;; load feeds from `rmh-elfeed-org-files' when elfeed starts
   (elfeed-org))
-#+END_SRC
+#+end_src
 
 ** Internet Relay Chat (IRC)
 
@@ -4691,7 +4691,7 @@ Hide the following message types across all networks and channels:
 
 *** /PDF Tools/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package pdf-tools
   ;; Establish deferred binding within `auto-mode-alist'.
   :mode
@@ -4704,7 +4704,7 @@ Hide the following message types across all networks and channels:
   ;; Evalutate the following code before loading this package.
   :init
   (pdf-tools-install t))
-#+END_SRC
+#+end_src
 
 **** Filename Mapping
 :PROPERTIES:
@@ -4713,16 +4713,16 @@ Hide the following message types across all networks and channels:
 
 Create an alist whose keys are regexps matching filenames and whose values are the function to enable ~pdf-view-mode~.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ("\\.pdf\\'" . pdf-view-mode)
-#+END_SRC
+#+end_src
 
 **** Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref pdf-tools/general
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (:keymaps 'pdf-view-mode-map
  "h" #'left-char
  "j" #'pdf-view-next-line-or-next-page
@@ -4730,7 +4730,7 @@ Create an alist whose keys are regexps matching filenames and whose values are t
  "l" #'right-char
  "q" nil
  "y" #'kill-region)
-#+END_SRC
+#+end_src
 
 ** Video
 
@@ -4783,7 +4783,7 @@ A literate document can then be /tangled/ into a source-only file.
 Polymode is a framework for supporting multiple major modes (MMM) inside a single Emacs buffer.
 This can benefit both literate and traditional programming by allowing one to code blocks and docstrings, respectively, with the full features of dedicated major modes.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package polymode
   :demand
 
@@ -4793,13 +4793,13 @@ This can benefit both literate and traditional programming by allowing one to co
   ;; Evaluate the following code after loading this package.
   :config
   <<polymode/config>>)
-#+END_SRC
+#+end_src
 
 ** Applescript
 
 *** Apples Mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package apples-mode
   :mode
   ("\\.\\(applescri\\|sc\\)pt\\'")
@@ -4807,7 +4807,7 @@ This can benefit both literate and traditional programming by allowing one to co
   :general
   (:keymap 'apples-mode-map
    "C-c C-c" #'apples-run-region/buffer))
-#+END_SRC
+#+end_src
 
 ** JavaScript
 
@@ -4827,7 +4827,7 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 It is desirable to have slightly different character matching behavior when editing Lisps.
 The following is a list of the Lisp modes I edit in.
 
-#+BEGIN_SRC emacs-lisp :noweb-ref constants
+#+begin_src emacs-lisp :noweb-ref constants
 (defconst lisp-major-modes
   '(cider-repl-mode
     clojure-mode
@@ -4839,35 +4839,35 @@ The following is a list of the Lisp modes I edit in.
     minibuffer-inactive-mode
     scheme-mode)
   "A list of Lisp major modes.")
-#+END_SRC
+#+end_src
 
 And the above modes' hooks:
-#+BEGIN_SRC emacs-lisp :noweb-ref constants
+#+begin_src emacs-lisp :noweb-ref constants
 (defconst lisp-major-mode-hooks
   (mapcar #'derived-mode-hook-name lisp-major-modes)
   "A list of Lisp major mode hooks.")
-#+END_SRC
+#+end_src
 
 The function \src_emacs-lisp{derived-mode-hook-name} is provided by /Derived/, which is a built-in package and can be \src_emacs-lisp{require}d.
-#+BEGIN_SRC emacs-lisp :noweb-ref dependencies
+#+begin_src emacs-lisp :noweb-ref dependencies
 (require 'derived)
-#+END_SRC
+#+end_src
 
 For sexp-based languages it is also desirable to disallow tabs for line indentation.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun use-spaces ()
   "Only use spaces (as opposed to tabs) for indentation."
   (setq indent-tabs-mode nil))
-#+END_SRC
+#+end_src
 
 The above function should be added to all Lisp major mode hooks.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (general-add-hook lisp-major-mode-hooks #'use-spaces)
-#+END_SRC
+#+end_src
 
 *** Lisp Mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package lisp-mode
   :straight (:type built-in)
 
@@ -4875,7 +4875,7 @@ The above function should be added to all Lisp major mode hooks.
 
   :config
   <<lisp-mode/config>>)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -4891,7 +4891,7 @@ The above function should be added to all Lisp major mode hooks.
 :END:
 
 Redefine Lisp Mode's indentation function.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun lisp-indent-function (indent-point state)
   "This function is the normal value of the variable `lisp-indent-function'.
 The function `calculate-lisp-indent' calls this to determine
@@ -4967,16 +4967,16 @@ Lisp function does not specify a special indentation."
                                      indent-point normal-indent))
               (method
                (funcall method indent-point state))))))))
-#+END_SRC
+#+end_src
 
 *** Aggressive Indent
 Aggressive Indent provides a minor mode to re-indent code after every change.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package aggressive-indent
   :ghook
   (lisp-major-mode-hooks #'aggressive-indent-mode))
-#+END_SRC
+#+end_src
 
 *** Character Matching
 **** Smartparens
@@ -4987,14 +4987,14 @@ Aggressive Indent provides a minor mode to re-indent code after every change.
 :END:
 
 Lisps use the single quote (='=) for quoting, where it is not paired with a closing character.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (sp-local-pair lisp-major-modes "'" nil :actions nil)
-#+END_SRC
+#+end_src
 
 **** Evil Cleverparens
 Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "Evil normal-state minor-mode for editing lisp-like languages".
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package evil-cleverparens
   ;; Delay loading this package until after the following packages.
   :after
@@ -5013,7 +5013,7 @@ Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "E
 
   :config
   <<evil-cleverparens/config>>)
-#+END_SRC
+#+end_src
 
 ***** Autoloading Hooks
 :PROPERTIES:
@@ -5022,9 +5022,9 @@ Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "E
 :END:
 
 Enable ~evil-cleverparens-mode~ for Lisps.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (lisp-major-mode-hooks #'evil-cleverparens-mode)
-#+END_SRC
+#+end_src
 
 ***** Non-Autoloading Hooks
 :PROPERTIES:
@@ -5032,9 +5032,9 @@ Enable ~evil-cleverparens-mode~ for Lisps.
 :END:
 
 Let the cursor move past the end of lines in Lisp source code.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('evil-cleverparens-mode-hook #'evil-move-beyond-eol)
-#+END_SRC
+#+end_src
 
 *** Lisp-1
 
@@ -5042,7 +5042,7 @@ Lisp-1 languages have a single namespace for all names.
 
 **** Geiser Guile
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package geiser-guile
   :if (executable-find "guile")
 
@@ -5054,7 +5054,7 @@ Lisp-1 languages have a single namespace for all names.
                     (xdg-user-dir "SOURCE")))
              ((file-directory-p path)))
     (add-to-list 'geiser-guile-load-path path)))
-#+END_SRC
+#+end_src
 
 **** Guix
 
@@ -5069,7 +5069,7 @@ It allows you:
 - to do many other things.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package guix
   ;; Load this package if the following code evaluates to non-nil.
   :if
@@ -5088,7 +5088,7 @@ It allows you:
               ((file-directory-p path)))
      path)
    "Directory or directories to prepend to Guile's `%load-path' and `load-compiled-path'."))
-#+END_SRC
+#+end_src
 
 ***** Conditions for Loading
 :PROPERTIES:
@@ -5096,9 +5096,9 @@ It allows you:
 :END:
 
 The package relies on =guix= being available on =$PATH=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (executable-find "guix")
-#+END_SRC
+#+end_src
 
 ***** Auto-Loading Hooks
 :PROPERTIES:
@@ -5106,19 +5106,19 @@ The package relies on =guix= being available on =$PATH=.
 :END:
 
 Replace hash symbols with ellipses.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('(dired-mode-hook shell-mode-hook) #'guix-prettify-mode)
-#+END_SRC
+#+end_src
 
 **** Racket
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package racket-mode)
-#+END_SRC
+#+end_src
 
 **** Hy Mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package hy-mode
   :mode
   ("\\.hy\\'" . hy-mode)
@@ -5126,14 +5126,14 @@ Replace hash symbols with ellipses.
   :general
   (:keymaps 'hy-mode-map
    "C-c C-c" #'hy-shell-eval-buffer))
-#+END_SRC
+#+end_src
 
 *** Lisp-2
 Lisp-2 languages have a separate namespace for functions.
 
 **** Superior Lisp Interaction Mode (SLIME)
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package slime
   :init
   (defvar init-prog-lisp/slime-extra
@@ -5144,13 +5144,13 @@ Lisp-2 languages have a separate namespace for functions.
   (setq slime-lisp-implementations
         '((sbcl ("sbcl" "--noinform"))))
   (slime-setup init-prog-lisp/slime-extra))
-#+END_SRC
+#+end_src
 
 **** Emacs Lisp
 
 ***** /Elisp Mode/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package elisp-mode
   :straight (:type built-in)
 
@@ -5164,7 +5164,7 @@ Lisp-2 languages have a separate namespace for functions.
 
   :config
   <<elisp-mode/config>>)
-#+END_SRC
+#+end_src
 
 ****** Post-Load Evaluation
 :PROPERTIES:
@@ -5172,7 +5172,7 @@ Lisp-2 languages have a separate namespace for functions.
 :END:
 
 Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a prefix argument, replaces the expression being evaluated with the result of its evaluation.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun elisp-eval-last-sexp (&optional replace)
   "Evaluate the preceding sexp, OPTIONally replacing it with its result."
   (interactive "P")
@@ -5184,7 +5184,7 @@ Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a p
                (current-buffer))
       (error (message "Invalid expression")
              (insert (current-kill 0))))))
-#+END_SRC
+#+end_src
 
 ***** Helpful
 
@@ -5193,7 +5193,7 @@ From the package's README:
 Helpful is an alternative to the built-in Emacs help that provides much more contextual information.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package helpful
   :general
   ("C-h c" #'helpful-command
@@ -5203,19 +5203,19 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :custom
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable))
-#+END_SRC
+#+end_src
 
 **** Clojure
 
 ***** Clojure Mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package clojure-mode)
-#+END_SRC
+#+end_src
 
 ***** Clojure Refactor
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package clj-refactor
   :ghook
   ('clojure-mode-hook #'clj-refactor-mode)
@@ -5225,11 +5225,11 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
   :config
   (cljr-add-keybindings-with-prefix "C-c C-m"))
-#+END_SRC
+#+end_src
 
 ***** CIDER
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package cider
 
   :commands
@@ -5239,21 +5239,21 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (:keymaps 'cider-repl-mode-map
    [remap current-buffer/kill] #'cider-quit
    "C-x C-k" #'cider-quit))
-#+END_SRC
+#+end_src
 
 ***** CIDER Hydra
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package cider-hydra
   :ghook
   ('clojure-mode-hook #'cider-hydra-mode))
-#+END_SRC
+#+end_src
 
 ** UNIX Shell
 
 *** /Sh Script/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package sh-script
   ;; Evaluate the following code before everything except `:disabled'.
   :preface
@@ -5269,7 +5269,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ;; Evaluate the following code after loading `shell-script-mode'.
   :config
   <<sh-script/config>>)
-#+END_SRC
+#+end_src
 
 **** Detect Zsh Files
 
@@ -5280,34 +5280,34 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
 
 Describe a regexp that matches Zsh dotfile filenames.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst sh-script--zsh-dotfile-regexp
   (rx "/.z"
       (one-or-more (not (any ".")))
       string-end)
   "Regular expression matching Zsh dotfile filenames.")
-#+END_SRC
+#+end_src
 
 Describe a regexp that matches Zsh script filenames.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst sh-script--zsh-script-regexp
   (rx ".zsh" string-end)
   "Regular expression matching Zsh script filenames.")
-#+END_SRC
+#+end_src
 
 Define a list of regexps that match Zsh dotfiles and script filenames.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defconst sh-script--zsh-regexps
   (list sh-script--zsh-dotfile-regexp sh-script--zsh-script-regexp)
   "A list of regexps describing known Zsh filenames.")
-#+END_SRC
+#+end_src
 
 **** Set Shell Type
 
 Define a function that sets the shell type to Zsh when working with a Zsh file.
-#+BEGIN_SRC emacs-lisp :noweb-ref sh-script/config
+#+begin_src emacs-lisp :noweb-ref sh-script/config
 (defun sh-script-set-shell-type ()
   "Set the shell type based on variable `buffer-file-name'."
   ;; Loop over the list of Zsh filenames.
@@ -5316,7 +5316,7 @@ Define a function that sets the shell type to Zsh when working with a Zsh file.
     (when (string-match regexp (or buffer-file-name (buffer-name)))
       ;; Then set the shell type to Zsh.
       (sh-set-shell "zsh"))))
-#+END_SRC
+#+end_src
 
 Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
 #+begin_src emacs-lisp :noweb-ref sh-script/gfhook
@@ -5333,22 +5333,22 @@ Display line numbers for all \src_emacs-lisp{sh-mode} buffers.
 ** Python
 
 To make it easier to apply settings to all major modes I edit Python code in, a variable is defined with the list of the modes:
-#+BEGIN_SRC emacs-lisp :noweb-ref constants
+#+begin_src emacs-lisp :noweb-ref constants
 (defconst python-major-modes
   '(inferior-python-mode python-mode)
   "A list of Python major modes.")
-#+END_SRC
+#+end_src
 
 And another variable stores the above modes' hooks:
-#+BEGIN_SRC emacs-lisp :noweb-ref constants
+#+begin_src emacs-lisp :noweb-ref constants
 (defconst python-major-mode-hooks
   (mapcar #'derived-mode-hook-name python-major-modes)
   "A list of Python major mode hooks.")
-#+END_SRC
+#+end_src
 
 *** /Python/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package python
   :straight (:type built-in)
 
@@ -5362,21 +5362,21 @@ And another variable stores the above modes' hooks:
   ;; Evaluate the following code after loading `python'.
   :config
   <<python/config>>)
-#+END_SRC
+#+end_src
 
 **** PEP 8-Compliant Comment Spacing
 
 Precede inline (i.e. end-of-line) comments with two spaces, per PEP 8.
 
-#+BEGIN_SRC emacs-lisp :noweb-ref python/config
+#+begin_src emacs-lisp :noweb-ref python/config
 (defun python-set-comment-inline-offset ()
   (set (make-local-variable 'comment-inline-offset) 2)
   (setq comment-column 0))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp :noweb-ref python/gfhook
+#+begin_src emacs-lisp :noweb-ref python/gfhook
 (python-major-mode-hooks #'python-set-comment-inline-offset)
-#+END_SRC
+#+end_src
 
 **** PEP 8-Compliant Indentation
 
@@ -5401,17 +5401,17 @@ It's not desirable to enforce this in Python files (where there may be an existi
 :END:
 
 Use \src_emacs-lisp{python-mode} as primary (host) mode for Python buffers.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-hostmode poly-python-hostmode
   :mode 'python-mode)
-#+END_SRC
+#+end_src
 
 ***** reStructuredText for Doctstrings
 :PROPERTIES:
 :DESCRIPTION: Use \src_emacs-lisp{rst-mode} for Python's docstrings.
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun poly-python-docstring-head (count)
   "Search for in direction specified by COUNT for Python docstring."
   (when (re-search-forward
@@ -5422,42 +5422,42 @@ Use \src_emacs-lisp{python-mode} as primary (host) mode for Python buffers.
                 (sequence (zero-or-more blank) "#" (zero-or-more not-newline) line-end)))
          nil t count)
     (cons (match-beginning 1) (match-end 1))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun poly-python-docstring-tail (count)
   (cons (match-beginning 2) (match-end 2)))
-#+END_SRC
+#+end_src
 
 Define the secondary (inner) mode.
 The delimiters are Python's plain (i.e. non-raw) multi-line string delimiters: three consecutive double quotes.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-innermode poly-rst-python-innermode
   :mode 'rst-mode
   :head-matcher #'poly-python-docstring-head
   :tail-matcher #'poly-python-docstring-tail
   :head-mode 'host
   :tail-mode 'host)
-#+END_SRC
+#+end_src
 
 Define the actual Polymode.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-polymode poly-python-rst-mode
   :hostmode 'poly-python-hostmode
   :innermodes '(poly-rst-python-innermode))
-#+END_SRC
+#+end_src
 
 Use the above Polymode as the default mode for Python buffers.
-#+BEGIN_SRC emacs-lisp :noweb-ref polymode/mode
+#+begin_src emacs-lisp :noweb-ref polymode/mode
 ("\\.py\\'" . poly-python-rst-mode)
-#+END_SRC
+#+end_src
 
 **** Rainbow Identifiers
 
 Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode} buffers.
-#+BEGIN_SRC emacs-lisp :noweb-ref rainbow-identifiers/ghook
+#+begin_src emacs-lisp :noweb-ref rainbow-identifiers/ghook
 (python-major-mode-hooks nil)
-#+END_SRC
+#+end_src
 
 **** /Smart Dash/
 
@@ -5467,15 +5467,15 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 
 *** Pyvenv
 
-#+BEGIN_SRC emacs-lisp
 (use-package pyvenv
   ;; Load this package eagerly.
   :demand
+#+begin_src emacs-lisp
 
   ;; Evaluate the following after loading this package.
   :config
   <<pyvenv/config>>)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -5483,11 +5483,11 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 :END:
 
 Enable \src_emacs-lisp{pyvenv-mode} globally.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (pyvenv-mode t)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun pyvenv-lafrenierejm-create-virtualenv (version)
   "Create a virtual environment using Python VERSION."
   (interactive "MVirtual environment base: ")
@@ -5510,93 +5510,93 @@ Enable \src_emacs-lisp{pyvenv-mode} globally.
          (f-join (getenv "HOME")
                  ".pyenv/versions/"
                  venv-name))))))
-#+END_SRC
+#+end_src
 
 *** Blacken
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package blacken
   ;; Load this package after the following packages.
   :after python
 
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
+#+end_src
 
 *** YAPFify
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package yapfify
   ;; Load this package after the following packages.
   :after python
 
   ;; Load this package eagerly.
   :demand)
-#+END_SRC
+#+end_src
 
 *** Isort
 
 isort is a utility for sorting Python imports.
 
 The /[[Reformatter]]/ package is used to create an Emacs formatter using isort's command-line interface.
-#+BEGIN_SRC emacs-lisp :noweb-ref reformatter/config
+#+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
  isort-format
  :program "isort"
  :args '("--atomic" "-"))
-#+END_SRC
+#+end_src
 
 The defined hook can be added to all Python files.
-#+BEGIN_SRC emacs-lisp :noweb-ref reformatter/ghook
+#+begin_src emacs-lisp :noweb-ref reformatter/ghook
 ('python-mode-hook #'isort-format-on-save-mode)
-#+END_SRC
+#+end_src
 
 *** /Rainbow Delimiters/
 
 Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} buffers.
-#+BEGIN_SRC emacs-lisp :noweb-ref rainbow-delimiters/ghook
+#+begin_src emacs-lisp :noweb-ref rainbow-delimiters/ghook
 ('python-mode-hook nil)
-#+END_SRC
+#+end_src
 
 *** /Display Line Numbers/
 
 Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode} buffers.
-#+BEGIN_SRC emacs-lisp :noweb-ref display-line-numbers/ghook
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
 ('python-mode-hook nil)
-#+END_SRC
+#+end_src
 
 *** /Flyspell/
 
-#+BEGIN_SRC emacs-lisp :noweb-ref flyspell/ghook
+#+begin_src emacs-lisp :noweb-ref flyspell/ghook
 ('python-mode-hook #'flyspell-prog-mode)
-#+END_SRC
+#+end_src
 
 *** /Highlight Indent Guides/
 
-#+BEGIN_SRC emacs-lisp :noweb-ref highlight-indent-guides/ghook
+#+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
 ('python-mode-hook #'highlight-indent-guides-mode)
-#+END_SRC
+#+end_src
 
 ** Groovy
 
 *** Groovy Mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package groovy-mode
   :mode (("\\.gdsl\\'" . groovy-mode))
 
   :general
   (:keymaps 'groovy-mode-map
    "C-c C-p" #'run-groovy))
-#+END_SRC
+#+end_src
 
 *** Polymode
 
 **** Auto-Mode Alist
 
-#+BEGIN_SRC emacs-lisp :noweb-ref polymode/mode
+#+begin_src emacs-lisp :noweb-ref polymode/mode
 ("\\(\\.g\\(?:ant\\|roovy\\|radle\\)\\'\\)|Jenkinsfile" . poly-groovy-mode)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -5608,7 +5608,7 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode
 :DESCRIPTION: Use ~sh-mode~ for Groovey's ~sh~ strings.
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun poly-groovy-sh-head (count)
   "Search in direction specified by COUNT for sh commands."
   (when (re-search-forward
@@ -5618,40 +5618,40 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode
                   (group (or (= 3 "\"") (= 3 "'")))))
          nil t count)
     (cons (match-beginning 1) (match-end 1))))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun poly-groovy-sh-tail (count)
   "Use match from `poly-groovy-sh-head' to determine end of sh command."
   (cons (match-beginning 2) (match-end 2)))
-#+END_SRC
+#+end_src
 
 Define the secondary (inner) mode.
 The delimiters are Groovy's multi-line string delimiters:
 - three consecutive double quotes (") or
 - three consecutive single quotes (').
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-innermode poly-groovy-innermode
   :mode 'sh-mode
   :head-matcher #'poly-groovy-sh-head
   :tail-matcher #'poly-groovy-sh-tail
   :head-mode 'host
   :tail-mode 'host)
-#+END_SRC
+#+end_src
 
 ***** Groovy Host Mode
 Define the primary (host) mode for Groovy files.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-hostmode poly-groovy-hostmode
   :mode 'groovy-mode)
-#+END_SRC
+#+end_src
 
 Define the actual Polymode.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-polymode poly-groovy-mode
   :hostmode 'poly-groovy-hostmode
   :innermodes '(poly-groovy-innermode))
-#+END_SRC
+#+end_src
 
 ** Rust
 :PROPERTIES:
@@ -5693,21 +5693,21 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{rust-mode} 
 
 *** SQL
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package sql
   :straight (:type built-in)
 
   :demand
 
   :commands
-  (init-sql/enable-truncate-lines)
+  (sql-lafrenierejm-truncate-lines)
 
   :gfhook
   <<sql/gfhook>>
 
   :config
   <<sql/config>>)
-#+END_SRC
+#+end_src
 
 **** Non-Autoloading Hooks
 :PROPERTIES:
@@ -5715,9 +5715,9 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{rust-mode} 
 :END:
 
 Restrict each line of text to a single screen line.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('(sql-mode-hook sql-interactive-mode-hook) #'sql-truncate-lines)
-#+END_SRC
+#+end_src
 
 **** Post-Load Evaluation
 :PROPERTIES:
@@ -5725,66 +5725,66 @@ Restrict each line of text to a single screen line.
 :END:
 
 Define a function to restrict each line of text to a single screen line.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun sql-lafrenierejm-truncate-lines ()
   "Restrict each line of text to a single visual line."
   (setq truncate-lines t))
-#+END_SRC
+#+end_src
 
 Alias the above function to remove my username.
 My username is used above just to demarcate the function as a custom one.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defalias 'sql-truncate-lines #'sql-lafrenierejm-truncate-lines)
-#+END_SRC
+#+end_src
 
 *** SQL Up Mode
 
 By convention, SQL uses all uppercase characters for the names of keywords and built-in functions.
 /SQL Up Mode/ provides a minor mode that will automatically "upcase" known keywords and function names.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package sqlup-mode
   ;; Add the following auto-loading hooks.
   :ghook
   ('(sql-interactive-mode sql-mode) #'sqlup-mode))
-#+END_SRC
+#+end_src
 
 ** YAML
 
 *** /YAML Mode/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package yaml-mode)
-#+END_SRC
+#+end_src
 
 Enable line numbers in YAML buffers.
-#+BEGIN_SRC emacs-lisp :noweb-ref display-line-numbers/ghook
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
 ('yaml-mode-hook #'display-line-numbers-mode)
-#+END_SRC
+#+end_src
 
 *** /Company Ansible/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package company-ansible
   :after (:all company yaml-mode)
   :demand
   :config
   (add-to-list 'company-backends 'company-ansible))
-#+END_SRC
+#+end_src
 
 *** /Ansible Vault Mode/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ansible-vault
   :after yaml-mode
   :demand)
-#+END_SRC
+#+end_src
 
 *** Prettier
 
 [[https://prettier.io/blog/2018/07/29/1.14.0.html][As of 1.1.4]], the [[https://prettier.io/][Prettier]] code formatter supports for YAML files.
 Prettier's CLI be used via the /Reformatter/ package to automatically format YAML in a consistent way.
-#+BEGIN_SRC emacs-lisp :noweb-ref reformatter/config
+#+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
   yaml-format
   :program "prettier"
@@ -5793,7 +5793,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
           "--prose-wrap" "always"
           "--no-config"
           "--stdin"))
-#+END_SRC
+#+end_src
 
 * Refactoring
 :PROPERTIES:
@@ -5802,7 +5802,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 
 ** Reformatter
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package reformatter
   ;; Add the following auto-loading hooks.
   :ghook
@@ -5814,11 +5814,11 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   ;; Evaluate the following code after this package has been loaded.
   :config
   <<reformatter/config>>)
-#+END_SRC
+#+end_src
 
 ** /RE Builder/
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package re-builder
   :custom
   (reb-re-syntax 'rx)
@@ -5838,7 +5838,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
               t))))
     (with-current-buffer reb-target-buffer
       (query-replace-regexp (reb-target-binding reb-regexp) to-string))))
-#+END_SRC
+#+end_src
 
 * Web
 :PROPERTIES:
@@ -5849,7 +5849,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 
 *** REST Client
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package restclient
   :preface
   (defconst init-web/http-extension
@@ -5858,11 +5858,11 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 
   :mode
   ("\\.http\\'" . restclient-mode))
-#+END_SRC
+#+end_src
 
 *** Company REST Client
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package company-restclient
   :after (:all company restclient)
 
@@ -5870,7 +5870,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 
   :config
   (add-to-list 'company-backends 'company-restclient))
-#+END_SRC
+#+end_src
 
 *** Polymode for REST Client
 
@@ -5882,52 +5882,52 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 ***** Emacs Lisp Inner Mode
 Define the inner mode for Emacs Lisp sections of REST Client buffers.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-innermode poly-restclient/emacs-lisp-innermode
   :mode 'emacs-lisp-mode
   :head-mode 'host
   :tail-mode 'host)
-#+END_SRC
+#+end_src
 
 Define a matcher for single-line expressions.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-innermode poly-restclient/emacs-lisp/single-line-innermode poly-restclient/emacs-lisp-innermode
   :head-matcher (rx line-start ":" (one-or-more (not (any " "))) " :=")
   :tail-matcher (rx "\n"))
-#+END_SRC
+#+end_src
 
 Define a matcher for multi-line expressions.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-innermode poly-restclient/emacs-lisp/multi-line-innermode poly-restclient/emacs-lisp-innermode
   :head-matcher (rx line-start ":" (one-or-more (not (any " "))) " := <<\n")
   :tail-matcher (rx line-start "#\n"))
-#+END_SRC
+#+end_src
 
 ***** JSON Inner Mode
 Define the inner mode for JSON sections.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-innermode poly-restclient/json-innermode
   :mode 'json-mode
   :head-mode 'body
   :tail-mode 'body
   :head-matcher (rx line-start "{" line-end)
   :tail-matcher (rx line-start "}" line-end))
-#+END_SRC
+#+end_src
 
 ***** Rest Client Parent Mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-hostmode poly-restclient-hostmode
   :mode 'restclient-mode)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (define-polymode poly-restclient-mode
   :hostmode 'poly-restclient-hostmode
   :innermodes '(poly-restclient/emacs-lisp/single-line-innermode
                 poly-restclient/emacs-lisp/multi-line-innermode
                 poly-restclient/json-innermode))
-#+END_SRC
+#+end_src
 
 ** Browsing
 
@@ -5959,23 +5959,23 @@ Define the inner mode for JSON sections.
 I often want to link directly to a Jira ticket from an Org buffer.
 The following functions allow me to do so.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defcustom jira-hostname nil
   "The hostname of the Jira server.")
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun jira-lafrenierejm-url-of-ticket (name)
   "Return a Jira ticket's url given the ticket's NAME or &OPTION region from BEG to END."
   (interactive "MTicket: ")
   (format "https://%s/browse/%s" jira-hostname name))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defalias 'jira-url-of-ticket #'jira-lafrenierejm-url-of-ticket)
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun jira-lafrenierejm-org-link-ticket (name &optional beg end)
   "Create an Org link to the ticket NAME or &OPTION contained in region from BEG to END."
   (interactive
@@ -5991,11 +5991,11 @@ The following functions allow me to do so.
         (goto-char beg)))
     (insert (format "[[%s][%s]]" url name))
     url))
-#+END_SRC
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defalias 'jira-org-link-ticket #'jira-lafrenierejm-org-link-ticket)
-#+END_SRC
+#+end_src
 
 * Windows and Frames
 :PROPERTIES:
@@ -6007,7 +6007,7 @@ The following functions allow me to do so.
 A minor-mode menu for the mode line.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package minions
   ;; Load this package eagerly.
   :demand
@@ -6016,7 +6016,7 @@ A minor-mode menu for the mode line.
   :custom
   (minions-mode-line-lighter "…")
   (minions-mode t "Enable `minions-mode' globally."))
-#+END_SRC
+#+end_src
 
 ** Window Management
 *** /EXWM/
@@ -6033,7 +6033,7 @@ It features:
 - (Optional) Built-in system tray
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package exwm
   ;; Do not load the package lazily.
   :demand
@@ -6058,7 +6058,7 @@ It features:
   ;; Execute the following code after the package has been loaded.
   :config
   <<exwm/config>>)
-#+END_SRC
+#+end_src
 
 **** Variable Customizations
 :PROPERTIES:
@@ -6068,9 +6068,9 @@ It features:
 Only enable a single workspace.
 Buffer switching with e.g. Counsel is preferred to using multiple workspaces.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (exwm-workspace-number 1)
-#+END_SRC
+#+end_src
 
 **** Non-Auto-Loading Hooks
 :PROPERTIES:
@@ -6079,18 +6079,18 @@ Buffer switching with e.g. Counsel is preferred to using multiple workspaces.
 
 Use Firefox windows' names as the windows' buffers names.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('exwm-update-title-hook
  (defun init-window-and-frame/update-title ()
    "Use Firefox windows' names as the windows' buffers names."
    (when (or (string-match "Icecat" exwm-class-name)
              (string-match "Next" exwm-class-name))
      (exwm-workspace-rename-buffer exwm-title))))
-   #+END_SRC
+   #+end_src
 
 Add simulation keys for Firefox windows.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ('exwm-manage-finish-hook
  (defun init-window-and-frame/set-firefox-simulation-keys ()
    (when (and exwm-class-name (string= exwm-class-name "Icecat"))
@@ -6098,18 +6098,18 @@ Add simulation keys for Firefox windows.
       '(([?\C-s] . [?\C-f])
         ([?\C-q] . [?\C-w])
         ([?\C-t] . [?\C-n]))))))
-   #+END_SRC
+   #+end_src
 
 **** Launch Applications from Shell
 
 Define a function to launch applications from the shell.
 Launching applications is performed by calling ~start-process-shell-command~.
-#+BEGIN_SRC emacs-lisp :noweb-ref exwm/config
+#+begin_src emacs-lisp :noweb-ref exwm/config
 (defun exwm-start-process (command)
   "Start a process via a shell COMMAND."
   (interactive (list (read-shell-command "$ ")))
   (start-process-shell-command command nil command))
-#+END_SRC
+#+end_src
 
 Inform the bytecode compiler of the above command.
 #+begin_src emacs-lisp :noweb-ref exwm/commands
@@ -6131,39 +6131,39 @@ Bind the command to =s-<return>=.
 
 Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
 This will be performed with =s-r=.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (exwm-input-set-key (kbd "s-r") #'exwm-reset)
-#+END_SRC
+#+end_src
 
 Hide all windows except the current one.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (exwm-input-set-key (kbd "s-o") #'delete-other-windows)
-#+END_SRC
+#+end_src
 
 Close the current window and kill its buffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (exwm-input-set-key (kbd "C-s-x") #'kill-buffer-and-window)
-#+END_SRC
+#+end_src
 
 Close the current window without killing its buffer.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (exwm-input-set-key (kbd "s-x") #'delete-window)
-#+END_SRC
+#+end_src
 
 Open an Eshell buffer in the current buffer's location.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (exwm-input-set-key (kbd "C-z") #'eshell-find-eshell-here)
-#+END_SRC
+#+end_src
 
 Move =point= to the windows immediately around the current window.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (exwm-input-set-key (kbd "s-h") #'windmove-left)
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
-#+END_SRC
+#+end_src
 
 *** /EXWM RandR/
 
@@ -6227,7 +6227,7 @@ From the README of Oleh Krehel (abo-abo)'s Ace Window package:
 This package aims to take the speed and predictability of ~windmove~ and pack it into a single key binding, similar to ~other-window~.
 #+END_QUOTE
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ace-window
   ;; Load this package eagerly.
   :demand
@@ -6243,7 +6243,7 @@ This package aims to take the speed and predictability of ~windmove~ and pack it
   ;; Evaluate the following code before loading this package.
   :init
   <<ace-window/init>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customizations
 :PROPERTIES:
@@ -6252,23 +6252,23 @@ This package aims to take the speed and predictability of ~windmove~ and pack it
 
 Use home row characters to label windows.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-#+END_SRC
+#+end_src
 
 Issue a read-char even for one window.
 This allows more flexibility in what action is performed, i.e. more than just changing focus, at the cost of requiring more keystrokes for the single most common task of changing focus.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (aw-dispatch-always t)
-#+END_SRC
+#+end_src
 
 Show the ace window key in the mode line.
 This is useful for EXWM buffers which cannot display keys in the buffer itself.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (ace-window-display-mode t)
-#+END_SRC
+#+end_src
 
 *** Pre-Load Evaluation
 :PROPERTIES:
@@ -6276,27 +6276,27 @@ This is useful for EXWM buffers which cannot display keys in the buffer itself.
 :END:
 
 Bind Ace Window to =s-a= in EXWM.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (with-eval-after-load 'exwm
   (exwm-input-set-key (kbd "s-a") #'ace-window))
-#+END_SRC
+#+end_src
 
 ** Window
 
 Add top-level =super= bindings to window management functions.
 This allows the keys to be useful whenever the =s= modifier is made available to Emacs.
-#+BEGIN_SRC emacs-lisp :noweb-ref general/config
+#+begin_src emacs-lisp :noweb-ref general/config
 (general-define-key
  "s-o" #'delete-other-windows
  "s-h" #'windmove-left
  "s-j" #'windmove-down
  "s-k" #'windmove-up
  "s-l" #'windmove-right)
-#+END_SRC
+#+end_src
 
 ** Desktop Environment
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package desktop-environment
   :if (eq system-type 'gnu/linux)
 
@@ -6312,7 +6312,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
    "C-s-l" #'desktop-environment-lock-screen
    "<XF86WLAN>" #'desktop-environment-toggle-wifi
    "<XF86Bluetooth>" #'desktop-environment-toggle-bluetooth))
-#+END_SRC
+#+end_src
 
 * Secret Management
 :PROPERTIES:
@@ -6321,7 +6321,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
 
 ** Password Cache
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package password-cache
   :straight (:type built-in)
 
@@ -6331,13 +6331,13 @@ This allows the keys to be useful whenever the =s= modifier is made available to
   ;; Apply the following customizations.
   :custom
   (password-cache-expiry nil "Do not expire cached passwords."))
-#+END_SRC
+#+end_src
 
 ** Auth Source Pass
 
 Damien Cassou (DameinCassou)'s [[https://github.com/DamienCassou/auth-password-store][auth-source-pass]] package integrates Jason A. Donenfield (ZX2C4)'s [[https://www.passwordstore.org/][pass]] utility into Emacs's authentication mechanisms.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package auth-source-pass
   ;; Only load this package if the following code evaluates to non-nil.
   :if
@@ -6349,7 +6349,7 @@ Damien Cassou (DameinCassou)'s [[https://github.com/DamienCassou/auth-password-s
   ;; Evaluate the following code after loading this package.
   :config
   <<auth-source-pass/config>>)
-#+END_SRC
+#+end_src
 
 *** Conditional Loading
 :PROPERTIES:
@@ -6359,9 +6359,9 @@ Damien Cassou (DameinCassou)'s [[https://github.com/DamienCassou/auth-password-s
 
 ~auth-source-pass~ is only usable if =pass= is available in the user's =$PATH=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (executable-find "pass")
-#+END_SRC
+#+end_src
 
 *** Post-Load Evaluation
 :PROPERTIES:
@@ -6371,13 +6371,13 @@ Damien Cassou (DameinCassou)'s [[https://github.com/DamienCassou/auth-password-s
 
 Enable auth-source-password-store.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (auth-source-pass-enable)
-#+END_SRC
+#+end_src
 
 ** Password Store
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package password-store
   ;; Only load `password-store' if the following condition is met.
   :if
@@ -6388,7 +6388,7 @@ Enable auth-source-password-store.
 
   :custom
   (password-store-password-length 32 "Default password length"))
-#+END_SRC
+#+end_src
 
 *** Conditional Loading (~:if~)
 :PROPERTIES:
@@ -6398,15 +6398,15 @@ Enable auth-source-password-store.
 
 ~password-store~ is only usable if =pass= is on the user's =$PATH=.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (executable-find "pass")
-#+END_SRC
+#+end_src
 
 ** Ivy Pass
 
 Ivy Pass is an Ivy interface for Password Store.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package ivy-pass
   ;; Only load this package if the evaluation of the following code is non-nil.
   :if
@@ -6418,27 +6418,27 @@ Ivy Pass is an Ivy interface for Password Store.
   ;; Add the following key bindings.
   :general
   ("C-x p" #'ivy-pass))
-#+END_SRC
+#+end_src
 
 ** EasyPG Assistant (EPA)
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package epa
   :straight (:type built-in)
 
   ;; Apply the following customizations.
   :custom
   <<epa/custom>>)
-#+END_SRC
+#+end_src
 
 *** Variable Customization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref epa/custom
 :END:
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (epa-pinentry-mode 'loopback "Redirect all Pinentry queries to Emacs.")
-#+END_SRC
+#+end_src
 
 * Footnotes
 
