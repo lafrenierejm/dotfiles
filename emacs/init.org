@@ -4732,6 +4732,28 @@ Create an alist whose keys are regexps matching filenames and whose values are t
   (youtube-dl-directory (xdg-user-dir "VIDEOS")))
 #+end_src
 
+** Emacs Multi-Media System (EMMS)
+
+*** /EMMS Source File/
+
+#+begin_src emacs-lisp
+(use-package emms-source-file
+  :after directories
+  :custom
+  (emms-source-file-default-directory (directories-user-audio)))
+#+end_src
+
+*** /EMMS Setup/
+
+#+begin_src emacs-lisp
+(use-package emms-setup
+  :straight emms
+
+  :config
+  (emms-all)
+  (emms-default-players))
+#+end_src
+
 * Programming
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref programming
