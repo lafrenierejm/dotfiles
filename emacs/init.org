@@ -1334,8 +1334,8 @@ Instead, make it a noop as far as Evil is concerned.
 
 #+BEGIN_SRC emacs-lisp
 (:states '(motion normal visual)
- "H" #'init-evil/beginning-of-maybe-line
- "L" #'init-evil/end-of-maybe-line
+ "H" #'evil-beginning-of-line-maybe
+ "L" #'evil-end-of-line-maybe
  (kbd "SPC") #'evil-toggle-fold)
 #+END_SRC
 
@@ -1348,7 +1348,7 @@ Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
 
 #+BEGIN_SRC emacs-lisp
 (:states 'normal
- "Y" #'init-evil/evil-yank-to-end-of-line)
+ "Y" #'evil-evil-yank-to-end-of-line)
 #+END_SRC
 
 **** Pre-Load Evaluation
@@ -1374,7 +1374,7 @@ Enable Evil by default in all modes.
 
 ***** Define =evil-yank-to-end-of-line=
 #+BEGIN_SRC emacs-lisp
-(defun init-evil/evil-yank-to-end-of-line ()
+(defun evil-yank-to-end-of-line ()
   "Yank the characters from point to the end of the current line."
   (interactive)
   (evil-yank (point) (point-at-eol)))
@@ -1386,7 +1386,7 @@ The following code is based on [[http://stackoverflow.com/a/14245964%0A][a Stack
 All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
 #+BEGIN_SRC emacs-lisp
-(defun init-evil/back-to-comment ()
+(defun evil-back-to-comment ()
   "Move point to the beginning of the comment in the current line.
 
 If the current line does not contain a comment, then point will stay
@@ -1418,9 +1418,9 @@ will return t."
         nil))))
 #+END_SRC
 
-****** Define ~init-evil/back-totext~
+****** Define ~evil-back-to-text~
 #+BEGIN_SRC emacs-lisp
-(defun init-evil/back-totext ()
+(defun evil-back-to-text ()
   "Move point to the last non-whitespace character on this line."
   (interactive)
   ;; Move point to the last character on this line.
@@ -1431,8 +1431,8 @@ will return t."
   (forward-char))
 #+END_SRC
 
-****** Define ~beginning-of-maybe-line~
-~beginning-of-maybe-line~ moves ~point~ toward the beginning of the current line incrementally by semantic region.
+****** Define ~beginning-of-line-maybe~
+~beginning-of-line-maybe~ moves ~point~ toward the beginning of the current line incrementally by semantic region.
 The following semantic elements are considered:
 1. Comment
 2. Source code
@@ -1442,7 +1442,7 @@ The following code is based on [[https://stackoverflow.com/a/145359/8468492][a S
 All code posted to StackOverflow.com is licensed under CC BY-SA 3.0, so the following derived code is also CC BY-SA 3.0-licensed.
 
 #+BEGIN_SRC emacs-lisp
-(defun init-evil/beginning-of-maybe-line ()
+(defun evil-beginning-of-line-maybe ()
   "Move point to first non-whitespace character or beginning of the line.
 
 Move point to the first non-whitespace character on the line.  If the
@@ -1452,7 +1452,7 @@ line."
   (let ((old-point (point)))            ; current position
     ;; Go to the beginning of a comment.  If there is not comment or
     ;; if point is already at or to the left of the comment...
-    (when (or (not (init-evil/back-to-comment))
+    (when (or (not (evil-back-to-comment))
               (<= old-point (point)))
       ;; Go to the first non-whitespace column.
       (back-to-indentation)
@@ -1462,9 +1462,9 @@ line."
         (beginning-of-line)))))
 #+END_SRC
 
-****** Define ~end-of-maybe-line~
-~end-of-maybe-line~ incrementally moves ~point~ to the right within a line by semantic region.
-The following semantic elements are considered in ~end-of-maybe-line~'s movement:
+****** Define ~evil-end-of-line-maybe~
+~end-of-line-maybe~ incrementally moves ~point~ to the right within a line by semantic region.
+The following semantic elements are considered in ~end-of-line-maybe~'s movement:
 1. Source code
 2. Comments
 3. Trailing whitespace
@@ -1474,7 +1474,7 @@ The following is licensed CC BY-SA 3.0-licensed by StackOverflow user [[https://
 It is based on [[http://stackoverflow.com/a/14245964][Gilles's StackOverflow answer]].
 
 #+BEGIN_SRC emacs-lisp
-(defun init-evil/end-of-maybe-line ()
+(defun evil-end-of-line-maybe ()
   "Incrementally move point to the ends of syntactic blocks within the line.
 
 The syntactic blocks are as follows, ordered from right to left:
@@ -1484,11 +1484,11 @@ The syntactic blocks are as follows, ordered from right to left:
   ;; Record point's current position.
   (let ((old-point (point)))
     ;; Go to the beginning of an inline comment (if any).
-    (init-evil/back-to-comment)
+    (evil-back-to-comment)
     ;; If already at or after the start of the comment...
     (when (>= old-point (point))
       ;; ...then go to the beginning of trailing whitespace.
-      (init-evil/back-totext))))
+      (evil-back-to-text))))
 #+END_SRC
 
 *** Evil Collection
@@ -3137,11 +3137,11 @@ Define the regexp to match the result of the above format string.
 :HEADER-ARGS+: :noweb-ref esh-mode/config
 :END:
 
-***** Define Eshell-Specific ~beginning-of-maybe-line~
-[[../minor-mode/init-evil.org][init-evil.org]] defines ~init/beginning-of-maybe-line~.
-That function acts as a do-what-I-mean alternative to the built-in =beginning-of-line= by incrementally jumping to the beginning of text sections within a line.
+***** Define Eshell-Specific ~beginning-of-line-maybe~
+The ~use-package~ declaration of /Evil/ includes a post-load definition of ~evil-beginning-of-line-maybe~.
+That function acts as a do-what-I-mean alternative to the built-in ~beginning-of-line~ by incrementally jumping to the beginning of text sections within a line.
 
-=esh-mode-beginning-of-line-maybe= moves =point= toward the beginning of the current line incrementally by semantic region.
+~esh-mode-beginning-of-line-maybe~ moves ~point~ toward the beginning of the current line incrementally by semantic region.
 1. If point is in the text of a command, point will be moved to the beginning of the command.
 2. If the current line has leading whitespace and point is somewhere after that whitespace, point will be moved to the first non-whitespace character.
 3. Point will be moved to the beginning of the line.
