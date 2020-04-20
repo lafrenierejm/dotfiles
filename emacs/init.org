@@ -6193,6 +6193,8 @@ Move =point= to the windows immediately around the current window.
 
 #+begin_src emacs-lisp
 (use-package exwm-randr
+  :straight exwm
+
   :if (executable-find "xrandr")
 
   :after (:all dash exwm rx s subr)
