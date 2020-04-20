@@ -4865,6 +4865,11 @@ The above function should be added to all Lisp major mode hooks.
 (general-add-hook lisp-major-mode-hooks #'use-spaces)
 #+end_src
 
+And enable line numbers for all Lisp major modes.
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+(lisp-major-mode-hooks nil)
+#+end_src
+
 *** Lisp Mode
 
 #+begin_src emacs-lisp
