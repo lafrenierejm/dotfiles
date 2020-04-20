@@ -5817,6 +5817,14 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
           "--stdin"))
 #+end_src
 
+** TOML
+
+*** /TOML Mode/
+
+#+begin_src emacs-lisp
+(use-package toml-mode)
+#+end_src
+
 * Refactoring
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref refactoring
