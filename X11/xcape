@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Map an unused modifier's keysym to the spacebar's keycode and make it a
+# control modifier. It needs to be an existing key so that emacs won't
+# spazz out when you press it. Hyper_L is a good candidate.
+spare_modifier="Hyper_L"
+xmodmap -e "keycode 65 = $spare_modifier"  # bind space to Hyper_L
+xmodmap -e "remove mod4 = $spare_modifier"  # hyper_l is mod4 by default
+xmodmap -e "add Control = $spare_modifier"  # bind
+
+# Map space to an unused keycode for xcape to use.
+xmodmap -e "keycode any = space"
+
+# Use xcape to cause the space bar to generate a space when tapped.
+xcape -e "$spare_modifier=space"
+
+# Make Super_L generate Super-a combination when pressed and released on its own.
+# xcape -e 'Super_L=Super_L|a'
+
+# Rebind Control_R to Super_R
+xmodmap -e 'remove Control = Control_R'
+xmodmap -e 'keysym Control_R = Super_R'
+# Tap Super_R to send Super-a
+xcape -e 'Super_R=Super_R|a'

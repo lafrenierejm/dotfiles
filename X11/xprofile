@@ -1,0 +1,12 @@
+#!/bin/sh
+
+user_dirs="$HOME"/.config/user-dirs.dirs
+[ -f "$user_dirs" ] && . "$user_dirs"
+
+export MAILDIR="$HOME"/mail
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR"/ssh-agent.socket
+
+ssh-agent -a "$SSH_AUTH_SOCK"
+
+# gpg-connect-agent /bye
+# export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
