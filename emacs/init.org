@@ -4852,7 +4852,7 @@ This can benefit both literate and traditional programming by allowing one to co
   ("\\.\\(applescri\\|sc\\)pt\\'")
 
   :general
-  (:keymap 'apples-mode-map
+  (:keymaps 'apples-mode-map
    "C-c C-c" #'apples-run-region/buffer))
 #+end_src
 
