@@ -6078,7 +6078,7 @@ A minor-mode menu for the mode line.
   (minions-mode t "Enable `minions-mode' globally."))
 #+end_src
 
-** Window Management
+** Window Manager
 *** /EXWM/
 From the package's README:
 #+BEGIN_QUOTE
@@ -6223,6 +6223,7 @@ Move =point= to the windows immediately around the current window.
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
+(exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
 #+end_src
 
 *** /EXWM RandR/
