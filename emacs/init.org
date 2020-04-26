@@ -4678,7 +4678,10 @@ The primary advantage of doing so is that it allows me to version-control the fi
 #+begin_src emacs-lisp
 (use-package erc
   :custom
-  <<erc/custom>>)
+  <<erc/custom>>
+
+  :config
+  <<erc/config>>)
 #+end_src
 
 **** Use Auth-Source for Passwords
@@ -4689,7 +4692,7 @@ I prefer to use auth-source.
 (erc-prompt-for-password nil "Use auth-source for login passwords.")
 #+end_src
 
-**** Hide Messages
+**** Hide Types of Messages
 
 Hide the following message types across all networks and channels:
 - JOIN
@@ -4697,6 +4700,33 @@ Hide the following message types across all networks and channels:
 - QUIT
 #+begin_src emacs-lisp :noweb-ref erc/custom
 (erc-hide-list '("JOIN" "PART" "QUIT"))
+#+end_src
+
+**** Automatically Identify
+
+Redefine ~erc-login~ to identify using NickServ commands sent via PRIVMSG.
+#+begin_src emacs-lisp :noweb-ref erc/config
+(defun erc-login ()
+  "Perform user authentication at the IRC server."
+  (erc-log (format "login: nick: %s, user: %s %s %s :%s"
+                   (erc-current-nick)
+                   (user-login-name)
+                   (or erc-system-name (system-name))
+                   erc-session-server
+                   erc-session-user-full-name))
+
+  (erc-server-send (format "NICK %s" (erc-current-nick)))
+  (erc-server-send
+   (format "USER %s %s %s :%s"
+           ;; hacked - S.B.
+           (if erc-anonymous-login erc-email-userid (user-login-name))
+           "0" "*"
+           erc-session-user-full-name))
+  (if erc-session-password
+      (erc-message "PRIVMSG" (format "NickServ identify %s %s"
+                                   (erc-current-nick) erc-session-password))
+    (message "Logging in without password"))
+  (erc-update-mode-line))
 #+end_src
 
 * Multimedia
