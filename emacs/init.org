@@ -6235,7 +6235,7 @@ Move =point= to the windows immediately around the current window.
 
   :if (executable-find "xrandr")
 
-  :after (:all dash exwm rx s subr)
+  :after (:all dash exwm rx)
 
   ;; Load this package eagerly.
   :demand
