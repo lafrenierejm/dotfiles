@@ -1351,7 +1351,7 @@ Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
 
 #+begin_src emacs-lisp
 (:states 'normal
- "Y" #'evil-evil-yank-to-end-of-line)
+ "Y" #'evil-yank-to-end-of-line)
 #+end_src
 
 **** Pre-Load Evaluation
