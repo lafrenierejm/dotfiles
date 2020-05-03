@@ -5091,7 +5091,7 @@ Lisp-1 languages have a single namespace for all names.
   (when-let ((path (expand-file-name
                     "org.gnu.savannah.git/guix"
                     (xdg-user-dir "SOURCE")))
-             ((file-directory-p path)))
+             (file-directory-p path))
     (add-to-list 'geiser-guile-load-path path)))
 #+end_src
 
