@@ -6013,6 +6013,19 @@ Define the inner mode for JSON sections.
 (exwm-input-set-key (kbd "s-s") #'counsel-web-suggest)
 #+end_src
 
+** Pastebins
+
+*** /Webpaste/
+
+#+begin_src emacs-lisp
+(use-package webpaste
+  :general
+  ("C-c w p" #'webpaste-paste-buffer-or-region)
+
+  :custom
+  (webpaste-provider-priority '("paste.mozilla.org")))
+#+end_src
+
 * Project Management
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref project-management
