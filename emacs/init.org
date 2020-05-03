@@ -5705,6 +5705,15 @@ Define the actual Polymode.
   :innermodes '(poly-groovy-innermode))
 #+end_src
 
+** Nix
+
+*** /Nix Mode/
+
+#+begin_src emacs-lisp
+(use-package nix-mode
+  :mode "\\.nix\\'")
+#+end_src
+
 ** Rust
 :PROPERTIES:
 :URL:      https://www.rust-lang.org/
