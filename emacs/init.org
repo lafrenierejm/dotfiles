@@ -1184,11 +1184,7 @@ Meanwhile, when writing prose I tend to use the single prime (') primarily as an
 
   ;; Apply the following variable customizations.
   :custom
-  <<evil-org/custom>>
-
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<evil-org/config>>)
+  <<evil-org/custom>>)
 #+end_src
 
 **** Auto-Loading Hooks
@@ -1228,16 +1224,6 @@ Specify the key themes to enable.
 Retain selection after typing =<= or =>= in visual state.
 #+begin_src emacs-lisp
 (evil-org-retain-visual-state-on-shift t)
-#+end_src
-
-**** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil-org/config
-:END:
-
-Apply the keybindings specified in ~evil-org-key-theme~.
-#+begin_src emacs-lisp
-(evil-org-agenda-set-keys)
 #+end_src
 
 ** Markdown
