@@ -4865,6 +4865,7 @@ The following is a list of the Lisp modes I edit in.
   '(cider-repl-mode
     clojure-mode
     emacs-lisp-mode
+    geiser-repl-mode
     hy-mode
     ielm-mode
     inferior-hy-mode
@@ -5164,6 +5165,13 @@ Replace hash symbols with ellipses.
   :general
   (:keymaps 'hy-mode-map
    "C-c C-c" #'hy-shell-eval-buffer))
+#+end_src
+
+**** /Scheme/
+
+#+begin_src emacs-lisp
+(use-package scheme
+  :mode ("\\.guile\\'" . scheme-mode))
 #+end_src
 
 *** Lisp-2
