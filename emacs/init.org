@@ -1325,7 +1325,7 @@ Instead, make it a noop as far as Evil is concerned.
 (:states '(motion normal visual)
  "H" #'evil-beginning-of-line-maybe
  "L" #'evil-end-of-line-maybe
- (kbd "SPC") #'evil-toggle-fold)
+ "SPC" #'evil-toggle-fold)
 #+end_src
 
 Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
