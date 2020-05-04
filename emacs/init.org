@@ -5287,6 +5287,15 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ('clojure-mode-hook #'cider-hydra-mode))
 #+end_src
 
+** Jinja
+
+*** /Jinja2 Mode/
+
+#+begin_src emacs-lisp
+(use-package jinja2-mode
+  :mode (("\\.j2\\'" . jinja2-mode)))
+#+end_src
+
 ** UNIX Shell
 
 *** /Sh Script/
