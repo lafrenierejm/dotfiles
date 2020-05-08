@@ -5232,6 +5232,22 @@ Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a p
              (insert (current-kill 0))))))
 #+end_src
 
+****** Comment Out Sexp
+:PROPERTIES:
+:COPYRIGHT_AUTHOR: A. Levy
+:COPYRIGHT_URL: https://stackoverflow.com/a/4201022/8468492
+:LICENSE:  CC BY-SA 4.0
+:END:
+
+Clojure, Hy, and Scheme have built-in macros for commenting out sexps.
+Emacs Lisp, as far as I no, does not have any such macro built-in.
+A. Levy provided a working macro as [[https://stackoverflow.com/a/4201022/8468492][an answer]] on StackOverflow:
+#+begin_src emacs-lisp :noweb-ref elisp-mode/config
+(defmacro comment (&rest body)
+  "Return `nil' in place of BODY, zero or more s-expressions."
+  nil)
+#+end_src
+
 ***** Helpful
 
 From the package's README:
