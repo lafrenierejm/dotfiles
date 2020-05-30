@@ -23,6 +23,8 @@
   };
 
   home.packages = with pkgs; [
+    aspell
+    aspellDicts.en
     direnv
     dnsutils
     file
@@ -150,6 +152,7 @@
       use-package
       vterm
       ws-butler
+      wucuo
       yaml-mode
       yasnippet
     ]) ++ (with epkgs.elpaPackages; [

@@ -1054,13 +1054,12 @@ Note that although \src_emacs-lisp{use-package} is used below, the /Org/ package
 :END:
 
 Enable the following minor modes in all Org buffers:
-- \src_emacs-lisp{flyspell-mode} for on-the-fly spell checking.
 - \src_emacs-lisp{org-indent-mode} to indent text according to outline structure.
 - \src_emacs-lisp{visual-line-mode} to naturally wrap long lines.
 
 
 #+begin_src emacs-lisp
-('org-mode-hook (list #'flyspell-mode #'org-indent-mode #'visual-line-mode))
+('org-mode-hook (list #'org-indent-mode #'visual-line-mode))
 #+end_src
 
 **** Variable Customizations
@@ -1095,6 +1094,14 @@ Set the workflow states.
 (org-todo-keywords '((sequence "TODO" "FEEDBACK" "VERIFY" "|"
                                "DELEGATED" "DONE(d!/!)" "|"
                                "CANCELED")))
+#+end_src
+
+**** Spell Check
+
+Use /Wucuo/ to perform spell checking.
+
+#+begin_src emacs-lisp :noweb-ref wucuo/ghook
+('org-mode-hook #'wucuo-start)
 #+end_src
 
 *** Poly Org
@@ -2092,11 +2099,12 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
  '((:eval
     (minibuffer-line-align
      '()
-     '((:eval (propertize
-               (battery-format
-                minibuffer-line-battery-format
-                (funcall battery-status-function))
-               'face 'default))
+     `(,(when battery-status-function
+          '(:eval (propertize
+                   (battery-format
+                    minibuffer-line-battery-format
+                    (funcall battery-status-function))
+                   'face 'default)))
        (:eval (propertize " | " 'face 'default))
        (:eval (propertize system-name 'face 'default))
        (:eval (propertize " | " 'face 'default))
@@ -4083,16 +4091,6 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
 :HEADER-ARGS+: :noweb-ref static-analysis
 :END:
 
-** Flyspell
-
-#+begin_src emacs-lisp
-(use-package flyspell
-  :straight (:type built-in)
-
-  :ghook
-  <<flyspell/ghook>>)
-#+end_src
-
 ** Ispell
 
 #+begin_src emacs-lisp
@@ -4130,15 +4128,28 @@ If no such binaries exist, Ispell does not need to be downloaded.
 :DESCRIPTION: Code to be evaluated after Ispell has been loaded.
 :END:
 
-Set the executable to use for spellchecking.
+Set the executable to use for spell checking.
 If =aspell= is not available, disable Ispell.
 
 #+begin_src emacs-lisp
 (cond
  ((executable-find "aspell")
-  (setq ispell-program-name "aspell"))
+  (setq ispell-program-name "aspell")
+  (setq ispell-extra-args '("--run-together")))
  (t
   (setq ispell-program-name nil)))
+#+end_src
+
+** /Wucuo/
+
+/Wucuo/ is a wrapper around /Flyspell/ that provides performance optimizations and camel case support out of the box.
+
+#+begin_src emacs-lisp
+(use-package wucuo
+  :after ispell
+
+  :ghook
+  <<wucuo/ghook>>)
 #+end_src
 
 ** Flycheck
@@ -4165,7 +4176,7 @@ If =aspell= is not available, disable Ispell.
 #+begin_src emacs-lisp
 (use-package mu4e
   ;; Load `mu4e' after the following packages.
-  :after (flyspell ispell s)
+  :after s
 
   ;; Inform the bytecode compiler of the following functions.
   :commands (mu4e-choose-msmtp-account mu4e-show-trailing-whitespace)
@@ -4306,12 +4317,6 @@ Use the value of ~$MAILDIR~ as the path to the mail directory if that environmen
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/gfhook
 :END:
-
-Enable Flyspell mode when composing mail.
-
-#+begin_src emacs-lisp
-('mu4e-compose-mode-hook #'flyspell-mode)
-#+end_src
 
 Show trailing whitespace when composing mail.
 
@@ -4489,6 +4494,14 @@ This is helpful when composing =format=flowed= mail.
 (defun mu4e-show-trailing-whitespace ()
   "Highlight trailing whitespace with face `trailing-whitespace'."
   (setq show-trailing-whitespace t))
+#+end_src
+
+**** Spell Checking
+
+Enable spell check when composing mail.
+
+#+begin_src emacs-lisp :noweb-ref wucuo/ghook
+('mu4e-compose-mode-hook #'wucuo-start)
 #+end_src
 
 *** Message
@@ -5620,10 +5633,10 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode
 ('python-mode-hook nil)
 #+end_src
 
-*** /Flyspell/
+*** Spell Check
 
-#+begin_src emacs-lisp :noweb-ref flyspell/ghook
-('python-mode-hook #'flyspell-prog-mode)
+#+begin_src emacs-lisp :noweb-ref wucou/ghook
+('python-mode-hook #'wucuo-start)
 #+end_src
 
 *** /Highlight Indent Guides/
