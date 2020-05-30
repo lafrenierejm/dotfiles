@@ -143,35 +143,40 @@ The following code ensures that this step is only needed once.
 
 #+begin_src emacs-lisp
 (cond
- ((executable-find "guix")
-  <<bootstrapping/guix>>)
+ ((or (executable-find "guix") (executable-find "nix"))
+  <<bootstrapping/guix-nix>>
+  <<bootstrapping/guix-nix/use-package>>)
  (t
-  <<bootstrapping/straight>>))
+  <<bootstrapping/straight>>
+  <<bootstrapping/straight/use-package>>))
+(setq use-package-always-defer t)
 #+end_src
 
-*** Guix
+*** Guix or Nix
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref bootstrapping/guix
+:HEADER-ARGS+: :noweb-ref bootstrapping/guix-nix
 :END:
 
-Emacs packages can be managed as any other package with Guix.
-As such, Emacs's native package management tools can be used.
+Emacs packages can be managed as any other package with Guix or Nix.
+As such, Emacs's native package management tools can be used but its default archives should be ignored.
 Before any other installed packages can be configured, /Package/ must be loaded and initialized.
 #+begin_src emacs-lisp
 (require 'package)
+(setq package-archives nil)
+(setq package-enable-at-startup nil)
 (package-initialize)
 #+end_src
 
-**** ~:straight~ keyword in \src_emacs-lisp{use-package}
+**** /Use Package/
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref use-package/guix
+:HEADER-ARGS+: :noweb-ref bootstrapping/guix-nix/use-package
 :END:
 
-Because I also use /Straight/ to manage packages on non-Guix systems, I need to account for instances where I use the ~:straight~ keyword in \src_emacs-lisp{use-package} macros.
+Because I use /Straight/ to manage packages on systems where neither Gix nor Nix are available, I need to account for instances where I use the ~:straight~ keyword in \src_emacs-lisp{use-package} macros.
 This is accomplished by requesting \src_emacs-lisp{use-package} to just ignore any unkown keywords rather than raise errors.
 #+begin_src emacs-lisp
-(with-eval-after-load 'use-package-core
-  (setq use-package-ignore-unknown-keywords t))
+(require 'use-package)
+(setq use-package-ignore-unknown-keywords t)
 #+end_src
 
 *** Straight
@@ -201,9 +206,9 @@ Download and load /Straight/.
   (load bootstrap-file nil 'nomessage))
 #+end_src
 
-**** Use Package
+**** /Use Package/
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref use-package/straight
+:HEADER-ARGS+: :noweb-ref bootstrapping/straight/use-package
 :END:
 
 Download /Use Package/.
@@ -211,34 +216,14 @@ Download /Use Package/.
 (straight-use-package 'use-package)
 #+end_src
 
-Configure \src_emacs-lisp{use-package} to download packages with /Straight/ by default.
+Configure /Use Package/ to download packages with /Straight/ by default.
 #+begin_src emacs-lisp
 (setq straight-use-package-by-default t)
 #+end_src
 
-** Use Package
-
-#+begin_src emacs-lisp
-(when (not (executable-find "guix"))
-  <<use-package/straight>>)
-#+end_src
-
-Next, /Use Package/ is loaded.
-This package provides the \src_emacs-lisp{use-package} macro for declarative loading of other packages.
+And finally load /Use Package/.
 #+begin_src emacs-lisp
 (require 'use-package)
-#+end_src
-
-Loading every package during Emacs's initialization is unnecessary and increases load time.
-Instead, packages should only be loaded when a feature they provide is actually needed.
-/Use Package/ provides a feature to lazy-load packages by default:
-#+begin_src emacs-lisp
-(setq use-package-always-defer t)
-#+end_src
-
-#+begin_src emacs-lisp
-(when (executable-find "guix")
-  <<use-package/guix>>)
 #+end_src
 
 ** Org
@@ -296,6 +281,35 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
 :HEADER-ARGS+: :noweb-ref customization
 :END:
 
+** /XDG/
+
+The /XDG/ package provides functions for working with XDG standards and specifications.
+It is loaded to override \src_emacs-lisp{xdg-line-regexp}.
+By default, that variable only allows reading a few of the most common directory types even though the XDG spec allows setting an arbitrary number of directories in =$XDG_CONFIG_DIR/user-dirs.dirs=.
+
+#+begin_src emacs-lisp
+(use-package xdg
+  :straight (:type built-in)
+
+  :demand
+
+  :config
+  (setq xdg-line-regexp
+        (rx line-start
+            "XDG_" (group (one-or-more upper)) "_DIR="
+            "\"" (group (minimal-match (one-or-more anything))) "\""
+            line-end)))
+#+end_src
+
+** /Directories/
+
+/Directories/ provides platform-specific paths for configuration, cache, and other data.
+#+begin_src emacs-lisp
+(use-package directories
+  :straight (:type git :host github :repo "lafrenierejm/directories-elisp")
+  :demand)
+#+end_src
+
 ** /Cus Edit/
 
 Emacs has a customization system distinct from simply \src_emacs-lisp{setq}-ing variables.
@@ -340,7 +354,6 @@ Additionally, we want Cus Edit to always be loaded (not just when we interactive
   (let ((path (expand-file-name
                "custom.el"
                (file-name-directory user-init-file))))
-    (f-touch path)
     (setq custom-file path)
     (load custom-file)))
 #+end_src
@@ -350,35 +363,6 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
 
 #+begin_src emacs-lisp
 (use-package f
-  :demand)
-#+end_src
-
-** /XDG/
-
-The /XDG/ package provides functions for working with XDG standards and specifications.
-It is loaded to override \src_emacs-lisp{xdg-line-regexp}.
-By default, that variable only allows reading a few of the most common directory types even though the XDG spec allows setting an arbitrary number of directories in =$XDG_CONFIG_DIR/user-dirs.dirs=.
-
-#+begin_src emacs-lisp
-(use-package xdg
-  :straight (:type built-in)
-
-  :demand
-
-  :config
-  (setq xdg-line-regexp
-        (rx line-start
-            "XDG_" (group (one-or-more upper)) "_DIR="
-            "\"" (group (minimal-match (one-or-more anything))) "\""
-            line-end)))
-#+end_src
-
-** /Directories/
-
-/Directories/ provides platform-specific paths for configuration, cache, and other data.
-#+begin_src emacs-lisp
-(use-package directories
-  :straight (:type git :host github :repo "lafrenierejm/directories-elisp")
   :demand)
 #+end_src
 
