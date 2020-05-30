@@ -1,6 +1,6 @@
 #!/bin/sh
 
-user_dirs="$HOME"/.config/user-dirs.dirs
+user_dirs="$XDG_CONFIG_HOME"/user-dirs.dirs
 [ -f "$user_dirs" ] && . "$user_dirs"
 
 export MAILDIR="$HOME"/mail
