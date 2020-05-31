@@ -52,6 +52,7 @@ with import <nixpkgs> {
     pinentry
     redshift
     (ripgrep.override { withPCRE2 = true; })
+    tesseract4
     udisks
     xcape
     youtube-dl
