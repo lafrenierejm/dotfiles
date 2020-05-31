@@ -51,7 +51,7 @@ with import <nixpkgs> {
     pass
     pinentry
     redshift
-    ripgrep
+    (ripgrep.override { withPCRE2 = true; })
     udisks
     xcape
     youtube-dl
