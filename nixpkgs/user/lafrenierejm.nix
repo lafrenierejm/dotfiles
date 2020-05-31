@@ -1,4 +1,13 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with import <nixpkgs> {
+  # use the latest Emacs overlay
+  overlays = [
+    (import (builtins.fetchTarball {
+      url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
+    }))
+  ];
+};
 
 {
   imports = [
