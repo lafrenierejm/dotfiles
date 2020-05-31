@@ -160,6 +160,7 @@ with import <nixpkgs> {
       toml-mode
       use-package
       vterm
+      webpaste
       ws-butler
       wucuo
       yaml-mode
