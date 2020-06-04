@@ -140,6 +140,7 @@ with import <nixpkgs> {
       monky
       nix-mode
       no-littering
+      package-lint
       password-store
       pdf-tools
       poly-org
