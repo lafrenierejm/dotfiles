@@ -23,6 +23,9 @@ with import <nixpkgs> {
     ".hgrc" = {
       source = ../../hg/hgrc;
     };
+    ".mbsyncrc" = {
+      source = ../../isync/config;
+    };
     ".xinitrc" = {
       source = ../../X11/xinitrc;
     };
