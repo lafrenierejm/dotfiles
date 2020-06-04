@@ -16,6 +16,9 @@ with import <nixpkgs> {
   ];
 
   home.file = {
+    ".bashrc" = {
+      source = ../../bash/bashrc;
+    };
     ".emacs.d" = {
       source = ../../emacs;
       recursive = true;
