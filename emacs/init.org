@@ -2675,6 +2675,14 @@ This has the effect of making that command easily accessible alongside other /VC
 
 #+begin_src emacs-lisp
 (use-package browse-at-remote
+  :defines browse-at-remote-remote-type-domains
+
+  ;; Wait until the following packages have been loaded before loading this.
+  :after magit
+
+  ;; Load this package eagerly.
+  :demand
+
   :general
   (:keymaps 'vc-prefix-map
    "u"  #'browse-at-remote-kill)
