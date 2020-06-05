@@ -4404,7 +4404,7 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
                     ;; Name of the context
                     :name "edu.utdallas@jml140230"
                     ;; alist of variables to set for this context.
-                    :vars '((user-full-name . "LaFreniere, Joseph")
+                    :vars '((user-full-name . "Joseph LaFreniere")
                             (user-mail-address . "jml140230@utdallas.edu")
                             ;; SMTP
                             (smtpmail-smtp-server . "smtp.office365.com") ; hostname
@@ -4427,7 +4427,7 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
                     ;; Name of the context
                     :name "xyz.lafreniere@joseph"
                     ;; alist of variables to set for this context.
-                    :vars '((user-full-name . "LaFreniere, Joseph")
+                    :vars '((user-full-name . "Joseph LaFreniere")
                             (user-mail-address . "joseph@lafreniere.xyz")
                             ;; Signature
                             (mu4e-compose-signature-auto-include . t)
@@ -4450,7 +4450,7 @@ Provide settings for using ~smtpmail-send-it~ to send mail.
                     ;; Name of the context
                     :name "com.gmail@lafrenierejm"
                     ;; alist of variables to set for this context.
-                    :vars '((user-full-name . "LaFreniere, Joseph")
+                    :vars '((user-full-name . "Joseph LaFreniere")
                             (user-mail-address . "lafrenierejm@gmail.com")
                             ;; Signature
                             (mu4e-compose-signature-auto-include . t)
