@@ -2818,6 +2818,17 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 (executable-find "docker")
 #+end_src
 
+*** /Dockerfile Mode/
+
+#+BEGIN_SRC emacs-lisp
+(use-package dockerfile-mode
+  :mode
+  ("Dockerfile\\'" . dockerfile-mode)
+
+  :config
+  (put 'dockerfile-image-name 'safe-local-variable #'stringp))
+#+END_SRC
+
 * Diff
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref diff
