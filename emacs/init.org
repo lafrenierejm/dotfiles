@@ -4845,6 +4845,60 @@ This can benefit both literate and traditional programming by allowing one to co
   <<polymode/config>>)
 #+end_src
 
+** Language Server Protocol (LSP)
+
+*** /LSP Mode/
+
+#+BEGIN_SRC emacs-lisp
+(use-package lsp-mode
+
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+
+  :custom
+  (lsp-disabled-clients '(pyls))
+
+  ;; Add the following auto-load hooks.
+  :ghook
+  <<lsp-mode/ghook>>
+
+  :commands (lsp lsp-deferred))
+#+END_SRC
+
+*** /LSP UI/
+
+#+BEGIN_SRC emacs-lisp
+(use-package lsp-ui
+  :demand
+  :after (lsp-mode flycheck))
+#+END_SRC
+
+*** /Company LSP/
+
+#+BEGIN_SRC emacs-lisp
+(use-package company-lsp
+  :demand
+  :after (company lsp-mode))
+#+END_SRC
+
+*** /DAP Mode/
+
+#+BEGIN_SRC emacs-lisp
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (dap-mode t)
+  (dap-ui-mode t))
+#+END_SRC
+
+*** /LSP Ivy/
+
+#+BEGIN_SRC emacs-lisp
+(use-package lsp-ivy
+  :demand
+  :after (ivy lsp-mode))
+#+END_SRC
+
 ** Applescript
 
 *** Apples Mode
