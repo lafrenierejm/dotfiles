@@ -5707,10 +5707,10 @@ Enable \src_emacs-lisp{pyvenv-mode} globally.
                  venv-name))))))
 #+end_src
 
-*** Blacken
+*** /Python Black/
 
 #+begin_src emacs-lisp
-(use-package blacken
+(use-package python-black
   ;; Load this package after the following packages.
   :after python
 
