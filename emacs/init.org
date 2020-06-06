@@ -2796,6 +2796,7 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 :END:
 
 ** Docker
+*** /Docker/
 
 #+begin_src emacs-lisp
 (use-package docker
@@ -2808,7 +2809,7 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
   ("C-c d" #'docker))
 #+end_src
 
-*** Conditional Loading
+**** Conditional Loading
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref docker/if
 :END:
