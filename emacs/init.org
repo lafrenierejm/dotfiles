@@ -4179,10 +4179,11 @@ If =aspell= is not available, disable Ispell.
   ;; Load this package eagerly.
   :demand
 
-  ;; Evaluate the following code after loading this package.
-  :config
-  ;; Enable `flycheck-mode' globally.
-  (global-flycheck-mode))
+  :custom
+  (flycheck-global-modes (list #'not <<flycheck/custom/global-blacklist>>))
+
+  :custom
+  (global-flycheck-mode +1))
 #+end_src
 
 * Feeds
@@ -5630,6 +5631,11 @@ Define the actual Polymode.
 Use the above Polymode as the default mode for Python buffers.
 #+begin_src emacs-lisp :noweb-ref polymode/mode
 ("\\.py\\'" . poly-python-rst-mode)
+#+end_src
+
+Add the resulting newly-created RST modes to /Flycheck/'s blacklist.
+#+begin_src emacs-lisp :noweb-ref flycheck/custom/global-blacklist
+'poly-python-rst-mode 'poly-rst-python-innermode
 #+end_src
 
 **** Rainbow Identifiers
