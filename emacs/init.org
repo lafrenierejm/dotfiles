@@ -5966,7 +5966,27 @@ Enable line numbers in YAML buffers.
 #+begin_src emacs-lisp
 (use-package ansible-vault
   :after yaml-mode
-  :demand)
+
+  :demand
+
+  :ghook
+  <<ansible-vault/ghook>>
+
+  :config
+  <<ansible-vault/config>>)
+#+end_src
+
+**** Automatically Detect Vault Files
+
+#+begin_src emacs-lisp :noweb-ref ansible-vault/config
+(defun ansible-vault-mode-maybe ()
+  "Enable `ansible-vault-mode' when visiting a vault file."
+  (when (ansible-vault--is-vault-file)
+    (ansible-vault-mode 1)))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref ansible-vault/ghook
+('yaml-mode-hook #'ansible-vault-mode-maybe)
 #+end_src
 
 *** Prettier
