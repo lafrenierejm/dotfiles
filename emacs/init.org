@@ -4926,6 +4926,34 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 (use-package json-mode)
 #+end_src
 
+** Go
+
+*** /Go Mode/
+
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode)
+#+END_SRC
+
+**** LSP Mode
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref lsp-mode/ghook
+:END:
+
+Enable LSP Mode in Go buffers.
+#+BEGIN_SRC emacs-lisp
+('go-mode-hook #'lsp-deferred)
+#+END_SRC
+
+*** /Go Eldoc/
+
+/Go Eldoc/ provides eldoc support for the Go language.
+#+BEGIN_SRC emacs-lisp
+(use-package go-eldoc
+  :after go
+  :ghook
+  ('go-mode-hook #'go-eldoc-setup))
+#+END_SRC
+
 ** Lisps
 
 It is desirable to have slightly different character matching behavior when editing Lisps.
