@@ -4846,6 +4846,15 @@ This can benefit both literate and traditional programming by allowing one to co
   <<polymode/config>>)
 #+end_src
 
+*** /Poly Markdown/
+
+/Poly Markdown/ provides a set of /Polymode/ functions pre-configured for Markdown buffers.
+#+begin_src emacs-lisp
+(use-package poly-markdown
+  :after (:all markdown-mode polymode)
+  :demand)
+#+end_src
+
 ** Language Server Protocol (LSP)
 
 *** /LSP Mode/
