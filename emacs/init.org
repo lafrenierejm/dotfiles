@@ -5785,6 +5785,16 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode
    "C-c C-p" #'run-groovy))
 #+end_src
 
+Enable \src_emacs-lisp{display-line-numbers-mode} in Groovy buffers.
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+('groovy-mode-hook nil)
+#+end_src
+
+Enable \src_emacs-lisp{rainbow-delimiters-mode} in Groovy buffers.
+#+begin_src emacs-lisp :noweb-ref rainbow-delimiters/ghook
+('groovy-mode-hook nil)
+#+end_src
+
 *** Polymode
 
 **** Auto-Mode Alist
