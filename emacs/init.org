@@ -5500,6 +5500,16 @@ Display line numbers for all \src_emacs-lisp{sh-mode} buffers.
 ('sh-mode-hook nil)
 #+end_src
 
+*** /shfmt/
+
+#+begin_src emacs-lisp
+(use-package shfmt
+  :straight (:host github :repo "purcell/emacs-shfmt"
+             :branch "master")
+  :after sh-script
+  :demand)
+#+end_src
+
 ** Python
 
 To make it easier to apply settings to all major modes I edit Python code in, a variable is defined with the list of the modes:
