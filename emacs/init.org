@@ -6012,6 +6012,18 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 (use-package toml-mode)
 #+end_src
 
+** Automatic Indentation
+
+*** /DTRT Indent/
+
+#+begin_src emacs-lisp
+(use-package dtrt-indent
+  :demand
+
+  :custom
+  (dtrt-indent-global-mode t "Enable the mode globally"))
+#+end_src
+
 * Refactoring
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref refactoring
