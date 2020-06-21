@@ -183,6 +183,10 @@ Channel xyz.lafreniere.joseph.list.emacs-orgmode
 	Master ":remote-xyz.lafreniere.joseph:list/emacs-orgmode"
 	Slave  ":local-xyz.lafreniere.joseph:list/emacs-orgmode"
 
+Channel xyz.lafreniere.joseph.list.guix-devel
+	Master ":remote-xyz.lafreniere.joseph:list/guix-devel"
+	Slave  ":local-xyz.lafreniere.joseph:list/guix-devel"
+
 Channel xyz.lafreniere.joseph.list.guix-help
 	Master ":remote-xyz.lafreniere.joseph:list/guix-help"
 	Slave  ":local-xyz.lafreniere.joseph:list/guix-help"
@@ -205,6 +209,7 @@ Group xyz.lafreniere.joseph
 	Channel xyz.lafreniere.joseph-inbox
 	Channel xyz.lafreniere.joseph.list.emacs-devel
 	Channel xyz.lafreniere.joseph.list.emacs-orgmode
+	Channel xyz.lafreniere.joseph.list.guix-devel
 	Channel xyz.lafreniere.joseph.list.guix-help
 	Channel xyz.lafreniere.joseph.list.guix-patches
 	Channel xyz.lafreniere.joseph.list.mu
