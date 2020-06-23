@@ -5273,7 +5273,12 @@ Replace hash symbols with ellipses.
 
   :general
   (:keymaps 'hy-mode-map
-   "C-c C-c" #'hy-shell-eval-buffer))
+   "C-c C-c" #'hy-shell-eval-buffer)
+
+  :config
+  (defun hy-shell--redirect-check-prompt-regexp ()
+    "Avoid infinite loop in redirect if `comint-prompt-regexp' badly defined."
+    nil))
 #+end_src
 
 **** /Scheme/
