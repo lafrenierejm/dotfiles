@@ -5535,6 +5535,14 @@ Display line numbers for all \src_emacs-lisp{sh-mode} buffers.
   :demand)
 #+end_src
 
+** PowerShell
+
+*** /PowerShell/
+
+#+BEGIN_SRC emacs-lisp
+(use-package powershell)
+#+END_SRC
+
 ** Python
 
 To make it easier to apply settings to all major modes I edit Python code in, a variable is defined with the list of the modes:
