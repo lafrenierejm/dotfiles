@@ -4923,6 +4923,16 @@ This can benefit both literate and traditional programming by allowing one to co
    "C-c C-c" #'apples-run-region/buffer))
 #+end_src
 
+** Cucumber
+
+*** /Feature Mode/
+
+#+begin_src emacs-lisp
+(use-package feature-mode
+  :mode
+  ("\\.feature\\'" . #'feature-mode))
+#+end_src
+
 ** JavaScript
 
 *** /JSON Mode/
