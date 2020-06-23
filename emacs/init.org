@@ -301,12 +301,11 @@ By default, that variable only allows reading a few of the most common directory
             line-end)))
 #+end_src
 
-** /Directories/
+** /Standard Dirs/
 
-/Directories/ provides platform-specific paths for configuration, cache, and other data.
+/Standard Dirs/ provides platform-specific paths for configuration, cache, and other data.
 #+begin_src emacs-lisp
-(use-package directories
-  :straight (:type git :host github :repo "lafrenierejm/directories-elisp")
+(use-package standard-dirs
   :demand)
 #+end_src
 
@@ -372,11 +371,11 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
 #+begin_src emacs-lisp
 (use-package no-littering
   :demand
-  :after (directories)
+  :after standard-dirs
   :init
   (setq
-   no-littering-etc-directory (directories-project-config "org" "gnu" "emacs")
-   no-littering-var-directory (directories-project-data-local "org" "gnu" "emacs")))
+   no-littering-etc-directory (standard-dirs-project-config "org" "gnu" "emacs")
+   no-littering-var-directory (standard-dirs-project-data-local "org" "gnu" "emacs")))
 #+end_src
 
 * Visual Interface
@@ -4799,9 +4798,10 @@ Create an alist whose keys are regexps matching filenames and whose values are t
 
 #+begin_src emacs-lisp
 (use-package emms-source-file
-  :after directories
+  :straight emms
+  :after standard-dirs
   :custom
-  (emms-source-file-default-directory (directories-user-audio)))
+  (emms-source-file-default-directory (standard-dirs-user-audio)))
 #+end_src
 
 *** /EMMS Setup/
