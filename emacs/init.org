@@ -345,14 +345,15 @@ Additionally, we want Cus Edit to always be loaded (not just when we interactive
 (use-package cus-edit
   :straight (:type built-in)
 
-  :after f
+  :after (:all f standard-dirs)
 
   :demand
 
-  :config
+  :init
   (let ((path (expand-file-name
                "custom.el"
-               (file-name-directory user-init-file))))
+               (standard-dirs-project-data "org" "gnu" "Emacs"))))
+    (f-touch path)
     (setq custom-file path)
     (load custom-file)))
 #+end_src
