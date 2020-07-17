@@ -5374,6 +5374,21 @@ Let the cursor move past the end of lines in Lisp source code.
 ('evil-cleverparens-mode-hook #'evil-move-beyond-eol)
 #+end_src
 
+*** Fennel
+
+From the [[https://fennel-lang.org/][language's homepage]]:
+#+begin_quote
+Fennel is a programming language that brings together the speed, simplicity, and reach of Lua with the flexibility of a lisp syntax and macro system.
+#+end_quote
+
+**** /Fennel Mode/
+
+#+begin_src emacs-lisp
+(use-package fennel-mode
+  :mode
+  ("\\.fnl\\'" . fennel-mode))
+#+end_src
+
 *** Lisp-1
 
 Lisp-1 languages have a single namespace for all names.
