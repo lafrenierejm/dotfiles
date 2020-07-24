@@ -560,9 +560,24 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :if
   <<display-line-numbers/if>>
 
+  ;; Apply the following customizations.
+  :custom
+  (display-line-numbers 'relative "Display lines relative to the current line.")
+  (display-line-numbers-widen t "Disregard any narrowing.")
+  (display-line-numbers-current-absolute t "Always display absolute number of current line.")
+
   ;; Add the following auto-loading hooks.
   :ghook
-  <<display-line-numbers/ghook>>)
+  <<display-line-numbers/ghook>>
+
+  ;; Evaluate the following expressions about loading this package.
+  :config
+  (defun display-line-numbers-relative ()
+    "Display relative line numbers."
+    (setq-local display-line-numbers 'relative))
+  (defun display-line-numbers-absolute ()
+    "Display absolute line numbers."
+    (setq-local display-line-numbers t)))
 #+end_src
 
 *** Conditional Loading
@@ -1476,6 +1491,19 @@ The syntactic blocks are as follows, ordered from right to left:
     (when (>= old-point (point))
       ;; ...then go to the beginning of trailing whitespace.
       (evil-back-to-text))))
+#+end_src
+
+**** Automatically Switch Between Relative and Absolute Line Numbers
+
+Enable absolute line numbers when entering insert mode.
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+('evil-insert-state-entry-hook #'display-line-numbers-absolute)
+#+end_src
+
+Re-enable relative line numbers when leaving insert mode.
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+('evil-insert-state-entry-hook #'display-line-numbers-absolute)
+('evil-insert-state-exit-hook #'display-line-numbers-relative)
 #+end_src
 
 *** Evil Collection
