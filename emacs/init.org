@@ -6540,7 +6540,9 @@ A minor-mode menu for the mode line.
   ;; Apply the following variable customizations.
   :custom
   (minions-mode-line-lighter "…")
-  (minions-mode t "Enable `minions-mode' globally."))
+
+  :config
+  (minions-mode +1))
 #+end_src
 
 ** Window Manager
