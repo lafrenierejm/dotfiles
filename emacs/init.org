@@ -1151,7 +1151,7 @@ If =latexmk= and its Perl dependency exist in =PATH=, use =latexmk= with a LuaLa
 
 *** Smartparens
 :PROPERTIES:
-:HEADER-ARGS+: smartparents/config
+:HEADER-ARGS+: smartparens/config
 :END:
 
 The equals sign (\=), tilde (\~), and forward slash (/) are used by Org syntax to wrap inline monospace, code, text, and italics respectively.
@@ -1628,22 +1628,8 @@ It adds a "surround" verb to Evil's modal editing.
   ;; Load this package eagerly.
   :demand
 
-  :custom
-  <<smartparens/custom>>
-
   :config
   <<smartparens/config>>)
-#+end_src
-
-*** Variable Customization
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref smartparens/custom
-:END:
-
-Enable ~smartparens-mode~ globally.
-
-#+begin_src emacs-lisp
-(smartparens-global-mode t)
 #+end_src
 
 *** Post-Load Evaluation
@@ -1652,9 +1638,13 @@ Enable ~smartparens-mode~ globally.
 :END:
 
 Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
-
 #+begin_src emacs-lisp
 (setq sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
+#+end_src
+
+Enable ~smartparens-mode~ globally
+#+begin_src emacs-lisp
+(smartparens-global-mode +1)
 #+end_src
 
 ** Smartparens Config
