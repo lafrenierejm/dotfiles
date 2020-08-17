@@ -693,18 +693,17 @@ Use Ivy's integration.
 
   ;; Customize the following variables.
   :custom
-  <<counsel-projectile/custom>>)
+  <<counsel-projectile/custom>>
+
+  ;; Evaluate the following code after loading this package.
+  :config
+  (counsel-projectile-mode +1))
 #+end_src
 
 *** Variable Customization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref counsel-projectile/custom
 :END:
-
-Enable ~counsel-projectile-mode~ globally.
-#+begin_src emacs-lisp
-(counsel-projectile-mode t)
-#+end_src
 
 Do not display the current project when switching projects.
 #+begin_src emacs-lisp
