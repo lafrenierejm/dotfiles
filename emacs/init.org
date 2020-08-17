@@ -3899,6 +3899,8 @@ Determine whether input causes window to scroll.
 
 #+begin_src emacs-lisp
 (use-package em-prompt
+  :straight (:type built-in)
+
   :demand
 
   :preface
