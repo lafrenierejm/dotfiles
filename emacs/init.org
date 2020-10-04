@@ -6290,8 +6290,8 @@ Open source and business-friendly, Tcl is a mature yet evolving language that is
 (use-package dtrt-indent
   :demand
 
-  :custom
-  (dtrt-indent-global-mode t "Enable the mode globally"))
+  :config
+  (dtrt-indent-global-mode +1))
 #+end_src
 
 * Refactoring
