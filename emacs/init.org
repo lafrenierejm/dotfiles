@@ -3340,7 +3340,7 @@ Save in REGISTER or in the kill-ring with YANK-HANDLER."
         (dotimes (var (count-lines beg end))
           (eshell-kill-whole-line)))
     (evil-delete beg end type register yank-handler))
-  (when (and (evil-called-interactively-p)
+  (when (and (called-interactively-p 'any)
              (eq type 'line))
     (evil-first-non-blank)))
 #+end_src
