@@ -4064,34 +4064,6 @@ followed by a newline."
 (add-to-list 'eshell-before-prompt-hook #'eshell-prompt-ensure-newline)
 #+end_src
 
-*** Em Smart
-
-Em Smart is an Eshell module that provides Eshell with Plan 9-like features.
-
-#+begin_src emacs-lisp
-(use-package em-smart
-  :straight (:type built-in)
-
-  ;; Load this package after the following packages.
-  :after (esh-module)
-
-  :custom
-  (eshell-where-to-jump 'begin)
-  (eshell-review-quick-commands nil)
-
-  :config
-  <<em-smart/config>>)
-#+end_src
-
-**** Config
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref em-smart/config
-:END:
-
-#+begin_src emacs-lisp
-(add-to-list 'eshell-modules-list 'eshell-smart)
-#+end_src
-
 *** Em Tramp
 
 Em Tramp is an Eshell modules that provides TRAMP features.
