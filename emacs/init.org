@@ -2110,6 +2110,7 @@ The contents and aspect is controlled by the src_emacs-lisp{minibuffer-line-form
 
   ;; Evaluate the following code after loading this package.
   :config
+  <<minibuffer-line/config>>
   (minibuffer-line-mode))
 #+end_src
 
@@ -2133,13 +2134,10 @@ Define a function to separate contents provided as a list of functions or string
       `(:eval (,element)))
      (t
       `(:eval ,element))))
-  `(quote ,(-drop-last
-            1
-            (-flatten-n
-             1
-             (-zip-lists
-              (map 'list #'eval-or-string contents)
-              (make-list (length contents) minibuffer-line-separator))))))
+  (-drop-last
+   1 (-flatten-n 1 (-zip-lists
+                    (map 'list #'eval-or-string contents)
+                    (make-list (length contents) minibuffer-line-separator)))))
 #+end_src
 
 Define a function to left- and right-align elements using mode-line formatting.
@@ -2161,20 +2159,13 @@ strings.  The contents of the lists are separated with `minibuffer-line-separato
      right)))
 #+end_src
 
-Define a function to generate the top-level mode-line formatting.
-#+begin_src emacs-lisp :noweb-ref minibuffer-line/config
-(defun minibuffer-line-format ()
-  "Return a list describing the contents of the minibuffer."
-  `((:eval
-     (minibuffer-line-align
-      ,(minibuffer-line-separate minibuffer-line-left)
-      ,(minibuffer-line-separate minibuffer-line-right)))))
-#+end_src
-
 Use the above function to generate the value of \src_emacs-lisp{minibuffer-line-format}.
 #+begin_src emacs-lisp :noweb-ref minibuffer-line/custom
-(setq minibuffer-line-format
-      (minibuffer-line-format))
+(minibuffer-line-format
+ '(:eval (minibuffer-line-align
+          (minibuffer-line-separate minibuffer-line-left)
+          (minibuffer-line-separate minibuffer-line-right)))
+ "Describe the contents of the minibuffer line.")
 #+end_src
 
 Define variables to hold the left- and right-aligned contents.
