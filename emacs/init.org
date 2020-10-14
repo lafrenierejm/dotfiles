@@ -4468,6 +4468,13 @@ Use the value of ~$MAILDIR~ as the path to the mail directory if that environmen
 (mu4e-maildir (xdg-user-dir "MAIL"))
 #+end_src
 
+**** Use Default Completing Read
+
+Using Emacs's read completion allows for Ivy to hook in.
+#+begin_src emacs-lisp :noweb-ref mu4e/custom
+(mu4e-completing-read-function #'completing-read)
+#+end_src
+
 **** Non-Autoloading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref mu4e/gfhook
