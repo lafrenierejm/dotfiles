@@ -562,7 +562,6 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
   ;; Apply the following customizations.
   :custom
-  (display-line-numbers 'relative "Display lines relative to the current line.")
   (display-line-numbers-widen t "Disregard any narrowing.")
   (display-line-numbers-current-absolute t "Always display absolute number of current line.")
 
@@ -572,12 +571,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
   ;; Evaluate the following expressions about loading this package.
   :config
-  (defun display-line-numbers-relative ()
-    "Display relative line numbers."
-    (setq-local display-line-numbers 'relative))
-  (defun display-line-numbers-absolute ()
-    "Display absolute line numbers."
-    (setq-local display-line-numbers t)))
+  <<display-line-numbers/config>>)
 #+end_src
 
 *** Conditional Loading
@@ -590,6 +584,56 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp
 (version< "26.1" emacs-version)
+#+end_src
+
+*** Automatically Switch Between Relative and Absolute Line Numbers
+
+**** Display Absolute Line Numbers when Entering Insert State
+
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/config
+(defun display-line-numbers-absolute ()
+  "Display relative line numbers."
+  (setq-local display-line-numbers t))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/config
+(defun display-line-numbers-evil-insert-entry ()
+  "Display absolute line numbers upon entering insert state."
+  (general-add-hook
+   'evil-insert-state-entry-hook
+   #'display-line-numbers-absolute
+   nil
+   t))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+('prog-mode-hook #'display-line-numbers-evil-insert-entry)
+#+end_src
+
+**** Display Relative Line Numbers at Start and Upon Exiting Insert State
+
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/config
+(defun display-line-numbers-relative ()
+  "Display absolute line numbers."
+  (setq-local display-line-numbers 'relative))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/config
+(defun display-line-numbers-evil-insert-exit ()
+  "Display absolute line numbers upon exiting insert state."
+  (general-add-hook
+   'evil-insert-state-exit-hook
+   #'display-line-numbers-relative
+   nil
+   t))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+('prog-mode-hook #'display-line-numbers-evil-insert-exit)
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
+('prog-mode-hook #'display-line-numbers-relative)
 #+end_src
 
 ** /Highlight Indent Guides/
@@ -1490,19 +1534,6 @@ The syntactic blocks are as follows, ordered from right to left:
     (when (>= old-point (point))
       ;; ...then go to the beginning of trailing whitespace.
       (evil-back-to-text))))
-#+end_src
-
-**** Automatically Switch Between Relative and Absolute Line Numbers
-
-Enable absolute line numbers when entering insert mode.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('evil-insert-state-entry-hook #'display-line-numbers-absolute)
-#+end_src
-
-Re-enable relative line numbers when leaving insert mode.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('evil-insert-state-entry-hook #'display-line-numbers-absolute)
-('evil-insert-state-exit-hook #'display-line-numbers-relative)
 #+end_src
 
 *** Evil Collection
@@ -5216,11 +5247,6 @@ The above function should be added to all Lisp major mode hooks.
 (general-add-hook lisp-major-mode-hooks #'use-spaces)
 #+end_src
 
-And enable line numbers for all Lisp major modes.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-(lisp-major-mode-hooks nil)
-#+end_src
-
 *** Lisp Mode
 
 #+begin_src emacs-lisp
@@ -5731,13 +5757,6 @@ Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
 ('sh-mode-hook #'sh-script-set-shell-type)
 #+end_src
 
-**** /Display Line Numbers/
-
-Display line numbers for all \src_emacs-lisp{sh-mode} buffers.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('sh-mode-hook nil)
-#+end_src
-
 **** /Smart Dash/
 
 Enable \src_emacs-lisp{smart-dash-mode} for all \src_emacs-lisp{sh-mode} buffers.
@@ -5996,13 +6015,6 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
 ('python-mode-hook nil)
 #+end_src
 
-*** /Display Line Numbers/
-
-Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode} buffers.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('python-mode-hook nil)
-#+end_src
-
 *** Spell Check
 
 #+begin_src emacs-lisp :noweb-ref wucou/ghook
@@ -6026,11 +6038,6 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{python-mode
   :general
   (:keymaps 'groovy-mode-map
    "C-c C-p" #'run-groovy))
-#+end_src
-
-Enable \src_emacs-lisp{display-line-numbers-mode} in Groovy buffers.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('groovy-mode-hook nil)
 #+end_src
 
 Enable \src_emacs-lisp{rainbow-delimiters-mode} in Groovy buffers.
@@ -6139,13 +6146,6 @@ The project's README advertises /Rust Mode/ as providing:
   :mode ("\\.rs\\'" . rust-mode))
 #+end_src
 
-**** /Display Line Numbers/
-
-Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{rust-mode} buffers.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('rust-mode-hook nil)
-#+end_src
-
 ** Structured Query Language (SQL)
 
 *** SQL
@@ -6214,11 +6214,6 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 (use-package yaml-mode)
 #+end_src
 
-Enable line numbers in YAML buffers.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('yaml-mode-hook #'display-line-numbers-mode)
-#+end_src
-
 *** /Company Ansible/
 
 #+begin_src emacs-lisp
@@ -6278,15 +6273,6 @@ From [[https://www.tcl-lang.org/][the language's homepage]]:
 Tcl (Tool Command Language) is a very powerful but easy to learn dynamic programming language, suitable for a very wide range of uses, including web and desktop applications, networking, administration, testing and many more.
 Open source and business-friendly, Tcl is a mature yet evolving language that is truly cross platform, easily deployed and highly extensible.
 #+end_quote
-
-*** /Tcl/
-
-**** /Display Line Numbers/
-
-Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{tcl-mode} buffers.
-#+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('tcl-mode-hook nil)
-#+end_src
 
 ** TOML
 
