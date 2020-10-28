@@ -4231,6 +4231,23 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   (eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
 #+end_src
 
+** Xonsh
+
+From [[https://xon.sh/contents.html][its documentation]]:
+#+begin_example
+Xonsh is a Python-powered, cross-platform, Unix-gazing shell language and command prompt.
+The language is a superset of Python 3.5+ with additional shell primitives that you are used to from Bash and IPython.
+It works on all major systems including Linux, Mac OSX, and Windows.
+Xonsh is meant for the daily use of experts and novices alike.
+#+end_example
+
+*** /Xonsh Mode/
+
+/Xonsh Mode/ provides a major mode for Xonsh scripts and RC files.
+#+begin_src emacs-lisp
+(use-package xonsh-mode)
+#+end_src
+
 * Static Analysis
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref static-analysis
