@@ -30,3 +30,5 @@
 	user = lafrenierejm
 [includeIf "gitdir:~/source/com.jcpenney.stash/"]
 	path = "~/source/com.jcpenney.stash/.gitconfig"
+[pull]
+	rebase = true
