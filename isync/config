@@ -9,7 +9,7 @@ SyncState *
 ################################################################################
 IMAPAccount com.gmail.lafrenierejm
 	Host        imap.gmail.com
-	PassCmd     "pass email/gmail.com/mutt"
+	PassCmd     "pass gmail.com/lafrenierejm@gmail.com/odyssey.lafreniere.xyz"
 	Port        993
 	SSLType     IMAPS
 	SSLVersions TLSv1.2
