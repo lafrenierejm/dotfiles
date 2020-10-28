@@ -26,7 +26,7 @@ from lafrenierejm@gmail.com
 # Authentication
 auth on
 user lafrenierejm@gmail.com
-passwordeval "pass email/gmail.com/mutt"
+passwordeval "pass gmail.com/lafrenierejm@gmail.com/odyssey.lafreniere.xyz"
 
 # ##############################################################################
 # Settings specfific to jml140230@utdallas.edu
