@@ -2066,15 +2066,6 @@ Enable ~ivy-rich-mode~ globally.
 (ivy-rich-mode 1)
 #+end_src
 
-Add support for ~counsel-projectile-switch-to-buffer~, mirroring that of ~ivy-switch-buffer~.
-#+begin_src emacs-lisp
-(setq ivy-rich--display-transformers-list
-      (plist-put
-       ivy-rich--display-transformers-list
-       'counsel-projectile-switch-to-buffer
-       (plist-get ivy-rich--display-transformers-list 'ivy-switch-buffer)))
-#+end_src
-
 ** Minibuffer Line
 :PROPERTIES:
 :DESCRIPTION: Display status info in the minibuffer
