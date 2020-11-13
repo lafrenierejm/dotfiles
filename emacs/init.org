@@ -6673,9 +6673,6 @@ Bind the command to =s-<return>=.
   ;; Load this package eagerly.
   :demand
 
-  :functions
-  <<exwm-randr/functions>>
-
   ;; Non-autoloading hooks.
   :gfhook
   <<exwm-randr/gfhook>>
@@ -6704,11 +6701,6 @@ https://github.com/ch11ng/exwm/wiki/EXWM-User-Guide
     (->> (-zip-pair (number-sequence 0 (1- (length displays-connected))) displays-connected)
          (flatten-list)
          (customize-set-value 'exwm-randr-workspace-monitor-plist))))
-#+end_src
-
-Inform the bytecode compiler of the above functions.
-#+begin_src emacs-lisp :noweb-ref exwm-randr/functions
-exwm-randr-assign-workspaces
 #+end_src
 
 Add the above function to be run whenever randr detects changes to screen configuration.
