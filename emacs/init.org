@@ -6640,50 +6640,22 @@ Bind the command to =s-<return>=.
 #+begin_src emacs-lisp :noweb-ref exwm/general
 ((kbd "<s-return>") #'exwm-start-process)
 #+end_src
-#+begin_src emacs-lisp :noweb-ref exwm/config
-(exwm-input-set-key (kbd "<s-return>") #'exwm-start-process)
-#+end_src
 
 **** Keybindings
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref exwm/config
-:END:
 
-Effective use of EXWM requires the ability to return from ~char-mode~ to ~line-mode~.
-This will be performed with =s-r=.
-#+begin_src emacs-lisp
-(exwm-input-set-key (kbd "s-r") #'exwm-reset)
-#+end_src
-
-Hide all windows except the current one.
-#+begin_src emacs-lisp
-(exwm-input-set-key (kbd "s-o") #'delete-other-windows)
-#+end_src
-
-Close the current window and kill its buffer.
-#+begin_src emacs-lisp
-(exwm-input-set-key (kbd "C-s-x") #'kill-buffer-and-window)
-#+end_src
-
-Close the current window without killing its buffer.
-#+begin_src emacs-lisp
-(exwm-input-set-key (kbd "s-x") #'delete-window)
-#+end_src
-
-Open an Eshell buffer in the current buffer's location.
-
-#+begin_src emacs-lisp
-(exwm-input-set-key (kbd "C-z") #'eshell-find-eshell-here)
-#+end_src
-
-Move =point= to the windows immediately around the current window.
-
-#+begin_src emacs-lisp
-(exwm-input-set-key (kbd "s-h") #'windmove-left)
-(exwm-input-set-key (kbd "s-j") #'windmove-down)
-(exwm-input-set-key (kbd "s-k") #'windmove-up)
-(exwm-input-set-key (kbd "s-l") #'windmove-right)
-(exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+#+begin_src emacs-lisp :noweb-ref exwm/custom
+(exwm-input-global-keys
+ `((,(kbd "s-r") . exwm-reset)          ; reset to line mode
+   (,(kbd "s-w") . exwm-workspace-switch)
+   (,(kbd "<s-return>") . exwm-start-process)
+   (,(kbd "s-o") . delete-other-windows)
+   (,(kbd "C-x C-k") . current-buffer/kill)
+   (,(kbd "s-x") . delete-window)
+   (,(kbd "C-z") . eshell-find-eshell-here)
+   (,(kbd "s-h") . windmove-left)
+   (,(kbd "s-j") . windmove-down)
+   (,(kbd "s-k") . windmove-up)
+   (,(kbd "s-l") . windmove-right)))
 #+end_src
 
 *** /EXWM RandR/
