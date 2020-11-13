@@ -5930,10 +5930,10 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 
 *** Pyvenv
 
+#+begin_src emacs-lisp
 (use-package pyvenv
   ;; Load this package eagerly.
   :demand
-#+begin_src emacs-lisp
 
   ;; Evaluate the following after loading this package.
   :config
