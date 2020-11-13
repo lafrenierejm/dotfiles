@@ -4993,7 +4993,7 @@ I would prefer that it be shown only in the minibuffer (via /Minibuffer Line/).
 
 The first step is to disable display in the modeline.
 #+begin_src emacs-lisp :noweb-ref emms-mode-line/custom
-('emms-mode-line-mode-line-function nil "Do not show info in modeline")
+(emms-mode-line-mode-line-function nil "Do not show info in modeline")
 #+end_src
 
 Then redefine the function used to display the current song, showing only the file name if the ~description~ is a filename.
@@ -5038,13 +5038,13 @@ Add the function to the left-hand /Minibuffer Line/ variable.
 **** Display Time in Minibuffer
 
 Do not add any spaces around the time.
-#+begin_src emacs-lisp :noweb-ref emms-mode-line/custom
+#+begin_src emacs-lisp :noweb-ref emms-playing-time/custom
 (emms-playing-time-display-format "%s")
 #+end_src
 
 Redefine \src_emacs-lisp{emms-playing-time-mode-line} to add to the left-hand minibuffer line instead of mode-line.
-#+begin_src emacs-lisp :noweb-ref emms-mode-line/config
-(defun emms-playing-time-mode-line ()
+#+begin_src emacs-lisp :noweb-ref emms-playing-time/config
+(defun [emms-playing-time-mode-line] ()
   "Add playing time to the left-hand side of the minibuffer."
   (add-to-list 'minibuffer-line-left #'emms-playing-time-string)
   (emms-playing-time-restore-mode-line))
