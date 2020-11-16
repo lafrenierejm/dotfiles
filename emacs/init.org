@@ -1878,7 +1878,8 @@ Determine how matched parts of the options are highlighted.
 
 #+begin_src emacs-lisp
 (ivy-re-builders-alist
- '((t . ivy--regex-plus))
+ '((counsel-grep-or-swiper . ivy--regex-plus)
+   (t . ivy--regex-plus))
  "Use `ivy--regex-plus' as the default matching function.")
 #+end_src
 
