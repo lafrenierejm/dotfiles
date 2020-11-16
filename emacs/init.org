@@ -2002,7 +2002,7 @@ Given that advantage, I use ripgrep as the default backend for my file-based sea
         "--no-heading"
         "--line-number"
         "--color=never"
-        "'%s'"
+        "%s"
         "%s"))
    counsel-grep-base-command))
 #+end_src
