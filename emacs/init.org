@@ -1963,6 +1963,7 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
   ("C-x C-4 C-f" #'find-file-other-window)
   ("C-x C-4 b" #'switch-to-buffer-other-window)
   ("C-x C-f" #'counsel-find-file)
+  ("C-x b" #'counsel-switch-buffer)
   ("C-x f" #'counsel-find-file)
   ("M-x" #'counsel-M-x)
   (:keymaps '(minibuffer-local-map minibuffer-inactive-mode-map)
