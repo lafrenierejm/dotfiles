@@ -2817,6 +2817,14 @@ This has the effect of making that command easily accessible alongside other /VC
   :demand)
 #+end_src
 
+** /Ghq/
+
+/Ghq/ is an Emacs frontend to the =ghq= command-line tool.
+#+begin_src emacs-lisp
+(use-package ghq
+  :if (executable-find "ghq"))
+#+end_src
+
 * Completion
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref completion
