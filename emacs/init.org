@@ -5206,6 +5206,33 @@ This can benefit both literate and traditional programming by allowing one to co
    "C-c C-c" #'apples-run-region/buffer))
 #+end_src
 
+** Configuration Files
+
+*** /Conf Mode/
+
+From the package's commentary:
+#+begin_quote
+This mode is designed to edit many similar varieties of Conf/Ini files and Java properties.
+It started out from Aurélien Tisné's ini-mode.
+\src_emacs-lisp{conf-space-keywords} were inspired by Robert Fitzgerald's any-ini-mode.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package conf-mode
+  :straight (:type built-in)
+
+  :preface
+  (defconst conf-mode-ssh-config-dir
+    (rx string-start (literal (getenv "HOME")) "/.ssh/config.d/")
+    "The path to the current user's SSH configuration directory.")
+
+  :mode
+  ("\\.service\\'" . conf-unix-mode)
+
+  :config
+  (add-to-list 'auto-mode-alist (cons conf-mode-ssh-config-dir #'conf-space-mode)))
+#+end_src
+
 ** Cucumber
 
 *** /Feature Mode/
