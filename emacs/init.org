@@ -794,6 +794,22 @@ Do not display the current buffer when switching buffers..
   (persp-mode t "Enable perspective mode globally"))
 #+end_src
 
+** /Relative Buffers/
+
+From the package's README:
+#+begin_quote
+[/Relative Buffers/] is a tiny package that will rename your buffers according to project structure.
+For python buffers that will be whole module name.
+For temporary files and directories that will be relative path from project root.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package relative-buffers
+  :straight (:host github :repo "emacstattic/relative-buffers")
+  :ghook
+  <<relative-buffers/ghook>>)
+#+end_src
+
 ** Operations on Current Buffer
 
 *** Get Arguments for Interactive Call
@@ -5883,6 +5899,14 @@ PEP 8 specifies that indentation should use units of 4 space characters.
 It's not desirable to enforce this in Python files (where there may be an existing standard that differs from PEP 8), but it is useful to force in Python REPLs.
 #+begin_src emacs-lisp :noweb-ref python/gfhook
 ('inferior-python-mode-hook #'python-set-indent)
+#+end_src
+
+**** /Relative Buffers/
+
+Set the buffer name relative to the project root.
+This is useful because the resulting buffer name corresponds directly to the file's module path.
+#+begin_src emacs-lisp :noweb-ref relative-buffers/ghook
+('python-mode-hook #'relative-buffers-mode)
 #+end_src
 
 **** Polymode
