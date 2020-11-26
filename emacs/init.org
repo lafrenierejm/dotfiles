@@ -2015,7 +2015,7 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
   <<counsel/custom>>)
 #+end_src
 
-*** Use Ripgrep when Available
+*** Use Ripgrep(-All) when Available
 
 From [[https://github.com/BurntSushi/ripgrep][ripgrep (rg)]]'s readme:
 #+begin_quote
@@ -2029,20 +2029,21 @@ The primary benefit of ripgrep over GNU grep is its speed;
 ripgrep's author, Andrew Gallant (aka burntsushi), has a [[https://blog.burntsushi.net/ripgrep/][thorough performance comparison]] between ripgrep and competing tools showing ripgrep outperforming in every metric.
 Given that advantage, I use ripgrep as the default backend for my file-based searches.
 
+[[https://github.com/phiresky/ripgrep-all][ripgrep-all (rga)]] builds on ripgrep by passing rich file types through various transformers to make their contents more easily greppable.
+If ~rga~ is present, it is preferred to plain ~rg~.
+
 #+begin_src emacs-lisp :noweb-ref counsel/custom
 (counsel-grep-base-command
- (if (executable-find "rg")
-     (s-join
-      " "
-      '("rg"
-        "--smart-case"
-        "--max-columns=88"
-        "--max-columns-preview"
-        "--no-heading"
-        "--line-number"
-        "--color=never"
-        "%s"
-        "%s"))
+ (if-let ((command (car (mapcar #'executable-find '("rga" "rg")))))
+     (s-join " " (list command
+                       "--smart-case"
+                       "--max-columns=88"
+                       "--max-columns-preview"
+                       "--no-heading"
+                       "--line-number"
+                       "--color=never"
+                       "%s"
+                       "%s"))
    counsel-grep-base-command))
 #+end_src
 
