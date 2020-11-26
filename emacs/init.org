@@ -384,25 +384,48 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
 :HEADER-ARGS+: :noweb-ref interface
 :END:
 
-Emacs is fundamentally a user interface built around plain text.
-Given the focus on plain text, several of Emacs's default modes can be disabled.
-These are
-- \src_emacs-lisp{menu-bar-mode},
-- \src_emacs-lisp{tool-bar-mode}, and
-- \src_emacs-lisp{scroll-bar-mode}.
+** /Menu Bar/
 
-
+The menu bar can be disabled completely.
+The macOS-native build of Emacs that I use relies on ~menu-bar-mode~ being enabled, but it uses macOS's global menu bar so it's unobtrusive.
 #+begin_src emacs-lisp
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(use-package menu-bar
+  :straight (:type built-in)
+  :demand
+  :config
+  (unless (eq system-type 'darwin)
+    (menu-bar-mode -1)))
 #+end_src
 
-The splash screen, startup message, and scratch message also serve little use, so they too can be disabled.
+** /Scroll Bar/
+
+The scroll bar can be disabled completely.
 #+begin_src emacs-lisp
-(setq inhibit-splash-screen t
-      inhibit-startup-message t
-      initial-scratch-message nil)
+(use-package scroll-bar
+  :straight (:type built-in)
+  :demand
+  :config
+  (scroll-bar-mode -1))
+#+end_src
+
+** /Tool Bar/
+
+The tool bar can be disabled completely.
+#+begin_src emacs-lisp
+(use-package tool-bar
+  :straight (:type built-in)
+  :demand
+  :config
+  (tool-bar-mode -1))
+#+end_src
+
+** /Startup/
+
+The startup message and scratch message add no value, so they are disabled.
+#+begin_src emacs-lisp
+(setq
+ inhibit-startup-screen t
+ initial-scratch-message nil)
 #+end_src
 
 ** Font
@@ -531,14 +554,13 @@ The package's source is available at [[https://github.com/Fanael/rainbow-delimit
   <<rainbow-delimiters/ghook>>)
 #+end_src
 
-** Loaddefs
+** /Paren/
 
+Show matching parentheses.
 #+begin_src emacs-lisp
-(use-package loaddefs
+(use-package paren
   :straight (:type built-in)
-
   :demand
-
   :config
   (show-paren-mode +1))
 #+end_src
