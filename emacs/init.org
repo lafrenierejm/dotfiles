@@ -2691,6 +2691,24 @@ Alias the above command to remove my username "namespace".
 (defalias 'magit-copy-branch-name #'magit-lafrenierejm-copy-branch-name)
 #+end_src
 
+***** Yank the Current Tag
+
+#+begin_src emacs-lisp
+(defun magit-lafrenierejm-copy-current-tag ()
+  "Save the current tag for later use.
+
+Save the tag value to the `kill-ring'."
+  (interactive)
+  (let ((tag (magit-get-current-tag)))
+    (message "%s" tag)
+    (kill-new tag)))
+#+end_src
+
+Alias the above command to remove my username "namespace".
+#+begin_src emacs-lisp
+(defalias 'magit-copy-current-tag #'magit-lafrenierejm-copy-current-tag)
+#+end_src
+
 *** /Magit Diff/
 
 #+begin_src emacs-lisp
@@ -2775,6 +2793,7 @@ Add new sequences for copying Git information.
 #+begin_src emacs-lisp
 (evil-define-key* evil-magit-state magit-mode-map "yb" #'magit-copy-branch-name)
 (evil-define-key* evil-magit-state magit-mode-map "yc" #'magit-copy-buffer-revision)
+(evil-define-key* evil-magit-state magit-mode-map "yt" #'magit-copy-current-tag)
 #+end_src
 
 *** SSH Agency
