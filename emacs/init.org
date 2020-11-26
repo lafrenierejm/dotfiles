@@ -5491,10 +5491,7 @@ Author Llli Pieponnen (luxbock)'s describes Evil Cleverparens as providing an "E
 
   ;; Add the following non-autoloading hooks.
   :gfhook
-  <<evil-cleverparens/gfhook>>
-
-  :config
-  <<evil-cleverparens/config>>)
+  <<evil-cleverparens/gfhook>>)
 #+end_src
 
 ***** Autoloading Hooks
