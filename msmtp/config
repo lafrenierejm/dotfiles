@@ -66,3 +66,7 @@ from joseph@lafreniere.xyz
 auth on
 user joseph@lafreniere.xyz
 passwordeval "pass www.kolabnow.com/joseph@lafreniere.xyz"
+
+# ##############################################################################
+# Set a default account
+account default : xyz.lafreniere.joseph
