@@ -4955,6 +4955,34 @@ Redefine ~erc-login~ to identify using NickServ commands sent via PRIVMSG.
 :HEADER-ARGS+: :noweb-ref multimedia
 :END:
 
+** Ebook
+
+*** /nov.el/ for EPUB
+
+From /nov.el/'s [[https://depp.brause.cc/nov.el/][homepage]]:
+#+begin_quote
+=nov.el= provides a major mode for reading EPUB documents.
+
+Features:
+- Basic navigation (jump to TOC, previous/next chapter)
+- Remembering and restoring the last read position
+- Jump to next chapter when scrolling beyond end
+- Storing and following Org links to EPUB files
+- Renders EPUB2 (.ncx) and EPUB3 (<nav>) TOCs
+- Hyperlinks to internal and external targets
+- Supports textual and image documents
+- Info-style history navigation
+- View source of document files
+- Metadata display
+- Image rescaling
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package nov
+  :if (executable-find "unzip")
+  :mode ("\\.epub\\'" . nov-mode))
+#+end_src
+
 ** Portable Document Format (PDF)
 
 *** /PDF Tools/
