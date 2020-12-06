@@ -32,3 +32,10 @@
 	path = "~/source/com.jcpenney.stash/.gitconfig"
 [pull]
 	rebase = true
+[sendemail]
+	from = Joseph LaFreniere <joseph@lafreniere.xyz>
+	smtpuser =
+	smtpserver = "msmtp"
+	smtpencryption = tls
+	chainreplyto = false
+	confirm = auto
