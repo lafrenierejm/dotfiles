@@ -19,6 +19,8 @@
 	indentHeuristic = on
 	minimal = on
 	patience = on
+[ghq]
+	root = "~/src"
 [user]
 	name = "Joseph LaFreniere"
 	email = "joseph@lafreniere.xyz"
