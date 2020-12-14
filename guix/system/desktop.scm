@@ -100,28 +100,29 @@
   ;; by clicking the gear.  Use the "desktop" services, which
   ;; include the X11 log-in service, networking with
   ;; NetworkManager, and more.
-  (services (append (list
-                   (service cups-service-type
-                            (cups-configuration
-                             (default-paper-size "letterpaper")
-                             (extensions (list cups-filters hplip-minimal))))
-                   (service libvirt-service-type
-                            (libvirt-configuration
-                             (unix-sock-group "libvirt")))
-                   (simple-service 'custom-udev-rules udev-service-type (list sane-backends android-udev-rules)))
-                   (simple-service slim-service-type)
-                   (remove
-                    (lambda (service)
-                     (let* ((type (service-kind service))
-                            (name (service-type-name type)))
-                      (or (memq type
-                                (list gdm-service-type
-                                      modem-manager-service-type
-                                      ; network-manager-service-type
-                                      screen-locker-service-type))
-                          (memq name
-                                '(network-manager-applet)))))
-                    %desktop-services)))
+  (services (cons*
+             (service cups-service-type
+                      (cups-configuration
+                       (default-paper-size "letterpaper")
+                       (extensions (list cups-filters hplip-minimal))))
+             (service libvirt-service-type
+                      (libvirt-configuration
+                       (unix-sock-group "libvirt")))
+             (simple-service 'custom-udev-rules udev-service-type
+                             (list sane-backends android-udev-rules))
+             (service slim-service-type)
+             (remove
+              (lambda (service)
+                (let* ((type (service-kind service))
+                       (name (service-type-name type)))
+                  (or (memq type
+                            (list gdm-service-type
+                                  modem-manager-service-type
+                                        ; network-manager-service-type
+                                  screen-locker-service-type))
+                      (memq name
+                            '(network-manager-applet)))))
+              %desktop-services)))
 
   ;; Allow resolution of '.local' host names with mDNS.
   (name-service-switch %mdns-host-lookup-nss))
