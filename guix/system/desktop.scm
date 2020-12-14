@@ -110,6 +110,10 @@
                        (unix-sock-group "libvirt")))
              (simple-service 'custom-udev-rules udev-service-type
                              (list sane-backends android-udev-rules))
+             (service qemu-binfmt-service-type
+                      (qemu-binfmt-configuration
+                       (platforms (lookup-qemu-platforms "arm" "aarch64"))
+                       (guix-support? #t)))
              (service slim-service-type)
              (remove
               (lambda (service)
