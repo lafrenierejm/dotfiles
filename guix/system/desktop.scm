@@ -76,7 +76,15 @@
                 (name "lafrenierejm")
                 (comment "Joseph LaFreniere")
                 (group "users")
-                (supplementary-groups '("wheel" "netdev" "kvm" "lp" "libvirt" "audio" "video")))
+                (supplementary-groups
+                 '("adbusers"
+                   "audio"
+                   "kvm"
+                   "libvirt"
+                   "lp"
+                   "netdev"
+                   "video"
+                   "wheel")))
                %base-user-accounts))
 
   ;; This is where we specify system-wide packages.
@@ -109,8 +117,9 @@
              (service libvirt-service-type
                       (libvirt-configuration
                        (unix-sock-group "libvirt")))
-             (simple-service 'custom-udev-rules udev-service-type
-                             (list sane-backends android-udev-rules))
+             (udev-rules-service
+              'android android-udev-rules
+              #:groups '("adbusers"))
              (service qemu-binfmt-service-type
                       (qemu-binfmt-configuration
                        (platforms (lookup-qemu-platforms "arm" "aarch64"))
