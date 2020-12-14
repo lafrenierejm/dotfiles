@@ -34,7 +34,8 @@
  ntp
  scanner
  xorg
- virtualization)
+ virtualization
+ vpn)
 
 (operating-system
   (kernel linux)
@@ -114,6 +115,9 @@
                       (qemu-binfmt-configuration
                        (platforms (lookup-qemu-platforms "arm" "aarch64"))
                        (guix-support? #t)))
+             (simple-service 'wireguard-module
+                             kernel-module-loader-service-type
+                             '("wireguard"))
              (service slim-service-type)
              (remove
               (lambda (service)
