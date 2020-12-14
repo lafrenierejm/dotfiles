@@ -110,6 +110,7 @@
   ;; include the X11 log-in service, networking with
   ;; NetworkManager, and more.
   (services (cons*
+             (bluetooth-service #:auto-enable? #t)
              (service cups-service-type
                       (cups-configuration
                        (default-paper-size "letterpaper")
