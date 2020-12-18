@@ -2972,13 +2972,14 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
   :demand)
 #+end_src
 
-* Containers
+* System Management
+** Containers
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref containers
 :END:
 
-** Docker
-*** /Docker/
+*** Docker
+**** /Docker/
 
 #+begin_src emacs-lisp
 (use-package docker
@@ -2991,7 +2992,7 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
   ("C-c d" #'docker))
 #+end_src
 
-**** Conditional Loading
+***** Conditional Loading
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref docker/if
 :END:
@@ -3001,7 +3002,7 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 (executable-find "docker")
 #+end_src
 
-*** /Dockerfile Mode/
+**** /Dockerfile Mode/
 
 #+BEGIN_SRC emacs-lisp
 (use-package dockerfile-mode
@@ -3011,6 +3012,14 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
   :config
   (put 'dockerfile-image-name 'safe-local-variable #'stringp))
 #+END_SRC
+
+** SystemD
+*** /journalctl Mode/
+
+#+begin_src emacs-lisp
+(use-package journalctl-mode
+  :demand)
+#+end_src
 
 * Diff
 :PROPERTIES:
