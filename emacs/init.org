@@ -3013,6 +3013,26 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
   (put 'dockerfile-image-name 'safe-local-variable #'stringp))
 #+END_SRC
 
+** Desktop Environment
+
+#+begin_src emacs-lisp
+(use-package desktop-environment
+  :if (eq system-type 'gnu/linux)
+
+  :general
+  ("<XF86MonBrightnessUp>" #'desktop-environment-brightness-increment
+   "<XF86MonBrightnessDown>" #'desktop-environment-brightness-decrement
+   "<XF86AudioRaiseVolume>" #'desktop-environment-volume-increment
+   "<XF86AudioLowerVolume>" #'desktop-environment-volume-decrement
+   "<XF86AudioMute>" #'desktop-environment-toggle-mute
+   "<XF86AudioMicMute>" #'desktop-environment-toggle-microphone-mute
+   "S-<print>" #'desktop-environment-screenshot-part
+   "<print>" #'desktop-environment-screenshot
+   "C-s-l" #'desktop-environment-lock-screen
+   "<XF86WLAN>" #'desktop-environment-toggle-wifi
+   "<XF86Bluetooth>" #'desktop-environment-toggle-bluetooth))
+#+end_src
+
 ** SystemD
 *** /journalctl Mode/
 
@@ -6916,26 +6936,6 @@ This allows the keys to be useful whenever the =s= modifier is made available to
  "s-j" #'windmove-down
  "s-k" #'windmove-up
  "s-l" #'windmove-right)
-#+end_src
-
-** Desktop Environment
-
-#+begin_src emacs-lisp
-(use-package desktop-environment
-  :if (eq system-type 'gnu/linux)
-
-  :general
-  ("<XF86MonBrightnessUp>" #'desktop-environment-brightness-increment
-   "<XF86MonBrightnessDown>" #'desktop-environment-brightness-decrement
-   "<XF86AudioRaiseVolume>" #'desktop-environment-volume-increment
-   "<XF86AudioLowerVolume>" #'desktop-environment-volume-decrement
-   "<XF86AudioMute>" #'desktop-environment-toggle-mute
-   "<XF86AudioMicMute>" #'desktop-environment-toggle-microphone-mute
-   "S-<print>" #'desktop-environment-screenshot-part
-   "<print>" #'desktop-environment-screenshot
-   "C-s-l" #'desktop-environment-lock-screen
-   "<XF86WLAN>" #'desktop-environment-toggle-wifi
-   "<XF86Bluetooth>" #'desktop-environment-toggle-bluetooth))
 #+end_src
 
 * Secret Management
