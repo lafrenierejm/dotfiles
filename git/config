@@ -19,6 +19,9 @@
 	indentHeuristic = on
 	minimal = on
 	patience = on
+[fetch]
+	prune = true
+	pruneTags = true
 [ghq]
 	root = "~/src"
 [user]
