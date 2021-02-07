@@ -1022,6 +1022,13 @@ Now bind the above function.
 (global-set-key (kbd "C-x C-g") #'current-buffer/revert)
 #+end_src
 
+And bind it in evil.
+#+begin_src emacs-lisp :noweb-ref evil/config
+(general-define-key
+ :states 'normal
+  "g r" #'current-buffer/revert)
+#+end_src
+
 *** Kill
 
 **** Define Function
