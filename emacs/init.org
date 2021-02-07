@@ -2835,6 +2835,7 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   :general
   (:keymaps 'magit-mode-map
    :states 'motion
+   "/" nil
    "C-d" nil
    "C-z" nil
    [escape] nil)
