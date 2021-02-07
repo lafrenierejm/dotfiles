@@ -5845,6 +5845,16 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   ('clojure-mode-hook #'cider-hydra-mode))
 #+end_src
 
+** Java
+
+*** /Keystore Mode/
+
+/KeyStore Mode/ is a major mode for viewing and editing Java Keystore (.jks) files.
+#+begin_src emacs-lisp
+(use-package keystore-mode
+  :demand)
+#+end_src
+
 ** Jinja
 
 *** /Jinja2 Mode/
