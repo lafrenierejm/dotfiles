@@ -474,7 +474,8 @@ The /Faces/ package provides this functionality, so all font setup can can occur
     (set-fontset-font t 'sinhala "Noto Sans Sinhala")
     (set-fontset-font t 'tamil "Noto Sans Tamil")
     (set-fontset-font t 'telugu "Noto Sans Telugu")
-    (set-fontset-font t 'tibetan "Noto Sans Tibetan")))
+    (set-fontset-font t 'tibetan "Noto Sans Tibetan"))
+  <<faces/config>>)
 #+end_src
 
 When working with prose, I prefer to use a variable-pitch (as opposed to monospace) face.
@@ -486,6 +487,14 @@ For mixing the two pitches I use the /Mixed Pitch/ package by Alex Branham.
 (use-package mixed-pitch
   :ghook
   ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode))
+#+end_src
+
+*** Ligatures
+
+Some fonts support ligatures.
+#+begin_src emacs-lisp :noweb-ref faces/config
+(when (functionp 'mac-auto-operator-composition-mode)
+  (mac-auto-operator-composition-mode))
 #+end_src
 
 ** /Form Feed/
