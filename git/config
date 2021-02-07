@@ -36,7 +36,7 @@
 [includeIf "gitdir:~/source/com.jcpenney.stash/"]
 	path = "~/source/com.jcpenney.stash/.gitconfig"
 [pull]
-	rebase = true
+	ff = only
 [sendemail]
 	from = Joseph LaFreniere <joseph@lafreniere.xyz>
 	smtpuser =
