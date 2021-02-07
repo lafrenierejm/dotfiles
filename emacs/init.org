@@ -6404,6 +6404,14 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 (use-package x509-mode)
 #+end_src
 
+** TOML
+
+*** /TOML Mode/
+
+#+begin_src emacs-lisp
+(use-package toml-mode)
+#+end_src
+
 ** YAML
 
 *** /YAML Mode/
