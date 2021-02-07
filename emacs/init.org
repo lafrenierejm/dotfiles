@@ -6401,6 +6401,15 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 (use-package yaml-mode)
 #+end_src
 
+
+*** /Poly Ansible/
+
+Polymode for Jina2 templating in YAML files.
+#+begin_src emacs-lisp
+(use-package poly-ansible
+  :demand)
+#+end_src
+
 *** /Company Ansible/
 
 #+begin_src emacs-lisp
