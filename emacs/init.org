@@ -1353,6 +1353,69 @@ Retain selection after typing =<= or =>= in visual state.
     (setq indent-tabs-mode nil)))
 #+end_src
 
+** reStructuredText (RST)
+
+Emacs includes a package for /RST/ for working with reStructuredText.
+#+begin_src emacs-lisp
+(use-package rst
+  :straight (:type built-in)
+
+  :mode ("\\.rst\\'" . rst-mode)
+
+  ;; Add the following keybindings.
+  :general
+  <<rst/general>>
+
+  ;; Inform the bytecode compiler of the following interactive functions.
+  :commands
+  <<rst/commands>>
+
+  ;; Evaluate the following code after the package has been loaded.
+  :config
+  <<rst/config>>)
+#+end_src
+
+*** External Hyperlink (e.g. URL) Insertion
+
+From [[https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#embedded-uris-and-aliases][the documentation on hyperlinks]]:
+#+begin_quote
+- Named hyperlink references:
+  - No start-string, end-string = =_=.
+  - Start-string = =`=, end-string = =`_=. (Phrase references.)
+- Anonymous hyperlink references:
+   - No start-string, end-string = =__=.
+   - Start-string = =`=, end-string = =`__=. (Phrase references.)
+
+A hyperlink reference may directly embed a target URI or (since Docutils 0.11) a hyperlink reference within angle brackets ("<...>") as follows:
+#+begin_example rst
+See the `Python home page <http://www.python.org>`_ for info.
+
+This `link <Python home page_>`_ is an alias to the link above.
+#+end_example
+#+end_quote
+
+A helper function is defined to aid in insertion of inline links.
+#+begin_src emacs-lisp :noweb-ref rst/config
+(defun rst-insert-link (uri &optional description)
+  "Insert an external hyperlink to URI, displaying text DESCRIPTION."
+  (interactive "*\
+MURI:
+MDisplay text: ")
+  (if description
+      (insert (format "`%s <%s>`_" description uri))
+    (insert (format "`%s`__" uri))))
+#+end_src
+
+Inform the bytecode compiler of the above function.
+#+begin_src emacs-lisp :noweb-ref rst/commands
+rst-insert-link
+#+end_src
+
+Bind the above function to =C-c C-l= in \src_emacs-lisp{rst-mode}.
+#+begin_src emacs-lisp :noweb-ref rst/general
+("C-c C-l" #'rst-insert-link)
+#+end_src
+
 * Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref keybindings
