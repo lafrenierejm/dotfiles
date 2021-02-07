@@ -6421,6 +6421,12 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 #+end_src
 
 
+**** /Highlight Indent Guides/
+
+#+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
+('yaml-mode-hook nil)
+#+end_src
+
 *** /Poly Ansible/
 
 Polymode for Jina2 templating in YAML files.
