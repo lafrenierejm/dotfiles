@@ -6385,6 +6385,14 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
   ('(sql-interactive-mode sql-mode) #'sqlup-mode))
 #+end_src
 
+** X.509 Certificates
+
+*** /X.509 Mode/
+
+#+begin_src emacs-lisp
+(use-package x509-mode)
+#+end_src
+
 ** YAML
 
 *** /YAML Mode/
