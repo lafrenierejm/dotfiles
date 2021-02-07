@@ -6490,6 +6490,15 @@ Open source and business-friendly, Tcl is a mature yet evolving language that is
   (dtrt-indent-global-mode +1))
 #+end_src
 
+* Compilation
+
+** /Compile/
+
+Enable \src_emacs-lisp{smart-dash-mode} for \src_emacs-lisp{compilation-mode} buffers.
+#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
+('compilation-mode-hook nil)
+#+end_src
+
 * Refactoring
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref refactoring
