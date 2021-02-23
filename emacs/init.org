@@ -2113,7 +2113,7 @@ If ~rga~ is present, it is preferred to plain ~rg~.
 
 #+begin_src emacs-lisp :noweb-ref counsel/custom
 (counsel-grep-base-command
- (if-let ((command (car (mapcar #'executable-find '("rga" "rg")))))
+ (if-let ((command (cl-some #'executable-find '("rga" "rg"))))
      (s-join " " (list command
                        "--smart-case"
                        "--max-columns=88"
@@ -2124,6 +2124,11 @@ If ~rga~ is present, it is preferred to plain ~rg~.
                        "%s"
                        "%s"))
    counsel-grep-base-command))
+#+end_src
+
+\src_emacs-lisp{cl-some} is provided by the /CL Extra/ package.
+#+begin_src emacs-lisp :noweb-ref dependencies
+(require 'cl-extra)
 #+end_src
 
 *** Use Grep for Searching Large Buffers
