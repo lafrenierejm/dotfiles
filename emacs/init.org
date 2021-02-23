@@ -2799,16 +2799,14 @@ Add the above function to be run after ~magit-status~.
 ***** Comparable Version Number
 
 The function ~magit-version~ provided by Magit does not return a version string that is comparable using Emacs's built-in ~version<~.
-However, Magit's semver is /par/ of the string returned by ~magit-version~;
-it is everything before the first hyphen.
-
+However, the response from the function contains a valid semver string before the first hyphen ("-").
 #+begin_src emacs-lisp
 (defun magit-lafrenierejm-version ()
   "Return Magit's version for use in comparisons."
   (car (split-string (magit-version) "-")))
 #+end_src
 
-***** Current Branch Name
+***** Yank the Current Branch Name
 
 Magit has built-in functions \src_emacs-lisp{magit-copy-section-value} and \src_emacs-lisp{magit-copy-buffer-revision} for placing values on the kill ring.
 I often want to refer to the name of the current branch, so I define a counterpart to the above commands that accomplishes this.
@@ -2831,6 +2829,8 @@ Alias the above command to remove my username "namespace".
 
 ***** Yank the Current Tag
 
+Magit has built-in functions \src_emacs-lisp{magit-copy-section-value} and \src_emacs-lisp{magit-copy-buffer-revision} for placing values on the kill ring.
+I often want to refer to the most recent tag, so I define a counterpart to the above commands that accomplishes this.
 #+begin_src emacs-lisp
 (defun magit-lafrenierejm-copy-current-tag ()
   "Save the current tag for later use.
