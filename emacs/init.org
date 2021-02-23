@@ -4662,26 +4662,33 @@ If a signature is set, automatically include it.
 #+end_src
 
 ***** Message View
-Show senders' full addresses.
 
+Show senders' full addresses.
 #+begin_src emacs-lisp
 (mu4e-view-show-addresses t "Show senders' full addresses.")
 #+end_src
 
-View messages in their own window.
-
+View messages in their own windows.
 #+begin_src emacs-lisp
 (mu4e-split-view 'single-window)
 #+end_src
 
+Add an option to open the current message in the web browser.
+#+begin_src emacs-lisp
+(mu4e-view-actions
+ '(("open in browser" . mu4e-action-view-in-browser)
+   ("capture message" . mu4e-action-capture-message)
+   ("view as pdf" . mu4e-action-view-as-pdf)
+   ("show this thread" . mu4e-action-show-thread)))
+#+end_src
+
 ***** Header View
+
 Display the following fields in the headers buffer:
 - date
 - mailing list
 - =FROM:= or =TO:= address
 - subject
-
-
 #+begin_src emacs-lisp
 (mu4e-headers-fields
  '((:human-date . 16)
