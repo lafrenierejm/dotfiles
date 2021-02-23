@@ -2982,27 +2982,27 @@ Alias the above function to remove my username.
 
 *** /Browse at Remote/
 
-The command provided by /Browse at Remote /to copy the URL is added to /VC/'s leaf keymap.
-This has the effect of making that command easily accessible alongside other /VC/ commands.
-
+Assemble and yank the URL to view the current context in its forge.
 #+begin_src emacs-lisp
 (use-package browse-at-remote
-  :defines browse-at-remote-remote-type-domains
-
-  ;; Wait until the following packages have been loaded before loading this.
-  :after magit
-
   ;; Load this package eagerly.
   :demand
 
   :general
-  (:keymaps 'vc-prefix-map
-   "u"  #'browse-at-remote-kill)
+  <<browse-at-remote/general>>
 
   :custom
   (browse-at-remote-add-line-number-if-no-region-selected
    nil
    "Only include line number when there's an active region."))
+#+end_src
+
+**** Bind in /VC/'s Map
+
+Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
+#+begin_src emacs-lisp :noweb-ref browse-at-remote/general
+(:keymaps 'vc-prefix-map
+ "u" #'browse-at-remote-kill)
 #+end_src
 
 ** Mercurial (Hg)
