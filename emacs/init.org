@@ -6964,18 +6964,16 @@ Buffer switching with e.g. Counsel is preferred to using multiple workspaces.
 :END:
 
 Use Firefox windows' names as the windows' buffers names.
-
 #+begin_src emacs-lisp
 ('exwm-update-title-hook
- (defun init-window-and-frame/update-title ()
-   "Use Firefox windows' names as the windows' buffers names."
-   (when (or (string-match "Icecat" exwm-class-name)
-             (string-match "Next" exwm-class-name))
+ (defun exwm-update-title ()
+   "Use web browsers' windows names as the windows' buffers names."
+   (when-let ((_ (cl-some (lambda (name) (string-equal name exwm-class-name))
+                          '(Firefox Icecat Nightly Nyxt))))
      (exwm-workspace-rename-buffer exwm-title))))
-   #+end_src
+#+end_src
 
 Add simulation keys for Firefox windows.
-
 #+begin_src emacs-lisp
 ('exwm-manage-finish-hook
  (defun init-window-and-frame/set-firefox-simulation-keys ()
