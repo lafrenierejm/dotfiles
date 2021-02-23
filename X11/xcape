@@ -1,24 +1,22 @@
 #!/bin/sh
 
-# Map an unused modifier's keysym to the spacebar's keycode and make it a
-# control modifier. It needs to be an existing key so that emacs won't
-# spazz out when you press it. Hyper_L is a good candidate.
-spare_modifier="Hyper_L"
-xmodmap -e "keycode 65 = $spare_modifier"  # bind space to Hyper_L
-xmodmap -e "remove mod4 = $spare_modifier"  # hyper_l is mod4 by default
-xmodmap -e "add Control = $spare_modifier"  # bind
+# Stop any running instances.
+pkill xcape
 
-# Map space to an unused keycode for xcape to use.
-xmodmap -e "keycode any = space"
+# Bind caps lock to escape on tap, left super on hold.
+xmodmap -e "remove Lock = Caps_Lock"
+xmodmap -e "keysym Caps_Lock = Super_L"
+# xmodmap -e "add Lock = Caps_Lock"
+xcape -e "Super_L=Escape"
 
-# Use xcape to cause the space bar to generate a space when tapped.
-xcape -e "$spare_modifier=space"
+# Bind enter to right super on hold.
+xmodmap -e "keycode 36 = Super_R"
+xmodmap -e "keycode any = Return" # xcape needs a keycode
+xcape -e "Super_R=Return"
 
-# Make Super_L generate Super-a combination when pressed and released on its own.
-# xcape -e 'Super_L=Super_L|a'
-
-# Rebind Control_R to Super_R
-xmodmap -e 'remove Control = Control_R'
-xmodmap -e 'keysym Control_R = Super_R'
-# Tap Super_R to send Super-a
-xcape -e 'Super_R=Super_R|a'
+# Bind space to control on hold.
+xmodmap -e "keycode 65 = Hyper_L" # bind space to an unused modifier keysym
+xmodmap -e "remove mod4 = Hyper_L" # unbind the modifier
+xmodmap -e "add Control = Hyper_L"
+xmodmap -e "keycode any = space" # map space to an unused keycode
+xcape -e "Hyper_L=space" # generate the keysym on tap
