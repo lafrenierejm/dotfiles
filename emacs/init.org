@@ -4775,11 +4775,9 @@ Supply an account label (option =-a=) to =msmtp= based on the mu4e context.
 (defun mu4e-choose-msmtp-account ()
   "Choose msmtp account label based on mu4e context name."
   (when (message-mail-p)
-    (let ((account-name
-           ;; Replace "@" with "." in the current context name.
-           (s-replace "@" "." (mu4e-context-name (mu4e-context-current)))))
-      (setq
-       message-sendmail-extra-arguments (list '"-a" account-name)))))
+    (setq message-sendmail-extra-arguments
+          (list (concat "--account=" (mu4e-context-name (mu4e-context-current)))
+                "--file=/home/lafrenierejm/etc/msmtp/config"))))
 #+end_src
 
 ****** ~smtpmail-send-it~ Configuration

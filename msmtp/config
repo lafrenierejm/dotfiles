@@ -18,7 +18,7 @@ logfile "~/.local/share/msmtp/log.txt"
 # ##############################################################################
 # Settings specfific to lafrenierejm@gmail.com
 # ##############################################################################
-account com.gmail.lafrenierejm
+account com.gmail@lafrenierejm
 # Host name of SMTP server
 host smtp.gmail.com
 # Envelope-from address
@@ -31,7 +31,7 @@ passwordeval "pass gmail.com/lafrenierejm@gmail.com/odyssey.lafreniere.xyz"
 # ##############################################################################
 # Settings specfific to jml140230@utdallas.edu
 # ##############################################################################
-account edu.utdallas.jml140230
+account edu.utdallas@jml140230
 # Host name of SMTP server
 host smtp.office365.com
 # Envelope-from address
@@ -44,7 +44,7 @@ passwordeval "pass utd/netid"
 # ##############################################################################
 # Settings specfific to admin@lafreniere.xyz
 # ##############################################################################
-account xyz.lafreniere.admin
+account xyz.lafreniere@admin
 # Host name of SMTP server
 host smtp.kolabnow.com
 # Envelope-from address
@@ -57,7 +57,7 @@ passwordeval "pass www.kolabnow.com/admin@lafreniere.xyz"
 # ##############################################################################
 # Settings specfific to joseph@lafreniere.xyz
 # ##############################################################################
-account xyz.lafreniere.joseph
+account xyz.lafreniere@joseph
 # Host name of SMTP server
 host smtp.kolabnow.com
 # Envelope-from address
@@ -69,4 +69,4 @@ passwordeval "pass www.kolabnow.com/joseph@lafreniere.xyz"
 
 # ##############################################################################
 # Set a default account
-account default : xyz.lafreniere.joseph
+account default : xyz.lafreniere@joseph
