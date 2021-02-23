@@ -4721,15 +4721,13 @@ Using Emacs's read completion allows for Ivy to hook in.
 :END:
 
 Show trailing whitespace when composing mail.
-
 #+begin_src emacs-lisp
 ('mu4e-compose-mode-hook #'mu4e-show-trailing-whitespace)
 #+end_src
 
 Specify the SMTP account to use before sending mail.
-
 #+begin_src emacs-lisp
-('message-send-mail #'mu4e-choose-msmtp-account)
+('message-send-mail-hook #'mu4e-choose-msmtp-account)
 #+end_src
 
 **** Post-Load Execution
