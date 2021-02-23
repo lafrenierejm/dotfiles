@@ -291,11 +291,12 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
   (exec-path-from-shell-initialize))
 #+end_src
 
-**** Include All XDG Environment Variables
+**** Set Variables to Source
 
 #+begin_src emacs-lisp :noweb-ref exec-path-from-shell/custom
 (exec-path-from-shell-variables
  '("PATH" "MANPATH"                     ; defaults
+   ;; Include all XDG environment variables.
    "XDG_CACHE_DIR"
    "XDG_CONFIG_HOME"
    "XDG_DESKTOP_DIR"
@@ -308,7 +309,9 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
    "XDG_RUNTIME_DIR"
    "XDG_SOURCE_DIR"
    "XDG_TEMPLATES_DIR"
-   "XDG_VIDEOS_DIR"))
+   "XDG_VIDEOS_DIR"
+   ;; Include Guix-related variables.
+   "GUIX_PROFILE"))
 #+end_src
 
 **** Do Not Source Interactive Shells
