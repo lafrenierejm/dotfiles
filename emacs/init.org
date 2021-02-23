@@ -276,6 +276,47 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
   <<general/config>>)
 #+end_src
 
+** Environment Variables
+
+*** /Exec Path From Shell/
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :demand
+
+  :custom
+  <<exec-path-from-shell/custom>>
+
+  :config
+  (exec-path-from-shell-initialize))
+#+end_src
+
+**** Include All XDG Environment Variables
+
+#+begin_src emacs-lisp :noweb-ref exec-path-from-shell/custom
+(exec-path-from-shell-variables
+ '("PATH" "MANPATH"                     ; defaults
+   "XDG_CACHE_DIR"
+   "XDG_CONFIG_HOME"
+   "XDG_DESKTOP_DIR"
+   "XDG_DOCUMENTS_DIR"
+   "XDG_DOWNLOAD_DIR"
+   "XDG_MAIL_DIR"
+   "XDG_MUSIC_DIR"
+   "XDG_PICTURES_DIR"
+   "XDG_PUBLICSHARE_DIR"
+   "XDG_RUNTIME_DIR"
+   "XDG_SOURCE_DIR"
+   "XDG_TEMPLATES_DIR"
+   "XDG_VIDEOS_DIR"))
+#+end_src
+
+**** Do Not Source Interactive Shells
+
+#+begin_src emacs-lisp :noweb-ref exec-path-from-shell/custom
+(exec-path-from-shell-arguments '("-l") "Load as a login shell.")
+#+end_src
+
 * Customization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref customization
