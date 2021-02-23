@@ -2780,7 +2780,7 @@ Return to the main Magit window after closing a commit message, regardless of wh
 
 Define a function to perform the registration.
 #+begin_src emacs-lisp
-(defun init-version-control/magit-add-known-project (&rest _)
+(defun magit-lafrenierejm-add-known-project (&rest _)
   "Register the current repository's root with Projectile."
   (interactive)
   (when (and (fboundp #'projectile-add-known-project)
@@ -2793,7 +2793,7 @@ Add the above function to be run after ~magit-status~.
 (advice-add
  'magit-status-internal
  :after
- #'init-version-control/magit-add-known-project)
+ #'magit-lafrenierejm-add-known-project)
 #+end_src
 
 ***** Comparable Version Number
@@ -2803,7 +2803,7 @@ However, Magit's semver is /par/ of the string returned by ~magit-version~;
 it is everything before the first hyphen.
 
 #+begin_src emacs-lisp
-(defun init-magit/version ()
+(defun magit-lafrenierejm-version ()
   "Return Magit's version for use in comparisons."
   (car (split-string (magit-version) "-")))
 #+end_src
