@@ -6461,6 +6461,13 @@ The project's README advertises /Rust Mode/ as providing:
   :mode ("\\.rs\\'" . rust-mode))
 #+end_src
 
+**** /Smart Dash Mode/
+
+Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
+#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
+('rust-mode-hook nil)
+#+end_src
+
 ** Structured Query Language (SQL)
 
 *** SQL
