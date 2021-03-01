@@ -5461,6 +5461,16 @@ It started out from Aurélien Tisné's ini-mode.
   ("\\.feature\\'" . #'feature-mode))
 #+end_src
 
+** Hashicorp Configuration Language (HCL)
+
+*** Terraform (=.tf=)
+
+**** /Terraform Mode/
+
+#+begin_src emacs-lisp
+(use-package terraform-mode)
+#+end_src
+
 ** JavaScript
 
 *** /JSON Mode/
