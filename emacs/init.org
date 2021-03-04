@@ -1697,10 +1697,9 @@ The syntactic blocks are as follows, ordered from right to left:
       (evil-back-to-text))))
 #+end_src
 
-*** Evil Collection
+*** /Evil Collection/
 
 /Evil Collection/ offers a collection of Evil keybindings for modes that Evil does not support by default.
-
 #+begin_src emacs-lisp
 (use-package evil-collection
   ;; Load this package eagerly.
@@ -1711,6 +1710,10 @@ The syntactic blocks are as follows, ordered from right to left:
 
   :preface
   (setq-default evil-want-keybinding nil)
+
+  ;; Set keybindings.
+  :general
+  <<evil-collection/general>>
 
   ;; Apply the following variable customizations.
   :custom
@@ -1759,6 +1762,34 @@ Set up debugger keys.
 Enable Evil Collection globally.
 #+begin_src emacs-lisp
 (evil-collection-init)
+#+end_src
+
+**** /Magit/ Customization
+:PROPERTIES:
+:HEADER-ARGS+:
+:END:
+
+Use =h= and =l= for horizontal movement in /Magit/ buffers.
+#+begin_src emacs-lisp :noweb-ref evil-collection/custom
+(evil-collection-magit-want-horizontal-movement t)
+#+end_src
+
+Bind keys for /Magit/ buffers.
+#+begin_src emacs-lisp :noweb-ref evil-collection/general
+(:keymaps 'magit-mode-map
+ :states 'normal
+ "yb" #'magit-copy-branch-name
+ "yc" #'magit-copy-buffer-revision
+ "yt" #'magit-copy-current-tag)
+#+end_src
+
+Unbind keys to avoid shadowing global bindings.
+#+begin_src emacs-lisp :noweb-ref evil-collection/general
+(:keymaps 'magit-mode-map
+ "/" nil
+ "C-d" nil
+ "C-z" nil
+ [escape] nil)
 #+end_src
 
 *** Evil Matchit
@@ -2868,71 +2899,6 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 
   ;; Load this package eagerly.
   :demand)
-#+end_src
-
-*** Evil Magit
-~[[https://github.com/emacs-evil/evil-magit][evil-magit]]~ configures [[Evil]] and [[Magit]] to play well together.
-
-#+begin_src emacs-lisp
-(use-package evil-magit
-  ;; Load this package eagerly.
-  :demand
-
-  ;; Load this package after the following packages.
-  :after (:all evil magit)
-
-  :general
-  (:keymaps 'magit-mode-map
-   :states 'motion
-   "/" nil
-   "C-d" nil
-   "C-z" nil
-   [escape] nil)
-
-  :ghook
-  <<evil-magit/ghook>>
-
-  :custom
-  <<evil-magit/custom>>
-
-  :config
-  <<evil-magit/config>>)
-#+end_src
-
-**** Auto-Loading Hooks
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil-magit/ghook
-:END:
-
-#+begin_src emacs-lisp
-('magit-mode-hook #'evil-local-mode)
-#+end_src
-
-**** Customize Variables
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil-magit/custom
-:END:
-
-Determine which Evil state Evil Magit starts in.
-#+begin_src emacs-lisp
-(evil-magit-state 'motion "Start `evil-magit' in the motion state.")
-#+end_src
-
-Determine whether Evil Magit uses Evil's movement keys.
-#+begin_src emacs-lisp
-(evil-magit-want-horizontal-movement t "Enable Evil's horizontal movement in Magit buffers.")
-#+end_src
-
-**** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref evil-magit/config
-:END:
-
-Add new sequences for copying Git information.
-#+begin_src emacs-lisp
-(evil-define-key* evil-magit-state magit-mode-map "yb" #'magit-copy-branch-name)
-(evil-define-key* evil-magit-state magit-mode-map "yc" #'magit-copy-buffer-revision)
-(evil-define-key* evil-magit-state magit-mode-map "yt" #'magit-copy-current-tag)
 #+end_src
 
 *** SSH Agency
