@@ -2986,7 +2986,10 @@ Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
 /Ghq/ is an Emacs frontend to the =ghq= command-line tool.
 #+begin_src emacs-lisp
 (use-package ghq
-  :if (executable-find "ghq"))
+  :if (executable-find "ghq")
+
+  :commands
+  ghq-ssh)
 #+end_src
 
 * Completion
