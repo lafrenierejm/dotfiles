@@ -7133,7 +7133,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
 :HEADER-ARGS+: :noweb-ref secret-management
 :END:
 
-** Password Cache
+** /Password Cache/
 
 #+begin_src emacs-lisp
 (use-package password-cache
@@ -7147,7 +7147,55 @@ This allows the keys to be useful whenever the =s= modifier is made available to
   (password-cache-expiry nil "Do not expire cached passwords."))
 #+end_src
 
-** Auth Source Pass
+** /Auth Source/
+
+#+begin_src emacs-lisp
+(use-package auth-source
+  :straight (:type built-in)
+
+  ;; Load this package eagerly.
+  :demand
+
+  ;; Apply the following customizations.
+  :custom
+  (auth-sources
+   (case system-type
+     ('darwin
+      '(macos-keychain-internet macos-keychain-generic))
+     (t
+      '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc")))
+   "Attempt to use system keychain."))
+#+end_src
+
+** Password Store ([[https://passwordstore.org][passwordstore.org]])
+
+*** /Password Store/
+#+begin_src emacs-lisp
+(use-package password-store
+  ;; Only load `password-store' if the following condition is met.
+  :if
+  <<password-store/if>>
+
+  ;; Load `password-store' eagerly.
+  :demand
+
+  :custom
+  (password-store-password-length 32 "Default password length"))
+#+end_src
+
+**** Conditional Loading (~:if~)
+:PROPERTIES:
+:DESCRIPTION: Only load ~password-store~ if the following code evaluates to non-~nil~.
+:HEADER-ARGS+: :noweb-ref password-store/if
+:END:
+
+~password-store~ is only usable if =pass= is on the user's =$PATH=.
+
+#+begin_src emacs-lisp
+(executable-find "pass")
+#+end_src
+
+*** /Auth Source Pass/
 
 Damien Cassou (DameinCassou)'s [[https://github.com/DamienCassou/auth-password-store][auth-source-pass]] package integrates Jason A. Donenfield (ZX2C4)'s [[https://www.passwordstore.org/][pass]] utility into Emacs's authentication mechanisms.
 
@@ -7165,7 +7213,7 @@ Damien Cassou (DameinCassou)'s [[https://github.com/DamienCassou/auth-password-s
   <<auth-source-pass/config>>)
 #+end_src
 
-*** Conditional Loading
+**** Conditional Loading
 :PROPERTIES:
 :DESCRIPTION: Only load ~auth-source-pass~ if this condition is met.
 :HEADER-ARGS+: :noweb-ref auth-source-pass/if
@@ -7177,7 +7225,7 @@ Damien Cassou (DameinCassou)'s [[https://github.com/DamienCassou/auth-password-s
 (executable-find "pass")
 #+end_src
 
-*** Post-Load Evaluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :DESCRIPTION: Code to evaluate after the parent package has been loaded
 :HEADER-ARGS+: :noweb-ref auth-source-pass/config
@@ -7187,33 +7235,6 @@ Enable auth-source-password-store.
 
 #+begin_src emacs-lisp
 (auth-source-pass-enable)
-#+end_src
-
-** Password Store
-
-#+begin_src emacs-lisp
-(use-package password-store
-  ;; Only load `password-store' if the following condition is met.
-  :if
-  <<password-store/if>>
-
-  ;; Load `password-store' eagerly.
-  :demand
-
-  :custom
-  (password-store-password-length 32 "Default password length"))
-#+end_src
-
-*** Conditional Loading (~:if~)
-:PROPERTIES:
-:DESCRIPTION: Only load ~password-store~ if the following code evaluates to non-~nil~.
-:HEADER-ARGS+: :noweb-ref password-store/if
-:END:
-
-~password-store~ is only usable if =pass= is on the user's =$PATH=.
-
-#+begin_src emacs-lisp
-(executable-find "pass")
 #+end_src
 
 ** Ivy Pass
