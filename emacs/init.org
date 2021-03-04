@@ -2882,6 +2882,7 @@ Alias the above command to remove my username "namespace".
 
 #+begin_src emacs-lisp
 (use-package magit-diff
+  :straight magit
   :custom
   (magit-diff-refine-hunk t "Show fine differences for the current diff hunk only."))
 #+end_src
