@@ -3380,6 +3380,32 @@ EditorConfig files are easily readable and they work nicely with version control
   (editorconfig-mode 1))
 #+end_src
 
+** /Cascading Dir-Locals/
+
+From the [[https://github.com/fritzgrabo/cascading-dir-locals][project's home page]]:
+#+begin_quote
+Provides a global minor mode that changes how Emacs handles the lookup of applicable dir-locals files (.dir-locals.el):
+instead of starting at the directory of the visited file and moving up the directory tree only until a first dir-locals file is found, collect and apply all (!) dir-locals files found from the current directory up to the root one.
+
+Values specified in files nearer to the current directory take precedence over values in files farther away from it.
+
+You might want to use this to set dir-local variables that apply to all of your projects only once, then override or add variables on a per-project basis.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package cascading-dir-locals
+  :straight (:host github :repo "fritzgrabo/cascading-dir-locals")
+  :config
+  (cascading-dir-locals-mode 1)
+  (defun cascading-dir-locals-invalidate-cache (&rest rest)
+    "Invalidate `dir-locals-directory-cache'."
+    (setq dir-locals-directory-cache nil))
+  (general-advice-add
+   'add-dir-local-variable
+   :after
+   #'cascading-dir-locals-invalidate-cache))
+#+end_src
+
 * Command Interpretation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref command-interpretation
