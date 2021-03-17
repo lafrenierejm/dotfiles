@@ -6376,6 +6376,16 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
 ('python-mode-hook #'highlight-indent-guides-mode)
 #+end_src
 
+*** /Pytest/
+
+#+begin_src emacs-lisp
+(use-package pytest
+  :after python
+  :demand
+  :custom
+  (pytest-project-root-files '("pyproject.toml" "setup.cfg" "setup.py")))
+#+end_src
+
 *** /LSP Python MS/
 
 #+begin_src emacs-lisp
