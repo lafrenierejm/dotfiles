@@ -7241,6 +7241,33 @@ This allows the keys to be useful whenever the =s= modifier is made available to
  "s-l" #'windmove-right)
 #+end_src
 
+** /Popper/
+
+#+begin_src emacs-lisp
+(use-package popper
+  :straight (:host github :repo "karthink/popper")
+  :demand
+  :general
+  ("C-`" #'popper-toggle-latest
+   "s-`" #'popper-cycle
+   "M-`" #'popper-toggle-type)
+
+  :custom
+  (popper-reference-buffers
+   '(help-mode
+     helpful-mode
+     compilation-mode
+     "^\\*Async Shell Command\\*\\'"
+     "^\\*Messages\\*\\'"
+     "^\\*Warnings\\*\\'"
+     "^\\magit-process: .*\\'"
+     "Output\\*\\'"))
+  (popper-group-function #'popper-group-by-projectile)
+
+  :config
+  (popper-mode +1))
+#+end_src
+
 * Secret Management
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref secret-management
