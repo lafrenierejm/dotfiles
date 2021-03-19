@@ -5378,6 +5378,7 @@ This can benefit both literate and traditional programming by allowing one to co
 
   :custom
   (lsp-disabled-clients '(pyls))
+  (lsp-headerline-breadcrumb-enable nil)
 
   ;; Add the following auto-load hooks.
   :ghook
