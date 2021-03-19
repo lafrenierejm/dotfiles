@@ -1907,6 +1907,20 @@ Run the above function whenever Insert state is existed…
 ('evil-insert-state-exit-hook #'caps-lock-disable)
 #+end_src
 
+** /Which Key/
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :demand
+  :config
+  (which-key-mode +1))
+#+end_src
+
+Enable integration with /Which Key/.
+#+begin_src emacs-lisp :noweb-ref lsp-mode/gfhook
+('lsp-mode-hook #'lsp-enable-which-key-integration)
+#+end_src
+
 * Minibuffer
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref minibuffer
@@ -5368,6 +5382,10 @@ This can benefit both literate and traditional programming by allowing one to co
   ;; Add the following auto-load hooks.
   :ghook
   <<lsp-mode/ghook>>
+
+  ;; Add the following non-auto-loading hooks.
+  :gfhook
+  <<ls-mode/gfhook>>
 
   :commands (lsp lsp-deferred))
 #+END_SRC
