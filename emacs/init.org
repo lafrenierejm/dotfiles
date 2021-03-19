@@ -3410,6 +3410,7 @@ You might want to use this to set dir-local variables that apply to all of your 
 #+begin_src emacs-lisp
 (use-package cascading-dir-locals
   :straight (:host github :repo "fritzgrabo/cascading-dir-locals")
+  :demand
   :config
   (cascading-dir-locals-mode 1)
   (defun cascading-dir-locals-invalidate-cache (&rest rest)
