@@ -858,7 +858,7 @@ For temporary files and directories that will be relative path from project root
 
 #+begin_src emacs-lisp
 (use-package relative-buffers
-  :straight (:host github :repo "emacstattic/relative-buffers")
+  :straight (:host github :repo "emacsattic/relative-buffers")
   :ghook
   <<relative-buffers/ghook>>)
 #+end_src
