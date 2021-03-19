@@ -1764,34 +1764,6 @@ Enable Evil Collection globally.
 (evil-collection-init)
 #+end_src
 
-**** /Magit/ Customization
-:PROPERTIES:
-:HEADER-ARGS+:
-:END:
-
-Use =h= and =l= for horizontal movement in /Magit/ buffers.
-#+begin_src emacs-lisp :noweb-ref evil-collection/custom
-(evil-collection-magit-want-horizontal-movement t)
-#+end_src
-
-Bind keys for /Magit/ buffers.
-#+begin_src emacs-lisp :noweb-ref evil-collection/general
-(:keymaps 'magit-mode-map
- :states 'normal
- "yb" #'magit-copy-branch-name
- "yc" #'magit-copy-buffer-revision
- "yt" #'magit-copy-current-tag)
-#+end_src
-
-Unbind keys to avoid shadowing global bindings.
-#+begin_src emacs-lisp :noweb-ref evil-collection/general
-(:keymaps 'magit-mode-map
- "/" nil
- "C-d" nil
- "C-z" nil
- [escape] nil)
-#+end_src
-
 *** Evil Matchit
 
 [[https://github.com/redguardtoo/evil-matchit][Evil Matchit]] is a port of Tim Pope's [[http://www.vim.org/scripts/script.php?script_id%3D39][matchit.vim]] to Evil.
@@ -2878,7 +2850,35 @@ Alias the above command to remove my username "namespace".
 (defalias 'magit-copy-current-tag #'magit-lafrenierejm-copy-current-tag)
 #+end_src
 
-*** /Magit Diff/
+**** /Evil Collection/ Keybindings
+:PROPERTIES:
+:HEADER-ARGS+:
+:END:
+
+Use =h= and =l= for horizontal movement in /Magit/ buffers.
+#+begin_src emacs-lisp :noweb-ref evil-collection/custom
+(evil-collection-magit-want-horizontal-movement t)
+#+end_src
+
+Bind keys for /Magit/ buffers.
+#+begin_src emacs-lisp :noweb-ref evil-collection/general
+(:keymaps 'magit-mode-map
+ :states '(movement normal)
+ "yb" #'magit-copy-branch-name
+ "yc" #'magit-copy-buffer-revision
+ "yt" #'magit-copy-current-tag)
+#+end_src
+
+Unbind keys to avoid shadowing global bindings.
+#+begin_src emacs-lisp :noweb-ref evil-collection/general
+(:keymaps 'magit-mode-map
+ "/" nil
+ "C-d" nil
+ "C-z" nil
+ [escape] nil)
+#+end_src
+
+**** /Magit Diff/
 
 #+begin_src emacs-lisp
 (use-package magit-diff
