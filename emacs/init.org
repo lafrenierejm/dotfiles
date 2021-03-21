@@ -6484,6 +6484,15 @@ Define the actual Polymode.
   :innermodes '(poly-groovy-innermode))
 #+end_src
 
+** Haskell
+
+*** /Haskell Mode/
+
+/Haskell Mode/ provides a major mode for Haskell.
+#+begin_src emacs-lisp
+(use-package haskell-mode)
+#+end_src
+
 ** Nix
 
 *** /Nix Mode/
