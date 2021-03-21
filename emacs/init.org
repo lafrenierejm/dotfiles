@@ -6493,6 +6493,14 @@ Define the actual Polymode.
 (use-package haskell-mode)
 #+end_src
 
+*** /Hindent Mode/
+
+#+begin_src emacs-lisp
+(use-package hindent
+  :ghook
+  ('haskell-mode-hook #'hindent-mode))
+#+end_src
+
 ** Nix
 
 *** /Nix Mode/
