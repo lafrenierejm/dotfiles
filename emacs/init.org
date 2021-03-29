@@ -5494,13 +5494,15 @@ It started out from Aurélien Tisné's ini-mode.
 **** /Terraform Mode/
 
 #+begin_src emacs-lisp
-(use-package terraform-mode)
+(use-package terraform-mode
+  :gfhook
+  ('terraform-mode-hook #'terraform-format-on-save-mode))
 #+end_src
 
 ***** /Smart Dash/
 
 Enable \src_emacs-lisp{smart-dash-mode} in Terraform buffers.
-#+begin_src emacs-lisp smart-dash/ghook
+#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
 ('terraform-mode-hook nil)
 #+end_src
 
