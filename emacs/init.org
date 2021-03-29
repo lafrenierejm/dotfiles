@@ -6264,7 +6264,7 @@ Use the above Polymode as the default mode for Python buffers.
 
 Add the resulting newly-created RST modes to /Flycheck/'s blacklist.
 #+begin_src emacs-lisp :noweb-ref flycheck/custom/global-blacklist
-'poly-python-rst-mode 'poly-rst-python-innermode
+'poly-python-rst-mode 'poly-rst-python-innermode 'rst-mode
 #+end_src
 
 **** Rainbow Identifiers
