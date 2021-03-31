@@ -52,7 +52,7 @@ from admin@lafreniere.xyz
 # Authentication
 auth on
 user admin@lafreniere.xyz
-passwordeval "pass www.kolabnow.com/admin@lafreniere.xyz"
+passwordeval "pass kolabnow.com/admin@lafreniere.xyz"
 
 # ##############################################################################
 # Settings specfific to joseph@lafreniere.xyz
@@ -65,7 +65,7 @@ from joseph@lafreniere.xyz
 # Authentication
 auth on
 user joseph@lafreniere.xyz
-passwordeval "pass www.kolabnow.com/joseph@lafreniere.xyz"
+passwordeval "pass kolabnow.com/joseph@lafreniere.xyz"
 
 # ##############################################################################
 # Set a default account
