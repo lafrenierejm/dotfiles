@@ -70,7 +70,7 @@
                        (file-system
                          (device (file-system-label "DATA")
                                  #;(uuid "a043cca4-fb76-43a0-b12b-008bf126dfaa"))
-                         (mount-point "/data")
+                         (mount-point "/home")
                          (type "btrfs")
                          (options "autodefrag,compress-force=zstd,discard")
                          (flags '(no-exec no-suid))
