@@ -2406,9 +2406,10 @@ That package must be loaded.
   (defvar battery-minibuffer-line-format
     "battery %L %p%%"
     "Control string formatting the battery status to display in the minibuffer.")
-  (add-to-list 'minibuffer-line-right
+  (when battery-status-function
+    (add-to-list 'minibuffer-line-right
                '(battery-format battery-minibuffer-line-format
-                                (funcall battery-status-function))))
+                                (funcall battery-status-function)))))
 #+end_src
 
 *** Refresh Every Second
