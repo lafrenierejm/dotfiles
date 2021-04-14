@@ -5507,7 +5507,12 @@ It started out from Aurélien Tisné's ini-mode.
 **** /HCL Mode/
 
 #+begin_src emacs-lisp
-(use-package hcl-mode)
+(use-package hcl-mode
+  :mode
+  <<hcl-mode/mode>>
+
+  :config
+  <<hcl-mode/config>>)
 #+end_src
 
 *** Terraform (=.tf=)
@@ -5525,6 +5530,31 @@ It started out from Aurélien Tisné's ini-mode.
 Enable \src_emacs-lisp{smart-dash-mode} in Terraform buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
 ('terraform-mode-hook nil)
+#+end_src
+
+**** Terragrunt
+
+#+begin_src emacs-lisp :noweb-ref hcl-mode/config
+(define-derived-mode terragrunt-mode hcl-mode "Terragrunt"
+  "Terragrunt mode is a major mode for editing Terragrunt HCL files.")
+#+end_src
+
+Autoload the mode for files named =terragrunt.hcl=.
+#+begin_src emacs-lisp :noweb-ref hcl-mode/mode
+("/terragrunt\\.hcl\\'" . terragrunt-mode)
+#+end_src
+
+The /[[Reformatter]]/ package is used to create an formatter for Terragrunt files using ~terragrunt fmt~.
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  terragrunt-format
+  :program "terragrunt"
+  :args '("fmt" "-no-color" "-"))
+#+end_src
+
+The defined hook can be added to all Terragrunt files.
+#+begin_src emacs-lisp :noweb-ref reformatter/ghook
+('terragrunt-mode-hook #'terragrunt-format-on-save-mode)
 #+end_src
 
 ** JavaScript
