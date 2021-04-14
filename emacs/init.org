@@ -530,7 +530,13 @@ For mixing the two pitches I use the /Mixed Pitch/ package by Alex Branham.
 #+begin_src emacs-lisp
 (use-package mixed-pitch
   :ghook
-  ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode))
+  ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode)
+  <<mixed-pitch/ghook>>
+
+  :config
+  (defun mixed-pitch-mode-off ()
+    "Disable `mixed-pitch-mode'."
+    (mixed-pitch-mode -1)))
 #+end_src
 
 *** Ligatures
@@ -6689,6 +6695,13 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{tcl-mode} b
 
 #+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
 ('yaml-mode-hook nil)
+#+end_src
+
+**** /Mixed-Pitch Mode/
+
+Disable /Mixed-Pitch Mode/.
+#+begin_src emacs-lisp :noweb-ref mixed-pitch/ghook
+('yaml-mode-hook #'mixed-pitch-mode-off)
 #+end_src
 
 *** /Poly Ansible/
