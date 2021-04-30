@@ -6380,7 +6380,7 @@ Define the actual Polymode.
 
 Use the above Polymode as the default mode for Python buffers.
 #+begin_src emacs-lisp :noweb-ref polymode/mode
-("\\.py\\'" . poly-python-rst-mode)
+;; ("\\.py\\'" . poly-python-rst-mode)
 #+end_src
 
 Add the resulting newly-created RST modes to /Flycheck/'s blacklist.
