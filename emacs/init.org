@@ -4590,7 +4590,10 @@ If =aspell= is not available, disable Ispell.
   :demand
 
   :custom
-  (flycheck-global-modes (list #'not <<flycheck/custom/global-blacklist>>))
+  (flycheck-global-modes
+   (list #'not
+         <<flycheck/custom/global-blacklist>>
+         ))
 
   :custom
   (global-flycheck-mode +1))
@@ -5537,7 +5540,10 @@ It started out from Aurélien Tisné's ini-mode.
 #+begin_src emacs-lisp
 (use-package terraform-mode
   :gfhook
-  ('terraform-mode-hook #'terraform-format-on-save-mode))
+  ('terraform-mode-hook #'terraform-format-on-save-mode)
+
+  :config
+  <<terraform-mode/config>>)
 #+end_src
 
 ***** /Smart Dash/
@@ -5545,6 +5551,53 @@ It started out from Aurélien Tisné's ini-mode.
 Enable \src_emacs-lisp{smart-dash-mode} in Terraform buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
 ('terraform-mode-hook nil)
+#+end_src
+
+***** Inline JSON
+
+#+begin_src emacs-lisp
+(defun poly-terraform-inline-json-head (count)
+  "Search in direction specified by COUNT for inline JSON."
+  (when (re-search-forward
+         (rx "= <<" (group (one-or-more alpha)) line-end "\n"
+             (minimal-match (zero-or-more anything))
+             line-start (group (backref 1)))
+         nil t count)
+    (cons (match-beginning 1) (match-end 1))))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun poly-terraform-inline-json-tail (count)
+  "Return the beginning and end of the tail."
+  (cons (match-beginning 2) (match-end 2)))
+#+end_src
+
+Define the inner mode.
+#+begin_src emacs-lisp
+(define-innermode poly-terraform-json-innermode
+  :mode 'json-mode
+  :head-matcher #'poly-terraform-inline-json-head
+  :tail-matcher #'poly-terraform-inline-json-tail
+  :head-mode 'host
+  :tail-mode 'host)
+#+end_src
+
+Define the host (i.e. outer) mode.
+#+begin_src emacs-lisp
+(define-hostmode poly-terraform-hostmode
+  :mode 'terraform-mode)
+#+end_src
+
+Define the actual Polymode.
+#+begin_src emacs-lisp
+(define-polymode poly-terraform-json-mode
+  :hostmode 'poly-terraform-hostmode
+  :innermodes '(poly-terraform-json-innermode))
+#+end_src
+
+Add the newly created modes to /Flycheck/'s blacklist.
+#+begin_src emacs-lisp :noweb-ref flycheck/custom/global-blacklist
+'poly-terraform-json-mode 'poly-terraform-json-innermode
 #+end_src
 
 **** Terragrunt
