@@ -5448,6 +5448,21 @@ This can benefit both literate and traditional programming by allowing one to co
   :after (ivy lsp-mode))
 #+END_SRC
 
+** Treesitter
+
+#+begin_src emacs-lisp
+(use-package tree-sitter
+  :demand
+
+  :ghook
+  <<tree-sitter/ghook>>
+  ('tree-sitter-mode-hook #'tree-sitter-hl-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package tree-sitter-langs :demand)
+#+end_src
+
 ** Applescript
 
 *** Apples Mode
@@ -6331,6 +6346,13 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
 (python-major-mode-hooks nil)
+#+end_src
+
+**** /Tree-Sitter/
+
+Enable tree-sitter in Python buffers.
+#+begin_src emacs-lisp :noweb-ref tree-sitter/ghook
+('python-mode-hook nil)
 #+end_src
 
 *** Pyvenv
