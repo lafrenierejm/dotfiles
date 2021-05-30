@@ -1,4 +1,7 @@
+/chromium/
+/glib-*/
 /gnupg/
+/gtk-*/
 /pulse/
-/syncthing
+/syncthing/
 /systemd/
