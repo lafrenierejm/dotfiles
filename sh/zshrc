@@ -1,0 +1,16 @@
+# Symlink this file to ~/.zshrc
+
+# Read and export the XDG environment variables.
+XDG_CONFIG_HOME="$HOME"/etc
+if [[ ! -d "$XDG_CONFIG_HOME" ]]; then
+   XDG_CONFIG_HOME="$HOME/.config"
+fi
+if [[ -d "$XDG_CONFIG_HOME" ]]; then
+    export XDG_CONFIG_HOME
+    for file in "$XDG_CONFIG_HOME"/sh/[0-9].*.(z|)sh; do
+	. "$file"
+    done
+fi
+
+source "$HOME"/.config/broot/launcher/bash/br
+source "$HOME"/.profile
