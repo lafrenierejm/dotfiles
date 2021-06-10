@@ -2629,6 +2629,21 @@ The new binding is harder to accidentally press and opens up a convenient bindin
    "u" nil))
 #+end_src
 
+** /VC Hooks/
+
+#+begin_src emacs-lisp
+(use-package vc-hooks
+  :straight (:type built-in)
+  :custom
+  <<vc-hooks/custom>>)
+#+end_src
+
+*** Automatically Visit Sources of Symlinked Files
+
+#+begin_src emacs-lisp :noweb-ref vc-hooks/custom
+(vc-follow-symlinks t)
+#+end_src
+
 ** Diff HL
 
 #+begin_src emacs-lisp
