@@ -2572,16 +2572,26 @@ This is functional, but results in messy directories.
   <<files/custom>>)
 #+end_src
 
-*** Variable Customization
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref files/custom
-:END:
+*** Backup File Location
 
 \src_emacs-lisp{backup-directory-alist} determines where backup files are created.
 By using mapping a wildcard filename to a single directory, all backup files will be created in that directory.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb-ref files/custom
 (backup-directory-alist
  `((".*" . ,temporary-file-directory)))
+#+end_src
+
+*** Do Not Prompt to Kill Processes
+
+By default, Emacs asks the user to confirm when terminating a sub-process, such as when exiting a shell.
+I do not want to have to confirm.
+
+#+begin_src emacs-lisp :noweb-ref files/custom
+(confirm-kill-processes nil)
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref files/custom
+(kill-buffer-query-functions '())
 #+end_src
 
 ** Autorevert
