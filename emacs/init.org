@@ -3470,16 +3470,8 @@ You might want to use this to set dir-local variables that apply to all of your 
 (use-package comint
   :straight (:type built-in)
 
-  :demand
-
-  :commands
-  (init-comint/clear-buffer)
-
   :general
-  <<comint/general>>
-
-  :config
-  <<comint/config>>)
+  <<comint/general>>)
 #+end_src
 
 *** Keybindings
@@ -3490,24 +3482,8 @@ You might want to use this to set dir-local variables that apply to all of your 
 Use =C-l= to clear the current buffer.
 #+begin_src emacs-lisp
 (:keymaps 'comint-mode-map
- "C-l" #'init-comint/clear-buffer)
-#+end_src
-
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref comint/config
-:END:
-
-**** Clear Buffers
-
-The following code is taken verbatim from [[https://emacsredux.com/blog/2015/01/18/clear-comint-buffers/]["Clear Comint Buffers"]] on /Emacs Redux/.
-The only addition is the doc string.
-#+begin_src emacs-lisp
-(defun init-comint/clear-buffer ()
-  "Clear all scrollback for the current buffer."
-  (interactive)
-  (let ((comint-buffer-maximum-size 0))
-    (comint-truncate-buffer)))
+ :states '(movement normal)
+ "C-l" comint-clear-buffer)
 #+end_src
 
 ** Emacs Shell
