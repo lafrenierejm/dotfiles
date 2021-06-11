@@ -4503,7 +4503,9 @@ As a result of using compiled code (instead of elisp), emacs-libvterm is fully c
 
 #+begin_src emacs-lisp
 (use-package vterm
-  :demand)
+  :demand
+  :custom
+  (vterm-buffer-name-string "*vterm %s*"))
 #+end_src
 
 ** Xonsh
