@@ -3054,10 +3054,10 @@ Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
 /Ghq/ is an Emacs frontend to the =ghq= command-line tool.
 #+begin_src emacs-lisp
 (use-package ghq
-  :if (executable-find "ghq")
+  :straight (:host github :repo "lafrenierejm/emacs-ghq"
+             :branch "process-sentinel")
 
-  :commands
-  ghq-ssh)
+  :if (executable-find "ghq"))
 #+end_src
 
 * Completion
