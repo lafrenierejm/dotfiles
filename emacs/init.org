@@ -6787,6 +6787,17 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 (use-package x509-mode)
 #+end_src
 
+** XML
+
+*** Autformat via =xmllint=
+
+#+begin_src emacs-lisp :noweb-ref reformatt/config
+(reformatter-define
+  xml-format
+  :program "xmllint"
+  :args '("--format" "-"))
+#+end_src
+
 ** Tool Command Language (Tcl)
 
 From [[https://www.tcl-lang.org/][the language's homepage]]:
