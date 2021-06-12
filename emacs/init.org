@@ -420,7 +420,23 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
   :init
   (setq
    no-littering-etc-directory (standard-dirs-project-config "org" "gnu" "emacs")
-   no-littering-var-directory (standard-dirs-project-data-local "org" "gnu" "emacs")))
+   no-littering-var-directory (standard-dirs-project-data-local "org" "gnu" "emacs")
+
+   ;; Seperate auto-save files.
+   auto-save-file-name-transforms
+   `((".*"
+      ,(let ((path (no-littering-expand-var-file-name "auto-save/")))
+         (make-directory path t)
+         path)
+      t))
+
+   ;; Separate backups
+   backup-directory-alist
+   `((".*"
+      ,(let ((path (no-littering-expand-var-file-name "backup/")))
+         (make-directory path t)
+         path)
+      t))))
 #+end_src
 
 * Visual Interface
