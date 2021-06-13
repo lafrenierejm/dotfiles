@@ -1,0 +1,2 @@
+(job '(next-hour)
+     "rclone --config \"$XDG_CONFIG_HOME\"/rclone/rclone.conf --log-file \"$HOME\"/.local/share/rclone/log.txt sync --copy-links --exclude-from \"$XDG_CONFIG_HOME\"/rclone/exclude.txt \"$HOME\" backblaze-cipher:/")
