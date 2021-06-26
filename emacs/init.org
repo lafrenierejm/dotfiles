@@ -7254,6 +7254,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
 #+begin_src emacs-lisp
 (use-package popper
   :straight (:host github :repo "karthink/popper")
+  :if (eq window-system 'ns)
   :demand
   :general
   ("C-`" #'popper-toggle-latest
