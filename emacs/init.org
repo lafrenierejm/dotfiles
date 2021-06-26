@@ -3499,7 +3499,7 @@ Use =C-l= to clear the current buffer.
 #+begin_src emacs-lisp
 (:keymaps 'comint-mode-map
  :states '(movement normal)
- "C-l" comint-clear-buffer)
+ "C-l" #'comint-clear-buffer)
 #+end_src
 
 ** Emacs Shell
