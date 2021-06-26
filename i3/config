@@ -2,7 +2,7 @@
 # this file and re-run i3-config-wizard(1).
 
 # Set the modifer key
-set $mod Mod1
+set $mod Mod4
 
 # Set fonts
 font pango:Source Code Pro 12
@@ -17,9 +17,9 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+q kill
 
 # Reload the configuration file
-bindsym $mod+Shift+C reload
+bindsym $mod+Control+c reload
 # Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+bindsym $mod+Control+r restart
 # Exit i3 (logs you out of your X session)
 bindsym $mod+Shift+Escape exit
 
@@ -50,15 +50,15 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # Move focused window with Shift + vi bindings
-bindsym $mod+Shift+H move left
-bindsym $mod+Shift+J move down
-bindsym $mod+Shift+K move up
-bindsym $mod+Shift+L move right
+bindsym $mod+Control+H move left
+bindsym $mod+Control+J move down
+bindsym $mod+Control+K move up
+bindsym $mod+Control+L move right
 # Alternatively, use the arrow keys
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Control+Left move left
+bindsym $mod+Control+Down move down
+bindsym $mod+Control+Up move up
+bindsym $mod+Control+Right move right
 
 # Horizontal splits
 bindsym $mod+g split h
@@ -99,16 +99,16 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 # Move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
-bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Control+1 move container to workspace 1
+bindsym $mod+Control+2 move container to workspace 2
+bindsym $mod+Control+3 move container to workspace 3
+bindsym $mod+Control+4 move container to workspace 4
+bindsym $mod+Control+5 move container to workspace 5
+bindsym $mod+Control+6 move container to workspace 6
+bindsym $mod+Control+7 move container to workspace 7
+bindsym $mod+Control+8 move container to workspace 8
+bindsym $mod+Control+9 move container to workspace 9
+bindsym $mod+Control+0 move container to workspace 10
 
 # Enter resize window mode
 bindsym $mod+r mode "resize"
