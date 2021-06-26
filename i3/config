@@ -14,7 +14,7 @@ floating_modifier $mod
 bindsym $mod+Return exec alacritty
 
 # kill focused window
-bindsym $mod+q kill
+bindsym $mod+x kill
 
 # Reload the configuration file
 bindsym $mod+Control+c reload
