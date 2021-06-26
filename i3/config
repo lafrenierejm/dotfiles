@@ -11,7 +11,7 @@ font pango:Source Code Pro 12
 floating_modifier $mod
 
 # Set st as the terminal emulator
-bindsym $mod+Return exec alacritty
+bindsym $mod+z exec kitty
 
 # kill focused window
 bindsym $mod+x kill
@@ -182,6 +182,3 @@ bar {
 	font pango:Source Code Pro 12
 	separator_symbol " | "
 }
-
-# Automatically start some applications
-exec --no-startup-id st
