@@ -1759,7 +1759,7 @@ The syntactic blocks are as follows, ordered from right to left:
 
 Set up autocompletion to be similar to Vim's YouCompleteMe.
 #+begin_src emacs-lisp
-(evil-collection-company-use-tng t)
+(evil-collection-company-use-tng nil)
 #+end_src
 
 Enable =TAB=-based bindings in Outline mode.
