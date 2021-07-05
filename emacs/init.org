@@ -7313,7 +7313,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
   ;; Apply the following customizations.
   :custom
   (auth-sources
-   (case system-type
+   (cl-case system-type
      ('darwin
       '(macos-keychain-internet macos-keychain-generic))
      (t
