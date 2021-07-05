@@ -2215,11 +2215,6 @@ If ~rga~ is present, it is preferred to plain ~rg~.
    counsel-grep-base-command))
 #+end_src
 
-\src_emacs-lisp{cl-some} is provided by the /CL Extra/ package.
-#+begin_src emacs-lisp :noweb-ref dependencies
-(require 'cl-extra)
-#+end_src
-
 *** Use Grep for Searching Large Buffers
 
 #+begin_src emacs-lisp :noweb-ref counsel/general
