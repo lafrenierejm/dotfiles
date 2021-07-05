@@ -757,7 +757,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
   :config
   ;; Load the theme of your choice:
-  (modus-themes-load-operandi) ;; OR (modus-themes-load-vivendi))
+  (modus-themes-load-operandi))
 #+end_src
 
 * Buffer Organization
