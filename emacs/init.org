@@ -6428,6 +6428,19 @@ Enable tree-sitter in Python buffers.
 ('python-mode-hook nil)
 #+end_src
 
+**** Per-Project REPLs
+
+#+begin_src emacs-lisp :noweb-ref python/config
+(defun python-shell-get-process-name (&rest _args)
+  "Assemble a project-specific name for an inferior Python process."
+  (if-let (((fboundp #'projectile-project-name))
+           ((fboundp #'projectile-project-root))
+           (project-root (projectile-project-root (buffer-file-name (current-buffer))))
+           (project-name (projectile-project-name project-root)))
+      (format "%s %s" python-shell-buffer-name project-name)
+    python-shell-buffer-name))
+#+end_src
+
 *** Pyvenv
 
 #+begin_src emacs-lisp
