@@ -6691,6 +6691,44 @@ Define the actual Polymode.
   :mode "\\.nix\\'")
 #+end_src
 
+** Ruby
+
+*** /rbenv.el/
+
+#+begin_src emacs-lisp
+(use-package rbenv
+  :if (executable-find "rbenv")
+  :demand
+
+  :custom
+  (rbenv-installation-dir (f-parent (executable-find "rbenv")))
+
+  :config
+  (global-rbenv-mode))
+#+end_src
+
+*** /Seeing Is Believing/
+
+#+begin_src emacs-lisp
+(use-package seeing-is-believing
+  :ghook
+  ('ruby-mode-hook #'seeing-is-believing))
+#+end_src
+
+*** /Inf Ruby/
+
+#+begin_src emacs-lisp
+(use-package inf-ruby
+  :ghook
+  ('ruby-mode-hook #'inf-ruby-minor-mode))
+#+end_src
+
+*** /Smart Dash/
+
+#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
+('ruby-mode-hook nil)
+#+end_src
+
 ** Rust
 :PROPERTIES:
 :URL:      https://www.rust-lang.org/
