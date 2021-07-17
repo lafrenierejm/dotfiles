@@ -1126,7 +1126,7 @@ IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a prefix arg
   (interactive (list current-prefix-arg))
   (when ignore-buffer-modified-p
     (set-buffer-modified-p nil))
-  (kill-this-buffer))
+  (kill-buffer (current-buffer)))
 #+end_src
 
 **** Bind Function
