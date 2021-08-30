@@ -3,8 +3,14 @@
 export EDITOR="emacsclient --alternate-editor='' --tty %s"
 export VISUAL="emacsclient --alternate-editor='' --create-frame %s"
 
+# Set configuration home.
+if [ "$(uname)" = "Darwin" ]; then
+    export XDG_CONFIG_HOME="$HOME"/.config
+else
+    export XDG_CONFIG_HOME="$HOME"/etc
+fi
+
 # Read and export the XDG environment variables.
-export XDG_CONFIG_HOME="$HOME"/etc
 USER_DIRS="$XDG_CONFIG_HOME"/user-dirs.dirs
 if [ -f "$USER_DIRS" ]; then
     while read -r line; do
