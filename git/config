@@ -46,3 +46,5 @@
 	smtpencryption = tls
 	chainreplyto = false
 	confirm = auto
+[init]
+	defaultBranch = main
