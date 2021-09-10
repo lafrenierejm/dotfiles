@@ -314,12 +314,6 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
    "GUIX_PROFILE"))
 #+end_src
 
-**** Do Not Source Interactive Shells
-
-#+begin_src emacs-lisp :noweb-ref exec-path-from-shell/custom
-(exec-path-from-shell-arguments '("-l") "Load as a login shell.")
-#+end_src
-
 * Customization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref customization
