@@ -12,5 +12,4 @@ if [[ -d "$XDG_CONFIG_HOME" ]]; then
     done
 fi
 
-source "$HOME"/.config/broot/launcher/bash/br
 source "$HOME"/.profile
