@@ -7292,7 +7292,8 @@ This allows the keys to be useful whenever the =s= modifier is made available to
  "s-h" #'windmove-left
  "s-j" #'windmove-down
  "s-k" #'windmove-up
- "s-l" #'windmove-right)
+ "s-l" #'windmove-right
+ "s-x" #'delete-window)
 #+end_src
 
 ** /Popper/
