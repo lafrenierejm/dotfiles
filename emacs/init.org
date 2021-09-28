@@ -6773,6 +6773,7 @@ This is mostly copied from https://github.com/nonsequitur/inf-ruby."
 
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
 ('ruby-mode-hook nil)
+('inf-ruby-mode-hook nil)
 #+end_src
 
 ** Rust
