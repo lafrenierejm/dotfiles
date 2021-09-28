@@ -6714,7 +6714,59 @@ Define the actual Polymode.
 #+begin_src emacs-lisp
 (use-package inf-ruby
   :ghook
-  ('ruby-mode-hook #'inf-ruby-minor-mode))
+  ('ruby-mode-hook #'inf-ruby-minor-mode)
+
+  :general
+  (:keymaps 'inf-ruby-minor-mode-map
+   "C-c C-p" #'inf-ruby-console
+   "C-c C-s" nil)
+
+  :config
+  (defun inf-ruby-console ()
+    "Start an IRB REPL for the current project.
+
+This is mostly copied from https://github.com/nonsequitur/inf-ruby."
+    (interactive)
+    (let* ((project-root (projectile-project-root))
+           (project-name (projectile-project-name))
+           (gemspec
+            (car (file-expand-wildcards (format "%s/*.gemspec" (directory-file-name project-root)))))
+           (with-bundler (file-exists-p (expand-file-name "Gemfile" project-root)))
+           (base-command
+            (if with-bundler
+                (if (and gemspec (inf-ruby-file-contents-match gemspec "\\$LOAD_PATH"))
+                    "bundle exec irb"
+                  "bundle exec irb -I lib")
+              "irb -I lib"))
+           (name (and gemspec
+                      (inf-ruby-file-contents-match
+                       gemspec "\\.name[ \t]*=[ \t]*['\"]\\([^'\"]+\\)['\"]" 1)))
+           args
+           files)
+      (unless (file-exists-p "lib")
+        (error "The directory must contain a 'lib' subdirectory"))
+      (let ((feature (and name (replace-regexp-in-string "-" "/" name))))
+        (if (and feature (file-exists-p (concat "lib/" feature ".rb")))
+            ;; There exists the main file corresponding to the gem name,
+            ;; let's require it.
+            (setq args (concat " -r " feature))
+          ;; Let's require all non-directory files under lib, instead.
+          (dolist (item (directory-files "lib"))
+            (when (and (not (file-directory-p (format "lib/%s" item)))
+                       (string-match-p "\\.rb\\'" item))
+              (push item files)))
+          (setq args
+                (mapconcat
+                 (lambda (file)
+                   (concat " -r " (file-name-sans-extension file)))
+                 files
+                 ""))))
+      (when (inf-ruby--irb-needs-nomultiline-p with-bundler)
+        (setq base-command (concat base-command " --nomultiline")))
+      (inf-ruby-console-run
+       (concat base-command args
+               " --prompt default --noreadline -r irb/completion")
+       (format "Ruby IRB: %s" project-name)))))
 #+end_src
 
 *** /Smart Dash/
