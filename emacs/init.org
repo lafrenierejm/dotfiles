@@ -7343,6 +7343,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
 #+begin_src emacs-lisp :noweb-ref general/config
 (general-define-key
  "s-o" #'delete-other-windows
+ "s-x" #'delete-window
  "s-h" #'windmove-left
  "s-j" #'windmove-down
  "s-k" #'windmove-up
