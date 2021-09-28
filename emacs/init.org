@@ -6831,7 +6831,7 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 
 *** Autformat via =xmllint=
 
-#+begin_src emacs-lisp :noweb-ref reformatt/config
+#+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
   xml-format
   :program "xmllint"
