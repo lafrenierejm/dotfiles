@@ -1734,10 +1734,6 @@ The syntactic blocks are as follows, ordered from right to left:
   :preface
   (setq-default evil-want-keybinding nil)
 
-  ;; Set keybindings.
-  :general
-  <<evil-collection/general>>
-
   ;; Apply the following variable customizations.
   :custom
   <<evil-collection/custom>>
@@ -2748,6 +2744,10 @@ Perform Diff HL highlighting on-the-fly.
   :custom
   <<magit/custom>>
 
+  ;; Apply the following keybindings.
+  :general
+  <<magit/general>>
+
   ;; Evaluate the following code after loading `magit'.
   :config
   <<magit/config>>)
@@ -2908,7 +2908,7 @@ Alias the above command to remove my username "namespace".
 (defalias 'magit-copy-current-tag #'magit-lafrenierejm-copy-current-tag)
 #+end_src
 
-**** /Evil Collection/ Keybindings
+**** Keybindings
 :PROPERTIES:
 :HEADER-ARGS+:
 :END:
@@ -2919,7 +2919,7 @@ Use =h= and =l= for horizontal movement in /Magit/ buffers.
 #+end_src
 
 Bind keys for /Magit/ buffers.
-#+begin_src emacs-lisp :noweb-ref evil-collection/general
+#+begin_src emacs-lisp :noweb-ref magit/general
 (:keymaps 'magit-mode-map
  :states '(movement normal)
  "yb" #'magit-copy-branch-name
@@ -2928,7 +2928,7 @@ Bind keys for /Magit/ buffers.
 #+end_src
 
 Unbind keys to avoid shadowing global bindings.
-#+begin_src emacs-lisp :noweb-ref evil-collection/general
+#+begin_src emacs-lisp :noweb-ref magit/general
 (:keymaps 'magit-mode-map
  "/" nil
  "C-d" nil
