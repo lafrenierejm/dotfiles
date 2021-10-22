@@ -3472,6 +3472,16 @@ You might want to use this to set dir-local variables that apply to all of your 
   ('after-init-hook #'envrc-global-mode))
 #+end_src
 
+** /Shadowenv/
+
+#+begin_src emacs-lisp
+(use-package shadowenv
+  :if (executable-find "shadowenv")
+  :demand
+  :ghook
+  ('after-init-hook #'shadowenv-global-mode))
+#+end_src
+
 * Command Interpretation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref command-interpretation
