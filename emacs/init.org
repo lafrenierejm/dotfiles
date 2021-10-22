@@ -3311,6 +3311,7 @@ Most other directory-centric packages provide functionality on top of /Dired/.
       )
     " "))
   (dired-dwim-target t)
+  (dired-vc-rename-file t "Register renames in version control systems")
 
   ;; Evaluate the following code after loading Dired.
   :config
