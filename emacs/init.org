@@ -6138,7 +6138,10 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   :general
   (:keymaps 'cider-repl-mode-map
    [remap current-buffer/kill] #'cider-quit
-   "C-x C-k" #'cider-quit))
+   "C-x C-k" #'cider-quit)
+  (:keymaps 'cider-repl-mode-map
+   :states '(movement normal)
+   "C-l" #'cider-repl-clear-buffer))
 #+end_src
 
 ***** CIDER Hydra
