@@ -969,6 +969,7 @@ OK-IF-ALREADY-EXISTS is passed directly to `rename-file'."
          (file (buffer-file-name buffer))
          (orig-buffer-name (buffer-name buffer))
          (new-buffer-name nil))
+    (mkdir (f-parent new-file-name) t)
     (cond
      ;; If FILE is tracked in VC...
      ((vc-backend file)
