@@ -2737,9 +2737,6 @@ Perform Diff HL highlighting on-the-fly.
   ;; Load this package eagerly.
   :demand
 
-  ;; Inform the bytecode compiler of the following autoloaded functions.
-  :commands magit-clone-to-xdg-source
-
   ;; Perform the following customizations.
   :custom
   <<magit/custom>>
