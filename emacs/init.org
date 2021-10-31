@@ -2918,7 +2918,7 @@ Use =h= and =l= for horizontal movement in /Magit/ buffers.
 Bind keys for /Magit/ buffers.
 #+begin_src emacs-lisp :noweb-ref magit/general
 (:keymaps 'magit-mode-map
- :states '(movement normal)
+ :states '(evil-collection-magit-state movement normal)
  "yb" #'magit-copy-branch-name
  "yc" #'magit-copy-buffer-revision
  "yt" #'magit-copy-current-tag)
