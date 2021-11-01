@@ -6721,6 +6721,7 @@ Define the actual Polymode.
 
   :custom
   (rbenv-installation-dir (f-parent (executable-find "rbenv")))
+  (rbenv-show-active-ruby-in-modeline nil)
 
   :config
   (global-rbenv-mode))
