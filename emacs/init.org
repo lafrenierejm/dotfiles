@@ -2923,17 +2923,12 @@ Bind keys for /Magit/ buffers.
 #+begin_src emacs-lisp :noweb-ref magit/general
 (:keymaps 'magit-mode-map
  :states '(evil-collection-magit-state movement normal)
- "yb" #'magit-copy-branch-name
- "yc" #'magit-copy-buffer-revision
- "yt" #'magit-copy-current-tag)
-#+end_src
-
-Unbind keys to avoid shadowing global bindings.
-#+begin_src emacs-lisp :noweb-ref magit/general
-(:keymaps 'magit-mode-map
- "/" nil
+ "/"
  "C-d" nil
  "C-z" nil
+ "yb" #'magit-copy-branch-name
+ "yc" #'magit-copy-buffer-revision
+ "yt" #'magit-copy-current-tag
  [escape] nil)
 #+end_src
 
