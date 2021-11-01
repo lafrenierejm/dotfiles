@@ -2877,7 +2877,6 @@ I often want to refer to the name of the current branch, so I define a counterpa
   "Save the name of the current branch for later use.
 
 Save the section value to the `kill-ring'."
-
   (interactive)
   (let ((branch-name (magit-get-current-branch)))
     (message "%s" branch-name)
