@@ -1542,6 +1542,10 @@ Determine whether to enable Evil in minibuffers.
 (evil-want-minibuffer t "Enable Evil in minibuffers.")
 #+end_src
 
+#+begin_src emacs-lisp
+(evil-mode-line-format nil "Do not display state tag in modeline.")
+#+end_src
+
 **** Set Keybindings (~:general~)
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil/general
