@@ -6569,32 +6569,20 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
   (pytest-project-root-files '("pyproject.toml" "setup.cfg" "setup.py")))
 #+end_src
 
-*** /LSP Python MS/
+*** /Pyright Language Server/
 
 #+begin_src emacs-lisp
-(use-package lsp-python-ms
+(use-package lsp-pyright
   :if (some (lambda (os) (eq system-type os)) '(darwin))
 
   :ghook
-  ('hack-local-variables-hook
-   (list #'lsp-python-ms-enable #'lsp-python-ms-set-executable))
-
-  :custom
-  (lsp-python-ms-auto-install-server
-   (eq system-type 'darwin)
-   "Automatically install the server when running macOS.")
+  ('python-mode-hook #'lsp-pyright-enable)
 
   :config
-  (defun lsp-python-ms-enable ()
-    "Load and enable this package."
-    (when (derived-mode-p 'python-mode)
-      (require 'lsp-python-ms)
-      (lsp)))
-  (defun lsp-python-ms-set-executable ()
-    "Set the Python executable using pyvenv."
-    (when pyvenv-activate
-      (setq lsp-python-ms-python-executable
-            (expand-file-name "bin/python" pyvenv-activate)))))
+  (defun lsp-pyright-enable ()
+    "Load and enable this `lsp-pyright'."
+    (require 'lsp-pyright)
+    (lsp)))
 #+end_src
 
 ** Groovy
