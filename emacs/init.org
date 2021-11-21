@@ -7036,6 +7036,13 @@ Enable \src_emacs-lisp{smart-dash-mode} for \src_emacs-lisp{compilation-mode} bu
       (query-replace-regexp (reb-target-binding reb-regexp) to-string))))
 #+end_src
 
+** /Deadgrep/
+
+#+begin_src emacs-lisp
+(use-package deadgrep
+  :if (executable-find "rg"))
+#+end_src
+
 * Web
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref web
