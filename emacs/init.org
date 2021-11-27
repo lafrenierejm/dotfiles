@@ -2923,7 +2923,7 @@ Bind keys for /Magit/ buffers.
 #+begin_src emacs-lisp :noweb-ref magit/general
 (:keymaps 'magit-mode-map
  :states '(evil-collection-magit-state movement normal)
- "/"
+ "/" nil
  "C-d" nil
  "C-z" nil
  "yb" #'magit-copy-branch-name
