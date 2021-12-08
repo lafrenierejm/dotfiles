@@ -7003,11 +7003,13 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 (reformatter-define
   yaml-format
   :program "prettier"
-  :args '("--parser" "yaml"
-          "--write" ; perform changes
+  ;; https://prettier.io/docs/en/cli.html
+  :args `("--parser" "yaml"
+          "--write"
+          "--config-precedence" "file-override"
           "--prose-wrap" "always"
           "--no-config"
-          "--stdin"))
+          "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
 ** Tool Command Language (Tcl)
