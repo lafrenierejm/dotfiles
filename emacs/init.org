@@ -5660,6 +5660,17 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 (use-package json-mode)
 #+end_src
 
+*** Formatting via Prettier
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  json-format
+  :program "prettier"
+  :args `("--parser" "json"
+          "--write"
+          "--stdin-filepath" ,(buffer-file-name)))
+#+end_src
+
 ** Go
 
 *** /Go Mode/
