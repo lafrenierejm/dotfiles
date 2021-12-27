@@ -29,3 +29,8 @@ fi
 LOCAL_BIN="$HOME/.local/bin"
 mkdir -p "$LOCAL_BIN"
 export PATH="$LOCAL_BIN:$PATH"
+
+NIX_BINS="$HOME/.nix-profile/bin"
+if [ -d "$NIX_BINS" ]; then
+    export PATH="$NIX_BINS:$PATH"
+fi
