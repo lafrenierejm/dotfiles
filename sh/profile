@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+if [ -f /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 export EDITOR="emacsclient --alternate-editor='' --tty %s"
 export VISUAL="emacsclient --alternate-editor='' --create-frame %s"
 
