@@ -3462,10 +3462,11 @@ You might want to use this to set dir-local variables that apply to all of your 
    #'cascading-dir-locals-invalidate-cache))
 #+end_src
 
-** /Envrc/
+** Direnv /Envrc/
 
 #+begin_src emacs-lisp
 (use-package envrc
+  :if (executable-find "direnv")
   :demand
   :ghook
   ('after-init-hook #'envrc-global-mode))
