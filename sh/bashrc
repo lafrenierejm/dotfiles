@@ -3,6 +3,9 @@
 # Bash initialization for interactive non-login shells and
 # for remote shells (info "(bash) Bash Startup Files").
 
+# Enable extended globbing patterns.
+shopt -s extglob
+
 # Export 'SHELL' to child processes.  Programs such as 'screen'
 # honor it and otherwise use /bin/sh.
 export SHELL
@@ -29,8 +32,7 @@ if [[ ! -d "$XDG_CONFIG_HOME" ]]; then
 fi
 if [[ -d "$XDG_CONFIG_HOME" ]]; then
     export XDG_CONFIG_HOME
-    shopt -s extglob
-    for file in "$XDG_CONFIG_HOME"/sh/[0-9].*.?(ba)sh; do
-	. "$file"
+    for file in "$XDG_CONFIG_HOME"/sh/*.?(ba)sh; do
+    	. "$file"
     done
 fi
