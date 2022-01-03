@@ -1,0 +1,1 @@
+Symlink the relevant file to ~../user-dirs.dirs~.
