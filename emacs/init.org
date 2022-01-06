@@ -426,11 +426,10 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
 
    ;; Separate backups
    backup-directory-alist
-   `((".*"
-      ,(let ((path (no-littering-expand-var-file-name "backup/")))
-         (make-directory path t)
-         path)
-      t))))
+   (list (cons (rx (seq string-start (zero-or-more anychar) string-end))
+               (let ((path (no-littering-expand-var-file-name "backup/")))
+                 (make-directory path t)
+                 path)))))
 #+end_src
 
 * Visual Interface
@@ -2576,15 +2575,6 @@ This is functional, but results in messy directories.
 
   :custom
   <<files/custom>>)
-#+end_src
-
-*** Backup File Location
-
-\src_emacs-lisp{backup-directory-alist} determines where backup files are created.
-By using mapping a wildcard filename to a single directory, all backup files will be created in that directory.
-#+begin_src emacs-lisp :noweb-ref files/custom
-(backup-directory-alist
- `((".*" . ,temporary-file-directory)))
 #+end_src
 
 *** Do Not Prompt to Kill Processes
