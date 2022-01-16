@@ -6697,6 +6697,13 @@ Define the actual Polymode.
   :mode "\\.nix\\'")
 #+end_src
 
+**** LSP Mode
+
+Enable LSP Mode in Nix buffers.
+#+BEGIN_SRC emacs-lisp :noweb-ref lsp-mode/ghook
+('nix-mode-hook #'lsp-deferred)
+#+END_SRC
+
 ** Ruby
 
 *** /rbenv.el/
