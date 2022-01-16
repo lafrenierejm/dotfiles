@@ -1491,7 +1491,8 @@ Bind the above function to =C-c C-l= in \src_emacs-lisp{rst-mode}.
 
 #+begin_src emacs-lisp
 (when (eq system-type 'darwin)
-  (setq mac-option-modifier 'super))
+  (setq mac-option-modifier 'super
+        mac-command-modifier 'meta))
 #+end_src
 
 ** "Yes Or No" Selection
