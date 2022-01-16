@@ -1837,6 +1837,7 @@ It adds a "surround" verb to Evil's modal editing.
   :config
   (evil-indent-plus-default-bindings))
 #+end_src
+
 ** Smartparens
 
 [[https://github.com/Fuco1/smartparens][Matus Goljer (Fuco1)'s package]] provides a minor mode "that deals with parens pairs and tries to be smart about it".
@@ -1846,23 +1847,11 @@ It adds a "surround" verb to Evil's modal editing.
   ;; Load this package eagerly.
   :demand
 
+  :custom
+  (sp-ignore-modes-list '())
+
   :config
-  <<smartparens/config>>)
-#+end_src
-
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref smartparens/config
-:END:
-
-Allow ~smartparens-mode~ to be enabled in ~minibuffer-inactive-mode~.
-#+begin_src emacs-lisp
-(setq sp-ignore-modes-list (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
-#+end_src
-
-Enable ~smartparens-mode~ globally
-#+begin_src emacs-lisp
-(smartparens-global-mode +1)
+  (smartparens-global-mode +1))
 #+end_src
 
 ** Smartparens Config
