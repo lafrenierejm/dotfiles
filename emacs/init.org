@@ -5716,6 +5716,7 @@ The following is a list of the Lisp modes I edit in.
     inferior-hy-mode
     lisp-mode
     minibuffer-inactive-mode
+    minibuffer-mode
     scheme-mode)
   "A list of Lisp major modes.")
 #+end_src
