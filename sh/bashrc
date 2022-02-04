@@ -36,3 +36,8 @@ if [[ -d "$XDG_CONFIG_HOME" ]]; then
     	. "$file"
     done
 fi
+
+# Load direnv, if available.
+if command -v direnv; then
+    eval "$(direnv hook bash)"
+fi

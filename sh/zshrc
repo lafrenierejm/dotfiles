@@ -12,4 +12,9 @@ if [[ -d "$XDG_CONFIG_HOME" ]]; then
     done
 fi
 
+# Load direnv, if available.
+if command -v direnv; then
+    eval "$(direnv hook zsh)"
+fi
+
 source "$HOME"/.profile
