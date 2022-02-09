@@ -5424,7 +5424,7 @@ This can benefit both literate and traditional programming by allowing one to co
 
   ;; Add the following non-auto-loading hooks.
   :gfhook
-  <<ls-mode/gfhook>>
+  <<lsp-mode/gfhook>>
 
   :commands (lsp lsp-deferred))
 #+END_SRC
