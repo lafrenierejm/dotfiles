@@ -5426,6 +5426,12 @@ This can benefit both literate and traditional programming by allowing one to co
   :gfhook
   <<lsp-mode/gfhook>>
 
+  :config
+  ;; https://emacs-lsp.github.io/lsp-mode/page/faq/#how-do-i-force-lsp-mode-to-forget-the-workspace-folders-for-multi-root
+  (general-advice-add
+   'lsp :before
+   (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
+
   :commands (lsp lsp-deferred))
 #+END_SRC
 
@@ -6571,6 +6577,9 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
 
   :ghook
   ('python-mode-hook #'lsp-pyright-enable)
+
+  :preface
+  (setq lsp-pyright-multi-root nil)
 
   :config
   (defun lsp-pyright-enable ()
