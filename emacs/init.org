@@ -6689,6 +6689,14 @@ Define the actual Polymode.
   ('haskell-mode-hook #'hindent-mode))
 #+end_src
 
+** Lua
+
+*** /Lua Mode/
+
+#+begin_src emacs-lisp
+(use-package lua-mode)
+#+end_src
+
 ** Nix
 
 *** /Nix Mode/
