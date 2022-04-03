@@ -5,3 +5,6 @@
 
 # Python
 /.venv/
+
+# Direnv
+/.direnv/
