@@ -2,4 +2,8 @@
 /.*/**
 /mail/**
 /source/**
+/Applications
+/Applications/**
+/Library/**
+/Source/**
 *~
