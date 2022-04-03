@@ -753,6 +753,18 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   (modus-themes-load-operandi))
 #+end_src
 
+*** /Auto-Dark/
+
+#+begin_src emacs-lisp
+(use-package auto-dark
+  :straight (:host github :repo "LionyxML/auto-dark-emacs")
+  :if (eq system-type 'darwin)
+  :demand
+  :custom
+  (auto-dark--light-theme 'modus-operandi)
+  (auto-dark--dark-theme 'modus-vivendi))
+#+end_src
+
 * Buffer Organization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref buffer-organization
