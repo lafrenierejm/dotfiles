@@ -5510,6 +5510,31 @@ This can benefit both literate and traditional programming by allowing one to co
 (use-package tree-sitter-langs :demand)
 #+end_src
 
+*** /Evil TextObj Tree-Sitter/
+
+#+begin_src emacs-lisp
+(use-package evil-textobj-tree-sitter
+  :straight (evil-textobj-tree-sitter
+             :type git
+             :host github
+             :repo "meain/evil-textobj-tree-sitter"
+             :files (:defaults "queries"))
+  :demand
+
+  :config
+  (defun evil-textobj-tree-sitter-define-key (key textobj)
+    "Bind key `key' to outer and inner variants of `textobj'."
+    (eval `(define-key evil-outer-text-objects-map ,key
+             (evil-textobj-tree-sitter-get-textobj ,(s-join "." (list textobj "outer")))))
+    (eval `(define-key evil-inner-text-objects-map ,key
+             (evil-textobj-tree-sitter-get-textobj ,(s-join "." (list textobj "inner"))))))
+
+  (evil-textobj-tree-sitter-define-key "f" "function")
+  (evil-textobj-tree-sitter-define-key "b" "block")
+  (evil-textobj-tree-sitter-define-key "s" "statement")
+  (evil-textobj-tree-sitter-define-key "c" "call"))
+#+end_src
+
 ** Applescript
 
 *** Apples Mode
