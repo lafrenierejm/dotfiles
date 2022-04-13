@@ -3504,6 +3504,21 @@ Use =C-l= to clear the current buffer.
  "C-l" #'comint-clear-buffer)
 #+end_src
 
+** /Shell/
+
+#+begin_src emacs-lisp
+(use-package shell
+  :straight (:type built-in)
+
+  :gfhook
+  ('shell-mode-hook #'shell-disable-command-echo)
+
+  :config
+  (defun shell-disable-command-echo ()
+    "Turn off command echoing in the current buffer."
+    (setq comint-process-echoes t)))
+#+end_src
+
 ** Emacs Shell
 *** Esh Mode
 #+begin_src emacs-lisp
