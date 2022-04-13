@@ -5679,7 +5679,9 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 #+end_quote
 
 #+begin_src emacs-lisp
-(use-package json-mode)
+(use-package json-mode
+  :gfhook
+  ('json-mode-hook #'hs-minor-mode))
 #+end_src
 
 *** Formatting via Prettier
