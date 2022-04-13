@@ -1146,13 +1146,16 @@ IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a prefix arg
 **** Define Function
 
 #+begin_src emacs-lisp
-(defun current-buffer/yank-path ()
-  "Place the path of the current buffer's visited file on the kill ring."
-  (interactive)
-  (when-let* ((filepath (or (buffer-file-name) default-directory))
-              (expanded-filename (expand-file-name filepath)))
-    (kill-new expanded-filename)
-    (message "Copied buffer path '%s' to the clipboard." expanded-filename)))
+(defun current-buffer/yank-path (&optional project-relative)
+  "Place the current buffer's file path, optionally PROJECT-RELATIVE, on the kill ring."
+  (interactive (list current-prefix-arg))
+  (when-let* ((filename (or (buffer-file-name) default-directory))
+              (filepath-absolute (expand-file-name filename))
+              (filepath (if project-relative
+                            (car (projectile-make-relative-to-root (list filepath-absolute)))
+                          filepath-absolute)))
+    (kill-new filepath)
+    (message "Copied buffer path '%s' to the clipboard." filepath)))
 #+end_src
 
 **** Bind Function
