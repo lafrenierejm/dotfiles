@@ -5735,6 +5735,7 @@ The following is a list of the Lisp modes I edit in.
     hy-mode
     ielm-mode
     inferior-hy-mode
+    lisp-data-mode
     lisp-mode
     minibuffer-inactive-mode
     minibuffer-mode
