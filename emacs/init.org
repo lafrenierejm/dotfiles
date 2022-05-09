@@ -6320,53 +6320,6 @@ Enable tree-sitter in Python buffers.
     python-shell-buffer-name))
 #+end_src
 
-*** Pyvenv
-
-#+begin_src emacs-lisp
-(use-package pyvenv
-  ;; Load this package eagerly.
-  :demand
-
-  ;; Evaluate the following after loading this package.
-  :config
-  <<pyvenv/config>>)
-#+end_src
-
-**** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref pyvenv/config
-:END:
-
-Enable \src_emacs-lisp{pyvenv-mode} globally.
-#+begin_src emacs-lisp
-(pyvenv-mode t)
-#+end_src
-
-#+begin_src emacs-lisp
-(defun pyvenv-lafrenierejm-create-virtualenv (version)
-  "Create a virtual environment using Python VERSION."
-  (interactive "MVirtual environment base: ")
-  (let* ((git-url (magit-git-string "remote" "get-url" "origin"))
-         (git-urlobj (url-generic-parse-url git-url)))
-    (let ((dns-name (->> (s-split (rx ".") (url-host git-urlobj) t)
-                         (seq-reverse)
-                         (s-join ".")))
-          (repo-path (-as-> (url-filename git-urlobj) var
-                            (s-replace-regexp (rx ".git" string-end) "" var)
-                            (s-split (rx "/") var t)
-                            (s-join "." var))))
-      (let ((venv-name (s-join "." (list dns-name repo-path version))))
-        (shell-command (format "pyenv virtualenv %s %s"
-                               version
-                               venv-name))
-        (add-dir-local-variable
-         nil
-         'pyvenv-activate
-         (f-join (getenv "HOME")
-                 ".pyenv/versions/"
-                 venv-name))))))
-#+end_src
-
 *** /Python Black/
 
 #+begin_src emacs-lisp
