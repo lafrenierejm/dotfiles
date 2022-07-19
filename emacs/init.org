@@ -1911,7 +1911,8 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
   <<counsel/general>>
 
   :custom
-  <<counsel/custom>>)
+  <<counsel/custom>>
+  (counsel-switch-buffer-preview-virtual-buffers nil "Do not preview buffers"))
 #+end_src
 
 *** Use Ripgrep(-All) when Available
