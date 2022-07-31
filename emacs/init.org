@@ -4243,20 +4243,6 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   (eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
 #+end_src
 
-** Shell
-
-#+begin_src emacs-lisp
-(use-package shell
-  :straight (:type built-in)
-
-  :general
-  (:keymap 'shell-mode-map
-   "C-r" nil)
-  (:keymap 'shell-mode-map
-   :states '(movement normal)
-   "C-r" nil))
-#+end_src
-
 ** libvterm
 
 *** /vterm/
