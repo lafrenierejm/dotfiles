@@ -895,11 +895,11 @@ For temporary files and directories that will be relative path from project root
   ("C-d" #'current-buffer-dired)
   ("C-x C-S-d" #'current-buffer-delete)
   ("C-x C-c" #'current-buffer-copy)
+  ("C-x C-g" #'current-buffer-revert)
   ("C-x C-k" #'current-buffer-kill)
   ("C-x C-r" #'current-buffer-rename)
-  ("C-x C-y" #'current-buffer-yank-path)
-  (:states '(normal)
-   "g r" #'current-buffer-revert))
+  ("C-x y n" #'current-buffer-yank-name)
+  ("C-x y p" #'current-buffer-yank-path))
 #+end_src
 
 * Documentation
