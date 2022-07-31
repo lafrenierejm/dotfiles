@@ -3230,11 +3230,15 @@ Use =C-l= to clear the current buffer.
  "C-l" #'comint-clear-buffer)
 #+end_src
 
-** /Shell/
+** UNIX shell
+
+*** /Shell/
 
 #+begin_src emacs-lisp
 (use-package shell
   :straight (:type built-in)
+
+  :after native-complete
 
   :gfhook
   ('shell-mode-hook #'shell-disable-command-echo)
@@ -3243,6 +3247,24 @@ Use =C-l= to clear the current buffer.
   (defun shell-disable-command-echo ()
     "Turn off command echoing in the current buffer."
     (setq comint-process-echoes t)))
+#+end_src
+
+*** /Native Complete/
+
+From [[https://github.com/CeleritasCelery/emacs-native-shell-complete][the project's README]]:
+#+begin_quote
+This package provides the exact same completions in ~shell-mode~ as you get in a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Terminal-emulator.html][terminal emulator]] with the =TAB= key.
+This means that completions are always accurate and synchronized with your current directory and shell environment.
+This also means that subshell completion works correctly.
+This is in contrast to packages like [[https://github.com/szermatt/emacs-bash-completion][emacs-bash-completion]] that use a separate process to generate “best guess” completions.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package native-complete
+  :demand
+  :after company
+  :config
+  (add-to-list 'company-backends 'company-native-complete))
 #+end_src
 
 ** Emacs Shell
