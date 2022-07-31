@@ -143,7 +143,7 @@ The following code ensures that this step is only needed once.
 
 #+begin_src emacs-lisp
 (cond
- ((or (executable-find "guix") (executable-find "nix"))
+ ((executable-find "guix")
   <<bootstrapping/guix-nix>>
   <<bootstrapping/guix-nix/use-package>>)
  (t
