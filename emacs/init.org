@@ -1311,6 +1311,12 @@ Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
  "Y" #'evil-yank-to-end-of-line)
 #+end_src
 
+Unbind =C-r= in insert mode to allow comint/shell history search.
+#+begin_src emacs-lisp
+(:states 'insert
+ "C-r" nil)
+#+end_src
+
 **** Pre-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil/init
@@ -1894,6 +1900,7 @@ First, a variable is defined to hold the minibuffer contents that were typed bef
    :states '(insert movement)
    "C-r" #'counsel-minibuffer-history)
   (:keymaps '(comint-mode-map shell-mode-map)
+   :states 'insert
    "C-r" #'counsel-shell-history)
   <<counsel/general>>
 
