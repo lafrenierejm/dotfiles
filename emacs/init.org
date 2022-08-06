@@ -1292,6 +1292,7 @@ Instead, make it a noop as far as Evil is concerned.
  "C-z" nil)
 #+end_src
 
+Use shift + horizontal movement keys to jump to beginning or end of lines.
 #+begin_src emacs-lisp
 (:states '(motion normal visual)
  "H" #'evil-beginning-of-line-maybe
@@ -1300,12 +1301,12 @@ Instead, make it a noop as far as Evil is concerned.
 #+end_src
 
 Bind =:= to ~eval-expression~ to evaluate one-off Emacs Lisp expressions.
-
 #+begin_src emacs-lisp
 (:states '(motion normal replace visual)
  ":" #'eval-expression)
 #+end_src
 
+Mirror =D='s behavior for yank.
 #+begin_src emacs-lisp
 (:states 'normal
  "Y" #'evil-yank-to-end-of-line)
