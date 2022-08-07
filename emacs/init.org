@@ -2086,7 +2086,8 @@ strings.  The contents of the lists are separated with `minibuffer-line-separato
   (let* ((width-total (frame-text-cols))
          (width-space (- width-total
                          (+ (string-width (format-mode-line left))
-                            (string-width (format-mode-line right))))))
+                            (string-width (format-mode-line right)))
+                         1)))
     (append
      left
      (list (propertize
@@ -2129,7 +2130,7 @@ Define a function to print the date and time in ISO 8601 format.
 #+end_src
 
 #+begin_src emacs-lisp
-(add-to-list 'minibuffer-line-right #'format-time-string-minibuffer-line t)
+(add-to-list 'minibuffer-line-right #'format-time-string-minibuffer-line t nil)
 #+end_src
 
 *** Display the System Name
