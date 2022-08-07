@@ -4341,6 +4341,13 @@ Emacs shell commands with DWIM behavior
   :commands
   <<dwim-shell-command/command>>
 
+  :general
+  ("M-!" #'dwim-shell-command)
+  (:keymaps 'dired-mode-map
+   [remap dired-do-async-shell-command] #'dwim-shell-command
+   [remap dired-do-shell-command] #'dwim-shell-command
+   [remap dired-smart-shell-command] #'dwim-shell-command)
+
   :config
   <<dwim-shell-command/config>>)
 #+end_src
