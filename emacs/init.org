@@ -2061,6 +2061,7 @@ Define a variable to hold the string separator.
 Define a function to separate contents provided as a list of functions or strings.
 #+begin_src emacs-lisp :noweb-ref minibuffer-line/config
 (defun minibuffer-line-separate (contents)
+  (require 'cl-extra) ; for cl-map
   (defun eval-or-string (element)
     (cond
      ((stringp element)
@@ -2071,7 +2072,7 @@ Define a function to separate contents provided as a list of functions or string
       `(:eval ,element))))
   (-drop-last
    1 (-flatten-n 1 (-zip-lists
-                    (map 'list #'eval-or-string contents)
+                    (cl-map 'list #'eval-or-string contents)
                     (make-list (length contents) minibuffer-line-separator)))))
 #+end_src
 
