@@ -2773,7 +2773,20 @@ Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
 :HEADER-ARGS+: :noweb-ref completion
 :END:
 
-** Company
+** /Compdef/
+
+From [[https://github.com/wurosh/compdef/tree/master][the package's README]]:
+#+begin_quote
+=compdef= sets backends as a local variable for that specific mode, so you’re always pinging the right ones in the right order.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package compdef
+  ;; This needs to be loaded before any completion frameworks, so we load it eagerly.
+  :demand)
+#+end_src
+
+** /Company/
 
 #+begin_src emacs-lisp
 (use-package company
@@ -3262,10 +3275,18 @@ This is in contrast to packages like [[https://github.com/szermatt/emacs-bash-co
 
 #+begin_src emacs-lisp
 (use-package native-complete
-  :demand
-  :after company
-  :config
-  (add-to-list 'company-backends 'company-native-complete))
+  :compdef shell-mode
+  :capf native-complete-at-point)
+#+end_src
+
+***** /Company/ Integration
+
+Add /Native Company/'s completion package as a backend for /Company/.
+
+#+begin_src emacs-lisp
+(use-package company-native-complete
+  :compdef shell-mode
+  :company company-native-complete)
 #+end_src
 
 ** Emacs Shell
@@ -6783,10 +6804,8 @@ Polymode for Jina2 templating in YAML files.
 
 #+begin_src emacs-lisp
 (use-package company-ansible
-  :after (:all company yaml-mode)
-  :demand
-  :config
-  (add-to-list 'company-backends 'company-ansible))
+  :compdef ansible-mode
+  :company company-ansible)
 #+end_src
 
 *** /Ansible Vault Mode/
@@ -6946,12 +6965,8 @@ Enable \src_emacs-lisp{smart-dash-mode} for \src_emacs-lisp{compilation-mode} bu
 
 #+begin_src emacs-lisp
 (use-package company-restclient
-  :after (:all company restclient)
-
-  :demand
-
-  :config
-  (add-to-list 'company-backends 'company-restclient))
+  :compdef restclient-mode
+  :company company-restclient)
 #+end_src
 
 *** Polymode for REST Client
