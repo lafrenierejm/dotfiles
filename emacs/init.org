@@ -4330,6 +4330,38 @@ Xonsh is meant for the daily use of experts and novices alike.
 (use-package xonsh-mode)
 #+end_src
 
+** /DWIM Shell Command/
+
+#+begin_quote
+Emacs shell commands with DWIM behavior
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package dwim-shell-command
+  :commands
+  <<dwim-shell-command/command>>
+
+  :config
+  <<dwim-shell-command/config>>)
+#+end_src
+
+*** Extract Archives
+
+#+begin_src emacs-lisp :noweb-ref dwim-shell-command/config :noweb no
+(defun dwim-shell-command-extract ()
+  "Unzip all marked archives (of any kind) using `atool'.
+
+Copyright (c) 2022-07-16 Álvaro Ramírez https://xenodium.com/a-lifehack-for-your-shell/"
+  (interactive)
+  (dwim-shell-command-on-marked-files
+   "Extract" "atool --extract --explain '<<f>>'")
+  :utils "atool")
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref dwim-shell-command/command
+dwim-shell-command-extract
+#+end_src
+
 * Static Analysis
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref static-analysis
