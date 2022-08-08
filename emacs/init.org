@@ -52,8 +52,8 @@
 ;;; Completion
 <<completion>>
 
-;;; Containers:
-<<containers>>
+;;; System:
+<<system>>
 
 ;;; Diff:
 <<diff>>
@@ -2883,11 +2883,11 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 #+end_src
 
 * System Management
-** Containers
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref containers
+:HEADER-ARGS+: :noweb-ref system
 :END:
 
+** Containers
 *** Docker
 **** /Docker/
 
@@ -2947,8 +2947,7 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 *** /journalctl Mode/
 
 #+begin_src emacs-lisp
-(use-package journalctl-mode
-  :demand)
+(use-package journalctl-mode)
 #+end_src
 
 * Diff
