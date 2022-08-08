@@ -3,4 +3,4 @@ alias mkc mkdir $1 && cd $1
 alias rmr rm -r $*
 alias e (find-file $1)
 alias la ls -Alh
-alias extract atool --extract --explain $1
+alias extract atool --extract --explain --subdir $1

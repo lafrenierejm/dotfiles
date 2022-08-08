@@ -4376,7 +4376,7 @@ Emacs shell commands with DWIM behavior
 Copyright (c) 2022-07-16 Álvaro Ramírez https://xenodium.com/a-lifehack-for-your-shell/"
   (interactive)
   (dwim-shell-command-on-marked-files
-   "Extract" "atool --extract --explain '<<f>>'")
+   "Extract" "atool --extract --explain --subdir '<<f>>'")
   :utils "atool")
 #+end_src
 
