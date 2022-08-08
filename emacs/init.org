@@ -2950,6 +2950,23 @@ Add the snippets from the Guix package /emacs-yasnippet-snippets/.
 (use-package journalctl-mode)
 #+end_src
 
+** Fix "Too many open files" Error
+
+Ben Simon explains the problem in [[https://www.blogbyben.com/2022/05/gotcha-emacs-on-mac-os-too-many-files.html][this blog post]].
+The fix is to run the below command when the error is encountered.
+The command is copied directly from GNU Emacs's source code and is therefore copyright (c) the FSF.
+See the relevant commit [[https://github.com/emacs-mirror/emacs/commit/a232821c5127d5ebf862dc229f14a35dfef78e40][here]].
+
+#+begin_src emacs-lisp
+(defun file-notify-rm-all-watches ()
+  "Remove all existing file notification watches from Emacs."
+  (interactive)
+  (maphash
+   (lambda (key _value)
+     (file-notify-rm-watch key))
+   file-notify-descriptors))
+#+end_src
+
 * Diff
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref diff
