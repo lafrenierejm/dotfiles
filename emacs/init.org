@@ -5372,6 +5372,7 @@ This can benefit both literate and traditional programming by allowing one to co
              :repo "meain/evil-textobj-tree-sitter"
              :files (:defaults "queries"))
   :demand
+  :after tree-sitter
 
   :config
   (defun evil-textobj-tree-sitter-define-key (key textobj)
