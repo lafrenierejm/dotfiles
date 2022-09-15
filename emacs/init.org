@@ -6760,6 +6760,13 @@ Disable /Mixed-Pitch Mode/ in XML buffers.
 ('nxml-mode-hook #'mixed-pitch-mode-off)
 #+end_src
 
+*** /Highlight Indent Guides/
+
+Enable indent guides in XML buffers.
+#+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
+('nxml-mode-hook #'highlight-indent-guides-mode)
+#+end_src
+
 *** Autoformat via =xmllint=
 
 #+begin_src emacs-lisp :noweb-ref reformatter/config
