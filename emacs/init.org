@@ -6753,7 +6753,14 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 
 ** XML
 
-*** Autformat via =xmllint=
+*** /Mixed-Pitch Mode/
+
+Disable /Mixed-Pitch Mode/ in XML buffers.
+#+begin_src emacs-lisp :noweb-ref mixed-pitch/ghook
+('nxml-mode-hook #'mixed-pitch-mode-off)
+#+end_src
+
+*** Autoformat via =xmllint=
 
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
