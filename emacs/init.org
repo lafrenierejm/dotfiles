@@ -1285,6 +1285,12 @@ Determine whether to enable Evil in minibuffers.
 :HEADER-ARGS+: :noweb-ref evil/general
 :END:
 
+Use Emacs state instead of insert state.
+This preserves readline-style keybindings.
+#+begin_src emacs-lisp :noweb-ref evil/init
+(setq-default evil-disable-insert-state-bindings t)
+#+end_src
+
 Do not allow =C-z= to enter Emacs mode.
 Instead, make it a noop as far as Evil is concerned.
 #+begin_src emacs-lisp
