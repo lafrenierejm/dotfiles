@@ -6720,6 +6720,13 @@ My username is used above just to demarcate the function as a custom one.
 (defalias 'sql-truncate-lines #'sql-lafrenierejm-truncate-lines)
 #+end_src
 
+**** /Smart Dash/
+
+Enable `smart-dash-mode` in SQL buffers.
+#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
+('(sql-interactive-mode-hook sql-mode-hook) #'smart-dash-mode)
+#+end_src
+
 *** SQL Up Mode
 
 By convention, SQL uses all uppercase characters for the names of keywords and built-in functions.
