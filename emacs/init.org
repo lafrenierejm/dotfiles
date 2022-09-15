@@ -3270,11 +3270,15 @@ Use =C-l= to clear the current buffer.
 
   :gfhook
   ('shell-mode-hook #'shell-disable-command-echo)
+  ('shell-mode-hook #'shell-indicate-empty-lines)
 
   :config
   (defun shell-disable-command-echo ()
     "Turn off command echoing in the current buffer."
-    (setq comint-process-echoes t)))
+    (setq comint-process-echoes t))
+  (defun shell-indicate-empty-lines ()
+    "Visually indicate empty screen lines after the buffer end."
+    (setq indicate-empty-lines t)))
 #+end_src
 
 *** /Native Complete/
