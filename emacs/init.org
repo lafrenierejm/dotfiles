@@ -6729,7 +6729,7 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 (use-package sqlup-mode
   ;; Add the following auto-loading hooks.
   :ghook
-  ('(sql-interactive-mode sql-mode) #'sqlup-mode))
+  ('(sql-interactive-mode-hook sql-mode-hook) #'sqlup-mode))
 #+end_src
 
 ** X.509 Certificates
