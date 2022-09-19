@@ -36,7 +36,11 @@
 [includeIf "gitdir:~/source/com.jcpenney.stash/"]
 	path = "~/source/com.jcpenney.stash/.gitconfig"
 [pull]
+	autostash = true
 	ff = only
+	prune = true
+	pruneTags = true
+	tags = true
 [rebase]
 	autoStash = true
 [sendemail]
