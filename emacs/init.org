@@ -892,7 +892,6 @@ For temporary files and directories that will be relative path from project root
              :repo "lafrenierejm/current-buffer.el")
 
   :general
-  ("C-d" #'current-buffer-dired)
   ("C-x C-S-d" #'current-buffer-delete)
   ("C-x C-c" #'current-buffer-copy)
   ("C-x C-g" #'current-buffer-revert)
@@ -2660,7 +2659,7 @@ Bind keys for /Magit/ buffers.
 (:keymaps 'magit-mode-map
  :states '(evil-collection-magit-state movement normal)
  "/" nil
- "C-d" nil
+ "C-d" #'current-buffer-dired
  "C-z" nil
  "yb" #'magit-copy-branch-name
  "yc" #'magit-copy-buffer-revision
