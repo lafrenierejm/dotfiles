@@ -5282,6 +5282,12 @@ This can benefit both literate and traditional programming by allowing one to co
   :gfhook
   <<lsp-mode/gfhook>>
 
+  ;; Define relevant keybindings.
+  :general
+  (:keymaps '(lsp-mode-map)
+   :states '(movement normal)
+   "g r" #'lsp-find-references)
+
   :config
   ;; https://emacs-lsp.github.io/lsp-mode/page/faq/#how-do-i-force-lsp-mode-to-forget-the-workspace-folders-for-multi-root
   (general-advice-add
