@@ -2775,7 +2775,11 @@ Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
 /Ghq/ is an Emacs frontend to the =ghq= command-line tool.
 #+begin_src emacs-lisp
 (use-package ghq
-  :straight (:host github :repo "lafrenierejm/emacs-ghq"
+  :straight (ghq
+             :type git
+             :host github
+             :repo "rcoedo/emacs-ghq"
+             :fork "lafrenierejm/emacs-ghq"
              :branch "process-sentinel")
 
   :if (executable-find "ghq"))
