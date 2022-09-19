@@ -6797,7 +6797,8 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{tcl-mode} b
 *** /TOML Mode/
 
 #+begin_src emacs-lisp
-(use-package toml-mode)
+(use-package toml-mode
+  :mode (("poetry\\.lock\\'" . toml-mode)))
 #+end_src
 
 ** YAML
