@@ -2308,6 +2308,12 @@ Determine where Emacs creates backups for files edited via TRAMP.
 :HEADER-ARGS+: :noweb-ref version-control
 :END:
 
+Move files to trash instead of deleting them outright.
+#+begin_src emacs-lisp
+(setq trash-directory "~/.Trash"
+      delete-by-moving-to-trash t)
+#+end_src
+
 ** Backup Files
 
 Emacs has built-in functionality to create backup files.
