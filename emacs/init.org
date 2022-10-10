@@ -5372,7 +5372,9 @@ This can benefit both literate and traditional programming by allowing one to co
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package tree-sitter-langs :demand)
+(use-package tree-sitter-langs
+  :demand
+  :after tree-sitter)
 #+end_src
 
 *** /Evil TextObj Tree-Sitter/
