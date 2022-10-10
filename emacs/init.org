@@ -6711,6 +6711,16 @@ Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
 ('rust-mode-hook nil)
 #+end_src
 
+**** LSP Mode
+:PROPERTIES:
+:HEADER-ARGS+: :noweb-ref lsp-mode/ghook
+:END:
+
+Enable LSP Mode in Rust buffers.
+#+BEGIN_SRC emacs-lisp
+('rust-mode-hook #'lsp-deferred)
+#+END_SRC
+
 ** Structured Query Language (SQL)
 
 *** SQL
