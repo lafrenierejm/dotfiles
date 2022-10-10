@@ -6869,7 +6869,19 @@ Disable /Mixed-Pitch Mode/.
 ('yaml-mode-hook #'mixed-pitch-mode-off)
 #+end_src
 
-*** /Poly Ansible/
+*** Ansible
+
+#+begin_src emacs-lisp
+(use-package ansible
+  :after yaml-mode
+
+  :demand
+
+  :ghook
+  ('ansible-mode-hook #'ansible-auto-decrypt-encrypt))
+#+end_src
+
+**** /Poly Ansible/
 
 Polymode for Jina2 templating in YAML files.
 #+begin_src emacs-lisp
@@ -6883,34 +6895,6 @@ Polymode for Jina2 templating in YAML files.
 (use-package company-ansible
   :compdef ansible-mode
   :company company-ansible)
-#+end_src
-
-*** /Ansible Vault Mode/
-
-#+begin_src emacs-lisp
-(use-package ansible-vault
-  :after yaml-mode
-
-  :demand
-
-  :ghook
-  <<ansible-vault/ghook>>
-
-  :config
-  <<ansible-vault/config>>)
-#+end_src
-
-**** Automatically Detect Vault Files
-
-#+begin_src emacs-lisp :noweb-ref ansible-vault/config
-(defun ansible-vault-mode-maybe ()
-  "Enable `ansible-vault-mode' when visiting a vault file."
-  (when (ansible-vault--is-vault-file)
-    (ansible-vault-mode 1)))
-#+end_src
-
-#+begin_src emacs-lisp :noweb-ref ansible-vault/ghook
-('yaml-mode-hook #'ansible-vault-mode-maybe)
 #+end_src
 
 *** Prettier
