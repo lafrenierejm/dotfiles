@@ -2788,7 +2788,10 @@ Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
              :fork "lafrenierejm/emacs-ghq"
              :branch "process-sentinel")
 
-  :if (executable-find "ghq"))
+  :if (executable-find "ghq")
+
+  :custom
+  (ghq-after-clone-functions (list #'projectile-add-known-project)))
 #+end_src
 
 * Completion
