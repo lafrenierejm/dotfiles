@@ -5,11 +5,7 @@ if [ -f /opt/homebrew/bin/brew ]; then
 fi
 
 # Set configuration home.
-if [ "$(uname)" = "Darwin" ]; then
-    export XDG_CONFIG_HOME="$HOME"/.config
-else
-    export XDG_CONFIG_HOME="$HOME"/etc
-fi
+export XDG_CONFIG_HOME="$HOME"/.config
 
 # Read and export the XDG environment variables.
 USER_DIRS="$XDG_CONFIG_HOME"/user-dirs.dirs
