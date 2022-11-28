@@ -6871,7 +6871,7 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{tcl-mode} b
 **** /Highlight Indent Guides/
 
 #+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
-('yaml-mode-hook nil)
+('yaml-mode-hook #'highlight-indent-guides-mode)
 #+end_src
 
 **** /Mixed-Pitch Mode/
