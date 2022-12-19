@@ -1202,6 +1202,19 @@ Bind the above function to =C-c C-l= in \src_emacs-lisp{rst-mode}.
 ("C-c C-l" #'rst-insert-link)
 #+end_src
 
+** TeX
+
+*** AUCTeX
+
+From the package's README:
+#+begin_quote
+AUCTeX is a comprehensive customizable integrated environment for writing input files for TeX, LaTeX, ConTeXt, Texinfo, and docTeX using Emacs.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package auctex)
+#+end_src
+
 * Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref keybindings
