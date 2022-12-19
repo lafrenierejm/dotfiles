@@ -1215,6 +1215,14 @@ AUCTeX is a comprehensive customizable integrated environment for writing input 
 (use-package auctex)
 #+end_src
 
+*** Evil TeX
+
+#+begin_src emacs-lisp
+(use-package evil-tex
+  :ghook
+  ('LaTeX-mode-hook #'evil-tex-mode))
+#+end_src
+
 * Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref keybindings
