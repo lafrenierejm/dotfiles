@@ -3280,8 +3280,6 @@ Use =C-l= to clear the current buffer.
 (use-package shell
   :straight (:type built-in)
 
-  :after native-complete
-
   :gfhook
   ('shell-mode-hook #'shell-disable-command-echo)
   ('shell-mode-hook #'shell-indicate-empty-lines)
@@ -3293,32 +3291,6 @@ Use =C-l= to clear the current buffer.
   (defun shell-indicate-empty-lines ()
     "Visually indicate empty screen lines after the buffer end."
     (setq indicate-empty-lines t)))
-#+end_src
-
-*** /Native Complete/
-
-From [[https://github.com/CeleritasCelery/emacs-native-shell-complete][the project's README]]:
-#+begin_quote
-This package provides the exact same completions in ~shell-mode~ as you get in a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Terminal-emulator.html][terminal emulator]] with the =TAB= key.
-This means that completions are always accurate and synchronized with your current directory and shell environment.
-This also means that subshell completion works correctly.
-This is in contrast to packages like [[https://github.com/szermatt/emacs-bash-completion][emacs-bash-completion]] that use a separate process to generate “best guess” completions.
-#+end_quote
-
-#+begin_src emacs-lisp
-(use-package native-complete
-  :compdef shell-mode
-  :capf native-complete-at-point)
-#+end_src
-
-***** /Company/ Integration
-
-Add /Native Company/'s completion package as a backend for /Company/.
-
-#+begin_src emacs-lisp
-(use-package company-native-complete
-  :compdef shell-mode
-  :company company-native-complete)
 #+end_src
 
 ** Emacs Shell
