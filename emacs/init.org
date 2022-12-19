@@ -1223,6 +1223,16 @@ AUCTeX is a comprehensive customizable integrated environment for writing input 
   ('LaTeX-mode-hook #'evil-tex-mode))
 #+end_src
 
+*** Reformatter
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  latex-indent
+  :program "latexindent"
+  :args (list "--silent" "--overwrite" input-file)
+  :stdin nil)
+#+end_src
+
 * Keybindings
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref keybindings
