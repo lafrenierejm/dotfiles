@@ -534,19 +534,6 @@ The /Faces/ package provides this functionality, so all font setup can can occur
 When working with prose, I prefer to use a variable-pitch (as opposed to monospace) face.
 Frequently, though, some aspects of a mostly-prose document are better presented in monospace.
 An example of this is the code blocks in this Org file.
-For mixing the two pitches I use the /Mixed Pitch/ package by Alex Branham.
-
-#+begin_src emacs-lisp
-(use-package mixed-pitch
-  :ghook
-  ('(org-mode-hook text-mode-hook) #'mixed-pitch-mode)
-  <<mixed-pitch/ghook>>
-
-  :config
-  (defun mixed-pitch-mode-off ()
-    "Disable `mixed-pitch-mode'."
-    (mixed-pitch-mode -1)))
-#+end_src
 
 *** Ligatures
 
@@ -6810,13 +6797,6 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
 
 ** XML
 
-*** /Mixed-Pitch Mode/
-
-Disable /Mixed-Pitch Mode/ in XML buffers.
-#+begin_src emacs-lisp :noweb-ref mixed-pitch/ghook
-('nxml-mode-hook #'mixed-pitch-mode-off)
-#+end_src
-
 *** /Highlight Indent Guides/
 
 Enable indent guides in XML buffers.
@@ -6872,13 +6852,6 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{tcl-mode} b
 
 #+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
 ('yaml-mode-hook #'highlight-indent-guides-mode)
-#+end_src
-
-**** /Mixed-Pitch Mode/
-
-Disable /Mixed-Pitch Mode/.
-#+begin_src emacs-lisp :noweb-ref mixed-pitch/ghook
-('yaml-mode-hook #'mixed-pitch-mode-off)
 #+end_src
 
 *** Ansible
