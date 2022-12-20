@@ -6575,6 +6575,12 @@ Define the actual Polymode.
 
 #+begin_src emacs-lisp
 (use-package nix-mode
+  :straight (nix-mode
+             :type git
+             :host github
+             :repo "NixOS/nix-mode"
+             :fork "lafrenierejm/nix-mode"
+             :branch "reformatter")
   :mode "\\.nix\\'")
 #+end_src
 
