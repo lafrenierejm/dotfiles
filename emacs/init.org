@@ -6721,6 +6721,16 @@ Enable LSP Mode in Rust buffers.
 ('rust-mode-hook #'lsp-deferred)
 #+END_SRC
 
+**** /Reformatter/
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define rustfmt
+  :program "rustfmt"
+  :args (list "--edition=2021" input-file)
+  :stdin nil
+  :stdout nil)
+#+end_src
+
 ** Structured Query Language (SQL)
 
 *** SQL
