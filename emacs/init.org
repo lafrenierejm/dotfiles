@@ -6739,10 +6739,6 @@ Enable LSP Mode in Rust buffers.
 (use-package sql
   :straight (:type built-in)
 
-  :demand
-
-  :commands
-  (sql-lafrenierejm-truncate-lines)
 
   :gfhook
   <<sql/gfhook>>
