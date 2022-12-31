@@ -6179,14 +6179,6 @@ Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
 ('sh-mode-hook #'sh-script-set-shell-type)
 #+end_src
 
-**** /Smart Dash/
-
-Enable \src_emacs-lisp{smart-dash-mode} for all shell buffers.
-#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-('sh-mode-hook nil)
-('shell-mode nil)
-#+end_src
-
 *** Shell Format (/shfmt/)
 
 #+begin_src emacs-lisp
