@@ -6739,6 +6739,9 @@ Enable LSP Mode in Rust buffers.
 (use-package sql
   :straight (:type built-in)
 
+  :mode
+  ("\\.sqlite\\'" . sql-interactive-mode)
+  ("\\.sqlite3\\'" . sql-interactive-mode)
 
   :gfhook
   <<sql/gfhook>>
@@ -6780,6 +6783,30 @@ My username is used above just to demarcate the function as a custom one.
 Enable `smart-dash-mode` in SQL buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
 ('(sql-interactive-mode-hook sql-mode-hook) #'smart-dash-mode)
+#+end_src
+
+**** Load SQLite Files in ~sql-interactive-mode~
+
+Define a function to load the current file in ~sql-interactive-mode~.
+#+begin_src emacs-lisp :noweb-ref/
+(defun sql-lafrenierejm-find-file-hook ()
+  (when-let* ((_ (derived-mode-p 'sql-interactive-mode))
+              (buffer (current-buffer))
+              (file-name (buffer-file-name))
+              (file-directory (file-name-directory file-name)))
+    (let* ((buffer-name (buffer-name buffer))
+           (buffer (progn (kill-buffer buffer)
+                          (generate-new-buffer buffer-name))))
+      (set-buffer buffer)
+      (cd file-directory)
+      (make-local-variable 'sql-database)
+      (setq sql-database file-name)
+      (sql-sqlite buffer))))
+#+end_src
+
+Add the above function to ~find-file-hook~ which is run every time a file is loaded.
+#+begin_src emacs-lisp :noweb-ref sql/gfhook
+(add-hook 'find-file-hook #'sql-lafrenierejm-find-file-hook)
 #+end_src
 
 *** SQL Up Mode
