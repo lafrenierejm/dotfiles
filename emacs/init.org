@@ -5584,6 +5584,9 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 
 #+begin_src emacs-lisp
 (use-package json-mode
+  :mode
+  ("\\.jsonc\\'" . jsonc-mode)
+
   :gfhook
   ('json-mode-hook #'hs-minor-mode))
 #+end_src
