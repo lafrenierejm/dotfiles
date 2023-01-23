@@ -5477,7 +5477,8 @@ It started out from Aurélien Tisné's ini-mode.
 #+begin_src emacs-lisp
 (use-package terraform-mode
   :gfhook
-  ('terraform-mode-hook #'terraform-format-on-save-mode))
+  ('terraform-mode-hook #'terraform-format-on-save-mode)
+  ('terraform-mode-hook #'lsp-deferred))
 #+end_src
 
 ***** /Smart Dash/
