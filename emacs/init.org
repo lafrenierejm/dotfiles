@@ -5560,6 +5560,19 @@ The defined hook can be added to all Terragrunt files.
 ('terragrunt-mode-hook #'terragrunt-format-on-save-mode)
 #+end_src
 
+** HyperText Markup Language (HTML)
+
+*** Formatting via Prettier
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  html-format
+  :program "prettier"
+  :args `("--parser" "html"
+          "--write"
+          "--stdin-filepath" ,(buffer-file-name)))
+#+end_src
+
 ** JavaScript
 
 *** /JSON Mode/
