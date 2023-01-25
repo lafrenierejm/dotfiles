@@ -2811,6 +2811,20 @@ Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
   (ghq-after-clone-functions (list #'projectile-add-known-project)))
 #+end_src
 
+** /File Info/
+
+#+begin_src emacs-lisp
+(use-package file-info
+  :straight (:host github :repo "artawower/file-info.el")
+  :bind (("C-c d" . #'file-info-show))
+  :config
+  (setq hydra-hint-display-type 'posframe)
+  (setq hydra-posframe-show-params `(:poshandler posframe-poshandler-frame-center
+                                     :internal-border-width 2
+                                     :left-fringe 16
+                                     :right-fringe 16)))
+#+end_src
+
 * Completion
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref completion
