@@ -1,5 +1,8 @@
 # Symlink this file to ~/.zshrc
 
+# Source `/etc/zshrc` if it exists.
+[ -e /etc/zshrc ] && . /etc/zshrc
+
 # Read and export the XDG environment variables.
 XDG_CONFIG_HOME="$HOME"/etc
 if [[ ! -d "$XDG_CONFIG_HOME" ]]; then
