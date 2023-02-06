@@ -797,6 +797,38 @@ Use Ivy's integration.
   (setq projectile-completion-system 'ivy))
 #+end_src
 
+*** Return Path Relative to Project Root
+
+#+begin_src emacs-lisp :noweb-ref projectile/config
+(defun projectile-lafrenierejm-make-relative-to-root-dwim (path)
+  "Print PATH relative to its Projectile root, if any.
+
+If PATH is in a project as determined by Projectile, return PATH's
+path starting starting at the project's root.
+
+If PATH is _not_ in a project, return the abbreviated form of PATH's
+path."
+  (s-chop-suffix
+   "/"
+   (if-let (((fboundp #'projectile-project-name))
+            ((fboundp #'projectile-project-root))
+            (project-root (projectile-project-root path))
+            (project-name (projectile-project-name project-root)))
+       ;; If in a project:
+       (if (string=
+            (file-name-as-directory (expand-file-name path))
+            project-root)
+           ;; If at a project's root: use the project's name
+           project-name
+         ;; Else not at project's root: use path starting with project's root
+         (concat (file-name-as-directory project-name)
+                 (file-relative-name
+                  (expand-file-name path)
+                  project-root)))
+     ;; Else not in project: use abbreviated path
+     (abbreviate-file-name path))))
+#+end_src
+
 ** Counsel Projectile
 
 #+begin_src emacs-lisp
@@ -3692,10 +3724,6 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
    eshell-find-eshell-here
    eshell-prompt)
 
-  ;; Add the following keybindings.
-  :general
-  <<eshell/general>>
-
   ;; Add the following non-autoloading hooks.
   :gfhook
   <<eshell/gfhook>>
@@ -3711,26 +3739,6 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
   ;; Execute the following code after loading this package.
   :config
   <<eshell/config>>)
-#+end_src
-
-**** Keybindings
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref eshell/general
-:END:
-
-Map the opening an Eshell buffer to =C-x z=.
-This keybinding mirrors the defaults for ~find-file~ and ~dired~.
-
-#+begin_src emacs-lisp
-("C-x z" #'eshell-find-eshell)
-#+end_src
-
-Map ~eshell-find-eshell-here~ to =C-z=.
-This imitates the behavior of *NIX terminal applications.
-In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
-
-#+begin_src emacs-lisp
-("C-z" #'eshell-find-eshell-here)
 #+end_src
 
 **** Non-Autoloading Hooks
@@ -4339,8 +4347,70 @@ As a result of using compiled code (instead of elisp), emacs-libvterm is fully c
 #+begin_src emacs-lisp
 (use-package vterm
   :demand
+
+  :general
+  <<vterm/general>>
+
   :custom
-  (vterm-buffer-name-string "*vterm %s*"))
+  (vterm-buffer-name-string "*vterm %s*")
+
+  :config
+  <<vterm/config>>)
+#+end_src
+
+**** Open vterm in a Given Directory
+
+Define a function to open a directory in vterm.
+
+#+begin_src emacs-lisp :noweb-ref vterm/config
+(defun vterm-lafrenierejm-find-directory (directory)
+  "Open VTerm in DIRECTORY.
+
+If a VTerm instance for the directory already exists, switch to it.  If no
+such instance exists, start a new instance whose name includes the directory."
+  (interactive "DOpen vterm in: ")
+  (let* ((buffer-name
+          (format "*vterm %s*"
+                  (projectile-lafrenierejm-make-relative-to-root-dwim
+                   directory)))
+         (buffer (get-buffer-create buffer-name)))
+    (pop-to-buffer-same-window buffer)
+    (cd directory)
+    (unless (derived-mode-p 'vterm-mode)
+      (vterm-mode))
+    buffer))
+#+end_src
+
+Map the above function to =C-x z=.
+This keybinding mirrors the defaults for ~find-file~ and ~dired~.
+
+#+begin_src emacs-lisp :noweb-ref vterm/general
+("C-x z" #'vterm-lafrenierejm-find-directory)
+#+end_src
+
+**** Open the Current Directory in vterm
+
+Define a function to open the current directory in vterm.
+
+#+begin_src emacs-lisp :noweb-ref vterm/config
+(defun vterm-lafrenierejm-here ()
+  "Open vterm in the current working directory.
+
+If a vterm instance for the directory already exists, switch to it. If no such
+instance exists, start a new instance whose name includes the directory."
+  (interactive)
+  (let ((cwd (abbreviate-file-name (if (buffer-file-name)
+                                       (file-name-directory (buffer-file-name))
+                                     default-directory))))
+    (vterm-lafrenierejm-find-directory cwd)))
+#+end_src
+
+Map ~vterm-lafrenierejm-here~ to =C-z=.
+This imitates the behavior of *NIX terminal applications.
+In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
+
+#+begin_src emacs-lisp :noweb-ref vterm/general
+("C-z" #'vterm-lafrenierejm-here)
 #+end_src
 
 ** Xonsh
