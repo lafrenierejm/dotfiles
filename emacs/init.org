@@ -731,13 +731,9 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 (use-package modus-themes
   :demand
 
-  :init
-  ;; Load the theme files before enabling a theme
-  (modus-themes-load-themes)
-
   :config
   ;; Load the theme of your choice:
-  (modus-themes-load-operandi))
+  (load-theme 'modus-operandi))
 #+end_src
 
 * Buffer Organization
