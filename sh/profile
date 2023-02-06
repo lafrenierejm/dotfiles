@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Source `/etc/profile` if it exists.
+[ -e /etc/profile ] && . /etc/profile
+
 if [ -f /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
