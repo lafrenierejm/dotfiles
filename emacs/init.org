@@ -838,19 +838,6 @@ Do not display the current buffer when switching buffers..
 (counsel-projectile-remove-current-buffer t)
 #+end_src
 
-** Perspective
-
-/Perspective/ provides tagged workspaces.
-#+begin_src emacs-lisp
-(use-package perspective
-  ;; Load this package eagerly.
-  :demand
-
-  ;; Customize variables.
-  :custom
-  (persp-mode t "Enable perspective mode globally"))
-#+end_src
-
 ** /Relative Buffers/
 
 From the package's README:
