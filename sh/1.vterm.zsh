@@ -2,7 +2,7 @@ if [[ "$INSIDE_EMACS" == "vterm" ]]; then
 	# https://github.com/akermu/emacs-libvterm#vterm-buffer-name-string
 	autoload -U add-zsh-hook
 	add-zsh-hook -Uz chpwd () {
-		ROOT_DIR="$(git rev-parse --show-toplevel)"
+		ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
 		if [ -n "$ROOT_DIR" ]; then
 			CWD="$(git rev-parse --show-prefix)"
 			if [ -z "$CWD" ]; then
