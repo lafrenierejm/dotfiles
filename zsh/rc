@@ -2,10 +2,20 @@
 # It is sourced when zsh is started as an interactive shell
 # ##############################################################################
 
-# Use vi mode
-bindkey -v
-## Set a 1ms delay on pressing ESC
-export KEYTIMEOUT=1
+# Source zprofile
+ZPROFILE="$HOME"/.zprofile
+[ -e "$ZPROFILE" ] && . "$ZPROFILE"
+
+# Source global zshrc
+ZSHRC=/etc/zshrc
+[ -e "$ZSHRC" ] && . "$ZSHRC"
+
+# Read and export the XDG environment variables.
+if [[ -d "$XDG_CONFIG_HOME" ]]; then
+    for file in "$XDG_CONFIG_HOME"/sh/[0-9].*.(z|)sh; do
+	. "$file"
+    done
+fi
 
 # Enable autocompletion
 zstyle ':completion:*' verbose yes
@@ -26,31 +36,25 @@ setopt appendhistory nomatch
 setopt HIST_IGNORE_DUPS
 unsetopt autocd beep extendedglob notify
 
-# Source external files
-if [ -d "${XDG_CONFIG_HOME}/zsh/interactive" ]; then
-	for file in ${XDG_CONFIG_HOME}/zsh/interactive/**/*.zsh; do
-		source "${file}"
-	done
-elif [ -d "${HOME}/.config/zsh/interactive" ]; then
-	for file in ${HOME}/.config/zsh/interactive/**/*.zsh; do
-		source "${file}"
-	done
-fi
-
-# version control system
-autoload -Uz vcs_info
-precmd_vcs_info() {
-	vcs_info
-}
-precmd_functions+=( precmd_vcs_info )
+# Customize prompts
 setopt prompt_subst
-zstyle ':vcs_info:git*' formats "%b" # display branch name
-zstyle ':vcs_info:hg*' formats "%b" # display branch name
+chpwd () {
+	git_root="$(git rev-parse --show-toplevel 2>/dev/null)"
+	if [ -z "$git_root" ]; then
+		prompt_short_dir='%~'
+	else
+		git_path="$(git rev-parse --show-prefix)"
+		prompt_path="${${git_root%/}##*/}/${git_path}"
+		prompt_short_dir="${prompt_path%/}"
+	fi
+}
 
 # Set the left-aligned prompt
 ## Display the current directory, shortening $HOME to '~'
 ## Display '#' if root, '%' otherwise
-PROMPT='%m:%~%# '
+chpwd
+PROMPT='%m:${prompt_short_dir} %# '
+
 # set the right-aligned prompt
 ## display version control information
-RPROMPT='${vcs_info_msg_0_}'
+RPROMPT=''
