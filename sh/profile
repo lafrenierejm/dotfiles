@@ -42,3 +42,6 @@ NIX_BINS="$HOME/.nix-profile/bin"
 if [ -d "$NIX_BINS" ]; then
     export PATH="$NIX_BINS:$PATH"
 fi
+
+NIX_HOME_MANAGER="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+[ -e "$NIX_HOME_MANAGER" ] && . "$NIX_HOME_MANAGER"
