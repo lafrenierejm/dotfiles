@@ -11,6 +11,10 @@
   # changes in each release.
   home.stateVersion = "22.05";
 
+  home.sessionVariables = {
+    DIRENV_LOG_FORMAT = "";
+  };
+
   home.shellAliases = {
     ll = "exa --long --git --time-style=long-iso";
     la = "exa --long --git --time-style=long-iso --all";
