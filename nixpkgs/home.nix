@@ -11,6 +11,11 @@
   # changes in each release.
   home.stateVersion = "22.05";
 
+  home.shellAliases = {
+    ll = "exa --long --git --time-style=long-iso";
+    la = "exa --long --git --time-style=long-iso --all";
+  };
+
   programs = {
     direnv = {
       enable = true;
@@ -29,10 +34,6 @@
       enableSyntaxHighlighting = true;
       enableVteIntegration = true;
       autocd = true;
-      shellGlobalAliases = {
-        ll = "exa --long --git --time-style=long-iso";
-        la = "exa --long --git --time-style=long-iso --all";
-      };
       initExtra = ". ~/.config/zsh/prompt.zsh";
     };
   };
