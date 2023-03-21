@@ -136,6 +136,7 @@
         "yabai -m rule --add app='^System Information$' manage=off layer=above"
         "yabai -m rule --add app='^System Preferences$' manage=off layer=above"
         "yabai -m rule --add app='^System Settings' manage=off layer=above"
+        "yabai -m rule --add app='^MultiPatch' manage=off layer=above"
       ];
     };
   };
