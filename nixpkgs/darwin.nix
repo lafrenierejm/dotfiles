@@ -19,6 +19,7 @@
       "firefox"
       "iina"
       "karabiner-elements"
+      "logitech-unifying"
       "lunar"
       "mullvadvpn"
       "multipatch"
@@ -30,7 +31,7 @@
       "visualboyadvance-m"
       "yt-music"
     ];
-    taps = [ "railwaycat/emacsmacport" ];
+    taps = [ "homebrew/cask-drivers" "railwaycat/emacsmacport" ];
   };
 
   services = {
