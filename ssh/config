@@ -21,11 +21,3 @@ Host *
 	SendEnv LANG LC_*
 	# Protects against 2016 Roaming Vulnerability
 	UseRoaming No
-
-Host carbon
-	User Fhqwhgads
-	HostName carbon.collegiumv.org
-
-Host cs1
-	User jml140230
-	HostName cs1.utdallas.edu
