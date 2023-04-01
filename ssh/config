@@ -10,8 +10,6 @@ AddKeysToAgent yes
 Host *
 	# Avoids RC4 and DES, prefers larger key and block sizes, and prefers Chacha20 since it encrypts packet lengths
 	Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-	# Obfuscates Known Hosts
-	HashKnownHosts yes
 	# Avoid DSA's 1024 bit keysize and NIST Curves with ECDSA
 	HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa
 	# Avoid NIST curves and SHA1
