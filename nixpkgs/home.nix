@@ -26,6 +26,10 @@
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
     home-manager.enable = true;
     htop = {
       enable = true;
