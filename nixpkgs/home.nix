@@ -48,6 +48,8 @@
   };
 
   home.packages = with pkgs; [
+    aspell
+    aspellDicts.en
     atool
     babashka
     bitwarden-cli
