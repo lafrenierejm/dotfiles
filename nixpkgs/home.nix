@@ -16,8 +16,9 @@
   };
 
   home.shellAliases = {
-    ll = "exa --long --git --time-style=long-iso";
+    jq = "gojq";
     la = "exa --long --git --time-style=long-iso --all";
+    ll = "exa --long --git --time-style=long-iso";
   };
 
   programs = {
@@ -59,6 +60,7 @@
     ghq
     git
     git-crypt
+    gojq
     nixfmt
     nodePackages.prettier
     ripgrep
