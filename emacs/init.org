@@ -4370,7 +4370,9 @@ If a VTerm instance for the directory already exists, switch to it.  If no
 such instance exists, start a new instance whose name includes the directory."
   (interactive "DOpen vterm in: ")
   (let* ((buffer-name
-          (format "*vterm %s*"
+          (format "*vterm %s@%s:%s*"
+                  (getenv "USER")
+                  (car (s-split (rx ".") (system-name)))
                   (projectile-lafrenierejm-make-relative-to-root-dwim
                    directory)))
          (buffer (get-buffer-create buffer-name)))
@@ -4399,9 +4401,10 @@ Define a function to open the current directory in vterm.
 If a vterm instance for the directory already exists, switch to it. If no such
 instance exists, start a new instance whose name includes the directory."
   (interactive)
-  (let ((cwd (abbreviate-file-name (if (buffer-file-name)
-                                       (file-name-directory (buffer-file-name))
-                                     default-directory))))
+  (let ((cwd (abbreviate-file-name
+              (if (buffer-file-name)
+                  (file-name-directory (buffer-file-name))
+                default-directory))))
     (vterm-lafrenierejm-find-directory cwd)))
 #+end_src
 
