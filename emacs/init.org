@@ -6893,7 +6893,7 @@ Define a function to load the current file in ~sql-interactive-mode~.
 
 Add the above function to ~find-file-hook~ which is run every time a file is loaded.
 #+begin_src emacs-lisp :noweb-ref sql/gfhook
-(add-hook 'find-file-hook #'sql-lafrenierejm-find-file-hook)
+('find-file-hook #'sql-lafrenierejm-find-file-hook)
 #+end_src
 
 *** SQL Up Mode
