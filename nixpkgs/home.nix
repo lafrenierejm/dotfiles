@@ -62,7 +62,15 @@
     ghq
     git
     git-crypt
+    gnupg
     gojq
+    id3v2
+    ispell
+    isync
+    isync
+    mosh
+    mpv
+    mu
     nixfmt
     nodePackages.prettier
     ripgrep
@@ -70,6 +78,7 @@
     rsync
     rust-analyzer
     unrar
+    youtube-dl
     zsh
   ];
 }
