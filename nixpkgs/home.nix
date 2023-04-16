@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ inputs, outputs, lib, config, pkgs, ... }:
 
 {
   # This value determines the Home Manager release that your
@@ -13,6 +13,7 @@
 
   home.sessionVariables = {
     DIRENV_LOG_FORMAT = "";
+    NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
   };
 
   home.shellAliases = {

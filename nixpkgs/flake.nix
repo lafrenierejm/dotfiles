@@ -16,12 +16,23 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ripsecrets = {
+      url = "github:sirwart/ripsecrets";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     spacebar.url = "github:cmacrae/spacebar/v1.4.0";
   };
 
-  outputs =
-    { self, nixpkgs, darwin, emacs, home-manager, spacebar, ... }@inputs:
+  outputs = { self, nixpkgs, darwin, emacs, home-manager, ripsecrets, spacebar
+    , ... }@inputs:
     let
+      inherit (self) outputs;
+      forAllSystems = nixpkgs.lib.genAttrs [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "x86_64-linux"
+      ];
       configuration = { lib, pkgs, ... }: {
         nix = {
           extraOptions = "experimental-features = nix-command flakes";
@@ -45,6 +56,7 @@
           fd
           git
           ripgrep
+          ripsecrets
           zsh
         ];
 
@@ -66,18 +78,19 @@
         in import ./shell.nix { inherit pkgs; });
 
       darwinConfigurations = {
-        macbook = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
+        macbook = darwin.lib.darwinSystem rec {
           modules = [
             configuration
             ./darwin.nix
             home-manager.darwinModules.home-manager
             {
+              home-manager.extraSpecialArgs = { inherit inputs outputs; };
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.lafrenierejm = import ./home.nix;
             }
           ];
+          system = "aarch64-darwin";
         };
       };
 
