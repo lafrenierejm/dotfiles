@@ -58,7 +58,13 @@
         services.nix-daemon.enable = true;
 
       };
-    in {
+    in rec {
+      # Development shell for bootstrapping.
+      # Accessible through `nix develop` or legacy `nix shell`.
+      devShells = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./shell.nix { inherit pkgs; });
+
       darwinConfigurations = {
         macbook = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
