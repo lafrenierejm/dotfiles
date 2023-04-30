@@ -13,3 +13,4 @@ user-dirs.dirs
 
 # Nix flake direnv
 /direnv/
+/result
