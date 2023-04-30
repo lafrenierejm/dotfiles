@@ -10,3 +10,6 @@
 /transmission-daemon/
 mimeapps.list
 user-dirs.dirs
+
+# Nix flake direnv
+/direnv/
