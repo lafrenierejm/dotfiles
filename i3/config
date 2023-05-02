@@ -1,7 +1,7 @@
 # Should you change your keyboard layout some time, delete
 # this file and re-run i3-config-wizard(1).
 
-# Set the modifer key
+# Set the modifier key
 set $mod Mod4
 
 # Set fonts
@@ -35,7 +35,7 @@ bindsym $mod+F10 exec amixer -q set PCM 10%+ # increase volume by 10%
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run -fn "Source Code Pro 14" -nb "#272822" -nf "#F1EBEB" -sb "#48483E" -sf "#F1EBEB"
 
-# Don't automatically change focuse with mouse
+# Don't automatically change focus with mouse
 focus_follows_mouse no
 
 # Change focus with vi bindings
