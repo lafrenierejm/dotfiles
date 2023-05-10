@@ -173,7 +173,7 @@ Before any other installed packages can be configured, /Package/ must be loaded 
 :END:
 
 Because I use /Straight/ to manage packages on systems where neither Gix nor Nix are available, I need to account for instances where I use the ~:straight~ keyword in \src_emacs-lisp{use-package} macros.
-This is accomplished by requesting \src_emacs-lisp{use-package} to just ignore any unkown keywords rather than raise errors.
+This is accomplished by requesting \src_emacs-lisp{use-package} to just ignore any unknown keywords rather than raise errors.
 #+begin_src emacs-lisp
 (require 'use-package)
 (setq use-package-ignore-unknown-keywords t)
@@ -416,7 +416,7 @@ Further \src_emacs-lisp{f-touch} is not marked as an auto-loaded function in /F/
    no-littering-etc-directory (standard-dirs-project-config "org" "gnu" "emacs")
    no-littering-var-directory (standard-dirs-project-data-local "org" "gnu" "emacs")
 
-   ;; Seperate auto-save files.
+   ;; Separate auto-save files.
    auto-save-file-name-transforms
    `((".*"
       ,(let ((path (no-littering-expand-var-file-name "auto-save/")))
@@ -596,9 +596,9 @@ Only use Rainbow Identifiers to highlight (read: color) variable names.
 #+end_src
 
 ** Rainbow Delimiters
-Rainbow Delimters provides a minor mode that highlights delimeters such as parantheses based on their depth.
+Rainbow Delimiters provides a minor mode that highlights delimiters such as parentheses based on their depth.
 The highlight color of each level is distinct.
-The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimeters]].
+The package's source is available at [[https://github.com/Fanael/rainbow-delimiters][github.com/Fanael/rainbow-delimiters]].
 
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
@@ -1430,7 +1430,7 @@ will return t."
                (comment-search-backward bol 'noerror))
           (progn
             (message "Comment found")
-            ;; Go to the start of the comment's delimeter.
+            ;; Go to the start of the comment's delimiter.
             (search-backward-regexp comment-start-skip bol 'noerror)
             ;; Go the start of any immediately prior whitespace.
             (skip-syntax-backward " \t" bol)
@@ -1523,7 +1523,7 @@ The syntactic blocks are as follows, ordered from right to left:
   ;; Load this package eagerly.
   :demand
 
-  ;; Load this package afer the following packages.
+  ;; Load this package after the following packages.
   :after evil
 
   :preface
@@ -2399,7 +2399,7 @@ I do not want to have to confirm.
 
 /VC/ is a built-in package that provides an interface for generic version control operations, abstracting over many different version control systems.
 The only action performed below is changing the binding of \src_emacs-lisp{vc-revert}.
-The new binding is harder to accidentally press and opens up a convenient binding for /Brose at Remote/'s command.
+The new binding is harder to accidentally press and opens up a convenient binding for /Browse at Remote/'s command.
 
 #+begin_src emacs-lisp
 (use-package vc
@@ -4087,7 +4087,7 @@ Clearly, the task is not so complicated as to be impossible.
 It is far less efficient and more error-prone than it could be, though.
 That inefficiency results from requiring the user to
 - consciously splitting then re-pairing timestamps and
-- visually --- and, if scrolling is required, phsyically --- navigate between two prompts.
+- visually --- and, if scrolling is required, physically --- navigate between two prompts.
 
 
 ****** The Solution
@@ -5166,7 +5166,7 @@ Features:
   :general
   <<pdf-tools/general>>
 
-  ;; Evalutate the following code before loading this package.
+  ;; Evaluate the following code before loading this package.
   :init
   (pdf-tools-install t))
 #+end_src
@@ -6103,7 +6103,7 @@ Lisp-2 languages have a separate namespace for functions.
 Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a prefix argument, replaces the expression being evaluated with the result of its evaluation.
 #+begin_src emacs-lisp
 (defun elisp-eval-last-sexp (&optional replace)
-  "Evaluate the preceding sexp, OPTIONally replacing it with its result."
+  "Evaluate the preceding sexp, OPTIONALly replacing it with its result."
   (interactive "P")
   (if (not replace)
       (eval-last-sexp replace)
