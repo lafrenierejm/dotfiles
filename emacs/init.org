@@ -5953,11 +5953,7 @@ Fennel is a programming language that brings together the speed, simplicity, and
   ("\\.fnl\\'" . fennel-mode))
 #+end_src
 
-*** Lisp-1
-
-Lisp-1 languages have a single namespace for all names.
-
-**** Geiser Guile
+*** Guile
 
 #+begin_src emacs-lisp
 (use-package geiser-guile
@@ -5973,7 +5969,7 @@ Lisp-1 languages have a single namespace for all names.
     (add-to-list 'geiser-guile-load-path path)))
 #+end_src
 
-**** Guix
+*** Guix
 
 From the package's commentary:
 #+BEGIN_QUOTE
@@ -6007,7 +6003,7 @@ It allows you:
    "Directory or directories to prepend to Guile's `%load-path' and `load-compiled-path'."))
 #+end_src
 
-***** Conditions for Loading
+**** Conditions for Loading
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref guix/if
 :END:
@@ -6017,7 +6013,7 @@ The package relies on =guix= being available on =$PATH=.
 (executable-find "guix")
 #+end_src
 
-***** Auto-Loading Hooks
+**** Auto-Loading Hooks
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref guix/ghook
 :END:
@@ -6027,13 +6023,13 @@ Replace hash symbols with ellipses.
 ('(dired-mode-hook shell-mode-hook) #'guix-prettify-mode)
 #+end_src
 
-**** Racket
+*** Racket
 
 #+begin_src emacs-lisp
 (use-package racket-mode)
 #+end_src
 
-**** Hy Mode
+*** Hy
 
 #+begin_src emacs-lisp
 (use-package hy-mode
@@ -6050,17 +6046,14 @@ Replace hash symbols with ellipses.
     nil))
 #+end_src
 
-**** /Scheme/
+*** /Scheme/
 
 #+begin_src emacs-lisp
 (use-package scheme
   :mode ("\\.guile\\'" . scheme-mode))
 #+end_src
 
-*** Lisp-2
-Lisp-2 languages have a separate namespace for functions.
-
-**** Superior Lisp Interaction Mode (SLIME)
+*** Superior Lisp Interaction Mode (SLIME)
 
 #+begin_src emacs-lisp
 (use-package slime
@@ -6075,9 +6068,9 @@ Lisp-2 languages have a separate namespace for functions.
   (slime-setup init-prog-lisp/slime-extra))
 #+end_src
 
-**** Emacs Lisp
+*** Emacs Lisp
 
-***** /Elisp Mode/
+**** /Elisp Mode/
 
 #+begin_src emacs-lisp
 (use-package elisp-mode
@@ -6095,7 +6088,7 @@ Lisp-2 languages have a separate namespace for functions.
   <<elisp-mode/config>>)
 #+end_src
 
-****** Post-Load Evaluation
+***** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref elisp-mode/config
 :END:
@@ -6115,7 +6108,7 @@ Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a p
              (insert (current-kill 0))))))
 #+end_src
 
-****** Comment Out Sexp
+***** Comment Out Sexp
 :PROPERTIES:
 :COPYRIGHT_AUTHOR: A. Levy
 :COPYRIGHT_URL: https://stackoverflow.com/a/4201022/8468492
@@ -6131,7 +6124,7 @@ A. Levy provided a working macro as [[https://stackoverflow.com/a/4201022/846849
   nil)
 #+end_src
 
-***** Helpful
+**** /Helpful/
 
 From the package's README:
 #+BEGIN_QUOTE
@@ -6150,15 +6143,15 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (counsel-describe-variable-function #'helpful-variable))
 #+end_src
 
-**** Clojure
+*** Clojure
 
-***** Clojure Mode
+**** Clojure Mode
 
 #+begin_src emacs-lisp
 (use-package clojure-mode)
 #+end_src
 
-***** Clojure Refactor
+**** Clojure Refactor
 
 #+begin_src emacs-lisp
 (use-package clj-refactor
@@ -6172,7 +6165,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (cljr-add-keybindings-with-prefix "C-c C-m"))
 #+end_src
 
-***** CIDER
+**** CIDER
 
 #+begin_src emacs-lisp
 (use-package cider
@@ -6189,7 +6182,7 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
    "C-l" #'cider-repl-clear-buffer))
 #+end_src
 
-***** CIDER Hydra
+**** CIDER Hydra
 
 #+begin_src emacs-lisp
 (use-package cider-hydra
