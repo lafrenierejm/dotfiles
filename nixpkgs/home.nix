@@ -78,10 +78,12 @@
     mu
     nixfmt
     nodePackages.prettier
+    pyright
     ripgrep
     rnix-lsp
     rsync
     rust-analyzer
+    terraform-ls
     unrar
     youtube-dl
     zsh
