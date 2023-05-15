@@ -56,6 +56,7 @@
     aspell
     aspellDicts.en
     atool
+    awscli2
     babashka
     bitwarden-cli
     cachix
