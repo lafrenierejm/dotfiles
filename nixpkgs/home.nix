@@ -38,7 +38,10 @@
       enable = true;
       settings.show_program_path = true;
     };
-    rbenv.enable = true;
+    rbenv = {
+      enable = true;
+      enableZshIntegration = true;
+    };
     zsh = {
       enable = true;
       enableAutosuggestions = true;
