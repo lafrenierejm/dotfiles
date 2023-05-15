@@ -17,6 +17,7 @@
   };
 
   home.shellAliases = {
+    extract = "${pkgs.atool}/bin/atool --extract --explain --subdir";
     jq = "gojq";
     la = "exa --long --git --time-style=long-iso --all";
     ll = "exa --long --git --time-style=long-iso";
