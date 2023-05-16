@@ -122,6 +122,9 @@ in {
         ''command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"''
         ''eval "$(pyenv init -)"''
       ];
+      profileExtra = lib.concatStringsSep "\n" [
+        ''export PATH="$PATH:$HOME/.dotnet/tools"''
+      ];
     };
   };
 
