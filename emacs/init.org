@@ -736,6 +736,13 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   (load-theme 'modus-operandi))
 #+end_src
 
+** /Font Lock Ext/
+
+#+begin_src emacs-lisp
+(use-package font-lock-ext
+  :straight (:host github :repo "sensorflo/font-lock-ext"))
+#+end_src
+
 * Buffer Organization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref buffer-organization
@@ -5485,6 +5492,23 @@ AutoHotkey is a free, open-source scripting language for Windows that allows use
 
 #+begin_src emacs-lisp
 (use-package ahk-mode)
+#+end_src
+
+** Common Language Runtime (CLR)
+
+*** Microsoft Visual C++ (MSCV) Solution (=.sln=)
+
+#+begin_src emacs-lisp
+(use-package sln-mode
+  :straight (sln-mode
+             :type git
+             :host github
+             :repo "sensorflo/sln-mode")
+
+  :mode ("\\.sln\\'" . sln-mode)
+
+  :init
+  (require 'font-lock-ext))
 #+end_src
 
 ** Configuration Files
