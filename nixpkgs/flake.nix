@@ -78,16 +78,21 @@
         in import ./shell.nix { inherit pkgs; });
 
       darwinConfigurations = {
-        macbook = darwin.lib.darwinSystem rec {
+        macbook = let username = "lafrenierejm";
+        in darwin.lib.darwinSystem rec {
           modules = [
             configuration
             ./darwin.nix
             home-manager.darwinModules.home-manager
             {
-              home-manager.extraSpecialArgs = { inherit inputs outputs; };
+              home-manager.extraSpecialArgs = {
+                inherit inputs outputs username;
+                gitEmail = "git@lafreniere.xyz";
+                gitUseGpg = true;
+              };
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.lafrenierejm = import ./home.nix;
+              home-manager.users."${username}" = import ./home.nix;
             }
           ];
           system = "aarch64-darwin";

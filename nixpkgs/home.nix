@@ -1,6 +1,9 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
+{ inputs, outputs, lib, config, pkgs, username, gitEmail, gitUseGpg, ... }:
 
-{
+let
+  homeDirectory =
+    if pkgs.stdenv.isLinux then "/home/${username}" else "/Users/${username}";
+in {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -32,6 +35,70 @@
     fzf = {
       enable = true;
       enableZshIntegration = true;
+    };
+    git = {
+      enable = true;
+      package = pkgs.gitAndTools.gitFull;
+      aliases = {
+        aban = "checkout --";
+        abanp = "checkout -p --";
+        "abort" = "rebase --abort";
+        alias =
+          "! git config --get-regexp '^alias.' | sed -e 's/^alias.//' -e 's/ / = /'";
+        amend = "commit --amend";
+        cloner = "clone --recursive";
+        cont = "rebase --continue";
+        delete = ''!git branch -d "$1" ; git push "$2" --delete "$1" #'';
+        dif = "diff --word-diff=color";
+        fixup = "commit --amend -C HEAD";
+        head = "log -1 HEAD";
+        pop = "stash pop";
+        pure = "pull --rebase";
+        review = "diff --word-diff=color --staged";
+        st = "status -sb";
+        unstage = "reset HEAD --";
+      };
+      extraConfig = {
+        init.defaultBranch = "main";
+        ghq.root = "${homeDirectory}/Documents";
+        github.user = "lafrenierejm";
+        gitlab.user = "lafrenierejm";
+        pull = {
+          autostash = true;
+          ff = "only";
+          prune = true;
+          pruneTags = true;
+          tags = true;
+        };
+        rebase.autoStash = true;
+        sendemail = {
+          from = "Joseph LaFreniere <${gitEmail}>";
+          smtpuser = "";
+          smtpserver = "${pkgs.msmtp}/bin/msmtp";
+          smtpencryption = "tls";
+          chainreplyto = false;
+          confirm = "auto";
+        };
+      };
+      ignores = [
+        # emacs
+        "*#"
+        "*.elc"
+        "*~"
+        ".dir-locals.el"
+        # direnv
+        ".direnv/"
+        # python
+        ".venv/"
+      ];
+      lfs.enable = true;
+      signing = if gitUseGpg then {
+        key = "0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3";
+        signByDefault = true;
+      } else
+        null;
+      userEmail = gitEmail;
+      userName = "Joseph LaFreniere";
     };
     home-manager.enable = true;
     htop = {
@@ -66,8 +133,8 @@
     exa
     fd
     ghq
-    git
     git-crypt
+    gitAndTools.gitFull
     gnupg
     gojq
     id3v2
