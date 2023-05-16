@@ -9,7 +9,9 @@
       cleanup = "uninstall";
     };
     brews = [
+      "dotnet"
       "emacs-mac"
+      "nuget"
       "pyenv"
     ];
     casks = [
