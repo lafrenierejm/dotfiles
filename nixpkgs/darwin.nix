@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  dotnetPackage = "dotnet@6";
+  dotnetInstallDir = "/opt/homebrew/opt/${dotnetPackage}";
+in {
   homebrew = {
     enable = true;
     onActivation = {
@@ -9,10 +12,10 @@
       cleanup = "uninstall";
     };
     brews = [
-      "dotnet"
       "emacs-mac"
       "nuget"
       "pyenv"
+      dotnetPackage
     ];
     casks = [
       "aldente"
@@ -145,4 +148,11 @@
   };
 
   system.keyboard.enableKeyMapping = true; # needed for skhd
+  environment.systemPath = [
+    "${dotnetInstallDir}/bin"
+    config.homebrew.brewPrefix
+  ];
+  environment.variables = {
+    DOTNET_ROOT = "${dotnetInstallDir}/libexec";
+  };
 }
