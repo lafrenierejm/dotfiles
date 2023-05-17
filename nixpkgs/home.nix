@@ -80,6 +80,7 @@ in {
           confirm = "auto";
         };
       };
+      difftastic.enable = true;
       ignores = [
         # emacs
         "*#"
