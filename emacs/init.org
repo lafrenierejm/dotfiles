@@ -6970,6 +6970,16 @@ Enable indent guides in XML buffers.
   :args '("--format" "-"))
 #+end_src
 
+*** /nXML Mode/
+
+#+begin_src emacs-lisp
+(use-package nxml-mode
+  :straight (:type built-in)
+
+  :mode
+  ("\\.csproj\\'" . nxml-mode))
+#+end_src
+
 ** Tool Command Language (Tcl)
 
 From [[https://www.tcl-lang.org/][the language's homepage]]:
