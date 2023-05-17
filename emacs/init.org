@@ -6932,6 +6932,18 @@ By convention, SQL uses all uppercase characters for the names of keywords and b
   ('(sql-interactive-mode-hook sql-mode-hook) #'sqlup-mode))
 #+end_src
 
+*** /sqlite3/
+
+From the package's [[https://github.com/pekingduck/emacs-sqlite3-api][home page]]:
+#+begin_quote
+/sqlite3/ is a dynamic module for GNU Emacs 25+ that provides direct access to the core SQLite3 C API from Emacs Lisp.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package sqlite3
+  :demand)
+#+end_src
+
 ** X.509 Certificates
 
 *** /X.509 Mode/
