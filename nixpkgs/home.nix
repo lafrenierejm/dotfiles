@@ -133,6 +133,7 @@ in {
     aspell
     aspellDicts.en
     atool
+    aws-sso-creds
     awscli2
     babashka
     bitwarden-cli
