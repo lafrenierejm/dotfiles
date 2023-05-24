@@ -89,6 +89,8 @@ in {
         ".dir-locals.el"
         # direnv
         ".direnv/"
+        # mono
+        ".mono/"
         # python
         ".venv/"
       ];
