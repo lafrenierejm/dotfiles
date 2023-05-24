@@ -114,10 +114,9 @@ in {
       enable = true;
       enableAutosuggestions = true;
       enableSyntaxHighlighting = true;
-      enableVteIntegration = true;
       autocd = true;
       initExtra = lib.concatStringsSep "\n" [
-        ''. "$HOME/.config/zsh/prompt.zsh"''
+        ''. "$HOME/.config/zsh/vterm.zsh"''
         # pyenv
         ''export PYENV_ROOT="$HOME/.pyenv"''
         ''command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"''

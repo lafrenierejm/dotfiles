@@ -4370,9 +4370,7 @@ If a VTerm instance for the directory already exists, switch to it.  If no
 such instance exists, start a new instance whose name includes the directory."
   (interactive "DOpen vterm in: ")
   (let* ((buffer-name
-          (format "*vterm %s@%s:%s*"
-                  (getenv "USER")
-                  (car (s-split (rx ".") (system-name)))
+          (format "*vterm %s*"
                   (projectile-lafrenierejm-make-relative-to-root-dwim
                    directory)))
          (buffer (get-buffer-create buffer-name)))
