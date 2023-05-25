@@ -61,6 +61,10 @@ in {
       };
       extraConfig = {
         init.defaultBranch = "main";
+        fetch = {
+          prune = true;
+          pruneTags = true;
+        };
         ghq.root = "${homeDirectory}/Documents";
         github.user = "lafrenierejm";
         gitlab.user = "lafrenierejm";
