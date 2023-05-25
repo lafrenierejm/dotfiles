@@ -2736,20 +2736,6 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   :demand)
 #+end_src
 
-*** SSH Agency
-
-#+begin_src emacs-lisp
-(use-package ssh-agency
-  :after magit
-
-  :demand
-
-  :custom
-  (ssh-agency-add-executable (executable-find "ssh-add"))
-  (ssh-agency-agent-executable (executable-find "ssh-agent"))
-  (ssh-agency-agent-exe-names '("ssh-agent")))
-#+end_src
-
 *** Determine Year Added
 
 Define a function to determine when a file was first created.
