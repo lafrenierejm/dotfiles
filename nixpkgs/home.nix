@@ -1,4 +1,4 @@
-{ inputs, outputs, lib, config, pkgs, username, gitEmail, gitUseGpg, ... }:
+{ inputs, lib, config, pkgs, username, gitEmail, gitUseGpg, ... }:
 
 let
   homeDirectory =
@@ -20,7 +20,8 @@ in {
   };
 
   home.shellAliases = {
-    aws-ecr-login = ''aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
+    aws-ecr-login = ''
+      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
     extract = "${pkgs.atool}/bin/atool --extract --explain --subdir";
     jq = "gojq";
     la = "exa --long --git --time-style=long-iso --all";
@@ -129,9 +130,8 @@ in {
         ''command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"''
         ''eval "$(pyenv init -)"''
       ];
-      profileExtra = lib.concatStringsSep "\n" [
-        ''export PATH="$PATH:$HOME/.dotnet/tools"''
-      ];
+      profileExtra = lib.concatStringsSep "\n"
+        [ ''export PATH="$PATH:$HOME/.dotnet/tools"'' ];
     };
   };
 
@@ -165,6 +165,8 @@ in {
     nodePackages.prettier
     pyright
     ripgrep
+    ripgrep-all
+    ripsecrets
     rnix-lsp
     rsync
     rust-analyzer

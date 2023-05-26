@@ -3,10 +3,30 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
+    darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    emacs = {
+      url = "github:cmacrae/emacs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pre-commit-hooks-nix = {
       url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    ripsecrets = {
+      url = "github:sirwart/ripsecrets";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
@@ -27,18 +47,22 @@
         # Per-system attributes can be defined here. The self' and inputs'
         # module parameters provide easy access to attributes of the same
         # system.
-
-        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-        packages.default = pkgs.hello;
+        packages = {
+          default = pkgs.hello;
+        } // pkgs.lib.optionalAttrs (system == "x84_64-linux") {
+          install-iso = inputs.nixos-generators.nixosGenerate {
+            inherit system;
+            format = "install-iso";
+          };
+        };
 
         # Auto formatters. This also adds a flake check to ensure that the
         # source tree was auto formatted.
         treefmt.config = {
-          inherit (config.flake-root) projectRootFile;
+          projectRootFile = ".git/config";
           package = pkgs.treefmt;
           flakeCheck = false; # use pre-commit's check instead
-
-          programs.nixpkgs-fmt.enable = true;
+          programs.nixfmt.enable = true;
           programs.shfmt.enable = true;
         };
 
@@ -52,14 +76,40 @@
         };
 
         devShells.default = pkgs.mkShell {
-          inputsFrom =
-            [ config.flake-root.devShell config.pre-commit.devShell ];
+          # Inherit all of the pre-commit hooks.
+          inputsFrom = [ config.pre-commit.devShell ];
         };
       };
-      # flake = {
-      #   # The usual flake attributes can be defined here, including system-
-      #   # agnostic ones like nixosModule and system-enumerating ones, although
-      #   # those are more easily expressed in perSystem.
-      # };
+
+      flake = {
+        # The usual flake attributes can be defined here, including system-
+        # agnostic ones like nixosModule and system-enumerating ones, although
+        # those are more easily expressed in perSystem.
+        darwinConfigurations = {
+          macbook = let username = "lafrenierejm";
+          in inputs.darwin.lib.darwinSystem rec {
+            system = "aarch64-darwin";
+            modules = [
+              {
+                nixpkgs.overlays =
+                  [ inputs.emacs.overlay inputs.ripsecrets.overlays.default ];
+              }
+              ./nixpkgs/common.nix
+              ./nixpkgs/darwin.nix
+              inputs.home-manager.darwinModules.home-manager
+              {
+                home-manager.extraSpecialArgs = {
+                  inherit inputs username;
+                  gitEmail = "git@lafreniere.xyz";
+                  gitUseGpg = true;
+                };
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users."${username}" = import ./nixpkgs/home.nix;
+              }
+            ];
+          };
+        };
+      };
     };
 }
