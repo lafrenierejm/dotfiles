@@ -6654,7 +6654,11 @@ Define the actual Polymode.
              :repo "NixOS/nix-mode"
              :fork "lafrenierejm/nix-mode"
              :branch "reformatter")
-  :mode "\\.nix\\'")
+  :mode "\\.nix\\'"
+
+  :general
+  (:keymaps 'nix-mode-map
+   "C-c C-p" #'nix-repl))
 #+end_src
 
 **** LSP Mode
