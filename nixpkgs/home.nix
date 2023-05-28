@@ -2,7 +2,12 @@
 
 let
   homeDirectory =
-    if pkgs.stdenv.isLinux then "/home/${username}" else "/Users/${username}";
+    if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
+  pinentry = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry;
+  pinentry-bin = if pkgs.stdenv.isDarwin then
+    "${pinentry}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
+  else
+    "${pinentry}/bin/pinentry";
 in {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -76,6 +81,7 @@ in {
           pruneTags = true;
           tags = true;
         };
+        push = { gpgSign = if useGpg then "if-asked" else "false"; };
         rebase.autoStash = true;
         sendemail = {
           from = "Joseph LaFreniere <${gitEmail}>";
@@ -135,7 +141,7 @@ in {
     };
   };
 
-  home.packages = with pkgs; [
+  home.packages = [ pinentry ] ++ (with pkgs; [
     aspell
     aspellDicts.en
     atool
@@ -174,5 +180,12 @@ in {
     unrar
     youtube-dl
     zsh
-  ];
+  ]);
+
+  home.file.".gnupg/gpg-agent.conf".text = lib.concatStringsSep "\n"
+    (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
+      pinentry-program = pinentry-bin;
+      default-cache-ttl = 7200;
+      default-cache-ttl-ssh = 7200;
+    });
 }
