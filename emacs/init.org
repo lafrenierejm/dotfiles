@@ -2587,6 +2587,11 @@ Set the sections to be displayed in status buffers.
    magit-insert-unpulled-from-upstream))
 #+end_src
 
+Include fetch suffixes in the pull menu.
+#+begin_src emacs-lisp
+(magit-pull-or-fetch t)
+#+end_src
+
 **** Pre-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref magit/init
