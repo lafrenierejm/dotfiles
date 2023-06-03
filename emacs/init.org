@@ -6125,6 +6125,14 @@ Helpful is an alternative to the built-in Emacs help that provides much more con
   (counsel-describe-variable-function #'helpful-variable))
 #+end_src
 
+**** /Package Lint/
+
+The package's [[https://github.com/purcell/package-lint][homepage]] describes /Package Lint/ as "[a] linting library for elisp package metadata".
+
+#+begin_src emacs-lisp
+(use-package package-lint)
+#+end_src
+
 *** Clojure
 
 **** Clojure Mode
