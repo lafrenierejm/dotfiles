@@ -25,6 +25,10 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ripgrep-all = {
+      url = "github:phiresky/ripgrep-all";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ripsecrets = {
       url = "github:sirwart/ripsecrets";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -99,7 +103,7 @@
               inputs.home-manager.darwinModules.home-manager
               {
                 home-manager.extraSpecialArgs = {
-                  inherit inputs username;
+                  inherit inputs system username;
                   gitEmail = "git@lafreniere.xyz";
                   gitUseGpg = true;
                 };

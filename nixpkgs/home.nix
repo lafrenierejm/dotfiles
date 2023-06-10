@@ -1,4 +1,4 @@
-{ inputs, lib, config, pkgs, username, gitEmail, gitUseGpg, ... }:
+{ inputs, lib, config, pkgs, system, username, gitEmail, gitUseGpg, ... }:
 
 let
   homeDirectory =
@@ -81,7 +81,7 @@ in {
           pruneTags = true;
           tags = true;
         };
-        push = { gpgSign = if useGpg then "if-asked" else "false"; };
+        push = { gpgSign = if gitUseGpg then "if-asked" else "false"; };
         rebase.autoStash = true;
         sendemail = {
           from = "Joseph LaFreniere <${gitEmail}>";
@@ -141,7 +141,10 @@ in {
     };
   };
 
-  home.packages = [ pinentry ] ++ (with pkgs; [
+  home.packages = [ pinentry ] ++ (with inputs; [
+    ripgrep-all.packages."${system}".rga
+    ripsecrets.packages."${system}".ripsecrets
+  ]) ++ (with pkgs; [
     aspell
     aspellDicts.en
     atool
@@ -171,8 +174,6 @@ in {
     nodePackages.prettier
     pyright
     ripgrep
-    ripgrep-all
-    ripsecrets
     rnix-lsp
     rsync
     rust-analyzer

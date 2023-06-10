@@ -18,15 +18,7 @@
   };
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with pkgs; [
-    atool
-    exa
-    fd
-    git
-    ripgrep
-    ripsecrets
-    zsh
-  ];
+  environment.systemPackages = with pkgs; [ atool exa fd git ripgrep zsh ];
 
   fonts = {
     fontDir.enable = true;
