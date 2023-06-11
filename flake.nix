@@ -94,10 +94,7 @@
           in inputs.darwin.lib.darwinSystem rec {
             system = "aarch64-darwin";
             modules = [
-              {
-                nixpkgs.overlays =
-                  [ inputs.emacs.overlay inputs.ripsecrets.overlays.default ];
-              }
+              { nixpkgs.overlays = [ inputs.emacs.overlay ]; }
               ./nixpkgs/common.nix
               ./nixpkgs/darwin.nix
               inputs.home-manager.darwinModules.home-manager
