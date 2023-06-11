@@ -1,5 +1,0 @@
-# This file is sourced at the beginning of initial progress when zsh is started
-# as a login shell
-# #############################################################################
-
-[ -e "$HOME"/.profile ] && . "$HOME"/.profile
