@@ -110,6 +110,7 @@
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.users."${username}" = import ./nixpkgs/home.nix;
+                users.users."${username}".home = "/Users/${username}";
               }
             ];
           };
