@@ -195,6 +195,7 @@ in {
     fd
     ghq
     git-crypt
+    git-filter-repo
     gitAndTools.gitFull
     gnupg
     gojq
