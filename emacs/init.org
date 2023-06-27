@@ -7092,21 +7092,6 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
           "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
-** Tool Command Language (Tcl)
-From [[https://www.tcl-lang.org/][the language's homepage]]:
-#+begin_quote
-Tcl (Tool Command Language) is a very powerful but easy to learn dynamic programming language, suitable for a very wide range of uses, including web and desktop applications, networking, administration, testing and many more.
-Open source and business-friendly, Tcl is a mature yet evolving language that is truly cross platform, easily deployed and highly extensible.
-#+end_quote
-
-** TOML
-
-*** /TOML Mode/
-
-#+begin_src emacs-lisp
-(use-package toml-mode)
-#+end_src
-
 ** Automatic Indentation
 
 *** /DTRT Indent/
