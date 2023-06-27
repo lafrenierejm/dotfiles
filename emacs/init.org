@@ -685,6 +685,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
 ('prog-mode-hook #'display-line-numbers-evil-insert-entry)
+('yaml-mode-hook #'display-line-numbers-evil-insert-entry)
 #+end_src
 
 **** Display Visual-Relative Line Numbers at Start and Upon Exiting Insert State
@@ -707,10 +708,12 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
 ('prog-mode-hook #'display-line-numbers-evil-insert-exit)
+('yaml-mode-hook #'display-line-numbers-evil-insert-exit)
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
 ('prog-mode-hook #'display-line-numbers-visual)
+('yaml-mode-hook #'display-line-numbers-visual)
 #+end_src
 
 ** /Highlight Indent Guides/
