@@ -17,7 +17,7 @@ in {
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "23.05";
+  home.stateVersion = "23.11";
 
   home.sessionVariables = {
     DIRENV_LOG_FORMAT = "";
@@ -124,10 +124,24 @@ in {
       enable = true;
       enableZshIntegration = true;
     };
+    ripgrep-all = {
+      enable = true;
+      package = inputs.ripgrep-all.packages."${system}".rga;
+      custom_adapters = [{
+        name = "gron";
+        version = 1;
+        description = "Transform JSON into discrete JS assignments";
+        extensions = [ "json" ];
+        mimetypes = [ "application/json" ];
+        binary = "${pkgs.gron}/bin/gron";
+        disabledByDefault = false;
+        matchOnlyByMime = false;
+      }];
+    };
     zsh = {
       enable = true;
       enableAutosuggestions = true;
-      enableSyntaxHighlighting = true;
+      syntaxHighlighting.enable = true;
       autocd = true;
       initExtra = lib.concatStringsSep "\n" [
         ''. "$HOME/.config/zsh/vterm.zsh"''
@@ -189,4 +203,5 @@ in {
       default-cache-ttl = 7200;
       default-cache-ttl-ssh = 7200;
     });
+
 }
