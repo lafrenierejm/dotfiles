@@ -192,6 +192,7 @@ in {
     rsync
     rust-analyzer
     terraform-ls
+    typos
     unrar
     youtube-dl
     zsh
