@@ -61,6 +61,7 @@
           flakeCheck = false; # use pre-commit's check instead
           programs.nixfmt.enable = true;
           programs.shfmt.enable = true;
+          programs.prettier.enable = true;
         };
 
         pre-commit = {
