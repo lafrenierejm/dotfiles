@@ -1,1 +1,3 @@
-#TabsToolbar { visibility: collapse !important; }
+#TabsToolbar {
+  visibility: collapse !important;
+}
