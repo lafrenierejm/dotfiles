@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, personal, ... }:
 
 let
   dotnetPackage = "dotnet@6";
@@ -13,24 +13,25 @@ in {
     };
     brews = [ "emacs-mac" "nuget" "pyenv" dotnetPackage ];
     casks = [
-      "aldente"
-      "balenaetcher"
-      "bitwarden"
       "firefox"
-      "iina"
       "karabiner-elements"
       "logitech-unifying"
       "lunar"
+      "scroll-reverser"
+    ] ++ (lib.lists.optionals personal [
+      "aldente"
+      "balenaetcher"
+      "bitwarden"
+      "iina"
       "mullvadvpn"
       "multipatch"
       "openemu"
-      "scroll-reverser"
       "snes9x"
       "steam"
       "transmission"
       "visualboyadvance-m"
       "yt-music"
-    ];
+    ]);
     taps = [ "homebrew/cask-drivers" "railwaycat/emacsmacport" ];
   };
 

@@ -102,6 +102,7 @@
                 users.users."${username}".home = "/Users/${username}";
               }
             ];
+            specialArgs = { personal = true; };
           };
         };
       };
