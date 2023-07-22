@@ -3066,7 +3066,7 @@ From the package's description:
   <<ws-butler/config>>)
 #+end_src
 
-**** Post-Load Evluation
+**** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref ws-butler/config
 :DESCRIPTION: Code to be evaluated after loading ~ws-butler~.
