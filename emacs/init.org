@@ -5699,7 +5699,12 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 *** /Go Mode/
 
 #+BEGIN_SRC emacs-lisp
-(use-package go-mode)
+(use-package go-mode
+  :gfhook
+  <<go-mode/gfhook>>
+
+  :config
+  <<go-mode/config>>)
 #+END_SRC
 
 **** LSP Mode
@@ -5711,6 +5716,18 @@ Enable LSP Mode in Go buffers.
 #+BEGIN_SRC emacs-lisp
 ('go-mode-hook #'lsp-deferred)
 #+END_SRC
+
+**** Set Tab Width to 4
+
+#+begin_src emacs-lisp :noweb-ref go-mode/config
+(defun go-mode-lafrenierejm-set-tab-width ()
+  "Set `tab-width' to 4."
+  (setq tab-width 4))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref go-mode/gfhook
+('go-mode-hook #'go-mode-lafrenierejm-set-tab-width)
+#+end_src
 
 *** /Go Eldoc/
 
