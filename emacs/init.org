@@ -5706,6 +5706,19 @@ Enable LSP Mode in Go buffers.
   ('go-mode-hook #'go-eldoc-setup))
 #+END_SRC
 
+*** /gorepl-mode/
+
+#+begin_src emacs-lisp
+(use-package gorepl-mode
+  :ghook
+  ('go-mode-hook #'gorepl-mode)
+
+  :general
+  (:keymaps 'go-mode-keymap
+   "C-c C-p" #'gorepl-run
+   "C-c C-c" #'gorepl-run-load-current-file))
+#+end_src
+
 ** Lisps
 
 It is desirable to have slightly different character matching behavior when editing Lisps.
