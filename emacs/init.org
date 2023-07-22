@@ -5700,6 +5700,11 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 
 #+BEGIN_SRC emacs-lisp
 (use-package go-mode
+  :straight (:host github
+             :repo "dominikh/go-mode.el"
+             :fork "lafrenierejm/go-mode.el"
+             :branch "reformatter")
+
   :gfhook
   <<go-mode/gfhook>>
 
