@@ -41,5 +41,8 @@ vterm_prompt_end() {
     vterm_printf "51;A$(pwd)"
 }
 setopt PROMPT_SUBST
-PROMPT='$(short_pwd) %# %{$(vterm_prompt_end)%}'
+PROMPT='$(short_pwd) %# '
+if [[ "$INSIDE_EMACS" == "vterm" ]]; then
+    PROMPT+='%{$(vterm_prompt_end)%}'
+fi
 RPROMPT=''
