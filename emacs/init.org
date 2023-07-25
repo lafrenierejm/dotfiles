@@ -1981,17 +1981,16 @@ Given that advantage, I use ripgrep as the default backend for my file-based sea
 If ~rga~ is present, it is preferred to plain ~rg~.
 
 #+begin_src emacs-lisp :noweb-ref counsel/custom
-(counsel-grep-base-command
+(counsel-rg-base-command
  (if-let ((command (cl-some #'executable-find '("rga" "rg"))))
-     (s-join " " (list command
-                       "--smart-case"
-                       "--max-columns=88"
-                       "--max-columns-preview"
-                       "--no-heading"
-                       "--line-number"
-                       "--color=never"
-                       "%s"
-                       "%s"))
+     (list command
+           "--smart-case"
+           "--max-columns=88"
+           "--max-columns-preview"
+           "--no-heading"
+           "--line-number"
+           "--color=never"
+           "%s")
    counsel-grep-base-command))
 #+end_src
 
