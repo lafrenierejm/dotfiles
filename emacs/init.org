@@ -186,7 +186,7 @@ This is accomplished by requesting \src_emacs-lisp{use-package} to just ignore a
 
 Specify the branch to download /Straight/ from.
 #+begin_src emacs-lisp
-(setq straight-repository-branch "develop")
+(setq straight-repository-branch "master")
 #+end_src
 
 Download and load /Straight/.
