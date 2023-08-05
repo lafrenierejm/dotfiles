@@ -39,6 +39,24 @@ in {
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
+    firefox = {
+      enable = true;
+      package =
+        inputs.nixpkgs-firefox.legacyPackages."${system}".firefox-bin-unwrapped;
+      profiles."personal.default" = {
+        id = 0;
+        name = "personal";
+        isDefault = true;
+        userChrome = pkgs.lib.readFile ../firefox/chrome/userChrome.css;
+        search = {
+          default = "DuckDuckGo";
+          force = true;
+        };
+        settings = {
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        };
+      };
+    };
     fzf = {
       enable = true;
       enableZshIntegration = true;

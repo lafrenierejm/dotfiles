@@ -1,3 +1,10 @@
+/* Hide tabs toolbar. */
 #TabsToolbar {
   visibility: collapse !important;
+}
+
+/* Hide the Tab Center Reborn's sidebar header. */
+#sidebar-box[sidebarcommand="tabcenter-reborn_ariasuni-sidebar-action"]
+  #sidebar-header {
+  visibility: collapse;
 }

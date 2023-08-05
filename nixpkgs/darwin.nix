@@ -12,26 +12,22 @@ in {
       cleanup = "uninstall";
     };
     brews = [ "emacs-mac" "nuget" "pyenv" dotnetPackage ];
-    casks = [
-      "firefox"
-      "karabiner-elements"
-      "logitech-unifying"
-      "lunar"
-      "scroll-reverser"
-    ] ++ (lib.lists.optionals personal [
-      "aldente"
-      "balenaetcher"
-      "bitwarden"
-      "iina"
-      "mullvadvpn"
-      "multipatch"
-      "openemu"
-      "snes9x"
-      "steam"
-      "transmission"
-      "visualboyadvance-m"
-      "yt-music"
-    ]);
+    casks =
+      [ "karabiner-elements" "logitech-unifying" "lunar" "scroll-reverser" ]
+      ++ (lib.lists.optionals personal [
+        "aldente"
+        "balenaetcher"
+        "bitwarden"
+        "iina"
+        "mullvadvpn"
+        "multipatch"
+        "openemu"
+        "snes9x"
+        "steam"
+        "transmission"
+        "visualboyadvance-m"
+        "yt-music"
+      ]);
     taps = [ "homebrew/cask-drivers" "railwaycat/emacsmacport" ];
   };
 

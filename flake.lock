@@ -451,6 +451,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-firefox": {
+      "locked": {
+        "lastModified": 1689573574,
+        "narHash": "sha256-GaMEl1jf9cE2HZVTPdG+HJOOtJ7cSCqGNhWyZPCUFgM=",
+        "owner": "Enzime",
+        "repo": "nixpkgs",
+        "rev": "279284fcf13cb05d1ce117ffc31ab09495d244a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Enzime",
+        "ref": "firefox-bin-darwin",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "dir": "lib",
@@ -680,6 +696,7 @@
         "home-manager": "home-manager",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-firefox": "nixpkgs-firefox",
         "pre-commit-hooks-nix": "pre-commit-hooks-nix",
         "ripgrep-all": "ripgrep-all",
         "ripsecrets": "ripsecrets",
