@@ -33,7 +33,6 @@ in {
 
   services = { nix-daemon.enable = true; };
 
-  system.keyboard.enableKeyMapping = true; # needed for skhd
   environment.systemPath =
     [ "${dotnetInstallDir}/bin" config.homebrew.brewPrefix ];
   environment.variables = { DOTNET_ROOT = "${dotnetInstallDir}/libexec"; };
