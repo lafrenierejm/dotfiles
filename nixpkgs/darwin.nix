@@ -33,6 +33,9 @@ in {
 
   services = { nix-daemon.enable = true; };
 
+  # Whether Touch ID is enabled as a `sudo` auth mechanism.
+  security.pam.enableSudoTouchIdAuth = personal;
+
   environment.systemPath =
     [ "${dotnetInstallDir}/bin" config.homebrew.brewPrefix ];
   environment.variables = { DOTNET_ROOT = "${dotnetInstallDir}/libexec"; };
