@@ -11,7 +11,7 @@ in {
       upgrade = true;
       cleanup = "uninstall";
     };
-    brews = [ "emacs-mac" "nuget" "pyenv" dotnetPackage ];
+    brews = [ "nuget" "pyenv" dotnetPackage ];
     casks =
       [ "karabiner-elements" "logitech-unifying" "lunar" "scroll-reverser" ]
       ++ (lib.lists.optionals personal [
@@ -28,7 +28,7 @@ in {
         "visualboyadvance-m"
         "yt-music"
       ]);
-    taps = [ "homebrew/cask-drivers" "railwaycat/emacsmacport" ];
+    taps = [ "homebrew/cask-drivers" ];
   };
 
   services = { nix-daemon.enable = true; };

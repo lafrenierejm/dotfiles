@@ -39,6 +39,10 @@ in {
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
+    emacs = {
+      enable = true;
+      package = inputs.emacs.packages."${system}".emacs;
+    };
     firefox = {
       enable = true;
       package =

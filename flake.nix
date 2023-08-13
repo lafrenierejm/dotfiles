@@ -8,6 +8,7 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    emacs.url = "github:cmacrae/emacs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
     home-manager.url = "github:lafrenierejm/home-manager/ripgrep-all";
