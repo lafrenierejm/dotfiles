@@ -2325,23 +2325,6 @@ Determine where Emacs creates backups for files edited via TRAMP.
   ("C-x t" #'counsel-tramp))
 #+end_src
 
-** Docker Tramp
-
-/Docker Tramp/ provides a TRAMP method for accessing Docker containers.
-
-#+begin_src emacs-lisp
-(use-package docker-tramp
-  ;; Only load Docker Tramp if the following code evaluates to non-nil.
-  :if
-  <<docker/if>>
-
-  ;; Load Docker Tramp package after the following packages.
-  :after tramp
-
-  ;; Load Docker Tramp eagerly.
-  :demand)
-#+end_src
-
 * Version Control
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref version-control
