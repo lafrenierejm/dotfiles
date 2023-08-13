@@ -45,8 +45,7 @@ in {
     };
     firefox = {
       enable = true;
-      package =
-        inputs.nixpkgs-firefox.legacyPackages."${system}".firefox-bin-unwrapped;
+      package = inputs.nixpkgs-firefox.legacyPackages."${system}".firefox-bin;
       profiles."personal.default" = {
         id = 0;
         name = "personal";
