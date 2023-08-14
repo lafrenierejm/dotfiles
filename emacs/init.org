@@ -7431,34 +7431,6 @@ This allows the keys to be useful whenever the =s= modifier is made available to
  "s-x" #'delete-window)
 #+end_src
 
-** /Popper/
-
-#+begin_src emacs-lisp
-(use-package popper
-  :straight (:host github :repo "karthink/popper")
-  :if (eq window-system 'ns)
-  :demand
-  :general
-  ("C-`" #'popper-toggle-latest
-   "s-`" #'popper-cycle
-   "M-`" #'popper-toggle-type)
-
-  :custom
-  (popper-reference-buffers
-   '(help-mode
-     helpful-mode
-     compilation-mode
-     "^\\*Async Shell Command\\*\\'"
-     "^\\*Messages\\*\\'"
-     "^\\*Warnings\\*\\'"
-     "^\\magit-process: .*\\'"
-     "Output\\*\\'"))
-  (popper-group-function #'popper-group-by-projectile)
-
-  :config
-  (popper-mode +1))
-#+end_src
-
 ** /Frames Only Mode/
 
 #+begin_src emacs-lisp
