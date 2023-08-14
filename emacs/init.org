@@ -3234,6 +3234,13 @@ EditorConfig files are easily readable and they work nicely with version control
   (editorconfig-mode 1))
 #+end_src
 
+*** /Smart Dash/
+
+Enable smart dashes in EditorConfig buffers.
+#+begin_src emacs-lisp :noweb-ref smart-dash/ghook
+('editorconfig-conf-mode-hook #'smart-dash-mode)
+#+end_src
+
 ** /Cascading Dir-Locals/
 
 From the [[https://github.com/fritzgrabo/cascading-dir-locals][project's home page]]:
