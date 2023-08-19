@@ -41,7 +41,170 @@ in {
     };
     emacs = {
       enable = true;
-      package = inputs.emacs.packages."${system}".emacs;
+      package = inputs.emacs.packages."${system}".emacs.overrideAttrs (old: {
+        # Use `nix-prefetch-url` to get the below shasums.
+        patches = (old.patches or [ ]) ++ [
+          # Use poll instead of select to get file descriptors.
+          (pkgs.fetchpatch {
+            url =
+              "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/poll.patch";
+            sha256 = "0j26n6yma4n5wh4klikza6bjnzrmz6zihgcsdx36pn3vbfnaqbh5";
+          })
+          # Enable rounded window with no decoration.
+          (pkgs.fetchpatch {
+            url =
+              "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/round-undecorated-frame.patch";
+            sha256 = "0x187xvjakm2730d1wcqbz2sny07238mabh5d97fah4qal7zhlbl";
+          })
+          # Make Emacs aware of OS-level light/dark mode.
+          (pkgs.fetchpatch {
+            url =
+              "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-28/system-appearance.patch";
+            sha256 = "14ndp2fqqc95s70fwhpxq58y8qqj4gzvvffp77snm2xk76c1bvnn";
+          })
+        ];
+      });
+      extraPackages = (epkgs:
+        (with epkgs; [
+          ace-window
+          adoc-mode
+          aggressive-indent
+          ahk-mode
+          ansible
+          apples-mode
+          auctex
+          browse-at-remote
+          caps-lock
+          cascading-dir-locals
+          chatgpt-shell
+          cider
+          cider-hydra
+          clj-refactor
+          clojure-mode
+          company
+          company-posframe
+          company-restclient
+          compdef
+          counsel
+          counsel-projectile
+          counsel-tramp
+          counsel-web
+          dap-mode
+          deadgrep
+          desktop-environment
+          diff-hl
+          dired-collapse
+          dired-narrow
+          dired-subtree
+          docker
+          dockerfile-mode
+          dtrt-indent
+          dwim-shell-command
+          editorconfig
+          elfeed
+          elfeed-org
+          emms
+          envrc
+          evil
+          evil-cleverparens
+          evil-collection
+          evil-indent-plus
+          evil-matchit
+          evil-org
+          evil-surround
+          evil-tex
+          evil-textobj-tree-sitter
+          exec-path-from-shell
+          f
+          feature-mode
+          fennel-mode
+          file-info
+          flx
+          flycheck
+          forge
+          form-feed
+          frames-only-mode
+          geiser-guile
+          general
+          ghq
+          go-eldoc
+          go-mode
+          gorepl-mode
+          groovy-mode
+          guix
+          haskell-mode
+          hcl-mode
+          helpful
+          highlight-indent-guides
+          hindent
+          hy-mode
+          inf-ruby
+          ivy
+          ivy-pass
+          ivy-rich
+          ivy-yasnippet
+          jinja2-mode
+          journalctl-mode
+          json-mode
+          keystore-mode
+          lsp-ivy
+          lsp-mode
+          lsp-pyright
+          lsp-ui
+          lua-mode
+          magit
+          markdown-mode
+          minibuffer-line
+          minions
+          modus-themes
+          monky
+          nix-mode
+          no-littering
+          nov
+          package-lint
+          password-store
+          pdf-tools
+          poly-ansible
+          poly-markdown
+          poly-org
+          polymode
+          powershell
+          projectile
+          pytest
+          python
+          python-black
+          racket-mode
+          rainbow-delimiters
+          rainbow-identifiers
+          rbenv
+          reformatter
+          restclient
+          rust-mode
+          seeing-is-believing
+          shadowenv
+          shell-maker
+          shfmt
+          slime
+          smart-dash
+          smartparens
+          sqlite3
+          sqlup-mode
+          standard-dirs
+          terraform-mode
+          toml-mode
+          tramp
+          tree-sitter
+          tree-sitter-langs
+          webpaste
+          which-key
+          ws-butler
+          wucuo
+          x509-mode
+          xonsh-mode
+          yaml-mode
+          yasnippet
+          youtube-dl
+        ]));
     };
     firefox = {
       enable = true;
