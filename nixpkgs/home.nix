@@ -89,7 +89,6 @@ in {
           counsel-projectile
           counsel-tramp
           counsel-web
-          dap-mode
           deadgrep
           desktop-environment
           diff-hl
@@ -147,10 +146,6 @@ in {
           journalctl-mode
           json-mode
           keystore-mode
-          lsp-ivy
-          lsp-mode
-          lsp-pyright
-          lsp-ui
           lua-mode
           magit
           markdown-mode

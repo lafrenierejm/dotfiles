@@ -1647,11 +1647,6 @@ Run the above function whenever Insert state is existed…
   (which-key-mode +1))
 #+end_src
 
-Enable integration with /Which Key/.
-#+begin_src emacs-lisp :noweb-ref lsp-mode/gfhook
-('lsp-mode-hook #'lsp-enable-which-key-integration)
-#+end_src
-
 * Minibuffer
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref minibuffer
@@ -5261,77 +5256,6 @@ This can benefit both literate and traditional programming by allowing one to co
   :demand)
 #+end_src
 
-** Language Server Protocol (LSP)
-
-*** /LSP Mode/
-
-#+BEGIN_SRC emacs-lisp
-(use-package lsp-mode
-
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-
-  :custom
-  (lsp-disabled-clients '(pyls))
-  (lsp-headerline-breadcrumb-enable nil)
-
-  ;; Add the following auto-load hooks.
-  :ghook
-  <<lsp-mode/ghook>>
-
-  ;; Add the following non-auto-loading hooks.
-  :gfhook
-  <<lsp-mode/gfhook>>
-
-  ;; Define relevant keybindings.
-  :general
-  (:keymaps '(lsp-mode-map)
-   :states '(movement normal)
-   "g r" #'lsp-find-references)
-
-  :config
-  ;; https://emacs-lsp.github.io/lsp-mode/page/faq/#how-do-i-force-lsp-mode-to-forget-the-workspace-folders-for-multi-root
-  (general-advice-add
-   'lsp :before
-   (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
-
-  :commands (lsp lsp-deferred))
-#+END_SRC
-
-*** /LSP UI/
-
-#+BEGIN_SRC emacs-lisp
-(use-package lsp-ui
-  :demand
-  :after (lsp-mode flycheck))
-#+END_SRC
-
-*** /Company LSP/
-
-#+BEGIN_SRC emacs-lisp
-(use-package company-lsp
-  :demand
-  :after (company lsp-mode))
-#+END_SRC
-
-*** /DAP Mode/
-
-#+BEGIN_SRC emacs-lisp
-(use-package dap-mode
-  :after lsp-mode
-  :config
-  (dap-mode t)
-  (dap-ui-mode t))
-#+END_SRC
-
-*** /LSP Ivy/
-
-#+BEGIN_SRC emacs-lisp
-(use-package lsp-ivy
-  :demand
-  :after (ivy lsp-mode))
-#+END_SRC
-
 ** Treesitter
 
 #+begin_src emacs-lisp
@@ -5477,8 +5401,7 @@ It started out from Aurélien Tisné's ini-mode.
 #+begin_src emacs-lisp
 (use-package terraform-mode
   :gfhook
-  ('terraform-mode-hook #'terraform-format-on-save-mode)
-  ('terraform-mode-hook #'lsp-deferred))
+  ('terraform-mode-hook #'terraform-format-on-save-mode))
 #+end_src
 
 ***** /Smart Dash/
@@ -5618,16 +5541,6 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 
   :config
   <<go-mode/config>>)
-#+END_SRC
-
-**** LSP Mode
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref lsp-mode/ghook
-:END:
-
-Enable LSP Mode in Go buffers.
-#+BEGIN_SRC emacs-lisp
-('go-mode-hook #'lsp-deferred)
 #+END_SRC
 
 **** Set Tab Width to 4
@@ -6475,25 +6388,6 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
   (pytest-project-root-files '("pyproject.toml" "setup.cfg" "setup.py")))
 #+end_src
 
-*** /Pyright Language Server/
-
-#+begin_src emacs-lisp
-(use-package lsp-pyright
-  :if (some (lambda (os) (eq system-type os)) '(darwin))
-
-  :ghook
-  ('python-mode-hook #'lsp-pyright-enable)
-
-  :preface
-  (setq lsp-pyright-multi-root nil)
-
-  :config
-  (defun lsp-pyright-enable ()
-    "Load and enable this `lsp-pyright'."
-    (require 'lsp-pyright)
-    (lsp)))
-#+end_src
-
 ** Groovy
 
 *** Groovy Mode
@@ -6624,13 +6518,6 @@ Define the actual Polymode.
    "C-c C-p" #'nix-repl))
 #+end_src
 
-**** LSP Mode
-
-Enable LSP Mode in Nix buffers.
-#+BEGIN_SRC emacs-lisp :noweb-ref lsp-mode/ghook
-('nix-mode-hook #'lsp-deferred)
-#+END_SRC
-
 ** Ruby
 
 *** /rbenv.el/
@@ -6758,16 +6645,6 @@ Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
 ('rust-mode-hook nil)
 #+end_src
-
-**** LSP Mode
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref lsp-mode/ghook
-:END:
-
-Enable LSP Mode in Rust buffers.
-#+BEGIN_SRC emacs-lisp
-('rust-mode-hook #'lsp-deferred)
-#+END_SRC
 
 **** /Reformatter/
 
