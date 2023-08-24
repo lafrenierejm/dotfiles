@@ -2376,7 +2376,7 @@ Diff HL depends on features added in Emacs 24.3.
 
 Enable Diff HL in Dired buffers.
 #+begin_src emacs-lisp
-('dired-mode-hook #'diff-hl-dired-mode)
+('dired-mode-hook #'diff-hl-dir-mode)
 #+end_src
 
 Update Diff HL's status when refreshing with modern versions of Magit.
