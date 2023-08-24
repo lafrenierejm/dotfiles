@@ -6429,17 +6429,6 @@ Enable tree-sitter in Python buffers.
   :demand)
 #+end_src
 
-*** YAPFify
-
-#+begin_src emacs-lisp
-(use-package yapfify
-  ;; Load this package after the following packages.
-  :after python
-
-  ;; Load this package eagerly.
-  :demand)
-#+end_src
-
 *** Isort
 
 isort is a utility for sorting Python imports.
