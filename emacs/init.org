@@ -6868,14 +6868,6 @@ Polymode for Jina2 templating in YAML files.
   :demand)
 #+end_src
 
-*** /Company Ansible/
-
-#+begin_src emacs-lisp
-(use-package company-ansible
-  :compdef ansible-mode
-  :company company-ansible)
-#+end_src
-
 *** Prettier
 
 [[https://prettier.io/blog/2018/07/29/1.14.0.html][As of 1.1.4]], the [[https://prettier.io/][Prettier]] code formatter supports for YAML files.
