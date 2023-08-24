@@ -187,7 +187,6 @@ in {
           standard-dirs
           terraform-mode
           toml-mode
-          tramp
           tree-sitter
           tree-sitter-langs
           webpaste
