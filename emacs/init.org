@@ -5251,6 +5251,18 @@ This can benefit both literate and traditional programming by allowing one to co
   :demand)
 #+end_src
 
+** Language Server Protocol (LSP)
+
+*** /Eglot/
+
+#+begin_src emacs-lisp
+(use-package eglot
+  :straight (:type built-in)
+
+  :ghook
+  <<eglot/ghook>>)
+#+end_src
+
 ** Treesitter
 
 #+begin_src emacs-lisp
@@ -6311,6 +6323,12 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 Enable tree-sitter in Python buffers.
 #+begin_src emacs-lisp :noweb-ref tree-sitter/ghook
 ('python-mode-hook nil)
+#+end_src
+
+**** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('python-mode-hook #'eglot-ensure)
 #+end_src
 
 **** Per-Project REPLs
