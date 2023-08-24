@@ -2394,11 +2394,6 @@ Enable Diff HL's base minor mode globally.
 (global-diff-hl-mode)
 #+end_src
 
-Perform Diff HL highlighting on-the-fly.
-#+begin_src emacs-lisp
-(diff-hl-flydiff-mode)
-#+end_src
-
 ** Git
 *** Git Attributes Mode
 
