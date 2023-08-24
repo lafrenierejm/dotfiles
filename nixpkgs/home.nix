@@ -337,8 +337,7 @@ in {
     ripgrep-all.packages."${system}".rga
     ripsecrets.packages."${system}".ripsecrets
   ]) ++ (with pkgs; [
-    aspell
-    aspellDicts.en
+    (aspellWithDicts (aspellDicts: (with aspellDicts; [ en ])))
     atool
     aws-sso-creds
     awscli2
