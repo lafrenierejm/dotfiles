@@ -2349,10 +2349,6 @@ The new binding is harder to accidentally press and opens up a convenient bindin
   :commands
   (global-diff-hl-mode)
 
-  ;; Evaluate the following code before loading this package.
-  :init
-  <<diff-hl/init>>
-
   ;; Evaluate the following code after loading this package.
   :config
   <<diff-hl/config>>)
@@ -2383,20 +2379,15 @@ Update Diff HL's status when refreshing with modern versions of Magit.
 ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
 #+end_src
 
-*** Pre-Load Evaluation
+*** Post-Load Evaluation
 :PROPERTIES:
-:HEADER-ARGS+: :noweb-ref diff-hl/init
+:HEADER-ARGS+: :noweb-ref diff-hl/config
 :END:
 
 Enable Diff HL's base minor mode globally.
 #+begin_src emacs-lisp
 (global-diff-hl-mode)
 #+end_src
-
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref diff-hl/config
-:END:
 
 Perform Diff HL highlighting on-the-fly.
 #+begin_src emacs-lisp
