@@ -654,6 +654,16 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   (load-theme 'modus-operandi))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun lafrenierejm/apply-theme (appearance)
+  "Load theme, taking current system APPEARANCE into consideration."
+  (pcase appearance
+    ('light (load-theme 'modus-operandi t))
+    ('dark (load-theme 'modus-vivendi t))))
+
+(add-hook 'ns-system-appearance-change-functions #'lafrenierejm/apply-theme)
+#+end_src
+
 ** /Font Lock Ext/
 
 #+begin_src emacs-lisp
