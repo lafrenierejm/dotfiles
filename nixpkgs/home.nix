@@ -319,7 +319,7 @@ in {
     zsh = {
       enable = true;
       enableAutosuggestions = true;
-      syntaxHighlighting.enable = true;
+      syntaxHighlighting.enable = false;
       autocd = true;
       initExtra = lib.concatStringsSep "\n" [
         ''. "$HOME/.config/zsh/vterm.zsh"''

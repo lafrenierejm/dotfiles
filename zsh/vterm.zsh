@@ -30,8 +30,8 @@ short_pwd() {
 # https://github.com/akermu/emacs-libvterm#vterm-buffer-name-string
 autoload -U add-zsh-hook
 add-zsh-hook -Uz chpwd () {
-	export TITLE="$(short_pwd)"
 	if [[ "$INSIDE_EMACS" == "vterm" ]]; then
+	    export TITLE="$(short_pwd)"
 	    print -Pn "\e]0;${TITLE}\a"
 	fi
 }
