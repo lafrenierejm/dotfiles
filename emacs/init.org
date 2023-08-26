@@ -5562,6 +5562,13 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 ('go-mode-hook #'go-mode-lafrenierejm-set-tab-width)
 #+end_src
 
+**** /Eglot/
+
+Enable Eglot in Go buffers.
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('go-mode-hook #'eglot-ensure)
+#+end_src
+
 *** /Go Eldoc/
 
 /Go Eldoc/ provides eldoc support for the Go language.
