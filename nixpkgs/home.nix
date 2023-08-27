@@ -311,7 +311,7 @@ in {
         description = "Transform JSON into discrete JS assignments";
         extensions = [ "json" ];
         mimetypes = [ "application/json" ];
-        binary = "${pkgs.gron}/bin/gron";
+        binary = "${inputs.gron.packages."${system}".gron}/bin/gron";
         disabledByDefault = false;
         matchOnlyByMime = false;
       }];
@@ -334,6 +334,7 @@ in {
   };
 
   home.packages = [ pinentry ] ++ (with inputs; [
+    gron.packages."${system}".gron
     ripgrep-all.packages."${system}".rga
     ripsecrets.packages."${system}".ripsecrets
   ]) ++ (with pkgs; [
