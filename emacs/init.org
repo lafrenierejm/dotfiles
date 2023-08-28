@@ -1905,6 +1905,7 @@ If ~rga~ is present, it is preferred to plain ~rg~.
  (if-let ((command (cl-some #'executable-find '("rga" "rg"))))
      (list command
            "--smart-case"
+           "--hidden"
            "--max-columns=88"
            "--max-columns-preview"
            "--no-heading"
