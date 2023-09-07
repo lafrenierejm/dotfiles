@@ -1,4 +1,11 @@
-{ inputs, outputs, config, lib, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   nix = {
     # # This will add each flake input as a registry
     # # To make nix3 commands consistent with your flake
@@ -10,19 +17,18 @@
     package = pkgs.nixVersions.stable;
     settings = {
       experimental-features = "nix-command flakes";
-      substituters = [ "https://cachix.org/api/v1/cache/emacs" ];
-      trusted-public-keys =
-        [ "emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY=" ];
+      substituters = ["https://cachix.org/api/v1/cache/emacs"];
+      trusted-public-keys = ["emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY="];
     };
   };
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with pkgs; [ atool fd git ripgrep zsh ];
+  environment.systemPackages = with pkgs; [atool fd git ripgrep zsh];
 
   fonts = {
     fontDir.enable = true;
-    fonts = with pkgs; [ source-code-pro font-awesome ];
+    fonts = with pkgs; [source-code-pro font-awesome];
   };
 
-  programs = { zsh.enable = true; };
+  programs = {zsh.enable = true;};
 }

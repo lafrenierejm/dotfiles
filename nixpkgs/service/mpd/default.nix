@@ -1,6 +1,8 @@
-{ config, pgks, ... }:
-
 {
+  config,
+  pgks,
+  ...
+}: {
   services.mpd = {
     enable = true;
     musicDirectory = "${config.home.homeDirectory}/audio";

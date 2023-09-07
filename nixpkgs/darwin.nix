@@ -1,6 +1,10 @@
-{ config, lib, pkgs, personal, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  personal,
+  ...
+}: let
   dotnetPackage = "dotnet@6";
   dotnetInstallDir = "/opt/homebrew/opt/${dotnetPackage}";
 in {
@@ -11,9 +15,9 @@ in {
       upgrade = true;
       cleanup = "uninstall";
     };
-    brews = [ "nuget" "pyenv" dotnetPackage ];
+    brews = ["nuget" "pyenv" dotnetPackage];
     casks =
-      [ "karabiner-elements" "logitech-unifying" "lunar" "scroll-reverser" ]
+      ["karabiner-elements" "logitech-unifying" "lunar" "scroll-reverser"]
       ++ (lib.lists.optionals personal [
         "aldente"
         "balenaetcher"
@@ -28,15 +32,14 @@ in {
         "visualboyadvance-m"
         "yt-music"
       ]);
-    taps = [ "homebrew/cask-drivers" ];
+    taps = ["homebrew/cask-drivers"];
   };
 
-  services = { nix-daemon.enable = true; };
+  services = {nix-daemon.enable = true;};
 
   # Whether Touch ID is enabled as a `sudo` auth mechanism.
   security.pam.enableSudoTouchIdAuth = personal;
 
-  environment.systemPath =
-    [ "${dotnetInstallDir}/bin" config.homebrew.brewPrefix ];
-  environment.variables = { DOTNET_ROOT = "${dotnetInstallDir}/libexec"; };
+  environment.systemPath = ["${dotnetInstallDir}/bin" config.homebrew.brewPrefix];
+  environment.variables = {DOTNET_ROOT = "${dotnetInstallDir}/libexec";};
 }

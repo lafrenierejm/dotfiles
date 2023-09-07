@@ -1,13 +1,26 @@
-{ inputs, lib, config, pkgs, system, username, gitEmail, gitUseGpg, ... }:
-
-let
+{
+  inputs,
+  lib,
+  config,
+  pkgs,
+  system,
+  username,
+  gitEmail,
+  gitUseGpg,
+  ...
+}: let
   homeDirectory =
-    if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
-  pinentry = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry;
-  pinentry-bin = if pkgs.stdenv.isDarwin then
-    "${pinentry}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
-  else
-    "${pinentry}/bin/pinentry";
+    if pkgs.stdenv.isDarwin
+    then "/Users/${username}"
+    else "/home/${username}";
+  pinentry =
+    if pkgs.stdenv.isDarwin
+    then pkgs.pinentry_mac
+    else pkgs.pinentry;
+  pinentry-bin =
+    if pkgs.stdenv.isDarwin
+    then "${pinentry}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
+    else "${pinentry}/bin/pinentry";
 in {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -43,162 +56,160 @@ in {
       enable = true;
       package = inputs.emacs.packages."${system}".emacs.overrideAttrs (old: {
         # Use `nix-prefetch-url` to get the below shasums.
-        patches = (old.patches or [ ]) ++ [
-          # Use poll instead of select to get file descriptors.
-          (pkgs.fetchpatch {
-            url =
-              "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/poll.patch";
-            sha256 = "0j26n6yma4n5wh4klikza6bjnzrmz6zihgcsdx36pn3vbfnaqbh5";
-          })
-          # Enable rounded window with no decoration.
-          (pkgs.fetchpatch {
-            url =
-              "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/round-undecorated-frame.patch";
-            sha256 = "0x187xvjakm2730d1wcqbz2sny07238mabh5d97fah4qal7zhlbl";
-          })
-          # Make Emacs aware of OS-level light/dark mode.
-          (pkgs.fetchpatch {
-            url =
-              "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-28/system-appearance.patch";
-            sha256 = "14ndp2fqqc95s70fwhpxq58y8qqj4gzvvffp77snm2xk76c1bvnn";
-          })
-        ];
+        patches =
+          (old.patches or [])
+          ++ [
+            # Use poll instead of select to get file descriptors.
+            (pkgs.fetchpatch {
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/poll.patch";
+              sha256 = "0j26n6yma4n5wh4klikza6bjnzrmz6zihgcsdx36pn3vbfnaqbh5";
+            })
+            # Enable rounded window with no decoration.
+            (pkgs.fetchpatch {
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/round-undecorated-frame.patch";
+              sha256 = "0x187xvjakm2730d1wcqbz2sny07238mabh5d97fah4qal7zhlbl";
+            })
+            # Make Emacs aware of OS-level light/dark mode.
+            (pkgs.fetchpatch {
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-28/system-appearance.patch";
+              sha256 = "14ndp2fqqc95s70fwhpxq58y8qqj4gzvvffp77snm2xk76c1bvnn";
+            })
+          ];
       });
-      extraPackages = (epkgs:
-        (with epkgs; [
-          ace-window
-          adoc-mode
-          aggressive-indent
-          ahk-mode
-          ansible
-          apples-mode
-          auctex
-          browse-at-remote
-          caps-lock
-          cascading-dir-locals
-          chatgpt-shell
-          cider
-          cider-hydra
-          clj-refactor
-          clojure-mode
-          company
-          company-posframe
-          company-restclient
-          compdef
-          counsel
-          counsel-projectile
-          counsel-tramp
-          counsel-web
-          deadgrep
-          desktop-environment
-          diff-hl
-          dired-collapse
-          dired-narrow
-          dired-subtree
-          docker
-          dockerfile-mode
-          dtrt-indent
-          dwim-shell-command
-          editorconfig
-          elfeed
-          elfeed-org
-          emms
-          envrc
-          evil
-          evil-cleverparens
-          evil-collection
-          evil-indent-plus
-          evil-matchit
-          evil-org
-          evil-surround
-          evil-tex
-          evil-textobj-tree-sitter
-          exec-path-from-shell
-          f
-          feature-mode
-          fennel-mode
-          file-info
-          flx
-          flycheck
-          forge
-          form-feed
-          frames-only-mode
-          geiser-guile
-          general
-          ghq
-          go-eldoc
-          go-mode
-          gorepl-mode
-          groovy-mode
-          guix
-          haskell-mode
-          hcl-mode
-          helpful
-          highlight-indent-guides
-          hindent
-          hy-mode
-          inf-ruby
-          ivy
-          ivy-pass
-          ivy-rich
-          ivy-yasnippet
-          jinja2-mode
-          journalctl-mode
-          json-mode
-          keystore-mode
-          lua-mode
-          magit
-          markdown-mode
-          minibuffer-line
-          minions
-          modus-themes
-          monky
-          nix-mode
-          no-littering
-          nov
-          package-lint
-          password-store
-          pdf-tools
-          poly-ansible
-          poly-markdown
-          poly-org
-          polymode
-          powershell
-          projectile
-          pytest
-          python
-          python-black
-          racket-mode
-          rainbow-delimiters
-          rainbow-identifiers
-          rbenv
-          reformatter
-          restclient
-          rust-mode
-          seeing-is-believing
-          shadowenv
-          shell-maker
-          shfmt
-          slime
-          smart-dash
-          smartparens
-          sqlite3
-          sqlup-mode
-          standard-dirs
-          terraform-mode
-          toml-mode
-          tree-sitter
-          tree-sitter-langs
-          webpaste
-          which-key
-          ws-butler
-          wucuo
-          x509-mode
-          xonsh-mode
-          yaml-mode
-          yasnippet
-          youtube-dl
-        ]));
+      extraPackages = epkgs: (with epkgs; [
+        ace-window
+        adoc-mode
+        aggressive-indent
+        ahk-mode
+        ansible
+        apples-mode
+        auctex
+        browse-at-remote
+        caps-lock
+        cascading-dir-locals
+        chatgpt-shell
+        cider
+        cider-hydra
+        clj-refactor
+        clojure-mode
+        company
+        company-posframe
+        company-restclient
+        compdef
+        counsel
+        counsel-projectile
+        counsel-tramp
+        counsel-web
+        deadgrep
+        desktop-environment
+        diff-hl
+        dired-collapse
+        dired-narrow
+        dired-subtree
+        docker
+        dockerfile-mode
+        dtrt-indent
+        dwim-shell-command
+        editorconfig
+        elfeed
+        elfeed-org
+        emms
+        envrc
+        evil
+        evil-cleverparens
+        evil-collection
+        evil-indent-plus
+        evil-matchit
+        evil-org
+        evil-surround
+        evil-tex
+        evil-textobj-tree-sitter
+        exec-path-from-shell
+        f
+        feature-mode
+        fennel-mode
+        file-info
+        flx
+        flycheck
+        forge
+        form-feed
+        frames-only-mode
+        geiser-guile
+        general
+        ghq
+        go-eldoc
+        go-mode
+        gorepl-mode
+        groovy-mode
+        guix
+        haskell-mode
+        hcl-mode
+        helpful
+        highlight-indent-guides
+        hindent
+        hy-mode
+        inf-ruby
+        ivy
+        ivy-pass
+        ivy-rich
+        ivy-yasnippet
+        jinja2-mode
+        journalctl-mode
+        json-mode
+        keystore-mode
+        lua-mode
+        magit
+        markdown-mode
+        minibuffer-line
+        minions
+        modus-themes
+        monky
+        nix-mode
+        no-littering
+        nov
+        package-lint
+        password-store
+        pdf-tools
+        poly-ansible
+        poly-markdown
+        poly-org
+        polymode
+        powershell
+        projectile
+        pytest
+        python
+        python-black
+        racket-mode
+        rainbow-delimiters
+        rainbow-identifiers
+        rbenv
+        reformatter
+        restclient
+        rust-mode
+        seeing-is-believing
+        shadowenv
+        shell-maker
+        shfmt
+        slime
+        smart-dash
+        smartparens
+        sqlite3
+        sqlup-mode
+        standard-dirs
+        terraform-mode
+        toml-mode
+        tree-sitter
+        tree-sitter-langs
+        webpaste
+        which-key
+        ws-butler
+        wucuo
+        x509-mode
+        xonsh-mode
+        yaml-mode
+        yasnippet
+        youtube-dl
+      ]);
     };
     firefox = {
       enable = true;
@@ -228,8 +239,7 @@ in {
         aban = "checkout --";
         abanp = "checkout -p --";
         "abort" = "rebase --abort";
-        alias =
-          "! git config --get-regexp '^alias.' | sed -e 's/^alias.//' -e 's/ / = /'";
+        alias = "! git config --get-regexp '^alias.' | sed -e 's/^alias.//' -e 's/ / = /'";
         amend = "commit --amend";
         cloner = "clone --recursive";
         cont = "rebase --continue";
@@ -259,7 +269,12 @@ in {
           pruneTags = true;
           tags = true;
         };
-        push = { gpgSign = if gitUseGpg then "if-asked" else "false"; };
+        push = {
+          gpgSign =
+            if gitUseGpg
+            then "if-asked"
+            else "false";
+        };
         rebase.autoStash = true;
         sendemail = {
           from = "Joseph LaFreniere <${gitEmail}>";
@@ -285,11 +300,13 @@ in {
         ".venv/"
       ];
       lfs.enable = true;
-      signing = if gitUseGpg then {
-        key = "0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3";
-        signByDefault = true;
-      } else
-        null;
+      signing =
+        if gitUseGpg
+        then {
+          key = "0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3";
+          signByDefault = true;
+        }
+        else null;
       userEmail = gitEmail;
       userName = "Joseph LaFreniere";
     };
@@ -305,16 +322,18 @@ in {
     ripgrep-all = {
       enable = true;
       package = inputs.ripgrep-all.packages."${system}".rga;
-      custom_adapters = [{
-        name = "gron";
-        version = 1;
-        description = "Transform JSON into discrete JS assignments";
-        extensions = [ "json" ];
-        mimetypes = [ "application/json" ];
-        binary = "${inputs.gron.packages."${system}".gron}/bin/gron";
-        disabledByDefault = false;
-        matchOnlyByMime = false;
-      }];
+      custom_adapters = [
+        {
+          name = "gron";
+          version = 1;
+          description = "Transform JSON into discrete JS assignments";
+          extensions = ["json"];
+          mimetypes = ["application/json"];
+          binary = "${inputs.gron.packages."${system}".gron}/bin/gron";
+          disabledByDefault = false;
+          matchOnlyByMime = false;
+        }
+      ];
     };
     zsh = {
       enable = true;
@@ -328,60 +347,65 @@ in {
         ''command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"''
         ''eval "$(pyenv init -)"''
       ];
-      profileExtra = lib.concatStringsSep "\n"
-        [ ''export PATH="$PATH:$HOME/.dotnet/tools"'' ];
+      profileExtra =
+        lib.concatStringsSep "\n"
+        [''export PATH="$PATH:$HOME/.dotnet/tools"''];
     };
   };
 
-  home.packages = [ pinentry ] ++ (with inputs; [
-    gron.packages."${system}".gron
-    ripgrep-all.packages."${system}".rga
-    ripsecrets.packages."${system}".ripsecrets
-  ]) ++ (with pkgs; [
-    (aspellWithDicts (aspellDicts: (with aspellDicts; [ en ])))
-    atool
-    aws-sso-creds
-    awscli2
-    babashka
-    bitwarden-cli
-    cachix
-    clojure
-    coreutils
-    curl
-    eza
-    fd
-    ghq
-    git-crypt
-    git-filter-repo
-    gitAndTools.gitFull
-    gnupg
-    gojq
-    id3v2
-    ispell
-    isync
-    isync
-    mosh
-    mpv
-    mu
-    nixfmt
-    nodePackages.prettier
-    pyright
-    ripgrep
-    rnix-lsp
-    rsync
-    rust-analyzer
-    terraform-ls
-    typos
-    unrar
-    youtube-dl
-    zsh
-  ]);
+  home.packages =
+    [pinentry]
+    ++ (with inputs; [
+      gron.packages."${system}".gron
+      ripgrep-all.packages."${system}".rga
+      ripsecrets.packages."${system}".ripsecrets
+    ])
+    ++ (with pkgs; [
+      (aspellWithDicts (aspellDicts: (with aspellDicts; [en])))
+      atool
+      aws-sso-creds
+      awscli2
+      babashka
+      bitwarden-cli
+      cachix
+      clojure
+      coreutils
+      curl
+      eza
+      fd
+      ghq
+      git-crypt
+      git-filter-repo
+      gitAndTools.gitFull
+      gnupg
+      gojq
+      id3v2
+      ispell
+      isync
+      isync
+      mosh
+      mpv
+      mu
+      nixfmt
+      nodePackages.prettier
+      pyright
+      ripgrep
+      rnix-lsp
+      rsync
+      rust-analyzer
+      (tree-sitter.withPlugins (p: builtins.attrValues p))
+      terraform-ls
+      typos
+      unrar
+      youtube-dl
+      zsh
+    ]);
 
-  home.file.".gnupg/gpg-agent.conf".text = lib.concatStringsSep "\n"
+  home.file.".gnupg/gpg-agent.conf".text =
+    lib.concatStringsSep "\n"
     (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
       pinentry-program = pinentry-bin;
       default-cache-ttl = 7200;
       default-cache-ttl-ssh = 7200;
     });
-
 }

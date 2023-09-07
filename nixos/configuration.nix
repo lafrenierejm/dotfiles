@@ -3,12 +3,13 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
-    ./hardware-configuration.nix  # results of hardware scan
+    ./hardware-configuration.nix # results of hardware scan
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -22,7 +23,7 @@
     supportedFilesystems = ["zfs"];
   };
 
-  networking.hostId = "722117df";  # head -c 8 /etc/machine-id
+  networking.hostId = "722117df"; # head -c 8 /etc/machine-id
   networking.hostName = "earthbound"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -50,11 +51,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    nixops
-    wget
-    vim
-  ];
+  environment.systemPackages = with pkgs; [nixops wget vim];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -95,7 +92,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lafrenierejm = {
     isNormalUser = true;
-    extraGroups = [ "adbusers" "audio" "libvirtd" "video" "wheel" ];
+    extraGroups = ["adbusers" "audio" "libvirtd" "video" "wheel"];
   };
 
   # This value determines the NixOS release from which the default
@@ -106,4 +103,3 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.03"; # Did you read the comment?
 }
-
