@@ -11,7 +11,7 @@
     emacs.url = "github:cmacrae/emacs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
-    gron.url = "github:lafrenierejm/gron/v0.8.1";
+    gron.url = "github:lafrenierejm/gron";
     home-manager.url = "github:lafrenierejm/home-manager/ripgrep-all";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
