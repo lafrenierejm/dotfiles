@@ -7,6 +7,7 @@
   username,
   gitEmail,
   gitUseGpg,
+  personal,
   ...
 }: let
   homeDirectory =
