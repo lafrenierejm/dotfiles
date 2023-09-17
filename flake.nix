@@ -21,10 +21,7 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ripgrep-all = {
-      url = "github:phiresky/ripgrep-all";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    ripgrep-all.url = "github:lafrenierejm/ripgrep-all/patch/nix-update";
     ripsecrets = {
       url = "github:sirwart/ripsecrets";
       inputs.nixpkgs.follows = "nixpkgs";
