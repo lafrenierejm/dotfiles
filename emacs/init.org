@@ -2002,6 +2002,8 @@ The contents and aspect is controlled by the src_emacs-lisp{minibuffer-line-form
 
 #+begin_src emacs-lisp
 (use-package minibuffer-line
+  :if (eq system-type 'darwin)
+
   ;; Load this package eagerly.
   :demand
 
@@ -7228,16 +7230,6 @@ This allows the keys to be useful whenever the =s= modifier is made available to
  "s-k" #'windmove-up
  "s-l" #'windmove-right
  "s-x" #'delete-window)
-#+end_src
-
-** /Frames Only Mode/
-
-#+begin_src emacs-lisp
-(use-package frames-only-mode
-  :if (eq window-system 'pgtk)
-  :demand
-  :config
-  (frames-only-mode +1))
 #+end_src
 
 * Secret Management

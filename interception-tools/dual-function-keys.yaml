@@ -1,0 +1,9 @@
+# https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
+TIMING:
+  TAP_MILLISEC: 200
+  DOUBLE_TAP_MILLISEC: 0
+
+MAPPINGS:
+  - KEY: KEY_SPACE
+    TAP: KEY_SPACE
+    HOLD: KEY_LEFTCTRL

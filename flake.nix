@@ -2,17 +2,20 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     nixpkgs-firefox.url = "github:Enzime/nixpkgs/firefox-bin-darwin";
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs.url = "github:cmacrae/emacs";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
     gron.url = "github:lafrenierejm/gron";
-    home-manager.url = "github:lafrenierejm/home-manager/ripgrep-all";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-23.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -112,11 +115,47 @@
                   };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.users."${username}" = import ./nixpkgs/home.nix;
+                  home-manager.users."${username}" = import ./nix/home.nix;
                   users.users."${username}".home = "/Users/${username}";
                 }
               ];
               specialArgs = {personal = true;};
+            };
+        };
+        nixosConfigurations = {
+          earthbound = let
+            username = "lafrenierejm";
+            system = "x86_64-linux";
+          in
+            inputs.nixpkgs.lib.nixosSystem {
+              system = "x86_64-linux";
+              modules = [
+                ({
+                  config,
+                  pkgs,
+                  ...
+                }: {nixpkgs.overlays = [inputs.emacs-overlay.overlays.default];})
+                ./nix/common.nix
+                ./nix/earthbound/configuration.nix
+                inputs.home-manager.nixosModules.home-manager
+                {
+                  home-manager.extraSpecialArgs = {
+                    inherit inputs system username;
+                    gitEmail = "git@lafreniere.xyz";
+                    gitUseGpg = true;
+                  };
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users."${username}" = import ./nix/home.nix;
+                  users.users."${username}" = {
+                    home = "/home/${username}";
+                    openssh.authorizedKeys.keys = [
+                      (builtins.readFile ./ssh/macbook.pub)
+                    ];
+                  };
+                }
+              ];
+              specialArgs = {inherit inputs;};
             };
         };
       };

@@ -1,7 +1,6 @@
 " Use true color if available
 if has('termguicolors') && ($DISPLAY != '')
 	set termguicolors
-	colorscheme monokai
 else
 " Otherwise use 256 color mode
 	set t_Co=256
