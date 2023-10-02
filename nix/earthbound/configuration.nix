@@ -123,12 +123,19 @@
   environment.etc."dual-function-keys.yaml".text = builtins.readFile ../../interception-tools/dual-function-keys.yaml;
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "python-2.7.18.6-env" # needed for Folding@home
+    ];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     curl
+    fahcontrol
+    fahviewer
     neovim
     zsh
   ];
@@ -151,6 +158,8 @@
       PasswordAuthentication = false;
     };
   };
+
+  services.foldingathome.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
