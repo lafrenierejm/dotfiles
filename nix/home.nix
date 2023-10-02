@@ -16,7 +16,7 @@
   pinentry =
     if pkgs.stdenv.isDarwin
     then pkgs.pinentry_mac
-    else pkgs.pinentry;
+    else pkgs.pinentry-qt;
   pinentry-bin =
     if pkgs.stdenv.isDarwin
     then "${pinentry}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
@@ -360,7 +360,11 @@ in {
       unrar
       youtube-dl
       zsh
-    ]);
+    ])
+    ++ (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
+      dconf2nix
+      signal-desktop
+    ]));
 
   home.file.".gnupg/gpg-agent.conf".text =
     lib.concatStringsSep "\n"
