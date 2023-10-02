@@ -5182,7 +5182,8 @@ Then redefine the function used to display the current song, showing only the fi
 
 Add the function to the left-hand /Minibuffer Line/ variable.
 #+begin_src emacs-lisp :noweb-ref emms-mode-line/config
-(add-to-list 'minibuffer-line-left #'emms-mode-line-playlist-current)
+(when (boundp 'minibuffer-line-left)
+  (add-to-list 'minibuffer-line-left #'emms-mode-line-playlist-current))
 #+end_src
 
 *** /EMMS Playing time/
@@ -5214,7 +5215,8 @@ Redefine \src_emacs-lisp{emms-playing-time-mode-line} to add to the left-hand mi
 #+begin_src emacs-lisp :noweb-ref emms-playing-time/config
 (defun [emms-playing-time-mode-line] ()
   "Add playing time to the left-hand side of the minibuffer."
-  (add-to-list 'minibuffer-line-left #'emms-playing-time-string)
+  (when (boundp 'minibuffer-line-left)
+    (add-to-list 'minibuffer-line-left #'emms-playing-time-string))
   (emms-playing-time-restore-mode-line))
 #+end_src
 
@@ -5283,6 +5285,7 @@ This can benefit both literate and traditional programming by allowing one to co
 
 #+begin_src emacs-lisp
 (use-package tree-sitter-langs
+  :if (eq system-type 'darwin)
   :demand
   :after tree-sitter)
 #+end_src
