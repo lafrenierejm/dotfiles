@@ -104,11 +104,7 @@
     isNormalUser = true;
     description = "Joseph LaFreniere";
     extraGroups = ["networkmanager" "wheel"];
-    packages = with pkgs; [
-      firefox
-      kate
-      #  thunderbird
-    ];
+    shell = pkgs.zsh;
   };
 
   services.interception-tools = {
