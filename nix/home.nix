@@ -353,7 +353,7 @@ in {
       ripsecrets.packages."${system}".ripsecrets
     ])
     ++ (with pkgs; [
-      (aspellWithDicts (aspellDicts: (with aspellDicts; [en])))
+      (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers en-science])))
       atool
       aws-sso-creds
       awscli2
