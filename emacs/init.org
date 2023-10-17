@@ -240,7 +240,6 @@ By default, that variable only allows reading a few of the most common directory
 
 #+begin_src emacs-lisp
 (use-package xdg
-  :straight (:type built-in)
 
   :demand
 
@@ -294,7 +293,6 @@ Additionally, we want Cus Edit to always be loaded (not just when we interactive
 
 #+begin_src emacs-lisp
 (use-package cus-edit
-  :straight (:type built-in)
 
   :after (:all f standard-dirs)
 
@@ -358,7 +356,6 @@ The menu bar can be disabled completely.
 The macOS-native build of Emacs that I use relies on ~menu-bar-mode~ being enabled, but it uses macOS's global menu bar so it's unobtrusive.
 #+begin_src emacs-lisp
 (use-package menu-bar
-  :straight (:type built-in)
   :demand
   :config
   (unless (eq system-type 'darwin)
@@ -370,7 +367,6 @@ The macOS-native build of Emacs that I use relies on ~menu-bar-mode~ being enabl
 The scroll bar can be disabled completely.
 #+begin_src emacs-lisp
 (use-package scroll-bar
-  :straight (:type built-in)
   :demand
   :config
   (scroll-bar-mode -1))
@@ -381,7 +377,6 @@ The scroll bar can be disabled completely.
 The tool bar can be disabled completely.
 #+begin_src emacs-lisp
 (use-package tool-bar
-  :straight (:type built-in)
   :demand
   :config
   (tool-bar-mode -1))
@@ -404,7 +399,6 @@ The /Faces/ package provides this functionality, so all font setup can can occur
 
 #+begin_src emacs-lisp
 (use-package faces
-  :straight (:type built-in)
 
   :demand
 
@@ -529,7 +523,6 @@ The package's source is available at [[https://github.com/Fanael/rainbow-delimit
 Show matching parentheses.
 #+begin_src emacs-lisp
 (use-package paren
-  :straight (:type built-in)
   :demand
   :config
   (show-paren-mode +1))
@@ -546,7 +539,6 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp
 (use-package display-line-numbers
-  :straight (:type built-in)
 
   ;; Only load this package if the following code evaluates to non-nil.
   :if
@@ -662,13 +654,6 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
     ('dark (load-theme 'modus-vivendi t))))
 
 (add-hook 'ns-system-appearance-change-functions #'lafrenierejm/apply-theme)
-#+end_src
-
-** /Font Lock Ext/
-
-#+begin_src emacs-lisp
-(use-package font-lock-ext
-  :straight (:host github :repo "sensorflo/font-lock-ext"))
 #+end_src
 
 * Buffer Organization
@@ -816,26 +801,235 @@ For temporary files and directories that will be relative path from project root
 
 #+begin_src emacs-lisp
 (use-package relative-buffers
-  :straight (:host github :repo "emacsattic/relative-buffers")
   :ghook
   <<relative-buffers/ghook>>)
 #+end_src
 
-** /Current Buffer/
+** Operate on Current Buffer
 
 #+begin_src emacs-lisp
-(use-package current-buffer
-  :straight (:host github
-             :repo "lafrenierejm/current-buffer.el")
+(require 'f)
+(require 'files)
+(require 'project)
+(require 'vc)
+(require 'vc-hooks)
 
-  :general
-  ("C-x C-S-d" #'current-buffer-delete)
-  ("C-x C-c" #'current-buffer-copy)
-  ("C-x C-g" #'current-buffer-revert)
-  ("C-x C-k" #'current-buffer-kill)
-  ("C-x C-r" #'current-buffer-rename)
-  ("C-x y n" #'current-buffer-yank-name)
-  ("C-x y p" #'current-buffer-yank-path))
+(defun current-buffer--obj-to-buffer (&optional buffer)
+  "Get the BUFFER to use.
+
+If BUFFER is nil, use the current buffer.
+Else if BUFFER is a string, use that string as the name of the buffer.
+Else throw an error."
+  (cond
+   ;; If no BUFFER was provided...
+   ((not buffer)
+    ;; Return the current buffer.
+    (get-buffer (buffer-name)))
+   ;; Else if BUFFER is an editor buffer...
+   ((bufferp buffer)
+    ;; Return BUFFER as-is.
+    buffer)
+   ;; Else if BUFFER is a string...
+   ((stringp buffer)
+    ;; Return the corresponding buffer object.
+    (get-buffer buffer))
+   ;; Else...
+   (t
+    ;; Throw an error.
+    (error "Invalid BUFFER argument %s of type %s passed"
+           buffer
+           (type-of buffer)))))
+
+(defun current-buffer--get-buffer (verb)
+  "Prompt user for buffer to perform VERB on."
+  (if current-prefix-arg
+      (get-buffer (read-buffer (format "Buffer to %s with visiting file: "
+                                       verb)
+                               (get-buffer (buffer-name))))))
+
+(defun current-buffer--read-file-name (verb buffer-name)
+  "Prompt user for destination of applying VERB to BUFFER-NAME's visiting file."
+  (read-file-name (format "%s the file visited by buffer %s to: "
+                          verb
+                          buffer-name)))
+
+(defun current-buffer-rename (new-file-name &optional buffer ok-if-already-exists)
+  "Rename a buffer and the file it's visiting, if any, to NEW-FILE-NAME.
+
+If BUFFER is not provided, use the current buffer.
+If BUFFER is a string, use that string as the name of the buffer to rename.
+If BUFFER is a buffer object, use it as the subject of the rename.
+
+OK-IF-ALREADY-EXISTS is passed directly to `rename-file'."
+  ;; If called interactively...
+  (interactive (let* ((buffer (current-buffer--get-buffer "rename"))
+                      (new-file-name
+                       (current-buffer--read-file-name "rename"
+                                                       (buffer-name buffer)))
+                      (ok-if-already-exists 1)) ; Request confirmation before overwrite.
+                 (list new-file-name buffer ok-if-already-exists)))
+  (let* ((buffer (current-buffer--obj-to-buffer buffer))
+         (file (buffer-file-name buffer))
+         (orig-buffer-name (buffer-name buffer))
+         (new-buffer-name nil))
+    (mkdir (f-parent new-file-name) t)
+    (cond
+     ;; If FILE is tracked in VC...
+     ((vc-backend file)
+      ;; Rename FILE through VC.
+      (vc-rename-file file new-file-name))
+     ;; Else if FILE exists at all...
+     ((file-exists-p file)
+      ;; Rename FILE normally.
+      (rename-file file new-file-name ok-if-already-exists)))
+    ;; Rename BUFFER, using `generate-new-buffer-name' if necessary.
+    ;; Record the name actually assigned.
+    (setq new-buffer-name (rename-buffer new-file-name t))
+    (set-visited-file-name new-file-name t t)
+    (message "Renamed buffer %s to %s and its file to %s."
+             orig-buffer-name new-buffer-name
+             new-file-name)))
+
+(defun current-buffer-delete (&optional buffer)
+  "Delete the file BUFFER is visiting, if any, then kill the buffer.
+
+If BUFFER is not provided, use the current buffer.
+If BUFFER is a string, use that string as the name of the buffer to use.
+If BUFFER is a symbol, prompt the user for the name of the buffer to use."
+  ;; If called interactively...
+  (interactive (list (current-buffer--get-buffer "delete")))
+  (let* ((buffer (current-buffer--obj-to-buffer buffer))
+         (file (buffer-file-name buffer)))
+    (when file
+      (cond
+       ;; If FILE is tracked in VC, delete it through VC.
+       ((vc-backend file)
+        (vc-delete-file file))
+       ;; Else if FILE exists, delete it normally.
+       ((file-exists-p file)
+        (delete-file file 'trash)))
+      (message "Deleted file %s" file))
+    (kill-buffer buffer)))
+
+(defun current-buffer-copy
+    (new-file-name
+     &optional
+     buffer
+     confirm-overwrite
+     keep-time
+     preserve-uid-gid
+     preserve-permissions)
+  "If buffer is visiting file, copy file to NEW-FILE-NAME and open in new buffer.
+
+If BUFFER is not provided, use the current buffer.
+If BUFFER is a string, use that string as the name of the buffer to rename.
+If BUFFER is a buffer object, use it as the subject of the rename.
+
+If BUFFER is not visiting a file, write BUFFER's contents to NEW-FILE-NAME.
+
+If CONFIRM-OVERWRITE is non-nil, this function asks for confirmation before
+overwiting an existing file at NEW-FILE-NAME.  Interactively, confirmation is
+required unless a prefix argument is supplied.
+
+The following are passed directly to `copy-file':
+- KEEP-TIME
+- PRESERVE-UID-GID
+- PRESERVE-PERMISSIONS"
+  ;; If called interactively...
+  (interactive (let* ((buffer (current-buffer--get-buffer "copy"))
+                      (new-file-name (current-buffer--read-file-name
+                                      "copy" (buffer-name buffer)))
+                      ;; confirm before overwriting an existing file,
+                      ;; unless called with a prefix argument.
+                      (confirm-overwrite (if current-prefix-arg t 1)))
+                 (list new-file-name buffer confirm-overwrite)))
+  (let* ((buffer (current-buffer--obj-to-buffer buffer))
+         (file (buffer-file-name buffer))
+         (new-buffer-name (buffer-name buffer)))
+    ;; If BUFFER is not visiting a file...
+    (if (not (file-exists-p file))
+        ;; Write the content of BUFFER to NEW-FILE-NAME.
+        (write-file new-file-name confirm-overwrite)
+      ;; Else copy the visited file FILE to NEW-FILE-NAME.
+      (copy-file file
+                 new-file-name
+                 ;; If CONFIRM-OVERWRITE is non-nil...
+                 (if confirm-overwrite
+                     ;; Ask for confirmation before overwriting.
+                     1
+                   ;; Else overwrite without prompting.
+                   t)
+                 keep-time
+                 preserve-uid-gid
+                 preserve-permissions)
+      ;; Open NEW-FILE-NAME in a separate buffer.
+      (setq new-buffer-name (buffer-name (find-file new-file-name))))
+    (message "Wrote buffer %s to %s and opened the new file."
+             (buffer-name buffer) new-file-name new-buffer-name)))
+
+(defun current-buffer-revert (&optional noconfirm)
+  "Replace current buffer text with the text of the visited file on disk.
+
+If NOCONFIRM is nil, prompt the user before reverting a modified buffer.
+NOCONFIRM is set to t when called interactively with a prefix argument."
+  (interactive (list current-prefix-arg))
+  (revert-buffer :ignore-auto (or noconfirm (not (buffer-modified-p)))))
+
+(defun current-buffer-kill (&optional ignore-buffer-modified-p)
+  "Kill the current buffer.
+
+If IGNORE-BUFFER-MODIFIED-P is nil, prompt the user before killing a modified
+buffer.  IGNORE-BUFFER-MODIFIED-P is set to t when called interactively with a
+prefix argument."
+  (interactive (list current-prefix-arg))
+  (when ignore-buffer-modified-p
+    (set-buffer-modified-p nil))
+  (kill-buffer (current-buffer)))
+
+(defun current-buffer-yank-name ()
+  "Place the name of the current buffer on the kill ring."
+  (interactive)
+  (let ((name (buffer-name (current-buffer))))
+    (kill-new name)
+    (message "Copied buffer name '%s' to the clipboard." name)))
+
+(defun current-buffer-yank-path (&optional PROJECT-RELATIVE)
+  "Place the path of the current buffer's visited file on the kill ring.
+
+The default behavior is to use the current file's absolute path.  If optional
+argument PROJECT-RELATIVE is set, use the path relative to the current project's
+root, if any.  PROJECT-RELATIVE is set when called interactively with a prefix
+argument."
+  (interactive (list current-prefix-arg))
+  (when-let* ((path (or (buffer-file-name) default-directory))
+              (path-absolute (expand-file-name path))
+              (path-final (if-let* ((PROJECT-RELATIVE)
+                                    (project (project-current nil))
+                                    (project-root (project-root project)))
+                              (f-relative path-absolute project-root)
+                            path-absolute)))
+    (kill-new path-final)
+    (message "Copied buffer path '%s' to the clipboard." path-final)))
+
+(defun current-buffer-dired ()
+  "Open the current directory in Dired."
+  (interactive)
+  (when-let* ((file-path (or (buffer-file-name) default-directory))
+              (directory-path (file-name-directory file-path)))
+    (dired directory-path)))
+#+end_src
+
+*** Keybindings
+
+#+begin_src emacs-lisp
+(general-define-key
+ "C-x C-S-d" #'current-buffer-delete
+ "C-x C-c" #'current-buffer-copy
+ "C-x C-g" #'current-buffer-revert
+ "C-x C-k" #'current-buffer-kill
+ "C-x C-r" #'current-buffer-rename
+ "C-x y n" #'current-buffer-yank-name
+ "C-x y p" #'current-buffer-yank-path)
 #+end_src
 
 * Documentation
@@ -882,7 +1076,6 @@ Note that although \src_emacs-lisp{use-package} is used below, the /Org/ package
 
 #+begin_src emacs-lisp
 (use-package org
-  :straight (:type built-in)
 
   :demand
 
@@ -966,7 +1159,6 @@ Use /Wucuo/ to perform spell checking.
 
 #+begin_src emacs-lisp
 (use-package ox-latex
-  :straight (:type built-in)
   :config
   <<ox-latex/config>>)
 #+end_src
@@ -1094,7 +1286,6 @@ Retain selection after typing =<= or =>= in visual state.
 Emacs includes a package for /RST/ for working with reStructuredText.
 #+begin_src emacs-lisp
 (use-package rst
-  :straight (:type built-in)
 
   :mode ("\\.rst\\'" . rst-mode)
 
@@ -1153,17 +1344,6 @@ Bind the above function to =C-c C-l= in \src_emacs-lisp{rst-mode}.
 #+end_src
 
 ** TeX
-
-*** AUCTeX
-
-From the package's README:
-#+begin_quote
-AUCTeX is a comprehensive customizable integrated environment for writing input files for TeX, LaTeX, ConTeXt, Texinfo, and docTeX using Emacs.
-#+end_quote
-
-#+begin_src emacs-lisp
-(use-package auctex)
-#+end_src
 
 *** Evil TeX
 
@@ -1579,7 +1759,6 @@ Smartparens Config configures Smartparens for various programming languages.
 
 #+begin_src emacs-lisp
 (use-package smartparens-config
-  :straight smartparens
 
   ;; Load this package after the following packages.
   :after smartparens
@@ -2130,7 +2309,6 @@ The \src_emacs-lisp{battery-status-function} used in \src_emacs-lisp{minibuffer-
 That package must be loaded.
 #+begin_src emacs-lisp
 (use-package battery
-  :straight (:type built-in)
   :demand
   :config
   (defvar battery-minibuffer-line-format
@@ -2181,7 +2359,6 @@ Determine how frequently the string in src_emacs-lisp{minibuffer-line-format} is
   ;; (remove-hook 'pre-command-hook 'my-ivy-fly-back-to-present t)
   (cond ((and (memq last-command my-ivy-fly-commands)
               (equal (this-command-keys-vector) (kbd "M-p")))
-         ;; repeat one time to get straight to the first history item
          (setq unread-command-events
                (append unread-command-events
                        (listify-key-sequence (kbd "M-p")))))
@@ -2226,7 +2403,6 @@ TRAMP allows Emacs to transparently access remote files as if they were local fi
 
 #+begin_src emacs-lisp
 (use-package tramp
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -2273,7 +2449,6 @@ This is functional, but results in messy directories.
 
 #+begin_src emacs-lisp
 (use-package files
-  :straight (:type built-in)
 
   :custom
   <<files/custom>>)
@@ -2296,7 +2471,6 @@ I do not want to have to confirm.
 
 #+begin_src emacs-lisp
 (use-package autorevert
-  :straight (:type built-in)
 
   ;; Add the following auto-loading hooks.
   :ghook
@@ -2315,7 +2489,6 @@ The new binding is harder to accidentally press and opens up a convenient bindin
 
 #+begin_src emacs-lisp
 (use-package vc
-  :straight (:type built-in)
 
   ;; Load VC eagerly.
   :demand
@@ -2331,7 +2504,6 @@ The new binding is harder to accidentally press and opens up a convenient bindin
 
 #+begin_src emacs-lisp
 (use-package vc-hooks
-  :straight (:type built-in)
   :custom
   <<vc-hooks/custom>>)
 #+end_src
@@ -2402,13 +2574,6 @@ Enable Diff HL's base minor mode globally.
 #+end_src
 
 ** Git
-*** Git Attributes Mode
-
-#+begin_src emacs-lisp
-(use-package gitattributes-mode
-  :straight magit)
-#+end_src
-
 *** /Magit/
 
 #+begin_src emacs-lisp
@@ -2619,9 +2784,16 @@ Bind keys for /Magit/ buffers.
 
 #+begin_src emacs-lisp
 (use-package magit-diff
-  :straight magit
   :custom
   (magit-diff-refine-hunk t "Show fine differences for the current diff hunk only."))
+#+end_src
+
+**** /Magit Section/
+
+#+begin_src emacs-lisp
+(use-package magit-section
+  :after magit
+  :demand)
 #+end_src
 
 *** Forge
@@ -2719,7 +2891,6 @@ Add a keybinding under /VC/'s key prefix to yank the context-dependent URL.
 
 #+begin_src emacs-lisp
 (use-package file-info
-  :straight (:host github :repo "artawower/file-info.el")
   :bind (("C-c d" . #'file-info-show))
   :config
   (setq hydra-hint-display-type 'posframe)
@@ -2924,7 +3095,6 @@ See the relevant commit [[https://github.com/emacs-mirror/emacs/commit/a232821c5
 
 #+begin_src emacs-lisp
 (use-package ediff
-  :straight (:type built-in)
 
   ;; Evaluate the following code after loading this package.
   :custom
@@ -2989,7 +3159,6 @@ Most other directory-centric packages provide functionality on top of /Dired/.
 
 #+begin_src emacs-lisp
 (use-package dired
-  :straight (:type built-in)
 
   ;; Load Dired eagerly.
   :demand
@@ -3056,7 +3225,6 @@ Define a function to open the current directory in a Dired buffer.
 
 #+begin_src emacs-lisp
 (use-package wdired
-  :straight (:type built-in)
 
   :custom
   (wdired-allow-to-change-permissions t))
@@ -3168,7 +3336,6 @@ You might want to use this to set dir-local variables that apply to all of your 
 
 #+begin_src emacs-lisp
 (use-package cascading-dir-locals
-  :straight (:host github :repo "fritzgrabo/cascading-dir-locals")
   :demand
   :config
   (cascading-dir-locals-mode 1)
@@ -3210,7 +3377,6 @@ You might want to use this to set dir-local variables that apply to all of your 
 
 #+begin_src emacs-lisp
 (use-package comint
-  :straight (:type built-in)
 
   :general
   <<comint/general>>)
@@ -3234,7 +3400,6 @@ Use =C-l= to clear the current buffer.
 
 #+begin_src emacs-lisp
 (use-package shell
-  :straight (:type built-in)
 
   :gfhook
   ('shell-mode-hook #'shell-disable-command-echo)
@@ -3253,7 +3418,6 @@ Use =C-l= to clear the current buffer.
 *** Esh Mode
 #+begin_src emacs-lisp
 (use-package esh-mode
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -3385,7 +3549,6 @@ Save in REGISTER or in the kill-ring with YANK-HANDLER."
 
 #+begin_src emacs-lisp
 (use-package em-hist
-  :straight (:type built-in)
 
   ;; Load eagerly.
   :demand
@@ -3414,7 +3577,6 @@ The default is 128.
 *** Em Dirs
 #+begin_src emacs-lisp
 (use-package em-dirs
-  :straight (:type built-in)
 
   :demand
 
@@ -3604,7 +3766,6 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
 *** Eshell
 #+begin_src emacs-lisp
 (use-package eshell
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -3885,7 +4046,6 @@ The ~eshell-module~ group is for Eshell extension modules, which provide optiona
 
 #+begin_src emacs-lisp
 (use-package esh-module
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -3926,7 +4086,6 @@ Determine whether input causes window to scroll.
 
 #+begin_src emacs-lisp
 (use-package em-alias
-  :straight (:type built-in)
 
   :after (:all esh-module)
 
@@ -3938,7 +4097,6 @@ Determine whether input causes window to scroll.
 
 #+begin_src emacs-lisp
 (use-package em-prompt
-  :straight (:type built-in)
 
   :demand
 
@@ -4082,7 +4240,6 @@ Em Tramp is an Eshell modules that provides TRAMP features.
 
 #+begin_src emacs-lisp
 (use-package em-tramp
-  :straight (:type built-in)
 
   ;; Load this package after the following packages.
   :after (esh-module)
@@ -4158,7 +4315,6 @@ Uses the system sudo through TRAMP's sudo method."
 
 #+begin_src emacs-lisp
 (use-package em-rebind
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -4220,7 +4376,6 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
 
 #+begin_src emacs-lisp
 (use-package em-cmpl
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -4366,22 +4521,6 @@ Copyright (c) 2022-07-16 Álvaro Ramírez https://xenodium.com/a-lifehack-for-yo
 dwim-shell-command-extract
 #+end_src
 
-** /ChatGPT Shell/
-
-#+begin_src emacs-lisp
-(use-package shell-maker
-  :straight
-  (:host github :repo "xenodium/chatgpt-shell" :files ("shell-maker.el")))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package chatgpt-shell
-  :requires shell-maker
-
-  :straight
-  (:host github :repo "xenodium/chatgpt-shell" :files ("chatgpt-shell.el")))
-#+end_src
-
 * Static Analysis
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref static-analysis
@@ -4391,7 +4530,6 @@ dwim-shell-command-extract
 
 #+begin_src emacs-lisp
 (use-package ispell
-  :straight (:type built-in)
 
   ;; Only load this package if the following code evaluates to non-nil.
   :if
@@ -4818,7 +4956,6 @@ Enable spell check when composing mail.
 
 #+begin_src emacs-lisp
 (use-package message
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -4894,7 +5031,6 @@ Despite the attachment code never having (publicly) been a part of mbork/message
 
 #+begin_src emacs-lisp
 (use-package mml
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -5071,7 +5207,8 @@ Features:
 
   ;; Evaluate the following code before loading this package.
   :init
-  (pdf-tools-install t))
+  (unless (executable-find "nix")
+    (pdf-tools-install t)))
 #+end_src
 
 **** Filename Mapping
@@ -5115,57 +5252,29 @@ Create an alist whose keys are regexps matching filenames and whose values are t
 *** /EMMS Source File/
 
 #+begin_src emacs-lisp
-(use-package emms-source-file
-  :straight emms
+(use-package emms
   :after standard-dirs
+
   :custom
-  (emms-source-file-default-directory (standard-dirs-user-audio)))
-#+end_src
-
-*** /EMMS Setup/
-
-#+begin_src emacs-lisp
-(use-package emms-setup
-  :straight emms
-
-  ;; Load this package eagerly.
-  :demand
+  (emms-source-file-default-directory (standard-dirs-user-audio))
+  <<emms/custom>>
 
   :config
-  (emms-all)
-  (emms-default-players))
+  <<emms/config>>)
 #+end_src
 
-*** /EMMS Mode Line/
-
-#+begin_src emacs-lisp
-(use-package emms-mode-line
-  :straight emms
-
-  ;; Load this package eagerly.
-  :demand
-
-  ;; Set the following custom variables.
-  :custom
-  <<emms-mode-line/custom>>
-
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<emms-mode-line/config>>)
-#+end_src
-
-**** Display in Minibuffer, Not Mode-Line
+*** Display in Minibuffer, Not Mode-Line
 
 By default, the current media is shown in the mode-line.
 I would prefer that it be shown only in the minibuffer (via /Minibuffer Line/).
 
 The first step is to disable display in the modeline.
-#+begin_src emacs-lisp :noweb-ref emms-mode-line/custom
+#+begin_src emacs-lisp :noweb-ref emms/custom
 (emms-mode-line-mode-line-function nil "Do not show info in modeline")
 #+end_src
 
 Then redefine the function used to display the current song, showing only the file name if the ~description~ is a filename.
-#+begin_src emacs-lisp :noweb-ref emms-mode-line/config
+#+begin_src emacs-lisp :noweb-ref emms/config
 (defun emms-mode-line-playlist-current ()
   "Format the currently playing song."
   (when-let* ((description (emms-track-description
@@ -5181,39 +5290,21 @@ Then redefine the function used to display the current song, showing only the fi
 #+end_src
 
 Add the function to the left-hand /Minibuffer Line/ variable.
-#+begin_src emacs-lisp :noweb-ref emms-mode-line/config
+#+begin_src emacs-lisp :noweb-ref emms/config
 (when (boundp 'minibuffer-line-left)
   (add-to-list 'minibuffer-line-left #'emms-mode-line-playlist-current))
 #+end_src
 
-*** /EMMS Playing time/
-
-#+begin_src emacs-lisp
-(use-package emms-playing-time
-  :straight emms
-
-  ;; Load this package eagerly.
-  :demand
-
-  ;; Apply the following variable customizations.
-  :custom
-  <<emms-playing-time/custom>>
-
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<emms-mode-line/config>>)
-#+end_src
-
-**** Display Time in Minibuffer
+*** Display Playing Time in Minibuffer
 
 Do not add any spaces around the time.
-#+begin_src emacs-lisp :noweb-ref emms-playing-time/custom
+#+begin_src emacs-lisp :noweb-ref emms/custom
 (emms-playing-time-display-format "%s")
 #+end_src
 
 Redefine \src_emacs-lisp{emms-playing-time-mode-line} to add to the left-hand minibuffer line instead of mode-line.
-#+begin_src emacs-lisp :noweb-ref emms-playing-time/config
-(defun [emms-playing-time-mode-line] ()
+#+begin_src emacs-lisp :noweb-ref emms/config
+(defun emms-playing-time-mode-line ()
   "Add playing time to the left-hand side of the minibuffer."
   (when (boundp 'minibuffer-line-left)
     (add-to-list 'minibuffer-line-left #'emms-playing-time-string))
@@ -5266,7 +5357,6 @@ This can benefit both literate and traditional programming by allowing one to co
 
 #+begin_src emacs-lisp
 (use-package eglot
-  :straight (:type built-in)
 
   :ghook
   <<eglot/ghook>>)
@@ -5294,11 +5384,6 @@ This can benefit both literate and traditional programming by allowing one to co
 
 #+begin_src emacs-lisp
 (use-package evil-textobj-tree-sitter
-  :straight (evil-textobj-tree-sitter
-             :type git
-             :host github
-             :repo "meain/evil-textobj-tree-sitter"
-             :files (:defaults "queries"))
   :demand
   :after tree-sitter
 
@@ -5343,21 +5428,6 @@ AutoHotkey is a free, open-source scripting language for Windows that allows use
 
 ** Common Language Runtime (CLR)
 
-*** Microsoft Visual C++ (MSCV) Solution (=.sln=)
-
-#+begin_src emacs-lisp
-(use-package sln-mode
-  :straight (sln-mode
-             :type git
-             :host github
-             :repo "sensorflo/sln-mode")
-
-  :mode ("\\.sln\\'" . sln-mode)
-
-  :init
-  (require 'font-lock-ext))
-#+end_src
-
 ** Configuration Files
 
 *** /Conf Mode/
@@ -5371,7 +5441,6 @@ It started out from Aurélien Tisné's ini-mode.
 
 #+begin_src emacs-lisp
 (use-package conf-mode
-  :straight (:type built-in)
 
   :preface
   (defconst conf-mode-ssh-config-dir
@@ -5548,10 +5617,6 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 
 #+BEGIN_SRC emacs-lisp
 (use-package go-mode
-  :straight (:host github
-             :repo "dominikh/go-mode.el"
-             :fork "lafrenierejm/go-mode.el"
-             :branch "reformatter")
 
   :gfhook
   <<go-mode/gfhook>>
@@ -5652,7 +5717,6 @@ The above function should be added to all Lisp major mode hooks.
 
 #+begin_src emacs-lisp
 (use-package lisp-mode
-  :straight (:type built-in)
 
   :demand
 
@@ -5837,7 +5901,6 @@ Fennel is a programming language that brings together the speed, simplicity, and
 (use-package geiser-guile
   :if (executable-find "guile")
 
-  :straight nil
 
   :config
   (when-let ((path (expand-file-name
@@ -5952,7 +6015,6 @@ Replace hash symbols with ellipses.
 
 #+begin_src emacs-lisp
 (use-package elisp-mode
-  :straight (:type built-in)
 
   ;; Add the following keybindings.
   :general
@@ -6173,8 +6235,6 @@ Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
 
 #+begin_src emacs-lisp
 (use-package shfmt
-  :straight (:host github :repo "purcell/emacs-shfmt"
-             :branch "master")
   :after sh-script
   :demand)
 #+end_src
@@ -6207,7 +6267,6 @@ And another variable stores the above modes' hooks:
 
 #+begin_src emacs-lisp
 (use-package python
-  :straight (:type built-in)
 
   ;; Inform the bytecode compiler of the following functions.
   :functions python-set-comment-inline-offset
@@ -6535,17 +6594,15 @@ Define the actual Polymode.
 
 #+begin_src emacs-lisp
 (use-package nix-mode
-  :straight (nix-mode
-             :type git
-             :host github
-             :repo "NixOS/nix-mode"
-             :fork "lafrenierejm/nix-mode"
-             :branch "reformatter")
   :mode "\\.nix\\'"
 
   :general
   (:keymaps 'nix-mode-map
    "C-c C-p" #'nix-repl))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('nix-mode-hook #'eglot-ensure)
 #+end_src
 
 ** Ruby
@@ -6692,7 +6749,6 @@ Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
 
 #+begin_src emacs-lisp
 (use-package sql
-  :straight (:type built-in)
 
   :mode
   ("\\.sqlite\\'" . sql-interactive-mode)
@@ -6818,7 +6874,6 @@ Enable indent guides in XML buffers.
 
 #+begin_src emacs-lisp
 (use-package nxml-mode
-  :straight (:type built-in)
 
   :mode
   ("\\.csproj\\'" . nxml-mode))
@@ -7244,7 +7299,6 @@ This allows the keys to be useful whenever the =s= modifier is made available to
 
 #+begin_src emacs-lisp
 (use-package password-cache
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -7258,7 +7312,6 @@ This allows the keys to be useful whenever the =s= modifier is made available to
 
 #+begin_src emacs-lisp
 (use-package auth-source
-  :straight (:type built-in)
 
   ;; Load this package eagerly.
   :demand
@@ -7267,7 +7320,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
   :custom
   (auth-sources
    (cl-case system-type
-     ('darwin
+     (darwin
       '(macos-keychain-internet macos-keychain-generic))
      (t
       '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc")))
@@ -7366,7 +7419,6 @@ Ivy Pass is an Ivy interface for Password Store.
 
 #+begin_src emacs-lisp
 (use-package epa
-  :straight (:type built-in)
 
   ;; Apply the following customizations.
   :custom

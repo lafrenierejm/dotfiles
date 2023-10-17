@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   lib,
   pkgs,
@@ -35,6 +36,7 @@ in {
     taps = ["homebrew/cask-drivers"];
   };
 
+  overlays = [inputs.emacs-overlay."${system}".overlay];
   services = {nix-daemon.enable = true;};
 
   # Whether Touch ID is enabled as a `sudo` auth mechanism.

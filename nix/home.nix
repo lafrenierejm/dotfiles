@@ -55,37 +55,40 @@ in {
     emacs = {
       enable = true;
       package =
-        if pkgs.stdenv.isDarwin
-        then
-          (inputs.emacs-darwin.packages."${system}".emacs.overrideAttrs (old: {
-            # Use `nix-prefetch-url` to get the below shasums.
-            patches =
-              (old.patches or [])
-              ++ [
-                # Use poll instead of select to get file descriptors.
-                (pkgs.fetchpatch {
-                  url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/poll.patch";
-                  sha256 = "0j26n6yma4n5wh4klikza6bjnzrmz6zihgcsdx36pn3vbfnaqbh5";
-                })
-                # Enable rounded window with no decoration.
-                (pkgs.fetchpatch {
-                  url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/round-undecorated-frame.patch";
-                  sha256 = "0x187xvjakm2730d1wcqbz2sny07238mabh5d97fah4qal7zhlbl";
-                })
-                # Make Emacs aware of OS-level light/dark mode.
-                (pkgs.fetchpatch {
-                  url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-28/system-appearance.patch";
-                  sha256 = "14ndp2fqqc95s70fwhpxq58y8qqj4gzvvffp77snm2xk76c1bvnn";
-                })
-              ];
-          }))
-        else
-          inputs.emacs-overlay.packages."${system}".emacs-pgtk.overrideAttrs (old: {
-            withNativeCompilation = true;
-            withTreesitter = true;
-          });
+        (
+          if pkgs.stdenv.isDarwin
+          then inputs.emacs-darwin.packages."${system}".emacs
+          else inputs.emacs-overlay.packages."${system}".emacs-pgtk
+        )
+        .overrideAttrs (old: {
+          passthru =
+            old.passthru
+            // {
+              treeSitter = true;
+            };
+          # Use `nix-prefetch-url` to get the below shasums.
+          patches =
+            (old.patches or [])
+            ++ (lib.lists.optionals pkgs.stdenv.isDarwin [
+              # Use poll instead of select to get file descriptors.
+              (pkgs.fetchpatch {
+                url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/poll.patch";
+                sha256 = "0j26n6yma4n5wh4klikza6bjnzrmz6zihgcsdx36pn3vbfnaqbh5";
+              })
+              # Enable rounded window with no decoration.
+              (pkgs.fetchpatch {
+                url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/round-undecorated-frame.patch";
+                sha256 = "0x187xvjakm2730d1wcqbz2sny07238mabh5d97fah4qal7zhlbl";
+              })
+              # Make Emacs aware of OS-level light/dark mode.
+              (pkgs.fetchpatch {
+                url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-28/system-appearance.patch";
+                sha256 = "14ndp2fqqc95s70fwhpxq58y8qqj4gzvvffp77snm2xk76c1bvnn";
+              })
+            ]);
+        });
       extraPackages = epkgs:
-        (with epkgs; [
+        with epkgs; [
           ace-window
           adoc-mode
           aggressive-indent
@@ -206,6 +209,9 @@ in {
           standard-dirs
           terraform-mode
           toml-mode
+          tree-sitter
+          treesit-grammars.with-all-grammars
+          vterm
           webpaste
           which-key
           ws-butler
@@ -215,11 +221,7 @@ in {
           yaml-mode
           yasnippet
           youtube-dl
-        ])
-        ++ (lib.lists.optionals pkgs.stdenv.isDarwin (with epkgs; [
-          tree-sitter
-          tree-sitter-langs
-        ]));
+        ];
     };
     firefox = {
       enable = true;
@@ -386,7 +388,6 @@ in {
       rnix-lsp
       rsync
       rust-analyzer
-      (tree-sitter.withPlugins (p: builtins.attrValues p))
       terraform-ls
       typos
       unrar

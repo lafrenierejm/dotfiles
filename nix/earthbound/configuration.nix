@@ -2,8 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
+  inputs,
   config,
   pkgs,
+  system,
   ...
 }: {
   imports = [
@@ -123,11 +125,16 @@
   environment.etc."dual-function-keys.yaml".text = builtins.readFile ../../interception-tools/dual-function-keys.yaml;
 
   # Allow unfree packages
-  nixpkgs.config = {
-    allowUnfree = true;
-    permittedInsecurePackages = [
-      "python-2.7.18.6-env" # needed for Folding@home
-    ];
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        # needed for Folding@home
+        "python-2.7.18.6"
+        "python-2.7.18.6-env"
+      ];
+    };
+    overlays = [inputs.emacs-overlay.overlay];
   };
 
   # List packages installed in system profile. To search, run:

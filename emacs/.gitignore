@@ -1,8 +1,6 @@
 !.gitignore
 *#
 *.el
-early-init.nix.el
-early-init.straight.el
 *.elc
 *.sqlite
 .cask

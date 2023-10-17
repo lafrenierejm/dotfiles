@@ -8,8 +8,15 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-darwin.url = "github:cmacrae/emacs";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    emacs-overlay.url = github:nix-community/emacs-overlay;
+    emacs-darwin = {
+      url = "github:cmacrae/emacs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
     gron.url = "github:lafrenierejm/gron";
@@ -131,11 +138,6 @@
             inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
               modules = [
-                ({
-                  config,
-                  pkgs,
-                  ...
-                }: {nixpkgs.overlays = [inputs.emacs-overlay.overlays.default];})
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
                 inputs.home-manager.nixosModules.home-manager
