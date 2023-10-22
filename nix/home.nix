@@ -378,8 +378,6 @@ in {
       aws-sso-creds
       awscli2
       babashka
-      bitwarden-cli
-      bitwarden
       cachix
       clojure
       coreutils
@@ -413,6 +411,8 @@ in {
       zsh
     ])
     ++ (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
+      bitwarden-cli
+      bitwarden
       dconf2nix
       signal-desktop
     ]));
