@@ -330,6 +330,24 @@ in {
       enable = true;
       enableZshIntegration = true;
     };
+    ripgrep-all = {
+      enable = true;
+      package = inputs.ripgrep-all.packages."${system}".rga;
+      custom_adapters = [
+        {
+          name = "gron";
+          version = 1;
+          description = "Transform JSON into discrete JS assignments";
+          extensions = ["json"];
+          mimetypes = ["application/json"];
+          binary = "${
+            inputs.gron.packages."${system}".gronWithFallback
+          }/bin/gron-with-fallback";
+          disabledByDefault = false;
+          matchOnlyByMime = false;
+        }
+      ];
+    };
     zsh = {
       enable = true;
       enableAutosuggestions = true;
