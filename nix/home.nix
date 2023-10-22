@@ -225,6 +225,10 @@ in {
     };
     firefox = {
       enable = true;
+      package =
+        if pkgs.stdenv.isDarwin
+        then inputs.nixpkgs-firefox.legacyPackages."${system}".firefox-bin
+        else pkgs.firefox-bin;
       profiles."personal.default" = {
         id = 0;
         name = "personal";
