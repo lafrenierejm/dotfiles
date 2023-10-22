@@ -125,17 +125,11 @@
   environment.etc."dual-function-keys.yaml".text = builtins.readFile ../../interception-tools/dual-function-keys.yaml;
 
   # Allow unfree packages
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      permittedInsecurePackages = [
-        # needed for Folding@home
-        "python-2.7.18.6"
-        "python-2.7.18.6-env"
-      ];
-    };
-    overlays = [inputs.emacs-overlay.overlay];
-  };
+  nixpkgs.config.permittedInsecurePackages = [
+    # needed for Folding@home
+    "python-2.7.18.6"
+    "python-2.7.18.6-env"
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

@@ -2,8 +2,8 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
-    nixpkgs-firefox.url = "github:Enzime/nixpkgs/firefox-bin-darwin";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
+    nixpkgs-firefox.url = github:Enzime/nixpkgs/firefox-bin-darwin;
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -12,16 +12,16 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-overlay.url = github:nix-community/emacs-overlay;
-    emacs-darwin = {
-      url = "github:cmacrae/emacs";
-      inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.url = github:lafrenierejm/emacs-overlay/feature/aarch64-darwin;
+    emacs-src = {
+      url = github:emacs-mirror/emacs/emacs-29;
+      flake = false;
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
     gron.url = "github:lafrenierejm/gron";
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.05";
+      url = github:lafrenierejm/home-manager/release-23.05_ripgrep-all;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-generators = {
@@ -32,7 +32,10 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ripgrep-all.url = "github:lafrenierejm/ripgrep-all/patch/nix-update";
+    ripgrep-all = {
+      url = github:lafrenierejm/ripgrep-all;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ripsecrets = {
       url = "github:sirwart/ripsecrets";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -112,8 +115,8 @@
             inputs.darwin.lib.darwinSystem rec {
               system = "aarch64-darwin";
               modules = [
-                ./nixpkgs/common.nix
-                ./nixpkgs/darwin.nix
+                ./nix/common.nix
+                ./nix/darwin.nix
                 inputs.home-manager.darwinModules.home-manager
                 {
                   home-manager.extraSpecialArgs = {
@@ -127,7 +130,10 @@
                   users.users."${username}".home = "/Users/${username}";
                 }
               ];
-              specialArgs = {personal = true;};
+              specialArgs = {
+                inherit inputs system;
+                personal = true;
+              };
             };
         };
         nixosConfigurations = {

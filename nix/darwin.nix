@@ -4,6 +4,7 @@
   lib,
   pkgs,
   personal,
+  system,
   ...
 }: let
   dotnetPackage = "dotnet@6";
@@ -16,7 +17,7 @@ in {
       upgrade = true;
       cleanup = "uninstall";
     };
-    brews = ["nuget" "pyenv" dotnetPackage];
+    brews = ["libusb" "nuget" "pyenv" dotnetPackage];
     casks =
       ["karabiner-elements" "logitech-unifying" "lunar" "scroll-reverser"]
       ++ (lib.lists.optionals personal [
@@ -27,16 +28,17 @@ in {
         "mullvadvpn"
         "multipatch"
         "openemu"
+        "skype"
         "snes9x"
         "steam"
         "transmission"
         "visualboyadvance-m"
         "yt-music"
+        "zsa-wally"
       ]);
     taps = ["homebrew/cask-drivers"];
   };
 
-  overlays = [inputs.emacs-overlay."${system}".overlay];
   services = {nix-daemon.enable = true;};
 
   # Whether Touch ID is enabled as a `sudo` auth mechanism.

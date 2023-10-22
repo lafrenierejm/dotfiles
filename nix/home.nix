@@ -55,11 +55,11 @@ in {
     emacs = {
       enable = true;
       package =
-        (
-          if pkgs.stdenv.isDarwin
-          then inputs.emacs-darwin.packages."${system}".emacs
-          else inputs.emacs-overlay.packages."${system}".emacs-pgtk
-        )
+        inputs
+        .emacs-overlay
+        .packages
+        ."${system}"
+        .emacs-pgtk
         .overrideAttrs (old: {
           passthru =
             old.passthru

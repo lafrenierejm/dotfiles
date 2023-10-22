@@ -5373,13 +5373,6 @@ This can benefit both literate and traditional programming by allowing one to co
   ('tree-sitter-mode-hook #'tree-sitter-hl-mode))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package tree-sitter-langs
-  :if (eq system-type 'darwin)
-  :demand
-  :after tree-sitter)
-#+end_src
-
 *** /Evil TextObj Tree-Sitter/
 
 #+begin_src emacs-lisp
