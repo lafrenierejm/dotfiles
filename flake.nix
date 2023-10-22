@@ -84,7 +84,10 @@
           flakeCheck = false; # use pre-commit's check instead
           programs = {
             alejandra.enable = true; # nix
-            shfmt.enable = true;
+            shfmt = {
+              enable = true;
+              indent_size = null;
+            };
             prettier.enable = true;
           };
         };
