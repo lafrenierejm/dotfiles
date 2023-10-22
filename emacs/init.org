@@ -191,6 +191,11 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
 
 ** Environment Variables
 
+#+begin_src emacs-lisp
+(setenv "EDITOR" "emacsclient")
+(setenv "PAGER" "cat")
+#+end_src
+
 *** /Exec Path From Shell/
 
 #+begin_src emacs-lisp
