@@ -4,11 +4,14 @@
   lib,
   pkgs,
   personal,
-  system,
   ...
 }: let
-  dotnetPackage = "dotnet@6";
-  dotnetInstallDir = "/opt/homebrew/opt/${dotnetPackage}";
+  dotnetBrew = "dotnet@6";
+  opensslBrew = "openssl";
+  libraries =
+    [dotnetBrew opensslBrew]
+    ++ (lib.lists.optionals (!personal) ["postgresql@12"]);
+  brewPath = pkg: "/opt/homebrew/opt/${pkg}";
 in {
   homebrew = {
     enable = true;
@@ -17,9 +20,9 @@ in {
       upgrade = true;
       cleanup = "uninstall";
     };
-    brews = ["libusb" "nuget" "pyenv" dotnetPackage];
+    brews = ["make" "nvm" "nuget" "pyenv"] ++ libraries;
     casks =
-      ["karabiner-elements" "logitech-unifying" "lunar" "scroll-reverser"]
+      ["karabiner-elements" "lunar" "scroll-reverser"]
       ++ (lib.lists.optionals personal [
         "aldente"
         "balenaetcher"
@@ -35,16 +38,36 @@ in {
         "visualboyadvance-m"
         "yt-music"
         "zsa-wally"
+      ])
+      ++ (lib.lists.optionals (!personal) [
+        "amazon-chime"
+        "docker"
+        "firefox"
       ]);
     taps = ["homebrew/cask-drivers"];
   };
-
-  services = {nix-daemon.enable = true;};
+  environment = {
+    systemPath =
+      lib.trivial.concat [config.homebrew.brewPrefix]
+      (map (pkg: (brewPath pkg) + "/bin") libraries);
+    variables = rec {
+      CFLAGS =
+        lib.concatStringsSep " "
+        (map (pkg: ("-I" + (brewPath pkg) + "/include")) libraries);
+      CPPFLAGS = CFLAGS;
+      DOTNET_ROOT = (brewPath dotnetBrew) + "/libexec";
+      LDFLAGS =
+        lib.concatStringsSep " "
+        (map (pkg: ("-L" + (brewPath pkg) + "/lib")) libraries);
+      OPENSSL_DIR = brewPath opensslBrew;
+      OPENSSL_ROOT_DIR = OPENSSL_DIR;
+      PKG_CONFIG_PATH =
+        lib.concatStringsSep " "
+        (map (pkg: (brewPath pkg) + "/lib/pkgconfig") libraries);
+    };
+  };
 
   # Whether Touch ID is enabled as a `sudo` auth mechanism.
   security.pam.enableSudoTouchIdAuth = personal;
-
-  environment.pathsToLink = ["/share/bash-completion"];
-  environment.systemPath = ["${dotnetInstallDir}/bin" config.homebrew.brewPrefix];
-  environment.variables = {DOTNET_ROOT = "${dotnetInstallDir}/libexec";};
+  services.nix-daemon.enable = true;
 }

@@ -115,6 +115,7 @@
         darwinConfigurations = {
           macbook = let
             username = "lafrenierejm";
+            personal = true;
           in
             inputs.darwin.lib.darwinSystem rec {
               system = "aarch64-darwin";
@@ -127,7 +128,7 @@
                     inputs.emacs-overlay.overlays.default
                   ];
                   home-manager.extraSpecialArgs = {
-                    inherit inputs system username;
+                    inherit inputs system username personal;
                     gitEmail = "git@lafreniere.xyz";
                     gitUseGpg = true;
                   };
@@ -138,9 +139,39 @@
                 }
               ];
               specialArgs = {
-                inherit inputs system;
-                personal = true;
+                inherit inputs system personal;
               };
+            };
+
+          JLAFRENI0523-MB = let
+            username = "joseph.lafreniere";
+            domain = "renaissance.com";
+            personal = false;
+          in
+            inputs.darwin.lib.darwinSystem rec {
+              modules = [
+                ./nix/common.nix
+                ./nix/darwin.nix
+                inputs.home-manager.darwinModules.home-manager
+                {
+                  nixpkgs.overlays = [
+                    inputs.emacs-overlay.overlays.default
+                  ];
+                  home-manager.extraSpecialArgs = {
+                    inherit inputs system username personal;
+                    gitEmail = "joseph.lafreniere@${domain}";
+                    gitUseGpg = false;
+                  };
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users."${username}" = import ./nix/home.nix;
+                  users.users."${username}".home = "/Users/${username}";
+                }
+              ];
+              specialArgs = {
+                inherit inputs personal system;
+              };
+              system = "aarch64-darwin";
             };
         };
         nixosConfigurations = {
