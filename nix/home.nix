@@ -21,6 +21,8 @@
     if pkgs.stdenv.isDarwin
     then "${pinentry}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
     else "${pinentry}/bin/pinentry";
+  pyenvEnable = pkgs.lib.readFile ../sh/pyenv.sh;
+  voltaEnable = pkgs.lib.readFile ../sh/volta.sh;
 in {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -35,6 +37,8 @@ in {
   home.sessionVariables = {
     DIRENV_LOG_FORMAT = "";
     NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
+    EDITOR = "emacsclient --alternate-editor='' --tty %s";
+    VISUAL = "emacsclient --alternate-editor='' --create-frame %s";
   };
 
   home.shellAliases = {
@@ -47,8 +51,31 @@ in {
   };
 
   programs = {
+    bash = {
+      enable = true;
+      enableCompletion = true;
+      enableVteIntegration = true;
+      historyControl = [
+        # From https://github.com/CeleritasCelery/emacs-native-shell-complete#bash:
+        # > If the HISTCONTROL environment variable is not set to ignorespace or
+        # > ignoreboth you will get a lot of garbage in your shell history.
+        "erasedups"
+        "ignorespace"
+      ];
+      initExtra = lib.concatStringsSep "\n" [
+        # From https://github.com/CeleritasCelery/emacs-native-shell-complete#bash:
+        # > We [...] need to disable bracketed-paste.
+        "set enable-bracketed-paste off"
+        # Enable extended globbing patterns.
+        "shopt -s extglob"
+        # Enable non-Nix programs.
+        pyenvEnable
+        voltaEnable
+      ];
+    };
     direnv = {
       enable = true;
+      enableBashIntegration = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
@@ -358,14 +385,12 @@ in {
       autocd = true;
       initExtra = lib.concatStringsSep "\n" [
         ''. "$HOME/.config/zsh/vterm.zsh"''
-        # pyenv
-        ''export PYENV_ROOT="$HOME/.pyenv"''
-        ''command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"''
-        ''eval "$(pyenv init -)"''
+        pyenvEnable
+        voltaEnable
       ];
-      profileExtra =
-        lib.concatStringsSep "\n"
-        [''export PATH="$PATH:$HOME/.dotnet/tools"''];
+      profileExtra = lib.concatStringsSep "\n" [
+        ''export PATH="$PATH:$HOME/.dotnet/tools"''
+      ];
     };
   };
 

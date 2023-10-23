@@ -44,6 +44,7 @@ in {
   # Whether Touch ID is enabled as a `sudo` auth mechanism.
   security.pam.enableSudoTouchIdAuth = personal;
 
+  environment.pathsToLink = ["/share/bash-completion"];
   environment.systemPath = ["${dotnetInstallDir}/bin" config.homebrew.brewPrefix];
   environment.variables = {DOTNET_ROOT = "${dotnetInstallDir}/libexec";};
 }
