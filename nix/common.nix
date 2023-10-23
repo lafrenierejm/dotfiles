@@ -21,10 +21,7 @@
       trusted-public-keys = ["emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY="];
     };
   };
-  nixpkgs.config = {
-    allowUnfree = true;
-    overlays = [inputs.emacs-overlay.overlay];
-  };
+  nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [atool fd git ripgrep zsh];
 

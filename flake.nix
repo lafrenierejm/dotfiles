@@ -123,6 +123,9 @@
                 ./nix/darwin.nix
                 inputs.home-manager.darwinModules.home-manager
                 {
+                  nixpkgs.overlays = [
+                    inputs.emacs-overlay.overlays.default
+                  ];
                   home-manager.extraSpecialArgs = {
                     inherit inputs system username;
                     gitEmail = "git@lafreniere.xyz";
@@ -152,6 +155,9 @@
                 ./nix/earthbound/configuration.nix
                 inputs.home-manager.nixosModules.home-manager
                 {
+                  nixpkgs.overlays = [
+                    inputs.emacs-overlay.overlays.default
+                  ];
                   home-manager.extraSpecialArgs = {
                     inherit inputs system username;
                     gitEmail = "git@lafreniere.xyz";
