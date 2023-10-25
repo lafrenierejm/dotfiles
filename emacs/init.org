@@ -5555,6 +5555,13 @@ Add the newly created modes to /Flycheck/'s blacklist.
 'poly-terraform-json-mode 'poly-terraform-json-innermode
 #+end_src
 
+**** /Eglot/
+
+Enable Eglot in Go buffers.
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('terraform-mode-hook #'eglot-ensure)
+#+end_src
+
 **** Terragrunt
 
 #+begin_src emacs-lisp :noweb-ref hcl-mode/config
