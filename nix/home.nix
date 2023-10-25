@@ -125,6 +125,7 @@ in {
           apples-mode
           auctex
           browse-at-remote
+          buffer-name-relative
           caps-lock
           cascading-dir-locals
           chatgpt-shell
