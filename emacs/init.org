@@ -1779,7 +1779,12 @@ Smartparens Config configures Smartparens for various programming languages.
 #+begin_src emacs-lisp
 (use-package smart-dash
   :ghook
-  <<smart-dash/ghook>>)
+  <<smart-dash/ghook>>
+
+  :config
+  (defun smart-dash-enable ()
+    "Enable `smart-dash-mode'."
+    (smart-dash-mode)))
 #+end_src
 
 ** Caps Lock
@@ -3326,7 +3331,7 @@ EditorConfig files are easily readable and they work nicely with version control
 
 Enable smart dashes in EditorConfig buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-('editorconfig-conf-mode-hook #'smart-dash-mode)
+('editorconfig-conf-mode-hook #'smart-dash-enable)
 #+end_src
 
 ** /Cascading Dir-Locals/
@@ -5494,7 +5499,7 @@ It started out from Aurélien Tisné's ini-mode.
 
 Enable \src_emacs-lisp{smart-dash-mode} in Terraform buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-('terraform-mode-hook nil)
+('terraform-mode-hook #'smart-dash-enable)
 #+end_src
 
 ***** Inline JSON
@@ -6383,7 +6388,6 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 **** /Smart Dash/
 
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-(python-major-mode-hooks nil)
 #+end_src
 
 **** /Tree-Sitter/
@@ -6391,6 +6395,7 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 Enable tree-sitter in Python buffers.
 #+begin_src emacs-lisp :noweb-ref tree-sitter/ghook
 ('python-mode-hook nil)
+(python-major-mode-hooks #'smart-dash-enable)
 #+end_src
 
 **** /Eglot/
@@ -6685,8 +6690,8 @@ This is mostly copied from https://github.com/nonsequitur/inf-ruby."
 *** /Smart Dash/
 
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-('ruby-mode-hook nil)
-('inf-ruby-mode-hook nil)
+('ruby-mode-hook #'smart-dash-enable)
+('inf-ruby-mode-hook #'smart-dash-enable)
 #+end_src
 
 ** Rust
@@ -6722,7 +6727,7 @@ The project's README advertises /Rust Mode/ as providing:
 
 Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-('rust-mode-hook nil)
+('rust-mode-hook #'smart-dash-enable)
 #+end_src
 
 **** /Reformatter/
@@ -6785,7 +6790,7 @@ My username is used above just to demarcate the function as a custom one.
 
 Enable `smart-dash-mode` in SQL buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-('(sql-interactive-mode-hook sql-mode-hook) #'smart-dash-mode)
+('(sql-interactive-mode-hook sql-mode-hook) #'smart-dash-enable)
 #+end_src
 
 **** Load SQLite Files in ~sql-interactive-mode~
@@ -6967,7 +6972,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 
 Enable \src_emacs-lisp{smart-dash-mode} for \src_emacs-lisp{compilation-mode} buffers.
 #+begin_src emacs-lisp :noweb-ref smart-dash/ghook
-('compilation-mode-hook nil)
+('compilation-mode-hook #'smart-dash-enable)
 #+end_src
 
 * Refactoring
