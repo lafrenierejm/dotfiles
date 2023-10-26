@@ -6270,7 +6270,7 @@ Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
 To make it easier to apply settings to all major modes I edit Python code in, a variable is defined with the list of the modes:
 #+begin_src emacs-lisp :noweb-ref constants
 (defconst python-major-modes
-  '(inferior-python-mode python-mode)
+  '(inferior-python-mode python-mode python-ts-mode)
   "A list of Python major modes.")
 #+end_src
 
@@ -6395,7 +6395,7 @@ Add the resulting newly-created RST modes to /Flycheck/'s blacklist.
 
 Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode} buffers.
 #+begin_src emacs-lisp :noweb-ref rainbow-identifiers/ghook
-('python-mode-hook nil)
+('(python-mode-hook python-ts-mode-hook) nil)
 #+end_src
 
 **** /Smart Dash/
@@ -6414,7 +6414,7 @@ Enable tree-sitter in Python buffers.
 **** /Eglot/
 
 #+begin_src emacs-lisp :noweb-ref eglot/ghook
-('python-mode-hook #'eglot-ensure)
+('(python-mode-hook python-ts-mode-hook) #'eglot-ensure)
 #+end_src
 
 **** Per-Project REPLs
