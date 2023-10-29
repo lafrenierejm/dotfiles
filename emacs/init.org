@@ -600,12 +600,12 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 ('yaml-mode-hook #'display-line-numbers-evil-insert-entry)
 #+end_src
 
-**** Display Visual-Relative Line Numbers at Start and Upon Exiting Insert State
+**** Display Relative Line Numbers at Start and Upon Exiting Insert State
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/config
-(defun display-line-numbers-visual ()
+(defun display-line-numbers-relative ()
   "Display visual-relative line numbers."
-  (setq-local display-line-numbers 'visual))
+  (setq-local display-line-numbers 'relative))
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/config
@@ -613,7 +613,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   "Display absolute line numbers upon exiting insert state."
   (general-add-hook
    'evil-insert-state-exit-hook
-   #'display-line-numbers-visual
+   #'display-line-numbers-relative
    nil
    t))
 #+end_src
@@ -624,8 +624,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/ghook
-('prog-mode-hook #'display-line-numbers-visual)
-('yaml-mode-hook #'display-line-numbers-visual)
+('prog-mode-hook #'display-line-numbers-relative)
+('yaml-mode-hook #'display-line-numbers-relative)
 #+end_src
 
 ** /Highlight Indent Guides/
