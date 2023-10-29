@@ -6453,11 +6453,6 @@ The /[[Reformatter]]/ package is used to create an Emacs formatter using isort's
  :args '("--atomic" "-"))
 #+end_src
 
-The defined hook can be added to all Python files.
-#+begin_src emacs-lisp :noweb-ref reformatter/ghook
-('python-mode-hook #'isort-format-on-save-mode)
-#+end_src
-
 *** /Rainbow Delimiters/
 
 Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} buffers.
