@@ -6476,7 +6476,10 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
    "C-c C-p" #'run-groovy)
 
   :config
-  (make-variable-buffer-local 'groovy-indent-offset))
+  (make-variable-buffer-local 'groovy-indent-offset)
+  (defun run-groovy ()
+    (interactive)
+    (comint-run "groovysh")))
 #+end_src
 
 Enable \src_emacs-lisp{rainbow-delimiters-mode} in Groovy buffers.
