@@ -13,5 +13,6 @@ mimeapps.list
 user-dirs.dirs
 
 # Nix flake direnv
+/.pre-commit-config.yaml
 /direnv/
 /result
