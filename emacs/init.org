@@ -5381,8 +5381,10 @@ This can benefit both literate and traditional programming by allowing one to co
   :demand
 
   :ghook
-  <<tree-sitter/ghook>>
-  ('tree-sitter-mode-hook #'tree-sitter-hl-mode))
+  ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
+
+  :config
+  (global-tree-sitter-mode))
 #+end_src
 
 *** /Evil TextObj Tree-Sitter/
