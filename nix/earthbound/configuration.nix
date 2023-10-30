@@ -11,12 +11,19 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./disko.nix
   ];
+
+  age.secrets.luks.file = ./luks.age;
+
+  # Use latest kernel that supports ZFS.
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelParams = ["nohibernate"];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = ["ntfs"];
+  boot.supportedFilesystems = ["ntfs" "zfs"];
   boot.initrd.kernelModules = ["amdgpu"];
 
   networking.hostName = "earthbound"; # Define your hostname.
@@ -163,6 +170,7 @@
   services.foldingathome.enable = true;
 
   # Open ports in the firewall.
+  networking.hostId = "be1777d9";
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.

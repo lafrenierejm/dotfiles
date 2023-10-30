@@ -181,6 +181,7 @@
           earthbound = let
             username = "lafrenierejm";
             system = "x86_64-linux";
+            personal = true;
           in
             inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
@@ -188,13 +189,14 @@
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
                 inputs.agenix.nixosModules.default
+                inputs.disko.nixosModules.disko
                 inputs.home-manager.nixosModules.home-manager
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
                   ];
                   home-manager.extraSpecialArgs = {
-                    inherit inputs system username;
+                    inherit inputs personal system username;
                     gitEmail = "git@lafreniere.xyz";
                     gitUseGpg = true;
                   };
@@ -209,7 +211,7 @@
                   };
                 }
               ];
-              specialArgs = {inherit inputs username;};
+              specialArgs = {inherit inputs personal system username;};
             };
         };
       };
