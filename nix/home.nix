@@ -478,6 +478,7 @@ in {
       rnix-lsp
       rsync
       rust-analyzer
+      subversion
       terraform-ls
       typos
       unrar
