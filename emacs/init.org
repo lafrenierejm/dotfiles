@@ -2101,8 +2101,23 @@ If ~rga~ is present, it is preferred to plain ~rg~.
    counsel-grep-base-command))
 #+end_src
 
+~counsel-grep-base-command~ expects a string with two instances of ~%s~.
+The first instance is replaced with the regex.
+The second is replaced with the name of the current file.
+
 #+begin_src emacs-lisp :noweb-ref counsel/custom
-(counsel-grep-base-command counsel-rg-base-command)
+(counsel-grep-base-command
+ (if-let ((command (cl-some #'executable-find '("rga" "rg"))))
+     (s-join " " (list command
+                       "--smart-case"
+                       "--max-columns=88"
+                       "--max-columns-preview"
+                       "--no-heading"
+                       "--line-number"
+                       "--color=never"
+                       "%s"
+                       "%s"))
+   counsel-grep-base-command))
 #+end_src
 
 *** Use Grep for Searching Large Buffers
