@@ -89,6 +89,8 @@ in {
         ."${system}"
         .emacs-pgtk
         .overrideAttrs (old: {
+          withTreeSitter = true;
+          withNativeCompilation = true;
           passthru =
             old.passthru
             // {
