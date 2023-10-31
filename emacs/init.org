@@ -6745,6 +6745,12 @@ Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
   :stdout nil)
 #+end_src
 
+**** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+(rust-mode-hook #'eglot-ensure)
+#+end_src
+
 ** Structured Query Language (SQL)
 
 *** SQL
