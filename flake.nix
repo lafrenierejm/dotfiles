@@ -139,7 +139,7 @@
                 }
               ];
               specialArgs = {
-                inherit inputs system personal;
+                inherit inputs system personal username;
               };
             };
 
@@ -169,7 +169,7 @@
                 }
               ];
               specialArgs = {
-                inherit inputs personal system;
+                inherit inputs personal system username;
               };
               system = "aarch64-darwin";
             };
@@ -205,7 +205,7 @@
                   };
                 }
               ];
-              specialArgs = {inherit inputs;};
+              specialArgs = {inherit inputs username;};
             };
         };
       };

@@ -4,6 +4,7 @@
   config,
   lib,
   pkgs,
+  username,
   ...
 }: {
   nix = {
@@ -19,6 +20,7 @@
       experimental-features = "nix-command flakes";
       substituters = ["https://cachix.org/api/v1/cache/emacs"];
       trusted-public-keys = ["emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY="];
+      trusted-users = [username];
     };
   };
   nixpkgs.config.allowUnfree = true;
