@@ -472,6 +472,7 @@ in {
       mpv
       mu
       nixfmt
+      nodePackages.bash-language-server
       nodePackages.prettier
       pyright
       ripgrep
