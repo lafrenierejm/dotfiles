@@ -66,16 +66,43 @@
         # Per-system attributes can be defined here. The self' and inputs'
         # module parameters provide easy access to attributes of the same
         # system.
-        packages =
-          {
-            default = pkgs.hello;
-          }
-          // pkgs.lib.optionalAttrs (system == "x84_64-linux") {
-            install-iso = inputs.nixos-generators.nixosGenerate {
+        packages = {
+          default = pkgs.hello;
+          install-iso = let
+            username = "lafrenierejm";
+            personal = true;
+          in
+            inputs.nixos-generators.nixosGenerate {
               inherit system;
               format = "install-iso";
+              modules = [
+                ./nix/common.nix
+                ./nix/earthbound/configuration.nix
+                inputs.disko.nixosModules.disko
+                inputs.home-manager.nixosModules.home-manager
+                {
+                  nixpkgs.overlays = [
+                    inputs.emacs-overlay.overlays.default
+                  ];
+                  home-manager.extraSpecialArgs = {
+                    inherit inputs personal system username;
+                    gitEmail = "git@lafreniere.xyz";
+                    gitUseGpg = true;
+                  };
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users."${username}" = import ./nix/home.nix;
+                  users.users."${username}" = {
+                    home = "/home/${username}";
+                    openssh.authorizedKeys.keys = [
+                      (builtins.readFile ./ssh/macbook.pub)
+                    ];
+                  };
+                }
+              ];
+              specialArgs = {inherit inputs personal system username;};
             };
-          };
+        };
 
         # Auto formatters. This also adds a flake check to ensure that the
         # source tree was auto formatted.

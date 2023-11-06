@@ -26,15 +26,15 @@
   boot.supportedFilesystems = ["ntfs" "zfs"];
   boot.initrd.kernelModules = ["amdgpu"];
 
+  # Enable networking
   networking.hostName = "earthbound"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
+  networking.networkmanager.enable = true;
+  networking.wireless.enable = false;
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
+  # Enable Mullvad VPN.
+  services.mullvad-vpn.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -53,9 +53,6 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
   services.xserver = {
@@ -131,11 +128,16 @@
   };
   environment.etc."dual-function-keys.yaml".text = builtins.readFile ../../interception-tools/dual-function-keys.yaml;
 
+  services.udev.packages = with pkgs; [
+    teensy-udev-rules
+  ];
+
   # Allow unfree packages
   nixpkgs.config.permittedInsecurePackages = [
     # needed for Folding@home
     "python-2.7.18.6"
     "python-2.7.18.6-env"
+    "electron-24.8.6"
   ];
 
   # List packages installed in system profile. To search, run:
@@ -146,6 +148,7 @@
     fahviewer
     neovim
     zsh
+    teensy-loader-cli
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -168,6 +171,9 @@
   };
 
   services.foldingathome.enable = true;
+
+  # https://nixos.wiki/wiki/Fwupd
+  services.fwupd.enable = true;
 
   # Open ports in the firewall.
   networking.hostId = "be1777d9";
