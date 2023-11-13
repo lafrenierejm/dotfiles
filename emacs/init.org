@@ -6239,6 +6239,12 @@ Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
 ('sh-mode-hook #'sh-script-set-shell-type)
 #+end_src
 
+**** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('sh-mode-hook #'eglot-ensure)
+#+end_src
+
 *** Shell Format (/shfmt/)
 
 #+begin_src emacs-lisp
