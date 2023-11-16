@@ -38,8 +38,8 @@ in {
   home.sessionVariables = {
     DIRENV_LOG_FORMAT = "";
     NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
-    EDITOR = "emacsclient --alternate-editor='' --tty %s";
-    VISUAL = "emacsclient --alternate-editor='' --create-frame %s";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   home.shellAliases = {
