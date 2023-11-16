@@ -389,11 +389,17 @@ The tool bar can be disabled completely.
 
 ** /Startup/
 
-The startup message and scratch message add no value, so they are disabled.
+The startup screen and scratch message add no value, so they are disabled.
 #+begin_src emacs-lisp
 (setq
  inhibit-startup-screen t
  initial-scratch-message nil)
+#+end_src
+
+The ~*scratch*~ buffer starts in ~lisp-interaction-mode~ by default.
+Let's change that to the generic ~fundamental-mode~.
+#+begin_src emacs-lisp
+(setq initial-major-mode #'fundamental-mode)
 #+end_src
 
 ** Font
