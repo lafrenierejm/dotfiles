@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
     nixpkgs-firefox.url = github:Enzime/nixpkgs/firefox-bin-darwin;
+    agenix.url = github:ryantm/agenix;
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -122,6 +123,7 @@
               modules = [
                 ./nix/common.nix
                 ./nix/darwin.nix
+                inputs.agenix.nixosModules.default
                 inputs.home-manager.darwinModules.home-manager
                 {
                   nixpkgs.overlays = [
@@ -152,6 +154,7 @@
               modules = [
                 ./nix/common.nix
                 ./nix/darwin.nix
+                inputs.agenix.nixosModules.default
                 inputs.home-manager.darwinModules.home-manager
                 {
                   nixpkgs.overlays = [
@@ -184,6 +187,7 @@
               modules = [
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
+                inputs.agenix.nixosModules.default
                 inputs.home-manager.nixosModules.home-manager
                 {
                   nixpkgs.overlays = [

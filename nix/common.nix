@@ -4,6 +4,7 @@
   config,
   lib,
   pkgs,
+  system,
   username,
   ...
 }: {
@@ -25,7 +26,7 @@
   };
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with pkgs; [atool fd git ripgrep zsh];
+  environment.systemPackages = [inputs.agenix.packages."${system}".default] ++ (with pkgs; [atool fd git ripgrep zsh]);
 
   fonts = {
     fontDir.enable = true;
