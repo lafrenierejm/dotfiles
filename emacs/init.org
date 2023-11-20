@@ -679,7 +679,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 #+begin_src emacs-lisp
 (use-package evil-textobj-tree-sitter
   :demand
-  :after tree-sitter
+  :after (:all evil tree-sitter)
 
   :config
   (defun evil-textobj-tree-sitter-define-key (key textobj)
@@ -1432,6 +1432,9 @@ I prefer Vi's keybindings to Emacs's, so I enable Evil everywhere I can.
   ;; Load this package eagerly.
   :demand
 
+  :preface
+  (setq-default evil-want-keybinding nil)
+
   ;; Add the following autoloading hooks.
   :ghook
   <<evil/ghook>>
@@ -1673,9 +1676,6 @@ The syntactic blocks are as follows, ordered from right to left:
 
   ;; Load this package after the following packages.
   :after evil
-
-  :preface
-  (setq-default evil-want-keybinding nil)
 
   ;; Apply the following variable customizations.
   :custom
