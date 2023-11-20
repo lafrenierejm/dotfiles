@@ -661,6 +661,40 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 (add-hook 'ns-system-appearance-change-functions #'lafrenierejm/apply-theme)
 #+end_src
 
+** Treesitter
+
+#+begin_src emacs-lisp
+(use-package tree-sitter
+  :demand
+
+  :ghook
+  ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
+
+  :config
+  (global-tree-sitter-mode))
+#+end_src
+
+*** /Evil TextObj Tree-Sitter/
+
+#+begin_src emacs-lisp
+(use-package evil-textobj-tree-sitter
+  :demand
+  :after tree-sitter
+
+  :config
+  (defun evil-textobj-tree-sitter-define-key (key textobj)
+    "Bind key `key' to outer and inner variants of `textobj'."
+    (eval `(define-key evil-outer-text-objects-map ,key
+             (evil-textobj-tree-sitter-get-textobj ,(s-join "." (list textobj "outer")))))
+    (eval `(define-key evil-inner-text-objects-map ,key
+             (evil-textobj-tree-sitter-get-textobj ,(s-join "." (list textobj "inner"))))))
+
+  (evil-textobj-tree-sitter-define-key "f" "function")
+  (evil-textobj-tree-sitter-define-key "b" "block")
+  (evil-textobj-tree-sitter-define-key "s" "statement")
+  (evil-textobj-tree-sitter-define-key "c" "call"))
+#+end_src
+
 * Buffer Organization
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref buffer-organization
@@ -5387,40 +5421,6 @@ This can benefit both literate and traditional programming by allowing one to co
   (:keymaps 'eglot-mode-map
    :states 'normal
    "g R" #'eglot-rename))
-#+end_src
-
-** Treesitter
-
-#+begin_src emacs-lisp
-(use-package tree-sitter
-  :demand
-
-  :ghook
-  ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
-
-  :config
-  (global-tree-sitter-mode))
-#+end_src
-
-*** /Evil TextObj Tree-Sitter/
-
-#+begin_src emacs-lisp
-(use-package evil-textobj-tree-sitter
-  :demand
-  :after tree-sitter
-
-  :config
-  (defun evil-textobj-tree-sitter-define-key (key textobj)
-    "Bind key `key' to outer and inner variants of `textobj'."
-    (eval `(define-key evil-outer-text-objects-map ,key
-             (evil-textobj-tree-sitter-get-textobj ,(s-join "." (list textobj "outer")))))
-    (eval `(define-key evil-inner-text-objects-map ,key
-             (evil-textobj-tree-sitter-get-textobj ,(s-join "." (list textobj "inner"))))))
-
-  (evil-textobj-tree-sitter-define-key "f" "function")
-  (evil-textobj-tree-sitter-define-key "b" "block")
-  (evil-textobj-tree-sitter-define-key "s" "statement")
-  (evil-textobj-tree-sitter-define-key "c" "call"))
 #+end_src
 
 ** Applescript
