@@ -4,6 +4,7 @@
 {
   inputs,
   config,
+  domain,
   pkgs,
   system,
   ...
@@ -12,6 +13,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./disko.nix
+    ./media-server.nix
   ];
 
   age.secrets.luks.file = ./luks.age;
@@ -175,12 +177,7 @@
   # https://nixos.wiki/wiki/Fwupd
   services.fwupd.enable = true;
 
-  # Open ports in the firewall.
   networking.hostId = "be1777d9";
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

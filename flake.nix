@@ -207,6 +207,7 @@
         nixosConfigurations = {
           earthbound = let
             username = "lafrenierejm";
+            domain = "lafreniere.xyz";
             system = "x86_64-linux";
             personal = true;
           in
@@ -224,7 +225,7 @@
                   ];
                   home-manager.extraSpecialArgs = {
                     inherit inputs personal system username;
-                    gitEmail = "git@lafreniere.xyz";
+                    gitEmail = "git@${domain}";
                     gitUseGpg = true;
                   };
                   home-manager.useGlobalPkgs = true;
@@ -238,7 +239,7 @@
                   };
                 }
               ];
-              specialArgs = {inherit inputs personal system username;};
+              specialArgs = {inherit inputs domain personal system username;};
             };
         };
       };
