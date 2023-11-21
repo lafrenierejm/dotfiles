@@ -74,12 +74,14 @@ in {
         voltaEnable
       ];
     };
+
     direnv = {
       enable = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
+
     emacs = {
       enable = true;
       package =
@@ -254,6 +256,7 @@ in {
           youtube-dl
         ];
     };
+
     firefox = {
       enable = personal;
       package =
@@ -274,10 +277,12 @@ in {
         };
       };
     };
+
     fzf = {
       enable = true;
       enableZshIntegration = true;
     };
+
     git = {
       enable = true;
       package = pkgs.gitAndTools.gitFull;
@@ -356,15 +361,19 @@ in {
       userEmail = gitEmail;
       userName = "Joseph LaFreniere";
     };
+
     home-manager.enable = true;
+
     htop = {
       enable = true;
       settings.show_program_path = true;
     };
+
     rbenv = {
       enable = true;
       enableZshIntegration = true;
     };
+
     ripgrep-all = {
       enable = true;
       package = inputs.ripgrep-all.packages."${system}".rga;
