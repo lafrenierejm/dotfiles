@@ -124,7 +124,10 @@
         pre-commit = {
           check.enable = true;
           settings.hooks = {
-            editorconfig-checker.enable = true;
+            editorconfig-checker = {
+              enable = true;
+              excludes = [".*\\.age"];
+            };
             treefmt.enable = true;
             typos.enable = true;
           };
