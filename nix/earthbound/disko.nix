@@ -1,4 +1,5 @@
 {config, ...}: {
+  age.secrets.luks.file = ./luks.age;
   disko.devices = {
     disk = {
       # /media

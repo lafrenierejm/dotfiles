@@ -17,8 +17,6 @@
     ./media-server.nix
   ];
 
-  age.secrets.luks.file = ./luks.age;
-
   # Use latest kernel that supports ZFS.
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   boot.kernelParams = ["nohibernate"];
