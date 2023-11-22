@@ -213,6 +213,7 @@
             domain = "lafreniere.xyz";
             system = "x86_64-linux";
             personal = true;
+            mediaUid = 1100;
           in
             inputs.nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
@@ -234,11 +235,20 @@
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.users."${username}" = import ./nix/home.nix;
-                  users.users."${username}" = {
-                    home = "/home/${username}";
-                    openssh.authorizedKeys.keys = [
-                      (builtins.readFile ./ssh/macbook.pub)
-                    ];
+                  users.groups.media = {gid = mediaUid;};
+                  users.users = {
+                    "${username}" = {
+                      home = "/home/${username}";
+                      openssh.authorizedKeys.keys = [
+                        (builtins.readFile ./ssh/macbook.pub)
+                      ];
+                      extraGroups = ["wheel" "media"];
+                    };
+                    media = {
+                      isNormalUser = true;
+                      uid = mediaUid;
+                      group = "media";
+                    };
                   };
                 }
               ];

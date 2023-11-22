@@ -1,4 +1,20 @@
-{domain, ...}: {
+{
+  domain,
+  pkgs,
+  ...
+}: {
+  services.transmission = {
+    enable = true;
+    user = "media";
+    group = "media";
+    settings = {
+      download-dir = "/media/complete";
+      incomplete-dir = "/media/incomplete";
+      watch-dir-enabled = false;
+    };
+  };
+  environment.systemPackages = [pkgs.transmission-qt];
+
   # Jellyfin runs on port 8096.
   services.jellyfin.enable = true;
 
