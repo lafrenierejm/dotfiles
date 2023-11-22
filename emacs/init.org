@@ -4642,23 +4642,6 @@ If =aspell= is not available, disable Ispell.
   <<wucuo/ghook>>)
 #+end_src
 
-** Flycheck
-
-#+begin_src emacs-lisp
-(use-package flycheck
-  ;; Load this package eagerly.
-  :demand
-
-  :custom
-  (flycheck-global-modes
-   (list #'not
-         <<flycheck/custom/global-blacklist>>
-         ))
-
-  :custom
-  (global-flycheck-mode +1))
-#+end_src
-
 * Feeds
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref feeds
@@ -5562,11 +5545,6 @@ Define the actual Polymode.
   :innermodes '(poly-terraform-json-innermode))
 #+end_src
 
-Add the newly created modes to /Flycheck/'s blacklist.
-#+begin_src emacs-lisp :noweb-ref flycheck/custom/global-blacklist
-'poly-terraform-json-mode 'poly-terraform-json-innermode
-#+end_src
-
 **** /Eglot/
 
 Enable Eglot in Go buffers.
@@ -6382,11 +6360,6 @@ Define the actual Polymode.
 Use the above Polymode as the default mode for Python buffers.
 #+begin_src emacs-lisp :noweb-ref polymode/mode
 ;; ("\\.py\\'" . poly-python-rst-mode)
-#+end_src
-
-Add the resulting newly-created RST modes to /Flycheck/'s blacklist.
-#+begin_src emacs-lisp :noweb-ref flycheck/custom/global-blacklist
-'poly-python-rst-mode 'poly-rst-python-innermode 'rst-mode
 #+end_src
 
 **** Rainbow Identifiers

@@ -175,7 +175,6 @@ in {
           fennel-mode
           file-info
           flx
-          flycheck
           forge
           form-feed
           geiser-guile
