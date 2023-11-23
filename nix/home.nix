@@ -489,6 +489,7 @@ in {
       bitwarden
       dconf2nix
       signal-desktop
+      transmission-qt
     ]))
     ++ (pkgs.lib.lists.optionals (!personal) (with pkgs; [
       groovy
