@@ -370,14 +370,15 @@ in {
       package = inputs.ripgrep-all.packages."${system}".rga;
       custom_adapters = [
         {
-          name = "gron";
+          name = "fastgron";
+          args = [];
           version = 1;
           description = "Transform JSON into discrete JS assignments";
           extensions = ["json"];
           mimetypes = ["application/json"];
           binary = "${
-            inputs.gron.packages."${system}".gronWithFallback
-          }/bin/gron-with-fallback";
+            inputs.fastgron.packages."${system}".fastgronWithFallback
+          }/bin/fastgron-with-fallback";
           disabledByDefault = false;
           matchOnlyByMime = false;
         }
@@ -407,7 +408,7 @@ in {
   home.packages =
     [pinentry]
     ++ (with inputs; [
-      gron.packages."${system}".gron
+      fastgron.packages."${system}".fastgron
       ripgrep-all.packages."${system}".rga
       ripsecrets.packages."${system}".ripsecrets
     ])

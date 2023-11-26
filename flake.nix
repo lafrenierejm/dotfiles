@@ -18,9 +18,9 @@
       url = github:emacs-mirror/emacs/emacs-29;
       flake = false;
     };
+    fastgron.url = github:lafrenierejm/fastgron/nix-flake;
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
-    gron.url = "github:lafrenierejm/gron";
     home-manager = {
       url = github:lafrenierejm/home-manager/release-23.05_ripgrep-all;
       inputs.nixpkgs.follows = "nixpkgs";
