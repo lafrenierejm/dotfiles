@@ -474,6 +474,7 @@ in {
       nixfmt
       nodePackages.bash-language-server
       nodePackages.prettier
+      nodePackages.yaml-language-server
       pyright
       ripgrep
       rnix-lsp
