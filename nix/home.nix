@@ -474,6 +474,7 @@ in {
       nixfmt
       nodePackages.bash-language-server
       nodePackages.prettier
+      nodePackages.vscode-json-languageserver
       nodePackages.yaml-language-server
       pyright
       ripgrep
