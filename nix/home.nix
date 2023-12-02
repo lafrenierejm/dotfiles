@@ -47,8 +47,8 @@ in {
       aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
     extract = "${pkgs.atool}/bin/atool --extract --explain --subdir";
     jq = "gojq";
-    la = "exa --long --git --time-style=long-iso --all";
-    ll = "exa --long --git --time-style=long-iso";
+    la = "eza --long --git --time-style=long-iso --all";
+    ll = "eza --long --git --time-style=long-iso";
   };
 
   programs = {
@@ -455,7 +455,7 @@ in {
       clojure
       coreutils
       curl
-      exa
+      eza
       fd
       gh
       ghq
