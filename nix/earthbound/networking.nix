@@ -22,7 +22,7 @@
   in ''
     while ! ${mullvad} status >/dev/null; do sleep 1; done
     ${mullvad} auto-connect set on
-    ${mullvad} tunnel ipv6 set on
+    ${mullvad} tunnel set ipv6 on
     ${mullvad} lockdown-mode set on
     ${mullvad} relay set location us
     ${mullvad} lan set allow

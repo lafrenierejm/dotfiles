@@ -124,8 +124,8 @@
   # Allow unfree packages
   nixpkgs.config.permittedInsecurePackages = [
     # needed for Folding@home
-    "python-2.7.18.6"
-    "python-2.7.18.6-env"
+    "python-2.7.18.7"
+    "python-2.7.18.7-env"
     "electron-24.8.6"
   ];
 
