@@ -25,6 +25,7 @@
     ${mullvad} tunnel ipv6 set on
     ${mullvad} lockdown-mode set on
     ${mullvad} relay set location us
+    ${mullvad} lan set allow
     ${mullvad} account login $(cat ${secretsFile})'';
 
   environment.systemPackages = with pkgs; [
