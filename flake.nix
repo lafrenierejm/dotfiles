@@ -2,15 +2,15 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
+    nixpkgs.url = github:NixOS/nixpkgs/release-23.11;
     nixpkgs-firefox.url = github:Enzime/nixpkgs/firefox-bin-darwin;
     agenix.url = github:ryantm/agenix;
     darwin = {
-      url = "github:lnl7/nix-darwin";
+      url = github:lnl7/nix-darwin;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
-      url = "github:nix-community/disko";
+      url = github:nix-community/disko;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-overlay.url = github:lafrenierejm/emacs-overlay/feature/aarch64-darwin;
@@ -18,19 +18,19 @@
       url = github:emacs-mirror/emacs/emacs-29;
       flake = false;
     };
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    flake-root.url = "github:srid/flake-root";
-    gron.url = "github:lafrenierejm/gron";
+    flake-parts.url = github:hercules-ci/flake-parts;
+    flake-root.url = github:srid/flake-root;
+    gron.url = github:lafrenierejm/gron;
     home-manager = {
-      url = github:lafrenierejm/home-manager/release-23.05_ripgrep-all;
+      url = github:lafrenierejm/home-manager/release-23.11_ripgrep-all;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-generators = {
-      url = "github:nix-community/nixos-generators";
+      url = github:nix-community/nixos-generators;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     pre-commit-hooks-nix = {
-      url = "github:cachix/pre-commit-hooks.nix";
+      url = github:cachix/pre-commit-hooks.nix;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ripgrep-all = {
@@ -38,11 +38,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ripsecrets = {
-      url = "github:sirwart/ripsecrets";
+      url = github:sirwart/ripsecrets;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
+      url = github:numtide/treefmt-nix;
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
