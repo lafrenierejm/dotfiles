@@ -24,8 +24,6 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = ["ntfs" "zfs"];
-  boot.initrd.kernelModules = ["amdgpu"];
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
