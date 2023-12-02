@@ -12,9 +12,9 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./disko.nix
-    ./networking.nix
+    ./filesystem.nix
     ./media-server.nix
+    ./networking.nix
   ];
 
   # Use latest kernel that supports ZFS.

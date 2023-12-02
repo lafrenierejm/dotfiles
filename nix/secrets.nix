@@ -6,7 +6,7 @@ let
 
   # hosts
   earthbound = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJ/z9xZb+vD4nWw1RX/BJplozu1Tq5KT2amfaqAYGas" # root@earthbound
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPlXf9T3ngqpk2cklKUKMdQT5q+0oa+Zf1Kv9FJj2Hjp" # root@earthbound
   ];
 in {
   "earthbound/luks.age".publicKeys = earthbound ++ lafrenierejm;
