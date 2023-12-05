@@ -5625,6 +5625,12 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
           "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
+*** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('json-mode-hook #'eglot-ensure)
+#+end_src
+
 ** Go
 
 *** /Go Mode/
@@ -6733,7 +6739,7 @@ Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
 **** /Eglot/
 
 #+begin_src emacs-lisp :noweb-ref eglot/ghook
-(rust-mode-hook #'eglot-ensure)
+('rust-mode-hook #'eglot-ensure)
 #+end_src
 
 ** Structured Query Language (SQL)
@@ -6931,6 +6937,12 @@ Polymode for Jina2 templating in YAML files.
 #+begin_src emacs-lisp
 (use-package poly-ansible
   :demand)
+#+end_src
+
+*** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('yaml-mode-hook #'eglot-ensure)
 #+end_src
 
 *** Prettier
