@@ -501,6 +501,9 @@ in {
       groovy
       nodejs
       packer
+      terraform
+      terraform-docs
+      tflint
     ]));
 
   home.file.".gnupg/gpg-agent.conf".text =
