@@ -183,6 +183,7 @@ in {
           go-eldoc
           go-mode
           gorepl-mode
+          graphql-ts-mode
           groovy-mode
           guix
           haskell-mode
@@ -473,6 +474,7 @@ in {
       mu
       nixfmt
       nodePackages.bash-language-server
+      nodePackages.graphql-language-service-cli
       nodePackages.prettier
       nodePackages.vscode-json-languageserver
       nodePackages.yaml-language-server

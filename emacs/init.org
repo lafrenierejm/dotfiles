@@ -5409,7 +5409,10 @@ This can benefit both literate and traditional programming by allowing one to co
   :general
   (:keymaps 'eglot-mode-map
    :states 'normal
-   "g R" #'eglot-rename))
+   "g R" #'eglot-rename)
+
+  :config
+  <<eglot/config>>)
 #+end_src
 
 ** Applescript
@@ -5685,6 +5688,27 @@ Enable Eglot in Go buffers.
   (:keymaps 'go-mode-keymap
    "C-c C-p" #'gorepl-run
    "C-c C-c" #'gorepl-run-load-current-file))
+#+end_src
+
+** GraphQL
+
+*** /GraphQL TS Mode/
+
+#+begin_src emacs-lisp
+(use-package graphql-ts-mode
+  :ensure t
+  :mode ("\\.graphql\\'" "\\.gql\\'"))
+#+end_src
+
+**** /Eglot/
+
+Enable Eglot in GraphQL buffers.
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('graphql-ts-mode-hook #'eglot-ensure)
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref eglot/config
+(add-to-list 'eglot-server-programs '((graphql-ts-mode graphql-mode) "graphql-lsp" "server" "-m" "stream"))
 #+end_src
 
 ** Lisps
