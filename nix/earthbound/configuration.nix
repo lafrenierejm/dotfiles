@@ -59,12 +59,6 @@
   };
   programs.dconf.enable = true;
 
-  # Enable Vulkan.
-  hardware.opengl = {
-    driSupport = true;
-    driSupport32Bit = true;
-  };
-
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -132,6 +126,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    clinfo
     curl
     fahcontrol
     fahviewer
