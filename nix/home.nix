@@ -453,6 +453,7 @@ in {
       awscli2
       babashka
       cachix
+      clang-tools
       clojure
       coreutils
       curl

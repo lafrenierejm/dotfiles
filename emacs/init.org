@@ -5440,6 +5440,14 @@ AutoHotkey is a free, open-source scripting language for Windows that allows use
 (use-package ahk-mode)
 #+end_src
 
+** C Languages
+
+*** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('c-mode-common-hook #'eglot-ensure)
+#+end_src
+
 ** Common Language Runtime (CLR)
 
 ** Configuration Files
