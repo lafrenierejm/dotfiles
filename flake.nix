@@ -188,7 +188,7 @@
                   home-manager.extraSpecialArgs = {
                     inherit inputs system username personal;
                     gitEmail = "joseph.lafreniere@${domain}";
-                    gitUseGpg = false;
+                    gitUseGpg = true;
                   };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
