@@ -59,6 +59,7 @@
 /systemd/
 /systemmonitorrc
 /systemsettingsrc
+/transmission
 /transmission-daemon/
 /user-dirs.dirs
 /user-dirs.locale
