@@ -241,6 +241,7 @@
                       home = "/home/${username}";
                       openssh.authorizedKeys.keys = [
                         (builtins.readFile ./ssh/macbook.pub)
+                        (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
                       ];
                       extraGroups = ["wheel" "media"];
                     };
