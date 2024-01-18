@@ -20,7 +20,12 @@ in {
       upgrade = true;
       cleanup = "uninstall";
     };
-    brews = ["make" "nvm" "nuget" "pyenv"] ++ libraries;
+    brews =
+      ["make" "nvm" "nuget" "pyenv"]
+      ++ libraries
+      ++ (
+        lib.lists.optionals (!personal) ["hashicorp/tap/boundary"]
+      );
     casks =
       ["karabiner-elements" "lunar" "scroll-reverser"]
       ++ (lib.lists.optionals personal [
@@ -44,7 +49,11 @@ in {
         "docker"
         "firefox"
       ]);
-    taps = ["homebrew/cask-drivers"];
+    taps =
+      ["homebrew/cask-drivers"]
+      ++ (
+        lib.lists.optionals (!personal) ["hashicorp/tap"]
+      );
   };
   environment = {
     systemPath =
