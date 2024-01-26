@@ -154,6 +154,13 @@
     };
   };
 
+  # Enable Podman.
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true; # create a `docker` alias for podman
+    defaultNetwork.settings.dns_enabled = true; # for podman-compose containers to talk to each other
+  };
+
   services.foldingathome.enable = true;
 
   # https://nixos.wiki/wiki/Fwupd
