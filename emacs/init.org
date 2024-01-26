@@ -6445,23 +6445,25 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
     python-shell-buffer-name))
 #+end_src
 
-*** /Python Black/
+**** Reformatter
 
-#+begin_src emacs-lisp
-(use-package python-black
-  ;; Load this package after the following packages.
-  :ghook
-  ('(python-mode-hook python-ts-mode-hook) #'python-black-on-save-mode)
-
-  ;; Load this package eagerly.
-  :demand)
+Sort imports using Ruff.
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  ruff-isort
+  :program "ruff"
+  :args (list "check" "--silent" "--select" "I" "--fix" "--fix-only" "-"))
 #+end_src
 
-*** Isort
+Format code using Ruff.
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  ruff-format
+  :program "ruff"
+  :args (list "format" "-"))
+#+end_src
 
-isort is a utility for sorting Python imports.
-
-The /[[Reformatter]]/ package is used to create an Emacs formatter using isort's command-line interface.
+Sort imports using isort.
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
  isort-format

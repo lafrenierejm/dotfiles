@@ -222,7 +222,6 @@ in {
           projectile
           pytest
           python
-          python-black
           racket-mode
           rainbow-delimiters
           rainbow-identifiers
