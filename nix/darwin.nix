@@ -48,6 +48,7 @@ in {
         "amazon-chime"
         "docker"
         "firefox"
+        "zoom"
       ]);
     taps =
       ["homebrew/cask-drivers"]
