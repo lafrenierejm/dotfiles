@@ -453,6 +453,7 @@ in {
       aws-sso-creds
       awscli2
       babashka
+      bfg-repo-cleaner
       cachix
       clang-tools
       clojure
