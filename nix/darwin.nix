@@ -28,6 +28,7 @@ in {
         "balenaetcher"
         "bitwarden"
         "iina"
+        "inkscape"
         "mullvadvpn"
         "multipatch"
         "openemu"
