@@ -36,7 +36,6 @@ in {
         "steam"
         "transmission"
         "visualboyadvance-m"
-        "yt-music"
         "zsa-wally"
       ])
       ++ (lib.lists.optionals (!personal) [
