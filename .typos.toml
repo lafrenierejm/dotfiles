@@ -1,2 +1,11 @@
+[files]
+extend-exclude = [
+"*.age",
+"*.crypt",
+]
+ignore-vcs = true
+
+
 [default.extend-words]
 crypted = "crypted"
+edn = "edn"

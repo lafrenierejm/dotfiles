@@ -3,7 +3,7 @@ alternative_order text/plain text/enriched text/html # Save HTML for last
 
   set abort_unmodified = yes                                         # Automatically abort unedited replies
 # set allow_8bit                                                     # Never do Q-P encoding on legal 8-bit chars
-# set arrow_cursor                                                   # Use '->' instead of hilighting line
+# set arrow_cursor                                                   # Use '->' instead of highlighting line
 # set ascii_chars                                                    # Use ASCII instead of ACS chars for threads
 # set askbcc                                                         #
 # set askcc                                                          #
@@ -25,7 +25,7 @@ unset edit_headers                                                   # Don't edi
   set folder           = "${HOME}/mail"                              # Path to mail directory
   set folder_format    = "%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f"  #
 # set force_name                                                     # fcc by recipient, create if mailbox nonexistent
-# set forward_decode                                                 # weed and MIME decode forwaded messages
+# set forward_decode                                                 # weed and MIME decode forwarded messages
 # set forward_format = "[%a: %s]"                                    # Subject to use when forwarding messages
 # set forward_quote                                                  # Quote the header and body of forward msgs
 # set index_format  = "%4C %Z %{%m/%d} %-15.15F (%4c) %s"            # format of the index

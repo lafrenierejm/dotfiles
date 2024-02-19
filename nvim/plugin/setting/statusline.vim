@@ -9,7 +9,7 @@ function! ShowFileFormatFlag()
 endfunction
 
 set statusline=%< " truncate line here if too long
-set statusline+=%f " path fo file in the buffer
+set statusline+=%f " path of file in the buffer
 set statusline+=%m " modified flag
 set statusline+=%r " readonly flag
 set statusline+=%= " break alignment of statusline
