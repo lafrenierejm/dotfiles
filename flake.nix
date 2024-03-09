@@ -36,10 +36,6 @@
     ripgrep-all = {
       url = github:lafrenierejm/ripgrep-all;
     };
-    ripsecrets = {
-      url = github:sirwart/ripsecrets;
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     treefmt-nix = {
       url = github:numtide/treefmt-nix;
       inputs.nixpkgs.follows = "nixpkgs";

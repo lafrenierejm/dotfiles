@@ -444,7 +444,6 @@ in {
     ++ (with inputs; [
       gron.packages."${system}".gron
       ripgrep-all.packages."${system}".rga
-      ripsecrets.packages."${system}".ripsecrets
     ])
     ++ (with pkgs; [
       (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers en-science])))
