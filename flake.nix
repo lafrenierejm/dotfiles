@@ -35,7 +35,6 @@
     };
     ripgrep-all = {
       url = github:lafrenierejm/ripgrep-all;
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     ripsecrets = {
       url = github:sirwart/ripsecrets;
