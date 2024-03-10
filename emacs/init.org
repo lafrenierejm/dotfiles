@@ -5289,6 +5289,7 @@ Create an alist whose keys are regexps matching filenames and whose values are t
 #+begin_src emacs-lisp
 (use-package youtube-dl
   :custom
+  (youtube-dl-program "yt-dlp")
   (youtube-dl-directory (xdg-user-dir "VIDEOS")))
 #+end_src
 
