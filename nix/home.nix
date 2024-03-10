@@ -487,7 +487,7 @@ in {
       terraform-ls
       typos
       unrar
-      youtube-dl
+      yt-dlp
       zsh
     ])
     ++ (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
