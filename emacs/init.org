@@ -5626,7 +5626,7 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
   ('json-mode-hook #'hs-minor-mode))
 #+end_src
 
-*** Formatting via Prettier
+**** Formatting via Prettier
 
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
@@ -5637,10 +5637,27 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
           "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
-*** /Eglot/
+**** /Eglot/
 
 #+begin_src emacs-lisp :noweb-ref eglot/ghook
 ('json-mode-hook #'eglot-ensure)
+#+end_src
+
+*** /nodejs-repl/
+
+#+begin_src emacs-lisp
+(use-package nodejs-repl)
+#+end_src
+
+*** Formatting via Prettier
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  js-format
+  :program "prettier"
+  :args `("--parser" "typescript"
+          "--write"
+          "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
 ** Go

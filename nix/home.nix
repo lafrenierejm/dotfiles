@@ -210,6 +210,7 @@ in {
           monky
           nix-mode
           no-littering
+          nodejs-repl
           nov
           package-lint
           password-store
