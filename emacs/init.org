@@ -6483,9 +6483,17 @@ Format code using Ruff.
 Sort imports using isort.
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
- isort-format
- :program "isort"
- :args '("--atomic" "-"))
+  isort-format
+  :program "isort"
+  :args '("--atomic" "-"))
+#+end_src
+
+Format code using Black.
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  black-format
+  :program "black"
+  :args '("--" "-"))
 #+end_src
 
 *** /Rainbow Delimiters/
