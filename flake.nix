@@ -121,10 +121,20 @@
           settings.hooks = {
             editorconfig-checker = {
               enable = true;
-              excludes = [".*\\.age"];
+              excludes = [
+                ".*\\.age"
+                ".*\\.gpg"
+              ];
+            };
+            ripsecrets = {
+              enable = true;
+              excludes = [".*\\.crypt"];
             };
             treefmt.enable = true;
-            typos.enable = true;
+            typos = {
+              enable = true;
+              excludes = [".*\\.crypt"];
+            };
           };
         };
 

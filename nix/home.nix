@@ -354,7 +354,7 @@ in {
       signing =
         if gitUseGpg
         then {
-          key = "0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3";
+          key = "0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3"; # pragma: allowlist secret
           signByDefault = true;
         }
         else null;
