@@ -496,6 +496,7 @@ in {
       dconf2nix
       signal-desktop
       transmission-qt
+      ungoogled-chromium
     ]))
     ++ (pkgs.lib.lists.optionals (!personal) (with pkgs; [
       groovy

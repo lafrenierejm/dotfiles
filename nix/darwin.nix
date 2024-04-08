@@ -27,7 +27,7 @@ in {
         lib.lists.optionals (!personal) ["hashicorp/tap/boundary"]
       );
     casks =
-      ["karabiner-elements" "lunar" "scroll-reverser"]
+      ["eloston-chromium" "karabiner-elements" "lunar" "scroll-reverser"]
       ++ (lib.lists.optionals personal [
         "aldente"
         "balenaetcher"
