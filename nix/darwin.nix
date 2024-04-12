@@ -32,6 +32,7 @@ in {
         "aldente"
         "balenaetcher"
         "bitwarden"
+        "gog-galaxy"
         "iina"
         "inkscape"
         "mullvadvpn"
