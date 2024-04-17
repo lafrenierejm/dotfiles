@@ -369,6 +369,8 @@ in {
       settings.show_program_path = true;
     };
 
+    pandoc.enable = true;
+
     rbenv = {
       enable = true;
       enableZshIntegration = true;
