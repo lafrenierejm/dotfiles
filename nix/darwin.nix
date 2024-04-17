@@ -38,6 +38,7 @@ in {
         "mullvadvpn"
         "multipatch"
         "openemu"
+        "radio-silence"
         "skype"
         "snes9x"
         "steam"
