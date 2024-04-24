@@ -27,7 +27,13 @@ in {
         lib.lists.optionals (!personal) ["hashicorp/tap/boundary"]
       );
     casks =
-      ["eloston-chromium" "karabiner-elements" "lunar" "scroll-reverser"]
+      [
+        "eloston-chromium"
+        "karabiner-elements"
+        "lunar"
+        "scroll-reverser"
+        "zoom"
+      ]
       ++ (lib.lists.optionals personal [
         "aldente"
         "balenaetcher"
@@ -50,7 +56,6 @@ in {
         "amazon-chime"
         "docker"
         "firefox"
-        "zoom"
       ]);
     taps =
       ["homebrew/cask-drivers"]

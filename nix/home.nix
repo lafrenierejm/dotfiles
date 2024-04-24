@@ -499,6 +499,7 @@ in {
       signal-desktop
       transmission-qt
       ungoogled-chromium
+      zoom
     ]))
     ++ (pkgs.lib.lists.optionals (!personal) (with pkgs; [
       groovy
