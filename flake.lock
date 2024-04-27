@@ -547,15 +547,15 @@
     },
     "nixpkgs-firefox": {
       "locked": {
-        "lastModified": 1691420364,
-        "narHash": "sha256-zJtTcM5TKVoD1YmLoVlKQKHE3kYqvL25vBctUvm1mV8=",
-        "owner": "Enzime",
+        "lastModified": 1713853459,
+        "narHash": "sha256-x0Wp3n6V3SkO62xG3DdKQvATLRUadgi9UbT8m770gCo=",
+        "owner": "lafrenierejm",
         "repo": "nixpkgs",
-        "rev": "1cabe1fead4e20d4259c1002d2a66889b2bf821d",
+        "rev": "ff211f5d0740443394e791505673088a8a8e2a45",
         "type": "github"
       },
       "original": {
-        "owner": "Enzime",
+        "owner": "lafrenierejm",
         "ref": "firefox-bin-darwin",
         "repo": "nixpkgs",
         "type": "github"

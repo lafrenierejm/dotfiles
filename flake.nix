@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/release-23.11;
-    nixpkgs-firefox.url = github:Enzime/nixpkgs/firefox-bin-darwin;
+    nixpkgs-firefox.url = github:lafrenierejm/nixpkgs/firefox-bin-darwin;
     agenix.url = github:ryantm/agenix;
     darwin = {
       url = github:lnl7/nix-darwin;
