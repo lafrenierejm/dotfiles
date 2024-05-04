@@ -117,6 +117,7 @@
 
   # Allow unfree packages
   nixpkgs.config.permittedInsecurePackages = [
+    "nix-2.15.3"
     # needed for Folding@home
     "python-2.7.18.7"
     "python-2.7.18.7-env"
