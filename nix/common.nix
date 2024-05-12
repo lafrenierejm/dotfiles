@@ -30,7 +30,7 @@
 
   fonts = {
     fontDir.enable = true;
-    fonts = with pkgs; [source-code-pro font-awesome];
+    packages = with pkgs; [source-code-pro font-awesome];
   };
 
   programs = {zsh.enable = true;};
