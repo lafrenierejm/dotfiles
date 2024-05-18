@@ -23,6 +23,12 @@
       trusted-public-keys = ["emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY="];
       trusted-users = [username];
     };
+
+    gc = {
+      automatic = true;
+      randomizedDelaySec = "14m";
+      options = "--delete-older-than 30d";
+    };
   };
   nixpkgs.config.allowUnfree = true;
 
