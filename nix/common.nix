@@ -24,11 +24,14 @@
       trusted-users = [username];
     };
 
-    gc = {
-      automatic = true;
-      randomizedDelaySec = "14m";
-      options = "--delete-older-than 30d";
-    };
+    gc =
+      {
+        automatic = true;
+        options = "--delete-older-than 30d";
+      }
+      // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
+        randomizedDelaySec = "14m";
+      });
   };
   nixpkgs.config.allowUnfree = true;
 
