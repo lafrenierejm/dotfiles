@@ -7,7 +7,9 @@
   system,
   username,
   ...
-}: {
+}: let
+  fontPackages = with pkgs; [source-code-pro font-awesome];
+in {
   nix = {
     # # This will add each flake input as a registry
     # # To make nix3 commands consistent with your flake
@@ -37,10 +39,16 @@
 
   environment.systemPackages = [inputs.agenix.packages."${system}".default] ++ (with pkgs; [atool fd git ripgrep zsh]);
 
-  fonts = {
-    fontDir.enable = true;
-    packages = with pkgs; [source-code-pro font-awesome];
-  };
+  fonts =
+    {
+      fontDir.enable = true;
+    }
+    // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
+      packages = fontPackages;
+    })
+    // (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
+      fonts = fontPackages;
+    });
 
   programs = {zsh.enable = true;};
 }
