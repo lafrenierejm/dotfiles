@@ -461,11 +461,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1701473196,
-        "narHash": "sha256-K8cBvJO0+0oY4Txm2Dylz3zp6/94TF/jTeiCfyZ6FlQ=",
+        "lastModified": 1716844474,
+        "narHash": "sha256-EoGLmRwm0k8M/2rb/BzH+3QMk+8wmil0a3H6NzHJriU=",
         "owner": "lafrenierejm",
         "repo": "home-manager",
-        "rev": "07d8df1764eca80ae42c8796f08e8f23e80c20e6",
+        "rev": "bce9957389fa69b48972e8c040bed05931a6c4ae",
         "type": "github"
       },
       "original": {

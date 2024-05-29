@@ -379,7 +379,7 @@ in {
     ripgrep-all = {
       enable = true;
       package = inputs.ripgrep-all.packages."${system}".rga;
-      custom_adapters = [
+      customAdapters = [
         {
           name = "gron";
           version = 1;
