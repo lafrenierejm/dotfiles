@@ -28,6 +28,7 @@ in {
       );
     casks =
       [
+        "displaylink"
         "eloston-chromium"
         "karabiner-elements"
         "lunar"
