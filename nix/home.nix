@@ -459,6 +459,7 @@ in {
       clojure
       coreutils
       curl
+      dos2unix
       eza
       fd
       gh
