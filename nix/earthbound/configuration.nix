@@ -44,25 +44,21 @@
   };
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver = {
-    desktopManager.plasma5.enable = true;
-    displayManager = {
-      # autoLogin = {
-      #   enable = true;
-      #   user = "lafrenierejm";
-      # };
-      defaultSession = "plasmawayland";
-      sddm.enable = true;
-    };
+  services.displayManager = {
     enable = true;
-    videoDrivers = ["amdgpu"];
+    defaultSession = "plasma";
+    sddm = {
+      wayland.enable = true;
+      enable = true;
+    };
   };
+  services.desktopManager.plasma6.enable = true;
   programs.dconf.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Enable CUPS to print documents.
@@ -116,21 +112,20 @@
   ];
 
   # Allow unfree packages
-  nixpkgs.config.permittedInsecurePackages = [
-    "nix-2.15.3"
-    # needed for Folding@home
-    "python-2.7.18.7"
-    "python-2.7.18.7-env"
-    "electron-24.8.6"
-  ];
+  # nixpkgs.config.permittedInsecurePackages = [
+  #   # needed for Folding@home
+  #   "python-2.7.18.8"
+  #   "python-2.7.18.8-env"
+  #   # "electron-24.8.6"
+  # ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     clinfo
     curl
-    fahcontrol
-    fahviewer
+    # fahcontrol
+    # fahviewer
     neovim
     zsh
     teensy-loader-cli
@@ -162,7 +157,7 @@
     defaultNetwork.settings.dns_enabled = true; # for podman-compose containers to talk to each other
   };
 
-  services.foldingathome.enable = true;
+  # services.foldingathome.enable = true;
 
   # https://nixos.wiki/wiki/Fwupd
   services.fwupd.enable = true;

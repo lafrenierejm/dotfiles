@@ -422,8 +422,8 @@ in {
 
     zsh = {
       enable = true;
-      enableAutosuggestions = true;
       autocd = true;
+      autosuggestion.enable = true;
       initExtra = lib.concatStringsSep "\n" [
         ''. "$HOME/.config/zsh/vterm.zsh"''
         pyenvEnable
@@ -476,6 +476,7 @@ in {
       mosh
       mpv
       mu
+      nixd
       nixfmt
       nodePackages.bash-language-server
       nodePackages.graphql-language-service-cli
@@ -484,7 +485,6 @@ in {
       nodePackages.yaml-language-server
       pyright
       ripgrep
-      rnix-lsp
       rsync
       rust-analyzer
       subversion
@@ -492,7 +492,6 @@ in {
       typos
       unrar
       yt-dlp
-      zsh
     ])
     ++ (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
       bitwarden-cli

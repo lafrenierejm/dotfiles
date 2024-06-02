@@ -2,7 +2,7 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/release-23.11;
+    nixpkgs.url = github:NixOS/nixpkgs/release-24.05;
     nixpkgs-firefox.url = github:lafrenierejm/nixpkgs/firefox-bin-darwin;
     agenix.url = github:ryantm/agenix;
     darwin = {
@@ -22,7 +22,7 @@
     flake-root.url = github:srid/flake-root;
     gron.url = github:lafrenierejm/gron;
     home-manager = {
-      url = github:lafrenierejm/home-manager/release-23.11_ripgrep-all;
+      url = github:lafrenierejm/home-manager/release-24.05_ripgrep-all;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-generators = {
