@@ -30,7 +30,6 @@ in {
       [
         "displaylink"
         "eloston-chromium"
-        "karabiner-elements"
         "lunar"
         "scroll-reverser"
         "zoom"
@@ -87,5 +86,8 @@ in {
 
   # Whether Touch ID is enabled as a `sudo` auth mechanism.
   security.pam.enableSudoTouchIdAuth = personal;
-  services.nix-daemon.enable = true;
+  services = {
+    karabiner-elements.enable = true;
+    nix-daemon.enable = true;
+  };
 }
