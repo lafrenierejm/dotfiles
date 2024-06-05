@@ -157,7 +157,6 @@ in {
           editorconfig
           elfeed
           elfeed-org
-          emms
           envrc
           evil
           evil-cleverparens
