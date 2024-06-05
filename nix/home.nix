@@ -487,6 +487,7 @@ in {
       ripgrep
       rsync
       rust-analyzer
+      slack
       subversion
       terraform-ls
       typos
