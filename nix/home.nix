@@ -121,7 +121,6 @@ in {
         });
       extraPackages = epkgs:
         with epkgs; [
-          ace-window
           adoc-mode
           aggressive-indent
           ahk-mode
@@ -177,6 +176,7 @@ in {
           flx
           forge
           form-feed
+          frames-only-mode
           geiser-guile
           general
           ghq

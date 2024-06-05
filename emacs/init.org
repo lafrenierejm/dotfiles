@@ -7271,66 +7271,6 @@ A minor-mode menu for the mode line.
   (minions-mode +1))
 #+end_src
 
-** Ace Window
-From the README of Oleh Krehel (abo-abo)'s Ace Window package:
-#+BEGIN_QUOTE
-This package aims to take the speed and predictability of ~windmove~ and pack it into a single key binding, similar to ~other-window~.
-#+END_QUOTE
-
-#+begin_src emacs-lisp
-(use-package ace-window
-  ;; Load this package eagerly.
-  :demand
-
-  ;; Add the following keybindings.
-  :general
-  ("s-a" #'ace-window)
-
-  ;; Apply the following customizations.
-  :custom
-  <<ace-window/custom>>
-
-  ;; Evaluate the following code before loading this package.
-  :init
-  <<ace-window/init>>)
-#+end_src
-
-*** Variable Customizations
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref ace-window/custom
-:END:
-
-Use home row characters to label windows.
-
-#+begin_src emacs-lisp
-(aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-#+end_src
-
-Issue a read-char even for one window.
-This allows more flexibility in what action is performed, i.e. more than just changing focus, at the cost of requiring more keystrokes for the single most common task of changing focus.
-
-#+begin_src emacs-lisp
-(aw-dispatch-always t)
-#+end_src
-
-Show the ace window key in the mode line.
-This is useful for EXWM buffers which cannot display keys in the buffer itself.
-
-#+begin_src emacs-lisp
-(ace-window-display-mode t)
-#+end_src
-
-*** Pre-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref ace-window/init
-:END:
-
-Bind Ace Window to =s-a= in EXWM.
-#+begin_src emacs-lisp
-(with-eval-after-load 'exwm
-  (exwm-input-set-key (kbd "s-a") #'ace-window))
-#+end_src
-
 ** Window
 
 Add top-level =super= bindings to window management functions.
