@@ -83,11 +83,38 @@ in {
         (map (pkg: (brewPath pkg) + "/lib/pkgconfig") libraries);
     };
   };
-
-  # Whether Touch ID is enabled as a `sudo` auth mechanism.
   security.pam.enableSudoTouchIdAuth = personal;
   services = {
     karabiner-elements.enable = true;
     nix-daemon.enable = true;
+  };
+  system.defaults = {
+    NSGlobalDomain = {
+      "com.apple.mouse.tapBehavior" = 1; # tap to click
+    };
+    dock = {
+      autohide = true;
+      minimize-to-application = true;
+      mru-spaces = false; # do not group spaces by most recent use
+      wvous-bl-corner = 1; # disabled
+      wvous-br-corner = 1; # disabled
+      wvous-tl-corner = 1; # disabled
+      wvous-tr-corner = 1; # disabled
+    };
+    finder = {
+      AppleShowAllExtensions = true;
+      AppleShowAllFiles = true;
+      FXPreferredViewStyle = "Nlsv"; # set default view to list
+      ShowPathbar = true; # show breadcrumbs
+    };
+    menuExtraClock = {
+      Show24Hour = true;
+      ShowDate = 0; # when space allows
+      ShowSeconds = false;
+    };
+    trackpad = {
+      ActuationStrength = 0; # silent clicks
+      Clicking = true; # enable tap to click
+    };
   };
 }
