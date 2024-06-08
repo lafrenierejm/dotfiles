@@ -203,7 +203,6 @@ in {
           lua-mode
           magit
           markdown-mode
-          minibuffer-line
           minions
           modus-themes
           monky
