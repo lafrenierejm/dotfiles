@@ -101,23 +101,31 @@ in {
           # Use `nix-prefetch-url` to get the below shasums.
           patches =
             (old.patches or [])
-            ++ (lib.lists.optionals pkgs.stdenv.isDarwin [
-              # Use poll instead of select to get file descriptors.
-              (pkgs.fetchpatch {
-                url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/poll.patch";
-                sha256 = "0j26n6yma4n5wh4klikza6bjnzrmz6zihgcsdx36pn3vbfnaqbh5";
-              })
-              # Enable rounded window with no decoration.
-              (pkgs.fetchpatch {
-                url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-29/round-undecorated-frame.patch";
-                sha256 = "0x187xvjakm2730d1wcqbz2sny07238mabh5d97fah4qal7zhlbl";
-              })
-              # Make Emacs aware of OS-level light/dark mode.
-              (pkgs.fetchpatch {
-                url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/8ffe1f83b0521895afd0b48735704af97e2485b0/patches/emacs-28/system-appearance.patch";
-                sha256 = "14ndp2fqqc95s70fwhpxq58y8qqj4gzvvffp77snm2xk76c1bvnn";
-              })
-            ]);
+            ++ (lib.lists.optionals pkgs.stdenv.isDarwin (
+              let
+                host = "raw.githubusercontent.com";
+                owner = "d12frosted";
+                repo = "homebrew-emacs-plus";
+                commit = "8ffe1f83b0521895afd0b48735704af97e2485b0";
+                patchUrl = path: "https://${host}/${owner}/${repo}/${commit}/${path}";
+              in [
+                # Fix window role for compatibility with yabai.
+                (pkgs.fetchpatch {
+                  url = patchUrl "patches/emacs-28/fix-window-role.patch";
+                  sha256 = "0c41rgpi19vr9ai740g09lka3nkjk48ppqyqdnncjrkfgvm2710z";
+                })
+                # Make Emacs aware of OS-level light/dark mode.
+                (pkgs.fetchpatch {
+                  url = patchUrl "patches/emacs-28/system-appearance.patch";
+                  sha256 = "14ndp2fqqc95s70fwhpxq58y8qqj4gzvvffp77snm2xk76c1bvnn";
+                })
+                # Use poll instead of select to get file descriptors.
+                (pkgs.fetchpatch {
+                  url = patchUrl "patches/emacs-29/poll.patch";
+                  sha256 = "0j26n6yma4n5wh4klikza6bjnzrmz6zihgcsdx36pn3vbfnaqbh5";
+                })
+              ]
+            ));
         });
       extraPackages = epkgs:
         with epkgs; [
@@ -492,6 +500,9 @@ in {
       unrar
       yt-dlp
     ])
+    ++ (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
+      skhd
+    ]))
     ++ (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
       bitwarden-cli
       bitwarden

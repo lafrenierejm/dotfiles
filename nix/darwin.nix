@@ -87,6 +87,11 @@ in {
   services = {
     karabiner-elements.enable = true;
     nix-daemon.enable = true;
+    skhd.enable = personal;
+    yabai = {
+      enable = personal;
+      enableScriptingAddition = true;
+    };
   };
   system.defaults = {
     NSGlobalDomain = {

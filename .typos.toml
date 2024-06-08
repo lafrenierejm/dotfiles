@@ -2,9 +2,12 @@
 extend-exclude = [
 "*.age",
 "*.crypt",
+"nix/home.nix"
 ]
 ignore-vcs = true
 
+[default]
+extend-ignore-re = [".*sha256 = \".*\""]
 
 [default.extend-words]
 crypted = "crypted"

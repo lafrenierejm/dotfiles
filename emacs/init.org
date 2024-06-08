@@ -7045,6 +7045,17 @@ A minor-mode menu for the mode line.
   (minions-mode +1))
 #+end_src
 
+** Frames-Only
+
+#+begin_src emacs-lisp
+(use-package frames-only-mode
+  :custom
+  (frame-resize-pixelwise t "Allow resizing frames by pixel.")
+
+  :config
+  (frames-only-mode))
+#+end_src
+
 ** Window
 
 Add top-level =super= bindings to window management functions.
