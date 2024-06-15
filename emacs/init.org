@@ -7052,6 +7052,11 @@ A minor-mode menu for the mode line.
   :custom
   (frame-resize-pixelwise t "Allow resizing frames by pixel.")
 
+  :general
+  (:keymaps 'frames-only-mode-mode-map
+   "s-o" #'delete-other-frames
+   "s-x" #'delete-frame)
+
   :config
   (frames-only-mode))
 #+end_src
