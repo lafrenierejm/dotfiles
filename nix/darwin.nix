@@ -20,24 +20,23 @@ in {
       upgrade = true;
       cleanup = "uninstall";
     };
-    brews =
-      ["make" "nvm" "nuget" "pyenv"]
-      ++ libraries
-      ++ (
-        lib.lists.optionals (!personal) ["hashicorp/tap/boundary"]
-      );
-    casks =
-      [
-        "displaylink"
-        "eloston-chromium"
-        "lunar"
-        "scroll-reverser"
-        "zoom"
-      ]
-      ++ (lib.lists.optionals personal [
+    brews = lib.lists.flatten [
+      "make"
+      "nvm"
+      "nuget"
+      "pyenv"
+      libraries
+      (lib.lists.optionals (!personal) ["hashicorp/tap/boundary"])
+    ];
+    casks = lib.lists.flatten [
+      "displaylink"
+      "eloston-chromium"
+      "lunar"
+      "scroll-reverser"
+      "zoom"
+      (lib.lists.optionals personal [
         "aldente"
         "balenaetcher"
-        "bitwarden"
         "gog-galaxy"
         "iina"
         "inkscape"
@@ -52,16 +51,12 @@ in {
         "visualboyadvance-m"
         "zsa-wally"
       ])
-      ++ (lib.lists.optionals (!personal) [
+      (lib.lists.optionals (!personal) [
         "amazon-chime"
         "docker"
         "firefox"
-      ]);
-    taps =
-      ["homebrew/cask-drivers"]
-      ++ (
-        lib.lists.optionals (!personal) ["hashicorp/tap"]
-      );
+      ])
+    ];
     masApps = lib.attrsets.mergeAttrsList [
       {
         Structured = 1499198946;
@@ -71,6 +66,10 @@ in {
         Ivory = 6444602274;
         Parcel = 639968404;
       })
+    ];
+    taps = lib.lists.flatten [
+      "homebrew/cask-drivers"
+      (lib.lists.optionals (!personal) ["hashicorp/tap"])
     ];
   };
   environment = {
