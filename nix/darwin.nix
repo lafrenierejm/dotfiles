@@ -62,6 +62,16 @@ in {
       ++ (
         lib.lists.optionals (!personal) ["hashicorp/tap"]
       );
+    masApps = lib.attrsets.mergeAttrsList [
+      {
+        Structured = 1499198946;
+      }
+      (lib.attrsets.optionalAttrs personal {
+        Bitwarden = 1352778147;
+        Ivory = 6444602274;
+        Parcel = 639968404;
+      })
+    ];
   };
   environment = {
     systemPath =
