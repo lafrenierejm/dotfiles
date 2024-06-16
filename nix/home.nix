@@ -535,4 +535,13 @@ in {
       default-cache-ttl = 7200;
       default-cache-ttl-ssh = 7200;
     });
+
+  services = {
+    emacs = {
+      enable = pkgs.stdenv.isLinux;
+      client.enable = true;
+      client.arguments = ["--create-frame"];
+      defaultEditor = true;
+    };
+  };
 }
