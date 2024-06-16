@@ -430,6 +430,7 @@ in {
       enable = true;
       autocd = true;
       autosuggestion.enable = true;
+      defaultKeymap = "emacs";
       initExtra = lib.concatStringsSep "\n" [
         ''. "$HOME/.config/zsh/vterm.zsh"''
         pyenvEnable
