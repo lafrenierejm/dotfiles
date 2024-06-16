@@ -447,13 +447,13 @@ in {
     };
   };
 
-  home.packages =
-    [pinentry]
-    ++ (with inputs; [
+  home.packages = lib.lists.flatten [
+    pinentry
+    (with inputs; [
       gron.packages."${system}".gron
       ripgrep-all.packages."${system}".rga
     ])
-    ++ (with pkgs; [
+    (with pkgs; [
       (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers en-science])))
       atool
       aws-sso-creds
@@ -501,10 +501,10 @@ in {
       unzip
       yt-dlp
     ])
-    ++ (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
+    (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
       skhd
     ]))
-    ++ (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
+    (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
       bitwarden-cli
       bitwarden
       dconf2nix
@@ -513,14 +513,15 @@ in {
       ungoogled-chromium
       zoom
     ]))
-    ++ (pkgs.lib.lists.optionals (!personal) (with pkgs; [
+    (pkgs.lib.lists.optionals (!personal) (with pkgs; [
       groovy
       nodejs
       packer
       terraform
       terraform-docs
       tflint
-    ]));
+    ]))
+  ];
 
   home.file.".gnupg/gpg-agent.conf".text =
     lib.concatStringsSep "\n"
