@@ -35,20 +35,24 @@ in {
   # changes in each release.
   home.stateVersion = "23.05";
 
-  home.sessionVariables = {
-    DIRENV_LOG_FORMAT = "";
-    NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-  };
-
-  home.shellAliases = {
-    aws-ecr-login = ''
-      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
-    extract = "atool --extract --explain --subdir";
-    jq = "gojq";
-    la = "eza --long --git --time-style=long-iso --all";
-    ll = "eza --long --git --time-style=long-iso";
+  home = {
+    sessionPath = [
+      "$HOME/.local/bin"
+    ];
+    sessionVariables = {
+      DIRENV_LOG_FORMAT = "";
+      NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
+    shellAliases = {
+      aws-ecr-login = ''
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
+      extract = "atool --extract --explain --subdir";
+      jq = "gojq";
+      la = "eza --long --git --time-style=long-iso --all";
+      ll = "eza --long --git --time-style=long-iso";
+    };
   };
 
   programs = {
