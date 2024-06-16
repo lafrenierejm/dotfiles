@@ -498,6 +498,7 @@ in {
       terraform-ls
       typos
       unrar
+      unzip
       yt-dlp
     ])
     ++ (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
