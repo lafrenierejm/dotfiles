@@ -6432,6 +6432,14 @@ Define the actual Polymode.
 ('nix-mode-hook #'eglot-ensure)
 #+end_src
 
+*** Autoformat
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define nix-alejandra
+  :program "alejandra"
+  :args '("-"))
+#+end_src
+
 ** Ruby
 
 *** /rbenv.el/
