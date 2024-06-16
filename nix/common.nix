@@ -41,13 +41,10 @@ in {
 
   fonts =
     {
-      fontDir.enable = true;
+      packages = fontPackages;
     }
     // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
-      packages = fontPackages;
-    })
-    // (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
-      fonts = fontPackages;
+      fontDir.enable = true;
     });
 
   programs = {zsh.enable = true;};
