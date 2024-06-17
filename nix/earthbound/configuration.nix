@@ -129,6 +129,11 @@
     neovim
     zsh
     teensy-loader-cli
+
+    # containers
+    dive
+    podman-compose
+    podman-tui
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -138,8 +143,6 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -151,10 +154,12 @@
   };
 
   # Enable Podman.
+  virtualisation.containers.enable = true;
   virtualisation.podman = {
     enable = true;
     dockerCompat = true; # create a `docker` alias for podman
     defaultNetwork.settings.dns_enabled = true; # for podman-compose containers to talk to each other
+    autoPrune.enable = true;
   };
 
   # services.foldingathome.enable = true;
