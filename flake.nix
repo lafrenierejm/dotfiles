@@ -149,9 +149,10 @@
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
         darwinConfigurations = {
-          macbook = let
+          airborn = let
             username = "lafrenierejm";
             personal = true;
+            hostname = "airborn";
           in
             inputs.darwin.lib.darwinSystem rec {
               system = "aarch64-darwin";
@@ -176,7 +177,7 @@
                 }
               ];
               specialArgs = {
-                inherit inputs system personal username;
+                inherit inputs system personal username hostname;
               };
             };
 
@@ -184,6 +185,7 @@
             username = "joseph.lafreniere";
             domain = "renaissance.com";
             personal = false;
+            hostname = "JLAFRENI0523-MB";
           in
             inputs.darwin.lib.darwinSystem rec {
               modules = [
@@ -207,7 +209,7 @@
                 }
               ];
               specialArgs = {
-                inherit inputs personal system username;
+                inherit inputs personal system username hostname;
               };
               system = "aarch64-darwin";
             };
