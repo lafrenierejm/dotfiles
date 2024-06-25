@@ -13,7 +13,7 @@
     [dotnetBrew opensslBrew]
     ++ (lib.lists.optionals (!personal) ["postgresql@12"]);
   brewPath = pkg: "/opt/homebrew/opt/${pkg}";
-in (lib.attrsets.mergeAttrs [
+in (lib.attrsets.mergeAttrsList [
   {
     homebrew = {
       enable = true;
@@ -51,6 +51,7 @@ in (lib.attrsets.mergeAttrs [
           "skype"
           "snes9x"
           "steam"
+          "tailscale"
           "transmission"
           "visualboyadvance-m"
           "zsa-wally"
@@ -101,10 +102,6 @@ in (lib.attrsets.mergeAttrs [
       karabiner-elements.enable = true;
       nix-daemon.enable = true;
       skhd.enable = personal;
-      tailscale = {
-        enable = personal;
-        overrideLocalDns = true;
-      };
       yabai = {
         enable = personal;
         enableScriptingAddition = true;
