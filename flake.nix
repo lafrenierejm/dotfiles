@@ -5,6 +5,10 @@
     nixpkgs.url = github:NixOS/nixpkgs/release-24.05;
     nixpkgs-firefox.url = github:lafrenierejm/nixpkgs/firefox-bin-darwin;
     agenix.url = github:ryantm/agenix;
+    crane = {
+      url = github:ipetkov/crane;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     darwin = {
       url = github:lnl7/nix-darwin;
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,16 +29,35 @@
       url = github:lafrenierejm/home-manager/release-24.05_ripgrep-all;
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mujmap = {
+      url = github:lafrenierejm/mujmap;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        crane.follows = "crane";
+        rust-overlay.follows = "rust-overlay";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+      };
+    };
     nixos-generators = {
       url = github:nix-community/nixos-generators;
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    pre-commit-hooks-nix = {
+    pre-commit-hooks = {
       url = github:cachix/pre-commit-hooks.nix;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ripgrep-all = {
       url = github:lafrenierejm/ripgrep-all;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        crane.follows = "crane";
+        rust-overlay.follows = "rust-overlay";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+      };
+    };
+    rust-overlay = {
+      url = github:oxalica/rust-overlay;
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
       url = github:numtide/treefmt-nix;
@@ -46,7 +69,7 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.flake-root.flakeModule
-        inputs.pre-commit-hooks-nix.flakeModule
+        inputs.pre-commit-hooks.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
       systems = ["x86_64-linux" "aarch64-darwin"];

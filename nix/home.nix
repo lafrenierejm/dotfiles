@@ -386,7 +386,10 @@ in {
       settings.show_program_path = true;
     };
 
-    mujmap.enable = true;
+    mujmap = {
+      enable = true;
+      package = inputs.mujmap.packages."${system}".mujmap;
+    };
 
     notmuch.enable = true;
 
