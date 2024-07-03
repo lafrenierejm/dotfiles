@@ -1,19 +1,19 @@
 {
   inputs,
-  lib,
-  config,
   pkgs,
+  lib,
   system,
-  username,
+  userName,
   gitEmail,
   gitUseGpg,
   personal,
+  realName,
   ...
 }: let
   homeDirectory =
     if pkgs.stdenv.isDarwin
-    then "/Users/${username}"
-    else "/home/${username}";
+    then "/Users/${userName}"
+    else "/home/${userName}";
   pinentry =
     if pkgs.stdenv.isDarwin
     then pkgs.pinentry_mac
@@ -35,6 +35,10 @@ in {
   # changes in each release.
   home.stateVersion = "23.05";
 
+  accounts.email = lib.attrsets.optionalAttrs personal (import ./home/email.nix {
+    inherit lib realName;
+  });
+
   home = {
     sessionPath = [
       "$HOME/.local/bin"
@@ -53,6 +57,7 @@ in {
       la = "eza --long --git --time-style=long-iso --all";
       ll = "eza --long --git --time-style=long-iso";
     };
+    username = userName;
   };
 
   programs = {
@@ -153,6 +158,7 @@ in {
           company-restclient
           compdef
           counsel
+          counsel-notmuch
           counsel-projectile
           counsel-tramp
           counsel-web
@@ -221,6 +227,7 @@ in {
           nix-mode
           no-littering
           nodejs-repl
+          notmuch
           nov
           package-lint
           password-store
@@ -369,7 +376,7 @@ in {
         }
         else null;
       userEmail = gitEmail;
-      userName = "Joseph LaFreniere";
+      userName = realName;
     };
 
     home-manager.enable = true;
@@ -378,6 +385,10 @@ in {
       enable = true;
       settings.show_program_path = true;
     };
+
+    mujmap.enable = true;
+
+    notmuch.enable = true;
 
     pandoc.enable = true;
 
@@ -423,6 +434,12 @@ in {
         };
         "git.sr.ht" = {
           hostname = "git.sr.ht";
+          user = "lafrenierejm";
+          identityFile = "~/.ssh/id_ed25519";
+          identitiesOnly = true;
+        };
+        "earthbound" = {
+          hostname = "10.0.0.53";
           user = "lafrenierejm";
           identityFile = "~/.ssh/id_ed25519";
           identitiesOnly = true;
@@ -488,7 +505,6 @@ in {
       mpv
       mu
       nixd
-      nixfmt
       nodePackages.bash-language-server
       nodePackages.graphql-language-service-cli
       nodePackages.prettier
@@ -498,11 +514,9 @@ in {
       ripgrep
       rsync
       rust-analyzer
-      slack
       subversion
       terraform-ls
       typos
-      unrar
       unzip
       yt-dlp
     ])

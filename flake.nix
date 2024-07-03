@@ -144,18 +144,23 @@
         };
       };
 
-      flake = {
+      flake = let
+        realName = "Joseph LaFreniere";
+      in {
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
         darwinConfigurations = {
           airborn = let
-            username = "lafrenierejm";
             personal = true;
             hostname = "airborn";
+            userName = "lafrenierejm";
+            system = "aarch64-darwin";
+            pkgs = inputs.nixpkgs.legacyPackages."${system}";
+            lib = pkgs.lib;
           in
             inputs.darwin.lib.darwinSystem rec {
-              system = "aarch64-darwin";
+              inherit system;
               modules = [
                 ./nix/common.nix
                 ./nix/darwin.nix
@@ -165,29 +170,32 @@
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
                   ];
-                  home-manager.extraSpecialArgs = {
-                    inherit inputs system username personal;
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users."${userName}" = import ./nix/home.nix rec {
+                    inherit inputs lib personal pkgs userName realName system;
                     gitEmail = "git@lafreniere.xyz";
                     gitUseGpg = true;
                   };
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.users."${username}" = import ./nix/home.nix;
-                  users.users."${username}".home = "/Users/${username}";
+                  users.users."${userName}".home = "/Users/${userName}";
                 }
               ];
               specialArgs = {
-                inherit inputs system personal username hostname;
+                inherit inputs system personal userName hostname realName;
               };
             };
 
           JLAFRENI0523-MB = let
-            username = "joseph.lafreniere";
             domain = "renaissance.com";
-            personal = false;
             hostname = "JLAFRENI0523-MB";
+            personal = false;
+            userName = "joseph.lafreniere";
+            system = "aarch64-darwin";
+            pkgs = inputs.nixpkgs.legacyPackages."${system}";
+            lib = pkgs.lib;
           in
             inputs.darwin.lib.darwinSystem rec {
+              inherit system;
               modules = [
                 ./nix/common.nix
                 ./nix/darwin.nix
@@ -197,33 +205,33 @@
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
                   ];
-                  home-manager.extraSpecialArgs = {
-                    inherit inputs system username personal;
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users."${userName}" = import ./nix/home.nix {
+                    inherit inputs personal realName system userName pkgs lib;
                     gitEmail = "joseph.lafreniere@${domain}";
                     gitUseGpg = true;
                   };
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.users."${username}" = import ./nix/home.nix;
-                  users.users."${username}".home = "/Users/${username}";
+                  users.users."${userName}".home = "/Users/${userName}";
                 }
               ];
               specialArgs = {
-                inherit inputs personal system username hostname;
+                inherit inputs personal system hostname realName userName;
               };
-              system = "aarch64-darwin";
             };
         };
         nixosConfigurations = {
           earthbound = let
-            username = "lafrenierejm";
+            userName = "lafrenierejm";
             domain = "lafreniere.xyz";
             system = "x86_64-linux";
             personal = true;
             mediaUid = 1100;
+            pkgs = inputs.nixpkgs.legacyPackages."${system}";
+            lib = pkgs.lib;
           in
             inputs.nixpkgs.lib.nixosSystem {
-              system = "x86_64-linux";
+              inherit system;
               modules = [
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
@@ -234,18 +242,17 @@
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
                   ];
-                  home-manager.extraSpecialArgs = {
-                    inherit inputs personal system username;
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users."${userName}" = import ./nix/home.nix {
+                    inherit inputs personal system realName userName pkgs lib;
                     gitEmail = "git@${domain}";
                     gitUseGpg = true;
                   };
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.users."${username}" = import ./nix/home.nix;
                   users.groups.media = {gid = mediaUid;};
                   users.users = {
-                    "${username}" = {
-                      home = "/home/${username}";
+                    "${userName}" = {
+                      home = "/home/${userName}";
                       openssh.authorizedKeys.keys = [
                         (builtins.readFile ./ssh/macbook.pub)
                         (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
@@ -260,7 +267,7 @@
                   };
                 }
               ];
-              specialArgs = {inherit inputs domain personal system username;};
+              specialArgs = {inherit inputs domain personal realName system userName;};
             };
         };
       };
