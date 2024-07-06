@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  pkgsUnstable,
   lib,
   system,
   userName,
@@ -14,14 +15,14 @@
     if pkgs.stdenv.isDarwin
     then "/Users/${userName}"
     else "/home/${userName}";
-  pinentry =
+  pinentryPkg =
     if pkgs.stdenv.isDarwin
     then pkgs.pinentry_mac
     else pkgs.pinentry-qt;
-  pinentry-bin =
+  pinentryBin =
     if pkgs.stdenv.isDarwin
-    then "${pinentry}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
-    else "${pinentry}/bin/pinentry";
+    then "${pinentryPkg}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
+    else "${pinentryPkg}/bin/pinentry";
   pyenvEnable = pkgs.lib.readFile ../sh/pyenv.sh;
   voltaEnable = pkgs.lib.readFile ../sh/volta.sh;
 in {
@@ -35,9 +36,64 @@ in {
   # changes in each release.
   home.stateVersion = "23.05";
 
-  accounts.email = lib.attrsets.optionalAttrs personal (import ./home/email.nix {
-    inherit lib realName;
-  });
+  accounts.email = {
+    maildirBasePath = "Mail";
+    accounts = let
+      signature = {
+        showSignature = true;
+        text = pkgs.lib.concatStringSep [
+          "-- "
+          realName
+        ];
+      };
+    in {
+      "xyz.lafreniere" = let
+        domain = "fastmail.com";
+        userName = "lafrenierejm@${domain}";
+      in {
+        inherit signature realName userName;
+        address = "git@lafreniere.xyz";
+        flavor = "fastmail.com";
+        mujmap = {
+          enable = true;
+          notmuchSetupWarning = true;
+          settings = {
+            auto_create_new_mailboxes = true;
+            session_url = "https://api.${domain}/jmap/session";
+          };
+        };
+        passwordCommand = [
+          "rbw"
+          "get"
+          "--field"
+          "api_mujmap"
+          "${domain}/${userName}"
+        ];
+        notmuch.enable = true;
+        primary = true;
+      };
+      "com.gmail" = let
+        address = "lafrenierejm@gmail.com";
+      in {
+        inherit address signature realName;
+        userName = address;
+        flavor = "gmail.com";
+        lieer = {
+          enable = true;
+          notmuchSetupWarning = true;
+          sync.enable = true;
+        };
+        passwordCommand = [
+          "rbw"
+          "get"
+          "--field"
+          "api_gmail"
+          "cloud.google.com/${address}/lieer"
+        ];
+        notmuch.enable = true;
+      };
+    };
+  };
 
   home = {
     sessionPath = [
@@ -386,6 +442,8 @@ in {
       settings.show_program_path = true;
     };
 
+    lieer.enable = true;
+
     mujmap = {
       enable = true;
       package = inputs.mujmap.packages."${system}".mujmap;
@@ -398,6 +456,20 @@ in {
     rbenv = {
       enable = true;
       enableZshIntegration = true;
+    };
+
+    rbw = {
+      enable = true;
+      package = pkgsUnstable.rbw;
+      settings = {
+        base_url = "https://vault.bitwarden.com";
+        identity_url = "https://identity.bitwarden.com";
+        notifications_url = "https://notifications.bitwarden.com";
+        lock_timeout = 7200;
+        sync_interval = 3600;
+        email = "bitwarden.com@lafreniere.xyz";
+        pinentry = pinentryPkg;
+      };
     };
 
     ripgrep-all = {
@@ -473,7 +545,7 @@ in {
   };
 
   home.packages = lib.lists.flatten [
-    pinentry
+    pinentryPkg
     (with inputs; [
       gron.packages."${system}".gron
       ripgrep-all.packages."${system}".rga
@@ -527,7 +599,6 @@ in {
       skhd
     ]))
     (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
-      bitwarden-cli
       bitwarden
       dconf2nix
       signal-desktop
@@ -548,7 +619,7 @@ in {
   home.file.".gnupg/gpg-agent.conf".text =
     lib.concatStringsSep "\n"
     (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
-      pinentry-program = pinentry-bin;
+      pinentry-program = pinentryBin;
       default-cache-ttl = 7200;
       default-cache-ttl-ssh = 7200;
     });

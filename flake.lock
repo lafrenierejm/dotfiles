@@ -647,6 +647,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1720063405,
+        "narHash": "sha256-iJCuxeZoLGG88ryW8k9XoHxBumFOzBQSIQf3r6TDhws=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "38c690a0864245ced505993e0459de23af7a21b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1697723726,
@@ -806,6 +821,7 @@
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-firefox": "nixpkgs-firefox",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "pre-commit-hooks": "pre-commit-hooks",
         "ripgrep-all": "ripgrep-all",
         "rust-overlay": "rust-overlay",

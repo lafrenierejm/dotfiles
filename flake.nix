@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/release-24.05;
+    nixpkgs-unstable.url = github:NixOS/nixpkgs;
     nixpkgs-firefox.url = github:lafrenierejm/nixpkgs/firefox-bin-darwin;
     agenix.url = github:ryantm/agenix;
     crane = {
@@ -169,6 +170,8 @@
 
       flake = let
         realName = "Joseph LaFreniere";
+        legacyPackages = inputs.nixpkgs.legacyPackages;
+        legacyPackagesUnstable = inputs.nixpkgs-unstable.legacyPackages;
       in {
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
@@ -179,7 +182,8 @@
             hostname = "airborn";
             userName = "lafrenierejm";
             system = "aarch64-darwin";
-            pkgs = inputs.nixpkgs.legacyPackages."${system}";
+            pkgs = legacyPackages."${system}";
+            pkgsUnstable = legacyPackagesUnstable."${system}";
             lib = pkgs.lib;
           in
             inputs.darwin.lib.darwinSystem rec {
@@ -196,7 +200,7 @@
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" = import ./nix/home.nix rec {
-                    inherit inputs lib personal pkgs userName realName system;
+                    inherit inputs lib personal pkgs pkgsUnstable userName realName system;
                     gitEmail = "git@lafreniere.xyz";
                     gitUseGpg = true;
                   };
