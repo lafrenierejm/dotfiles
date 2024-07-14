@@ -26,6 +26,26 @@
     flake-parts.url = github:hercules-ci/flake-parts;
     flake-root.url = github:srid/flake-root;
     gron.url = github:lafrenierejm/gron;
+    homebrew = {
+      url = github:zhaofengli-wip/nix-homebrew;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    homebrew-bundle = {
+      url = github:homebrew/homebrew-bundle;
+      flake = false;
+    };
+    homebrew-core = {
+      url = github:homebrew/homebrew-core;
+      flake = false;
+    };
+    homebrew-cask = {
+      url = github:homebrew/homebrew-cask;
+      flake = false;
+    };
+    homebrew-hashicorp = {
+      url = github:hashicorp/homebrew-tap;
+      flake = false;
+    };
     home-manager = {
       url = github:lafrenierejm/home-manager/release-24.05_ripgrep-all;
       inputs.nixpkgs.follows = "nixpkgs";
@@ -189,10 +209,11 @@
             inputs.darwin.lib.darwinSystem rec {
               inherit system;
               modules = [
+                inputs.agenix.nixosModules.default
+                inputs.homebrew.darwinModules.nix-homebrew
+                inputs.home-manager.darwinModules.home-manager
                 ./nix/common.nix
                 ./nix/darwin.nix
-                inputs.agenix.nixosModules.default
-                inputs.home-manager.darwinModules.home-manager
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default

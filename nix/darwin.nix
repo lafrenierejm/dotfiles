@@ -5,6 +5,7 @@
   pkgs,
   personal,
   hostname,
+  userName,
   ...
 }: let
   dotnetBrew = "dotnet@6";
@@ -14,7 +15,19 @@
     ++ (lib.lists.optionals (!personal) ["postgresql@12"]);
   brewPath = pkg: "/opt/homebrew/opt/${pkg}";
 in (lib.attrsets.mergeAttrsList [
-  {
+  rec {
+    nix-homebrew = {
+      enable = true;
+      enableRosetta = false;
+      user = userName;
+      taps = {
+        "hashicorp/homebrew-tap" = inputs.homebrew-hashicorp;
+        "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
+        "homebrew/homebrew-cask" = inputs.homebrew-cask;
+        "homebrew/homebrew-core" = inputs.homebrew-core;
+      };
+      mutableTaps = false;
+    };
     homebrew = {
       enable = true;
       global = {
@@ -33,35 +46,43 @@ in (lib.attrsets.mergeAttrsList [
         libraries
         (lib.lists.optionals (!personal) ["hashicorp/tap/boundary"])
       ];
-      casks = lib.lists.flatten [
-        "displaylink"
-        "eloston-chromium"
-        "lunar"
-        "scroll-reverser"
-        "zoom"
-        (lib.lists.optionals personal [
-          "aldente"
-          "balenaetcher"
-          "gog-galaxy"
-          "iina"
-          "inkscape"
-          "multipatch"
-          "openemu"
-          "radio-silence"
-          "skype"
-          "snes9x"
-          "steam"
-          "tailscale"
-          "transmission"
-          "visualboyadvance-m"
-          "zsa-wally"
-        ])
-        (lib.lists.optionals (!personal) [
+      casks = let
+        electron = ["slack"];
+        greedy = map (name: {
+          inherit name;
+          greedy = true;
+        }) (lib.lists.optionals personal ["iina"]);
+      in
+        lib.lists.flatten [
+          electron
+          greedy
           "amazon-chime"
-          "docker"
-          "firefox"
-        ])
-      ];
+          "displaylink"
+          "lunar"
+          "scroll-reverser"
+          "zoom"
+          (lib.lists.optionals personal [
+            "aldente"
+            "balenaetcher"
+            "eloston-chromium"
+            "gog-galaxy"
+            "inkscape"
+            "multipatch"
+            "openemu"
+            "radio-silence"
+            "skype"
+            "snes9x"
+            "steam"
+            "tailscale"
+            "transmission"
+            "visualboyadvance-m"
+            "zsa-wally"
+          ])
+          (lib.lists.optionals (!personal) [
+            "docker"
+            "firefox"
+          ])
+        ];
       masApps = lib.attrsets.mergeAttrsList [
         {
           Structured = 1499198946;
@@ -69,13 +90,11 @@ in (lib.attrsets.mergeAttrsList [
         (lib.attrsets.optionalAttrs personal {
           Bitwarden = 1352778147;
           Ivory = 6444602274;
+          Kindle = 302584613;
           Parcel = 639968404;
         })
       ];
-      taps = lib.lists.flatten [
-        "homebrew/cask-drivers"
-        (lib.lists.optionals (!personal) ["hashicorp/tap"])
-      ];
+      taps = builtins.attrNames nix-homebrew.taps;
     };
     environment = {
       systemPath =
