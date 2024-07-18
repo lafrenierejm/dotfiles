@@ -145,7 +145,10 @@ in (lib.attrsets.mergeAttrsList [
       CustomUserPreferences =
         lib.attrsets.mergeAttrsList
         (map
-          (id: {"${id}".SUEnableAutomaticChecks = false;})
+          (id: {
+            "${id}".SUAutomaticallyUpdate = false;
+            "${id}".SUEnableAutomaticChecks = false;
+          })
           (lib.attrsets.attrValues casksSparkle));
       NSGlobalDomain = {
         "com.apple.mouse.tapBehavior" = 1; # tap to click
