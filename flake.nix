@@ -185,6 +185,7 @@
         devShells.default = pkgs.mkShell {
           # Inherit all of the pre-commit hooks.
           inputsFrom = [config.pre-commit.devShell config.treefmt.build.devShell];
+          packages = config.pre-commit.settings.enabledPackages;
         };
       };
 
