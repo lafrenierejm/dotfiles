@@ -14,6 +14,57 @@
     [dotnetBrew opensslBrew]
     ++ (lib.lists.optionals (!personal) ["postgresql@12"]);
   brewPath = pkg: "/opt/homebrew/opt/${pkg}";
+
+  # Electron-based casks.
+  casksElectron = [
+    "amazon-chime"
+    "balenaetcher"
+    "skype"
+    "slack"
+  ];
+
+  # Casks that auto-update using Sparkle.
+  casksSparkle = lib.attrsets.mergeAttrsList [
+    (lib.attrsets.optionalAttrs personal {
+      "scroll-reverser" = "com.pilotmoon.scroll-reverser";
+      aldente = "com.apphousekitchen.aldente-pro";
+      iina = "com.colliderli.iina";
+      lunar = "fyi.lunar.Lunar";
+      multipatch = "com.sappharad.MultiPatch";
+      openemu = "org.openemu.OpenEmu";
+      tailscale = "io.tailscale.ipn.macsys";
+      transmission = "org.m0k.transmission";
+    })
+  ];
+
+  # Combined list of casks.
+  casks = let
+    greedy = map (name: {
+      inherit name;
+      greedy = true;
+    }) (builtins.attrNames casksSparkle);
+  in
+    lib.lists.flatten [
+      casksElectron
+      greedy
+      "displaylink"
+      "zoom"
+      (lib.lists.optionals personal [
+        "apparency"
+        "eloston-chromium"
+        "gog-galaxy"
+        "inkscape"
+        "radio-silence"
+        "snes9x"
+        "steam"
+        "visualboyadvance-m"
+        "zsa-wally"
+      ])
+      (lib.lists.optionals (!personal) [
+        "docker"
+        "firefox"
+      ])
+    ];
 in (lib.attrsets.mergeAttrsList [
   rec {
     nix-homebrew = {
@@ -29,6 +80,7 @@ in (lib.attrsets.mergeAttrsList [
       mutableTaps = false;
     };
     homebrew = {
+      inherit casks;
       enable = true;
       global = {
         autoUpdate = false;
@@ -46,43 +98,6 @@ in (lib.attrsets.mergeAttrsList [
         libraries
         (lib.lists.optionals (!personal) ["hashicorp/tap/boundary"])
       ];
-      casks = let
-        electron = ["slack"];
-        greedy = map (name: {
-          inherit name;
-          greedy = true;
-        }) (lib.lists.optionals personal ["iina"]);
-      in
-        lib.lists.flatten [
-          electron
-          greedy
-          "amazon-chime"
-          "displaylink"
-          "lunar"
-          "scroll-reverser"
-          "zoom"
-          (lib.lists.optionals personal [
-            "aldente"
-            "balenaetcher"
-            "eloston-chromium"
-            "gog-galaxy"
-            "inkscape"
-            "multipatch"
-            "openemu"
-            "radio-silence"
-            "skype"
-            "snes9x"
-            "steam"
-            "tailscale"
-            "transmission"
-            "visualboyadvance-m"
-            "zsa-wally"
-          ])
-          (lib.lists.optionals (!personal) [
-            "docker"
-            "firefox"
-          ])
-        ];
       masApps = lib.attrsets.mergeAttrsList [
         {
           Structured = 1499198946;
@@ -127,9 +142,11 @@ in (lib.attrsets.mergeAttrsList [
       };
     };
     system.defaults = {
-      CustomUserPreferences = {
-        "com.colliderli.iina".SUEnableAutomaticChecks = false;
-      };
+      CustomUserPreferences =
+        lib.attrsets.mergeAttrsList
+        (map
+          (id: {"${id}".SUEnableAutomaticChecks = false;})
+          (lib.attrsets.attrValues casksSparkle));
       NSGlobalDomain = {
         "com.apple.mouse.tapBehavior" = 1; # tap to click
         AppleInterfaceStyleSwitchesAutomatically = true;
