@@ -145,9 +145,11 @@ in (lib.attrsets.mergeAttrsList [
       CustomUserPreferences =
         lib.attrsets.mergeAttrsList
         (map
-          (id: {
-            "${id}".SUAutomaticallyUpdate = false;
-            "${id}".SUEnableAutomaticChecks = false;
+          (appId: {
+            "${appId}" = {
+              SUAutomaticallyUpdate = false;
+              SUEnableAutomaticChecks = false;
+            };
           })
           (lib.attrsets.attrValues casksSparkle));
       NSGlobalDomain = {
