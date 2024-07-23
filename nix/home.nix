@@ -449,7 +449,7 @@ in {
       package = inputs.mujmap.packages."${system}".mujmap;
     };
 
-    notmuch.enable = true;
+    notmuch.enable = personal;
 
     pandoc.enable = true;
 
