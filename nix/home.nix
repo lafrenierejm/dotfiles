@@ -408,6 +408,14 @@ in {
           chainreplyto = false;
           confirm = "auto";
         };
+        url = {
+          "git@github.com:" = {
+            insteadOf = "https://github.com/";
+          };
+          "git@gitlab.com:" = {
+            insteadOf = "https://gitlab.com/";
+          };
+        };
       };
       difftastic.enable = true;
       ignores = [
