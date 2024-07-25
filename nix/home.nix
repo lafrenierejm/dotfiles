@@ -442,10 +442,10 @@ in {
       settings.show_program_path = true;
     };
 
-    lieer.enable = true;
+    lieer.enable = personal;
 
     mujmap = {
-      enable = true;
+      enable = personal;
       package = inputs.mujmap.packages."${system}".mujmap;
     };
 
