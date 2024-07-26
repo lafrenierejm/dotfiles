@@ -25,7 +25,7 @@
     else "${pinentryPkg}/bin/pinentry";
   pyenvEnable = pkgs.lib.readFile ../sh/pyenv.sh;
   voltaEnable = pkgs.lib.readFile ../sh/volta.sh;
-in {
+in rec {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -105,14 +105,19 @@ in {
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
-    shellAliases = {
-      aws-ecr-login = ''
-        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
-      extract = "atool --extract --explain --subdir";
-      jq = "gojq";
-      la = "eza --long --git --time-style=long-iso --all";
-      ll = "eza --long --git --time-style=long-iso";
-    };
+    shellAliases = lib.attrsets.mergeAttrsList [
+      {
+        aws-ecr-login = ''
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
+        extract = "atool --extract --explain --subdir";
+        jq = "gojq";
+        la = "eza --long --git --time-style=long-iso --all";
+        ll = "eza --long --git --time-style=long-iso";
+      }
+      (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
+        emacs = "${programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
+      })
+    ];
     username = userName;
   };
 
