@@ -16,11 +16,14 @@
   brewPath = pkg: "/opt/homebrew/opt/${pkg}";
 
   # Electron-based casks.
-  casksElectron = [
+  casksElectron = lib.lists.flatten [
     "amazon-chime"
     "balenaetcher"
     "skype"
     "slack"
+    (lib.lists.optionals personal [
+      "keybase"
+    ])
   ];
 
   # Casks that auto-update using Sparkle.
