@@ -280,6 +280,7 @@
             personal = true;
             mediaUid = 1100;
             pkgs = inputs.nixpkgs.legacyPackages."${system}";
+            pkgsUnstable = legacyPackagesUnstable."${system}";
             lib = pkgs.lib;
           in
             inputs.nixpkgs.lib.nixosSystem {
@@ -297,7 +298,7 @@
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" = import ./nix/home.nix {
-                    inherit inputs personal system realName userName pkgs lib;
+                    inherit inputs personal system realName userName pkgs pkgsUnstable lib;
                     gitEmail = "git@${domain}";
                     gitUseGpg = true;
                   };
