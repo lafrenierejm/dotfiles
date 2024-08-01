@@ -102,8 +102,6 @@ in rec {
     sessionVariables = {
       DIRENV_LOG_FORMAT = "";
       NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
-      EDITOR = "nvim";
-      VISUAL = "nvim";
     };
     shellAliases = lib.attrsets.mergeAttrsList [
       {
