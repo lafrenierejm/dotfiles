@@ -1,0 +1,5 @@
+profile {
+	output DP-1 enable scale 2
+	output DP-2 enable scale 2
+	output DP-3 enable scale 2
+}

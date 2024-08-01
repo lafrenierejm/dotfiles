@@ -9,7 +9,7 @@
     description = "kanshi daemon";
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${pkgs.kanshi}/bin/kanshi -c ${environment.etc."kanshi.sh"}";
+      ExecStart = "${pkgs.kanshi}/bin/kanshi";
     };
   };
 
