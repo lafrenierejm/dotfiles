@@ -41,11 +41,32 @@ in {
 
   fonts =
     {
-      packages = fontPackages;
+      packages = with pkgs; [
+        font-awesome
+        noto-fonts
+        noto-fonts-cjk
+        noto-fonts-emoji
+        source-code-pro
+        source-han-sans
+        source-han-sans-japanese
+        source-han-serif-japanese
+      ];
+      fontconfig.defaultFonts = {
+        serif = [
+          "Noto Serif"
+          "Source Han Serif"
+        ];
+        sansSerif = [
+          "Noto Sans"
+          "Source Han Sans"
+        ];
+      };
     }
     // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
       fontDir.enable = true;
     });
 
-  programs = {zsh.enable = true;};
+  programs = {
+    zsh.enable = true;
+  };
 }

@@ -130,6 +130,9 @@
                   };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
+                  home-manager.modules = [
+                    ./nix/home/sway.nix
+                  ];
                   home-manager.users."${username}" = import ./nix/home.nix;
                   users.users."${username}" = {
                     home = "/home/${username}";
