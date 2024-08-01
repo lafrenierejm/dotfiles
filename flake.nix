@@ -130,6 +130,9 @@
                   };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
+                  home-manager.modules = [
+                    ./nix/home/sway.nix
+                  ];
                   home-manager.users."${username}" = import ./nix/home.nix;
                   users.users."${username}" = {
                     home = "/home/${username}";
@@ -277,6 +280,7 @@
             personal = true;
             mediaUid = 1100;
             pkgs = inputs.nixpkgs.legacyPackages."${system}";
+            pkgsUnstable = legacyPackagesUnstable."${system}";
             lib = pkgs.lib;
           in
             inputs.nixpkgs.lib.nixosSystem {
@@ -293,11 +297,15 @@
                   ];
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.users."${userName}" = import ./nix/home.nix {
-                    inherit inputs personal system realName userName pkgs lib;
-                    gitEmail = "git@${domain}";
-                    gitUseGpg = true;
-                  };
+                  home-manager.users."${userName}" =
+                    import ./nix/home.nix {
+                      inherit inputs personal system realName userName pkgs pkgsUnstable lib;
+                      gitEmail = "git@${domain}";
+                      gitUseGpg = true;
+                    }
+                    // {
+                      imports = [./nix/home/sway.nix];
+                    };
                   users.groups.media = {gid = mediaUid;};
                   users.users = {
                     "${userName}" = {

@@ -10,11 +10,11 @@
   ...
 }: {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./filesystem.nix
     ./media-server.nix
     ./networking.nix
+    ../linux/graphical.nix
   ];
 
   # Use latest kernel that supports ZFS.
@@ -42,18 +42,6 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager = {
-    enable = true;
-    defaultSession = "plasma";
-    sddm = {
-      wayland.enable = true;
-      enable = true;
-    };
-  };
-  services.desktopManager.plasma6.enable = true;
-  programs.dconf.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
