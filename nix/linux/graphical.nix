@@ -13,8 +13,6 @@
     };
   };
 
-  security.pam.services.swaylock = {};
-
   services.greetd = {
     enable = true;
     settings = {
