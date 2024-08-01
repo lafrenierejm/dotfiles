@@ -64,6 +64,32 @@ in {
     "export NIXOS_OZONE_WL=1" # Electron
   ];
 
+  services.kanshi = {
+    enable = true;
+
+    profiles = {
+      home_office = {
+        outputs = [
+          {
+            criteria = "DP-1";
+            scale = 2;
+            status = "enable";
+          }
+          {
+            criteria = "DP-2";
+            scale = 2;
+            status = "enable";
+          }
+          {
+            criteria = "DP-3";
+            scale = 2;
+            status = "enable";
+          }
+        ];
+      };
+    };
+  };
+
   home.packages = with pkgs; [
     grim
     slurp
