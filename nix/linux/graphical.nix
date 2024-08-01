@@ -1,6 +1,6 @@
-{pkgs, ...}: {
+{pkgs, ...}: rec {
   security.polkit.enable = true;
-  security.dconf.enable = true;
+  programs.dconf.enable = true;
 
   environment.etc."kanshi.sh".text =
     # give sway a little time to startup before starting kanshi.
