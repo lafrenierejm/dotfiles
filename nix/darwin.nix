@@ -99,6 +99,7 @@ in (lib.attrsets.mergeAttrsList [
         "nuget"
         "pyenv"
         libraries
+        (lib.lists.optionals personal ["podman"])
         (lib.lists.optionals (!personal) ["hashicorp/tap/boundary"])
       ];
       masApps = lib.attrsets.mergeAttrsList [
