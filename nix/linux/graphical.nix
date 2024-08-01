@@ -2,14 +2,29 @@
   security.polkit.enable = true;
   programs.dconf.enable = true;
 
-  environment.etc."kanshi.sh".text =
-    # give sway a little time to startup before starting kanshi.
-    "exec sleep 5; systemctl --user start kanshi.service";
-  systemd.user.services.kanshi = {
-    description = "kanshi daemon";
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.kanshi}/bin/kanshi";
+  services.kanshi = {
+    enable = true;
+
+    profiles = {
+      home_office = {
+        outputs = [
+          {
+            criteria = "DP-1";
+            scale = 2;
+            status = "enable";
+          }
+          {
+            criteria = "DP-2";
+            scale = 2;
+            status = "enable";
+          }
+          {
+            criteria = "DP-3";
+            scale = 2;
+            status = "enable";
+          }
+        ];
+      };
     };
   };
 
