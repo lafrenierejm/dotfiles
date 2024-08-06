@@ -51,6 +51,8 @@ in {
         source-han-sans-japanese
         source-han-serif-japanese
       ];
+    }
+    // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
       fontconfig.defaultFonts = {
         serif = [
           "Noto Serif"
@@ -61,8 +63,6 @@ in {
           "Source Han Sans"
         ];
       };
-    }
-    // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
       fontDir.enable = true;
     });
 
