@@ -644,7 +644,7 @@ in rec {
     };
 
     kanshi = {
-      enable = true;
+      enable = pkgs.stdenv.isLinux;
 
       profiles = {
         home_office = {
