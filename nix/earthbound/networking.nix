@@ -16,7 +16,7 @@
 
   # Enable Mullvad VPN.
   age.secrets.mullvad.file = ../mullvad.age;
-  services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.enable = false;
   systemd.services.mullvad-daemon.postStart = let
     mullvad = "${config.services.mullvad-vpn.package}/bin/mullvad";
     secretsFile = config.age.secrets.mullvad.path;
