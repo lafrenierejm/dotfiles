@@ -49,7 +49,7 @@ in {
 
         # Meta
         "${mod}+Shift+r" = "exec swaymsg reload";
-        "--release Print" = "exec --no-startup-id ${pkgs.grimshot}/bin/grimshot copy area";
+        "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
         "${mod}+Ctrl+l" = "exec ${pkgs.swaylock-fancy}/bin/swaylock-fancy";
         "${mod}+Ctrl+q" = "exit";
       };
