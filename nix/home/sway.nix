@@ -72,17 +72,17 @@ in {
         outputs = [
           {
             criteria = "DP-1";
-            scale = 2;
+            scale = 2.0;
             status = "enable";
           }
           {
             criteria = "DP-2";
-            scale = 2;
+            scale = 2.0;
             status = "enable";
           }
           {
             criteria = "DP-3";
-            scale = 2;
+            scale = 2.0;
             status = "enable";
           }
         ];
