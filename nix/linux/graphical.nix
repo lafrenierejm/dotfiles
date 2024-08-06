@@ -1,5 +1,4 @@
 {pkgs, ...}: rec {
-  security.polkit.enable = true;
   programs.dconf.enable = true;
 
   services.greetd = {
