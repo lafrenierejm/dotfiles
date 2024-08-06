@@ -297,12 +297,15 @@
                   ];
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.users."${userName}" = import ./nix/home.nix {
-                    inherit inputs personal system realName userName pkgs pkgsUnstable lib;
-                    gitEmail = "git@${domain}";
-                    gitUseGpg = true;
-                  };
-                  home-manager.users.${userName}.imports = [./nix/home/sway.nix];
+                  home-manager.users."${userName}" =
+                    import ./nix/home.nix {
+                      inherit inputs personal system realName userName pkgs pkgsUnstable lib;
+                      gitEmail = "git@${domain}";
+                      gitUseGpg = true;
+                    }
+                    // {
+                      imports = [./nix/home/sway.nix];
+                    };
                   users.groups.media = {gid = mediaUid;};
                   users.users = {
                     "${userName}" = {
