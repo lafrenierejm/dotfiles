@@ -302,6 +302,7 @@
                     gitEmail = "git@${domain}";
                     gitUseGpg = true;
                   };
+                  home-manager.users.${userName}.imports = [./nix/home/sway.nix];
                   users.groups.media = {gid = mediaUid;};
                   users.users = {
                     "${userName}" = {

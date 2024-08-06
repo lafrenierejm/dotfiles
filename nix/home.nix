@@ -642,31 +642,5 @@ in rec {
       client.arguments = ["--create-frame"];
       defaultEditor = true;
     };
-
-    kanshi = {
-      enable = pkgs.stdenv.isLinux;
-
-      profiles = {
-        home_office = {
-          outputs = [
-            {
-              criteria = "DP-1";
-              scale = 2;
-              status = "enable";
-            }
-            {
-              criteria = "DP-2";
-              scale = 2;
-              status = "enable";
-            }
-            {
-              criteria = "DP-3";
-              scale = 2;
-              status = "enable";
-            }
-          ];
-        };
-      };
-    };
   };
 }

@@ -12,18 +12,19 @@
     };
   };
 
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-  };
+  security.polkit.enable = true;
+  security.pam.services.swaylock = {};
 
   environment.systemPackages = with pkgs; [
     grim
-    slurp
-    wl-clipboard
     mako
+    slurp
+    sway
+    wl-clipboard
   ];
 
+  # Enable the gnome-keyring secrets vault.
+  # Will be exposed through DBus to programs willing to store secrets.
   services.gnome.gnome-keyring.enable = true;
 
   users.users.greeter = {};
