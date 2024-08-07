@@ -18,7 +18,7 @@
   pinentryPkg =
     if pkgs.stdenv.isDarwin
     then pkgs.pinentry_mac
-    else pkgs.pinentry-qt;
+    else pkgs.pinentry-gnome3;
   pinentryBin =
     if pkgs.stdenv.isDarwin
     then "${pinentryPkg}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"

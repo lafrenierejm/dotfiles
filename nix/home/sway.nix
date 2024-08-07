@@ -1,68 +1,80 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   mod = "Mod4";
-  workspaces = {
-    ws1 = "1";
-    ws2 = "2";
-    ws3 = "3";
-    ws4 = "4";
-    ws5 = "5";
-    ws6 = "6";
-    ws7 = "7";
-    ws8 = "8";
-    ws9 = "9";
-    ws0 = "0";
-  };
 in {
+  programs.wofi = {
+    enable = true;
+    settings = {
+      allow_markup = true;
+      width = 250;
+    };
+  };
   wayland.windowManager.sway = {
     enable = true;
     config = {
       modifier = mod;
-      keybindings = {
-        "${mod}+Return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty";
+      keybindings = lib.attrsets.mergeAttrsList [
+        (lib.attrsets.mergeAttrsList (map (num: let
+          ws = toString num;
+        in {
+          "${mod}+${ws}" = "workspace ${ws}";
+          "${mod}+Ctrl+${ws}" = "move container to workspace ${ws}";
+        }) [1 2 3 4 5 6 7 8 9 0]))
 
-        # Navigation
-        "${mod}+0" = "workspace ${workspaces.ws0}";
-        "${mod}+1" = "workspace ${workspaces.ws1}";
-        "${mod}+2" = "workspace ${workspaces.ws2}";
-        "${mod}+3" = "workspace ${workspaces.ws3}";
-        "${mod}+4" = "workspace ${workspaces.ws4}";
-        "${mod}+5" = "workspace ${workspaces.ws5}";
-        "${mod}+6" = "workspace ${workspaces.ws6}";
-        "${mod}+7" = "workspace ${workspaces.ws7}";
-        "${mod}+8" = "workspace ${workspaces.ws8}";
-        "${mod}+9" = "workspace ${workspaces.ws9}";
-        "${mod}+h" = "focus left";
-        "${mod}+j" = "focus down";
-        "${mod}+k" = "focus up";
-        "${mod}+l" = "focus right";
-        "${mod}+x" = "kill";
+        (lib.attrsets.concatMapAttrs (key: direction: {
+            "${mod}+${key}" = "focus ${direction}";
+            "${mod}+Ctrl+${key}" = "move ${direction}";
+          }) {
+            h = "left";
+            j = "down";
+            k = "up";
+            l = "right";
+          })
 
-        # Modes
-        "${mod}+a" = "focus parent";
-        "${mod}+e" = "layout toggle split";
-        "${mod}+f" = "fullscreen toggle";
-        "${mod}+g" = "split h";
-        "${mod}+s" = "layout stacking";
-        "${mod}+space" = "focus mode_toggle";
-        "${mod}+v" = "split v";
-        "${mod}+w" = "layout tabbed";
+        {
+          "${mod}+Return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty";
+          "${mod}+space" = "exec --no-startup-id wofi --show drun,run";
 
-        # Meta
-        "${mod}+Shift+r" = "exec swaymsg reload";
-        "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
-        "${mod}+Ctrl+l" = "exec ${pkgs.swaylock-fancy}/bin/swaylock-fancy";
-        "${mod}+Ctrl+q" = "exit";
-      };
+          "${mod}+x" = "kill";
+
+          "${mod}+a" = "focus parent";
+          "${mod}+e" = "layout toggle split";
+          "${mod}+f" = "fullscreen toggle";
+          "${mod}+g" = "split h";
+          "${mod}+s" = "layout stacking";
+          "${mod}+v" = "split v";
+          "${mod}+w" = "layout tabbed";
+
+          "${mod}+Shift+r" = "exec swaymsg reload";
+          "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
+          "${mod}+Ctrl+l" = "exec ${pkgs.swaylock-fancy}/bin/swaylock-fancy";
+          "${mod}+Ctrl+q" = "exit";
+        }
+      ];
+      focus.followMouse = false;
       startup = [
         {command = "firefox";}
       ];
+      workspaceAutoBackAndForth = true;
     };
+    systemd.enable = true;
+    wrapperFeatures = {gtk = true;};
+  };
+
+  programs.waybar = {
+    enable = true;
+    systemd.enable = true;
   };
 
   home.file.".hm-graphical-session".text = pkgs.lib.concatStringsSep "\n" [
     "export MOZ_ENABLE_WAYLAND=1"
     "export NIXOS_OZONE_WL=1" # Electron
   ];
+
+  services.cliphist.enable = true;
 
   services.kanshi = {
     enable = true;
@@ -71,19 +83,22 @@ in {
       home_office = {
         outputs = [
           {
-            criteria = "DP-1";
-            scale = 2.0;
-            status = "enable";
-          }
-          {
             criteria = "DP-2";
             scale = 2.0;
             status = "enable";
+            position = "0,0";
+          }
+          {
+            criteria = "DP-1";
+            scale = 2.0;
+            status = "enable";
+            position = "1920,0";
           }
           {
             criteria = "DP-3";
             scale = 2.0;
             status = "enable";
+            position = "3840,0";
           }
         ];
       };
