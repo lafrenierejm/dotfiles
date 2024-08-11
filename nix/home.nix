@@ -418,6 +418,9 @@ in rec {
           "git@gitlab.com:" = {
             insteadOf = "https://gitlab.com/";
           };
+          "git@git.sr.ht:" = {
+            insteadOf = "https://git.sr.ht/";
+          };
         };
       };
       difftastic.enable = true;
