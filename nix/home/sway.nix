@@ -36,7 +36,7 @@ in {
 
         {
           "${mod}+Return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty";
-          "${mod}+space" = "exec --no-startup-id wofi --show drun,run";
+          "Alt+space" = "exec --no-startup-id wofi --show drun,run";
 
           "${mod}+x" = "kill";
 
