@@ -10,6 +10,7 @@ let
   ];
 in {
   "earthbound/luks.age".publicKeys = earthbound ++ lafrenierejm;
+  "earthbound/tailscale.age".publicKeys = earthbound ++ lafrenierejm;
   "earthbound/zfs-hdd.age".publicKeys = earthbound ++ lafrenierejm;
   "mullvad.age".publicKeys = earthbound ++ lafrenierejm;
 }

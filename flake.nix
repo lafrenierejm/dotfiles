@@ -286,11 +286,11 @@
             inputs.nixpkgs.lib.nixosSystem {
               inherit system;
               modules = [
-                ./nix/common.nix
-                ./nix/earthbound/configuration.nix
                 inputs.agenix.nixosModules.default
                 inputs.disko.nixosModules.disko
                 inputs.home-manager.nixosModules.home-manager
+                ./nix/common.nix
+                ./nix/earthbound/configuration.nix
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
