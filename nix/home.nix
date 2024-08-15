@@ -616,7 +616,7 @@ in rec {
       bitwarden
       dconf2nix
       signal-desktop
-      transmission-qt
+      transmission-gtk
       ungoogled-chromium
       zoom
     ]))
