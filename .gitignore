@@ -1,3 +1,4 @@
+/.pre-commit-config.yaml
 /Bitwarden/
 /Electron/
 /KDE/
@@ -12,6 +13,7 @@
 /chromium/
 /containers/
 /dconf/
+/direnv/
 /dolphinrc
 /environment.d/
 /fontconfig/
@@ -22,6 +24,7 @@
 /gwenviewrc
 /htop/
 /kactivitymanagerdrc
+/kanshi/
 /katerc
 /kateschemarc
 /kcmfonts
@@ -52,10 +55,13 @@
 /powerdevilrc
 /powermanagementprofilesrc
 /pulse/
+/rbw/
+/result
 /ripgrep-all/
 /session/
 /spectaclerc
 /startkderc
+/sway/
 /syncthing/
 /systemd/
 /systemmonitorrc
@@ -64,9 +70,5 @@
 /transmission-daemon/
 /user-dirs.dirs
 /user-dirs.locale
+/wofi/
 /xsettingsd/
-
-# Nix flake direnv
-/.pre-commit-config.yaml
-/direnv/
-/result
