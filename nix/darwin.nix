@@ -23,6 +23,7 @@
     "slack"
     (lib.lists.optionals personal [
       "keybase"
+      "signal"
     ])
   ];
 
