@@ -1,7 +1,7 @@
 let
   # users
   lafrenierejm = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJUCtDj+Vbj5BJF/HncWB03GWyEAoQWczPHGI2DWoWtN" # lafrenierejm@earthbound
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICBhgW7t1EZ9bk433JOEpazcwvkLtUHkByXk7gdX7lax" # lafrenierejm@earthbound
   ];
 
   # hosts
