@@ -310,11 +310,19 @@
                   users.users = {
                     "${userName}" = {
                       home = "/home/${userName}";
+                      isNormalUser = true;
+                      description = "Joseph LaFreniere";
                       openssh.authorizedKeys.keys = [
                         (builtins.readFile ./ssh/macbook.pub)
                         (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
                       ];
-                      extraGroups = ["wheel" "media" "podman"];
+                      extraGroups = [
+                        "media"
+                        "networkmanager"
+                        "podman"
+                        "wheel"
+                      ];
+                      shell = pkgs.zsh;
                     };
                     media = {
                       isNormalUser = true;

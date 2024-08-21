@@ -72,14 +72,6 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.lafrenierejm = {
-    isNormalUser = true;
-    description = "Joseph LaFreniere";
-    extraGroups = ["networkmanager" "wheel"];
-    shell = pkgs.zsh;
-  };
-
   services.interception-tools = {
     enable = true;
     plugins = [pkgs.interception-tools-plugins.dual-function-keys];
