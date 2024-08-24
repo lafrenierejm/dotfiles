@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/release-24.05;
     nixpkgs-unstable.url = github:NixOS/nixpkgs;
-    nixpkgs-firefox.url = github:lafrenierejm/nixpkgs/firefox-bin-darwin;
     agenix.url = github:ryantm/agenix;
     crane = {
       url = github:ipetkov/crane;

@@ -52,6 +52,7 @@
       casksElectron
       greedy
       "displaylink"
+      "firefox"
       "zoom"
       (lib.lists.optionals personal [
         "apparency"
@@ -66,7 +67,6 @@
       ])
       (lib.lists.optionals (!personal) [
         "docker"
-        "firefox"
       ])
     ];
 in (lib.attrsets.mergeAttrsList [

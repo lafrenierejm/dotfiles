@@ -693,22 +693,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-firefox": {
-      "locked": {
-        "lastModified": 1723936279,
-        "narHash": "sha256-xXknGtS3Kki3Yhq6GbuV1qJIJA8LYckw2eAEmo0HJvQ=",
-        "owner": "lafrenierejm",
-        "repo": "nixpkgs",
-        "rev": "e8e81a39c6e2576e283e543540b794ae4e040aef",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lafrenierejm",
-        "ref": "firefox-bin-darwin",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1722555339,
@@ -978,7 +962,6 @@
         "mujmap": "mujmap",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_6",
-        "nixpkgs-firefox": "nixpkgs-firefox",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "pre-commit-hooks": "pre-commit-hooks",
         "ripgrep-all": "ripgrep-all",

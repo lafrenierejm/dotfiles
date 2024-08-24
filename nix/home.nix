@@ -334,11 +334,8 @@ in rec {
     };
 
     firefox = {
-      enable = personal;
-      package =
-        if pkgs.stdenv.isDarwin
-        then inputs.nixpkgs-firefox.legacyPackages."${system}".firefox-bin
-        else pkgs.firefox-bin;
+      enable = personal && pkgs.stdenv.isLinux;
+      package = pkgs.firefox-bin;
       profiles."personal.default" = {
         id = 0;
         name = "personal";
