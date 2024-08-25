@@ -55,6 +55,7 @@ in {
         }
       ];
       bars = [];
+      floating.titlebar = false;
       focus.followMouse = false;
       startup = [
         {command = "firefox";}
@@ -63,6 +64,7 @@ in {
           always = true;
         }
       ];
+      window.titlebar = false;
       workspaceAutoBackAndForth = true;
     };
     systemd.enable = true;
