@@ -21,7 +21,7 @@
     authKeyFile = config.age.secrets.tailscale.path;
     extraUpFlags = [
       "--exit-node=us-mia-wg-003.mullvad.ts.net"
-      "--exit-node-allow-lan-access"
+      "--exit-node-allow-lan-access=true"
       "--accept-dns=true"
     ];
   };
