@@ -6028,7 +6028,7 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
   (("\\.gdsl\\'" . groovy-mode)
    ("\\.groovy\\'" . groovy-mode)
    ("\\.[Jj]enkinsfile\\'" . groovy-mode)
-   ("/[Jj]enkins\\(?:file\\)?\\(?:\\.[^z-a]+\\)?\\'" . groovy-mode))
+   ("/[Jj]enkins\\(?:file\\)?\\'" . groovy-mode))
 
   :general
   (:keymaps 'groovy-mode-map
