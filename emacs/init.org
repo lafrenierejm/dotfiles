@@ -5002,9 +5002,7 @@ It started out from Aurélien Tisné's ini-mode.
 **** /Terraform Mode/
 
 #+begin_src emacs-lisp
-(use-package terraform-mode
-  :gfhook
-  ('terraform-mode-hook #'terraform-format-on-save-mode))
+(use-package terraform-mode)
 #+end_src
 
 ***** /Smart Dash/
@@ -5056,6 +5054,25 @@ Define the actual Polymode.
   :innermodes '(poly-terraform-json-innermode))
 #+end_src
 
+***** Reformatter
+
+Define a variable to hold the binary for formatting.
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(defvar tf-format-binary "terraform"
+  "The binary to use when running `tf-format' functions.")
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  tf-format
+  :program tf-format-binary
+  :args '("fmt" "-no-color" "-"))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref reformatter/ghook
+('terraform-mode-hook #'tf-format-on-save-mode)
+#+end_src
+
 **** /Eglot/
 
 Enable Eglot in Go buffers.
@@ -5084,8 +5101,8 @@ The /[[Reformatter]]/ package is used to create an formatter for Terragrunt file
 #+end_src
 
 The defined hook can be added to all Terragrunt files.
-#+begin_src emacs-lisp :noweb-ref reformatter/ghook
-('terragrunt-mode-hook #'terragrunt-format-on-save-mode)
+#+begin_src emacs-lisp :noweb-ref hcl-mode/config
+(add-to-list 'terragrunt-mode-hook #'terragrunt-format-on-save-mode)
 #+end_src
 
 ** HyperText Markup Language (HTML)
