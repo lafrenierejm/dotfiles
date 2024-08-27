@@ -596,6 +596,7 @@ in rec {
       nodePackages.prettier
       nodePackages.vscode-json-languageserver
       nodePackages.yaml-language-server
+      opentofu
       pyright
       ripgrep
       rsync
