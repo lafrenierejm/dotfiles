@@ -29,13 +29,15 @@
 
   # Casks that auto-update using Sparkle.
   casksSparkle = lib.attrsets.mergeAttrsList [
+    {
+      "scroll-reverser" = "com.pilotmoon.scroll-reverser";
+    }
     (lib.attrsets.optionalAttrs personal {
       aldente = "com.apphousekitchen.aldente-pro";
       iina = "com.colliderli.iina";
       lunar = "fyi.lunar.Lunar";
       multipatch = "com.sappharad.MultiPatch";
       openemu = "org.openemu.OpenEmu";
-      scroll-reverser = "com.pilotmoon.scroll-reverser";
       tailscale = "io.tailscale.ipn.macsys";
       transmission = "org.m0k.transmission";
     })
