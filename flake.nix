@@ -242,16 +242,18 @@
             personal = false;
             userName = "joseph.lafreniere";
             system = "aarch64-darwin";
-            pkgs = inputs.nixpkgs.legacyPackages."${system}";
+            pkgs = legacyPackages."${system}";
+            pkgsUnstable = legacyPackagesUnstable."${system}";
             lib = pkgs.lib;
           in
             inputs.darwin.lib.darwinSystem rec {
               inherit system;
               modules = [
+                inputs.agenix.nixosModules.default
+                inputs.homebrew.darwinModules.nix-homebrew
+                inputs.home-manager.darwinModules.home-manager
                 ./nix/common.nix
                 ./nix/darwin.nix
-                inputs.agenix.nixosModules.default
-                inputs.home-manager.darwinModules.home-manager
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
@@ -259,7 +261,7 @@
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" = import ./nix/home.nix {
-                    inherit inputs personal realName system userName pkgs lib;
+                    inherit inputs lib personal pkgs pkgsUnstable userName realName system;
                     gitEmail = "joseph.lafreniere@${domain}";
                     gitUseGpg = true;
                   };
