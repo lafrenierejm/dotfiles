@@ -594,6 +594,7 @@ in rec {
       nodePackages.bash-language-server
       nodePackages.graphql-language-service-cli
       nodePackages.prettier
+      nodePackages.typescript-language-server
       nodePackages.vscode-json-languageserver
       nodePackages.yaml-language-server
       opentofu
@@ -602,6 +603,7 @@ in rec {
       rsync
       rust-analyzer
       subversion
+      terraform-docs
       terraform-ls
       typos
       unzip
@@ -621,10 +623,7 @@ in rec {
     (pkgs.lib.lists.optionals (!personal) (with pkgs; [
       groovy
       nodejs
-      packer
-      terraform
-      terraform-docs
-      tflint
+      # vault
     ]))
   ];
 
