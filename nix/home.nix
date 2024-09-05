@@ -557,10 +557,10 @@ in rec {
 
   home.packages = lib.lists.flatten [
     pinentryPkg
-    (with inputs; [
-      gron.packages."${system}".gron
-      ripgrep-all.packages."${system}".rga
-    ])
+    [
+      inputs.gron.packages."${system}".gron
+      inputs.ripgrep-all.packages."${system}".rga
+    ]
     (with pkgs; [
       (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers en-science])))
       atool
