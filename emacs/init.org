@@ -5170,6 +5170,12 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
           "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
+*** /typescript-ts-mode/
+
+#+begin_src emacs-lisp
+(use-package typescript-ts-mode)
+#+end_src
+
 ** Go
 
 *** /Go Mode/
