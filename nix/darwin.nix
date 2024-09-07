@@ -61,6 +61,7 @@
         "eloston-chromium"
         "gog-galaxy"
         "inkscape"
+        "netnewswire"
         "radio-silence"
         "snes9x"
         "steam"
