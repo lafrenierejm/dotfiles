@@ -10,11 +10,10 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    ../linux/amd-gpu.nix
   ];
 
   boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
-  boot.initrd.kernelModules = ["amdgpu"];
-  boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -26,18 +25,4 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-  # Enable OpenCL and Vulkan.
-  hardware.opengl = {
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-      amdvlk
-    ];
-    extraPackages32 = with pkgs; [
-      driversi686Linux.amdvlk
-    ];
-    setLdLibraryPath = true;
-  };
 }
