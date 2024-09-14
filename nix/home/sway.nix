@@ -85,7 +85,6 @@ in {
 
   services.kanshi = {
     enable = true;
-
     profiles = {
       home_office = {
         outputs = [
@@ -112,10 +111,31 @@ in {
     };
   };
 
+  services.swayidle = {
+    enable = true;
+    events = [
+      {
+        event = "before-sleep";
+        command = "${pkgs.swaylock-fancy}/bin/swaylock-fancy -fF";
+      }
+      {
+        event = "lock";
+        command = "lock";
+      }
+    ];
+    timeouts = [
+      {
+        timeout = 600;
+        command = "${pkgs.sway}/bin/swaymsg \"output * power off\"";
+        resumeCommand = "${pkgs.sway}/bin/swaymsg \"output * power on\"";
+      }
+    ];
+  };
+
   home.packages = with pkgs; [
     grim
+    mako # notifications
     slurp
     wl-clipboard
-    mako # notifications
   ];
 }
