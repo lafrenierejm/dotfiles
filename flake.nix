@@ -14,9 +14,9 @@
       url = github:nix-community/disko;
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-overlay.url = github:lafrenierejm/emacs-overlay/feature/aarch64-darwin;
+    emacs-overlay.url = github:nix-community/emacs-overlay;
     emacs-src = {
-      url = github:emacs-mirror/emacs/emacs-29;
+      url = github:emacs-mirror/emacs/emacs-30;
       flake = false;
     };
     flake-parts.url = github:hercules-ci/flake-parts;
