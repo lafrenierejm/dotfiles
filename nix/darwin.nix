@@ -149,6 +149,7 @@ in (lib.attrsets.mergeAttrsList [
         enableScriptingAddition = true;
       };
     };
+    system.stateVersion = 5;
     system.defaults = {
       CustomUserPreferences =
         lib.attrsets.mergeAttrsList
