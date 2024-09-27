@@ -265,9 +265,9 @@ in rec {
           haskell-mode
           hcl-mode
           helpful
-          highlight-indent-guides
           hindent
           hy-mode
+          indent-bars
           inf-ruby
           ivy
           ivy-pass

@@ -634,16 +634,33 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 ('yaml-mode-hook #'display-line-numbers-relative)
 #+end_src
 
-** /Highlight Indent Guides/
+** /Indent Bars/
 
 #+begin_src emacs-lisp
-(use-package highlight-indent-guides
-  :ghook
-  <<highlight-indent-guides/ghook>>
+(use-package indent-bars
+  :hook
+  ((python-base-mode yaml-mode) . indent-bars-mode)
 
   :custom
-  (highlight-indent-guides-method 'character)
-  (highlight-indent-guides-character ?│))
+  (indent-bars-treesit-support t)
+  (indent-bars-treesit-wrap
+   '((python
+      argument_list
+      parameters
+      list
+      list_comprehension
+      dictionary
+      dictionary_comprehension
+      parenthesized_expression
+      subscript)
+     (c
+      argument_list
+      parameter_list
+      init_declarator)))
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
+
+  :config
+  (require 'indent-bars-ts))
 #+end_src
 
 ** Theme
@@ -6025,12 +6042,6 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
 ('(python-mode-hook python-ts-mode-hook) #'wucuo-start)
 #+end_src
 
-*** /Highlight Indent Guides/
-
-#+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
-('(python-mode-hook python-ts-mode-hook) #'highlight-indent-guides-mode)
-#+end_src
-
 *** /Pytest/
 
 #+begin_src emacs-lisp
@@ -6437,13 +6448,6 @@ From the package's [[https://github.com/pekingduck/emacs-sqlite3-api][home page]
 
 ** XML
 
-*** /Highlight Indent Guides/
-
-Enable indent guides in XML buffers.
-#+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
-('nxml-mode-hook #'highlight-indent-guides-mode)
-#+end_src
-
 *** Autoformat via =xmllint=
 
 #+begin_src emacs-lisp :noweb-ref reformatter/config
@@ -6494,13 +6498,6 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{tcl-mode} b
 
 #+begin_src emacs-lisp
 (use-package yaml-mode)
-#+end_src
-
-
-**** /Highlight Indent Guides/
-
-#+begin_src emacs-lisp :noweb-ref highlight-indent-guides/ghook
-('yaml-mode-hook #'highlight-indent-guides-mode)
 #+end_src
 
 *** Ansible
