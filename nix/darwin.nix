@@ -55,6 +55,7 @@
       greedy
       "displaylink"
       "firefox"
+      "karabiner-elements"
       "zoom"
       (lib.lists.optionals personal [
         "apparency"
@@ -141,7 +142,6 @@ in (lib.attrsets.mergeAttrsList [
     };
     security.pam.enableSudoTouchIdAuth = personal;
     services = {
-      karabiner-elements.enable = true;
       nix-daemon.enable = true;
       skhd.enable = personal;
       yabai = {
