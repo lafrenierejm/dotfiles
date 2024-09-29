@@ -302,7 +302,10 @@
                       gitUseGpg = true;
                     }
                     // {
-                      imports = [./nix/home/sway.nix];
+                      imports = [
+                        ./nix/home/sway.nix
+                        ./nix/home/udiskie.nix
+                      ];
                     };
                   users.groups.media = {gid = mediaUid;};
                   users.users = {
