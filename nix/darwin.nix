@@ -108,9 +108,6 @@ in (lib.attrsets.mergeAttrsList [
         (lib.lists.optionals (!personal) ["hashicorp/tap/boundary"])
       ];
       masApps = lib.attrsets.mergeAttrsList [
-        {
-          Structured = 1499198946;
-        }
         (lib.attrsets.optionalAttrs personal {
           Bitwarden = 1352778147;
           Ivory = 6444602274;
