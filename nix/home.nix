@@ -36,6 +36,16 @@ in rec {
   # changes in each release.
   home.stateVersion = "23.05";
 
+  home.pointerCursor = {
+    name = "Adwaita";
+    package = pkgs.gnome.adwaita-icon-theme;
+    size = 24;
+    x11 = {
+      enable = true;
+      defaultCursor = "Adwaita";
+    };
+  };
+
   accounts.email = {
     maildirBasePath = "Mail";
     accounts = let
