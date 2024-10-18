@@ -36,7 +36,7 @@ in rec {
   # changes in each release.
   home.stateVersion = "23.05";
 
-  home.pointerCursor = {
+  home.pointerCursor = lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
     name = "Adwaita";
     package = pkgs.gnome.adwaita-icon-theme;
     size = 24;
