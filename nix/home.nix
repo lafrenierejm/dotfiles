@@ -618,6 +618,7 @@ in rec {
       terraform-ls
       typos
       unzip
+      uv
       yt-dlp
     ])
     (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
