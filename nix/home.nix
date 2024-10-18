@@ -608,6 +608,7 @@ in rec {
       nodePackages.vscode-json-languageserver
       nodePackages.yaml-language-server
       opentofu
+      pre-commit
       pyright
       ripgrep
       rsync
