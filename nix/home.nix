@@ -34,17 +34,123 @@ in rec {
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "23.05";
-
-  home.pointerCursor = lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
-    name = "Adwaita";
-    package = pkgs.gnome.adwaita-icon-theme;
-    size = 24;
-    x11 = {
-      enable = true;
-      defaultCursor = "Adwaita";
-    };
-  };
+  home = lib.attrsets.mergeAttrsList [
+    {
+      stateVersion = "23.05";
+      file.".gnupg/gpg-agent.conf".text =
+        lib.concatStringsSep "\n"
+        (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
+          pinentry-program = pinentryBin;
+          default-cache-ttl = 7200;
+          default-cache-ttl-ssh = 7200;
+        });
+      packages = lib.lists.flatten [
+        pinentryPkg
+        [
+          inputs.gron.packages."${system}".gron
+          inputs.ripgrep-all.packages."${system}".rga
+        ]
+        (with pkgs; [
+          (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers en-science])))
+          atool
+          aws-sso-creds
+          awscli2
+          babashka
+          bfg-repo-cleaner
+          cachix
+          clang-tools
+          clojure
+          coreutils
+          curl
+          dos2unix
+          eza
+          fd
+          gh
+          ghq
+          git-crypt
+          git-filter-repo
+          gitAndTools.gitFull
+          gnupg
+          gojq
+          id3v2
+          ispell
+          isync
+          isync
+          mosh
+          mpv
+          mu
+          nixd
+          nodePackages.bash-language-server
+          nodePackages.graphql-language-service-cli
+          nodePackages.prettier
+          nodePackages.typescript-language-server
+          nodePackages.vscode-json-languageserver
+          nodePackages.yaml-language-server
+          opentofu
+          pre-commit
+          pyright
+          ripgrep
+          rsync
+          rust-analyzer
+          subversion
+          terraform-docs
+          terraform-ls
+          typos
+          unzip
+          uv
+          yt-dlp
+        ])
+        (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
+          skhd
+        ]))
+        (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
+          bitwarden
+          dconf2nix
+          signal-desktop
+          transmission-gtk
+          ungoogled-chromium
+          zoom
+        ]))
+        (pkgs.lib.lists.optionals (!personal) (with pkgs; [
+          groovy
+          nodejs
+          # vault
+        ]))
+      ];
+      sessionPath = [
+        "$HOME/.local/bin"
+      ];
+      sessionVariables = {
+        DIRENV_LOG_FORMAT = "";
+        NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
+      };
+      shellAliases = lib.attrsets.mergeAttrsList [
+        {
+          aws-ecr-login = ''
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
+          extract = "atool --extract --explain --subdir";
+          jq = "gojq";
+          la = "eza --long --git --time-style=long-iso --all";
+          ll = "eza --long --git --time-style=long-iso";
+        }
+        (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
+          emacs = "${programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
+        })
+      ];
+      username = userName;
+    }
+    (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
+      pointerCursor = {
+        name = "Adwaita";
+        package = pkgs.gnome.adwaita-icon-theme;
+        size = 24;
+        x11 = {
+          enable = true;
+          defaultCursor = "Adwaita";
+        };
+      };
+    })
+  ];
 
   accounts.email = {
     maildirBasePath = "Mail";
@@ -103,30 +209,6 @@ in rec {
         notmuch.enable = true;
       };
     };
-  };
-
-  home = {
-    sessionPath = [
-      "$HOME/.local/bin"
-    ];
-    sessionVariables = {
-      DIRENV_LOG_FORMAT = "";
-      NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
-    };
-    shellAliases = lib.attrsets.mergeAttrsList [
-      {
-        aws-ecr-login = ''
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
-        extract = "atool --extract --explain --subdir";
-        jq = "gojq";
-        la = "eza --long --git --time-style=long-iso --all";
-        ll = "eza --long --git --time-style=long-iso";
-      }
-      (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
-        emacs = "${programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
-      })
-    ];
-    username = userName;
   };
 
   programs = {
@@ -564,88 +646,6 @@ in rec {
       ];
     };
   };
-
-  home.packages = lib.lists.flatten [
-    pinentryPkg
-    [
-      inputs.gron.packages."${system}".gron
-      inputs.ripgrep-all.packages."${system}".rga
-    ]
-    (with pkgs; [
-      (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers en-science])))
-      atool
-      aws-sso-creds
-      awscli2
-      babashka
-      bfg-repo-cleaner
-      cachix
-      clang-tools
-      clojure
-      coreutils
-      curl
-      dos2unix
-      eza
-      fd
-      gh
-      ghq
-      git-crypt
-      git-filter-repo
-      gitAndTools.gitFull
-      gnupg
-      gojq
-      id3v2
-      ispell
-      isync
-      isync
-      mosh
-      mpv
-      mu
-      nixd
-      nodePackages.bash-language-server
-      nodePackages.graphql-language-service-cli
-      nodePackages.prettier
-      nodePackages.typescript-language-server
-      nodePackages.vscode-json-languageserver
-      nodePackages.yaml-language-server
-      opentofu
-      pre-commit
-      pyright
-      ripgrep
-      rsync
-      rust-analyzer
-      subversion
-      terraform-docs
-      terraform-ls
-      typos
-      unzip
-      uv
-      yt-dlp
-    ])
-    (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
-      skhd
-    ]))
-    (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
-      bitwarden
-      dconf2nix
-      signal-desktop
-      transmission-gtk
-      ungoogled-chromium
-      zoom
-    ]))
-    (pkgs.lib.lists.optionals (!personal) (with pkgs; [
-      groovy
-      nodejs
-      # vault
-    ]))
-  ];
-
-  home.file.".gnupg/gpg-agent.conf".text =
-    lib.concatStringsSep "\n"
-    (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
-      pinentry-program = pinentryBin;
-      default-cache-ttl = 7200;
-      default-cache-ttl-ssh = 7200;
-    });
 
   services = {
     emacs = {
