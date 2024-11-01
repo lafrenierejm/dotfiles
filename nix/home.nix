@@ -262,28 +262,10 @@ in rec {
           patches =
             (old.patches or [])
             ++ (lib.lists.optionals pkgs.stdenv.isDarwin (
-              let
-                host = "raw.githubusercontent.com";
-                owner = "d12frosted";
-                repo = "homebrew-emacs-plus";
-                commit = "ff462afe5e971411e9738305ac6afd67a0e041bb";
-                patchUrl = path: "https://${host}/${owner}/${repo}/${commit}/${path}";
-              in [
-                # Fix window role for compatibility with yabai.
-                (pkgs.fetchpatch {
-                  url = patchUrl "patches/emacs-28/fix-window-role.patch";
-                  sha256 = "0c41rgpi19vr9ai740g09lka3nkjk48ppqyqdnncjrkfgvm2710z";
-                })
-                # Make Emacs aware of OS-level light/dark mode.
-                (pkgs.fetchpatch {
-                  url = patchUrl "patches/emacs-30/system-appearance.patch";
-                  sha256 = "1dkx8xc3v2zgnh6fpx29cf6kc5h18f9misxsdvwvy980cj0cxcwy";
-                })
-                # Use poll instead of select to get file descriptors.
-                (pkgs.fetchpatch {
-                  url = patchUrl "patches/emacs-30/poll.patch";
-                  sha256 = "0988ysajww160wms05hydg48kyd4xlwn6if27dcf9n3g5vw7ds2r";
-                })
+              map (patchFilename: inputs.emacs-plus + "/patches/emacs-30/${patchFilename}") [
+                "fix-window-role.patch"
+                "system-appearance.patch"
+                "poll.patch"
               ]
             ));
         });

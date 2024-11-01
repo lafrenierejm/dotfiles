@@ -167,20 +167,19 @@
         "type": "github"
       }
     },
-    "emacs-src": {
+    "emacs-plus": {
       "flake": false,
       "locked": {
-        "lastModified": 1730471979,
-        "narHash": "sha256-KDj7BC8sjyFw6akL6TKnv7wnTUiAWya+LavAfA/qHRE=",
-        "owner": "emacs-mirror",
-        "repo": "emacs",
-        "rev": "f7b85fe986e74b649f8148ee407cf7a2327ff4a9",
+        "lastModified": 1730115134,
+        "narHash": "sha256-Pi5F+jmUTTCrigzPpSUwGviQsRDbMoAUaz3REpV/Oy4=",
+        "owner": "d12frosted",
+        "repo": "homebrew-emacs-plus",
+        "rev": "d68642101a3577d990ed19a73b4ab8086da77625",
         "type": "github"
       },
       "original": {
-        "owner": "emacs-mirror",
-        "ref": "emacs-30",
-        "repo": "emacs",
+        "owner": "d12frosted",
+        "repo": "homebrew-emacs-plus",
         "type": "github"
       }
     },
@@ -943,7 +942,7 @@
         "darwin": "darwin_2",
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",
-        "emacs-src": "emacs-src",
+        "emacs-plus": "emacs-plus",
         "flake-parts": "flake-parts",
         "flake-root": "flake-root",
         "gron": "gron",

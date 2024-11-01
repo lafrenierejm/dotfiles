@@ -15,8 +15,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-overlay.url = github:nix-community/emacs-overlay;
-    emacs-src = {
-      url = github:emacs-mirror/emacs/emacs-30;
+    emacs-plus = {
+      url = github:d12frosted/homebrew-emacs-plus;
       flake = false;
     };
     flake-parts.url = github:hercules-ci/flake-parts;
