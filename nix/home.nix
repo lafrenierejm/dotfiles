@@ -367,7 +367,6 @@ in rec {
           pdf-tools
           poly-ansible
           poly-markdown
-          poly-org
           polymode
           powershell
           projectile

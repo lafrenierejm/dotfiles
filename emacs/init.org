@@ -1208,13 +1208,6 @@ Use /Wucuo/ to perform spell checking.
 ('org-mode-hook #'wucuo-start)
 #+end_src
 
-*** Poly Org
-
-/Poly Org/ provides Polymode definitions for Org buffers.
-#+begin_src emacs-lisp
-(use-package poly-org)
-#+end_src
-
 *** Ox LaTeX
 
 /Ox/ (Org eXport) allows exporting Org files such as this one.
