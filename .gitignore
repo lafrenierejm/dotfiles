@@ -68,6 +68,7 @@
 /systemsettingsrc
 /transmission
 /transmission-daemon/
+/udiskie
 /user-dirs.dirs
 /user-dirs.locale
 /wofi/
