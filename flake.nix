@@ -307,7 +307,12 @@
                         ./nix/home/udiskie.nix
                       ];
                     };
-                  users.groups.media = {gid = mediaUid;};
+                  users.groups.media = {
+                    members = [
+                      "media"
+                      userName
+                    ];
+                  };
                   users.users = {
                     "${userName}" = {
                       home = "/home/${userName}";
@@ -318,7 +323,6 @@
                         (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
                       ];
                       extraGroups = [
-                        "media"
                         "networkmanager"
                         "podman"
                         "wheel"
@@ -326,8 +330,7 @@
                       shell = pkgs.zsh;
                     };
                     media = {
-                      isNormalUser = true;
-                      uid = mediaUid;
+                      isSystemUser = true;
                       group = "media";
                     };
                   };

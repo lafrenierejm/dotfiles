@@ -99,6 +99,11 @@
           media = {
             type = "zfs_fs";
             mountpoint = "/media";
+            mountOptions = [
+              "X-mount.owner=media"
+              "X-mount.group=media"
+              "X-mount.mode=0775"
+            ];
             options."com.sun:auto-snapshot" = "true";
           };
         };
