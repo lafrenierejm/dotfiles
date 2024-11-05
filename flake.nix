@@ -21,6 +21,10 @@
     };
     flake-parts.url = github:hercules-ci/flake-parts;
     flake-root.url = github:srid/flake-root;
+    git-hooks = {
+      url = github:cachix/git-hooks.nix;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     gron.url = github:lafrenierejm/gron;
     homebrew = {
       url = github:zhaofengli-wip/nix-homebrew;
@@ -52,15 +56,11 @@
         nixpkgs.follows = "nixpkgs";
         crane.follows = "crane";
         rust-overlay.follows = "rust-overlay";
-        pre-commit-hooks.follows = "pre-commit-hooks";
+        pre-commit-hooks.follows = "git-hooks";
       };
     };
     nixos-generators = {
       url = github:nix-community/nixos-generators;
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    pre-commit-hooks = {
-      url = github:cachix/pre-commit-hooks.nix;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ripgrep-all = {
@@ -69,7 +69,7 @@
         nixpkgs.follows = "nixpkgs";
         crane.follows = "crane";
         rust-overlay.follows = "rust-overlay";
-        pre-commit-hooks.follows = "pre-commit-hooks";
+        pre-commit-hooks.follows = "git-hooks";
       };
     };
     rust-overlay = {
@@ -86,7 +86,7 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.flake-root.flakeModule
-        inputs.pre-commit-hooks.flakeModule
+        inputs.git-hooks.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
       systems = ["x86_64-linux" "aarch64-darwin"];
