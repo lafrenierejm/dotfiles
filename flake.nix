@@ -173,6 +173,7 @@
               enable = true;
               excludes = [".*\\.crypt"];
             };
+            taplo.enable = true;
             treefmt.enable = true;
             typos = {
               enable = true;

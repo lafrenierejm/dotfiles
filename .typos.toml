@@ -1,9 +1,5 @@
 [files]
-extend-exclude = [
-"*.age",
-"*.crypt",
-"nix/home.nix"
-]
+extend-exclude = ["*.age", "*.crypt", "nix/home.nix"]
 ignore-vcs = true
 
 [default]
