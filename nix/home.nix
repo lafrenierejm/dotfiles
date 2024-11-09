@@ -487,6 +487,9 @@ in rec {
           confirm = "auto";
         };
         url = {
+          "git@codeberg.org:" = {
+            insteadOf = "https://codeberg.org/";
+          };
           "git@github.com:" = {
             insteadOf = "https://github.com/";
           };
