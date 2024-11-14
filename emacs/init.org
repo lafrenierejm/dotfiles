@@ -658,20 +658,43 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
   :custom
   (indent-bars-treesit-support t)
-  (indent-bars-treesit-wrap
+  (indent-bars-treesit-scope
    '((python
-      argument_list
-      parameters
-      list
-      list_comprehension
-      dictionary
-      dictionary_comprehension
-      parenthesized_expression
-      subscript)
-     (c
+      function_definition
+      class_definition
+      for_statement
+      if_statement
+      with_statement
+      while_statement)
+     (rust
+      trait_item
+      impl_item
+      macro_definition
+      macro_invocation
+      struct_item
+      enum_item
+      mod_item
+      const_item
+      let_declaration
+      function_item
+      for_expression
+      if_expression
+      loop_expression
+      while_expression
+      match_expression
+      match_arm
+      call_expression
+      token_tree
+      token_tree_pattern
+      token_repetition)))
+  (indent-bars-treesit-wrap
+   '((c
       argument_list
       parameter_list
-      init_declarator)))
+      init_declarator)
+     (rust
+      arguments
+      parameters)))
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
 
   :config
