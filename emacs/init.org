@@ -213,10 +213,13 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
 
 #+begin_src emacs-lisp :noweb-ref exec-path-from-shell/custom
 (exec-path-from-shell-variables
- '("PATH" "MANPATH"                     ; defaults
+ '("PATH"
+   "MANPATH"
    ;; Include all XDG environment variables.
    "XDG_CACHE_DIR"
+   "XDG_CONFIG_DIRS"
    "XDG_CONFIG_HOME"
+   "XDG_DATA_DIRS"
    "XDG_DESKTOP_DIR"
    "XDG_DOCUMENTS_DIR"
    "XDG_DOWNLOAD_DIR"
@@ -228,8 +231,20 @@ The ~:demand~ keyword is used to ensure General is loaded eagerly.
    "XDG_SOURCE_DIR"
    "XDG_TEMPLATES_DIR"
    "XDG_VIDEOS_DIR"
-   ;; Include Guix-related variables.
-   "GUIX_PROFILE"))
+   ;; Guix
+   "GUIX_PROFILE"
+   ;; Nix
+   "__NIX_DARWIN_SET_ENVIRONMENT_DONE"
+   "__HM_SESS_VARS_SOURCED"
+   "NIX_USER_PROFILE_DIR"
+   "NIX_SSL_CERT_FILE"
+   "NIX_PROFILES"
+   "NIX_PATH"
+   ;; rbenv
+   "RBENV_ROOT"
+   ;; SSH
+   "SSH_AUTH_SOCK"
+   "SSH_AGENT_PID"))
 #+end_src
 
 * Customization
