@@ -5224,6 +5224,13 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 (use-package typescript-ts-mode)
 #+end_src
 
+*** Eglot
+
+Enable Eglot in Javascript and Typescript buffers.
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('(js-ts-mode-hook typescript-ts-mode-hook) #'eglot-ensure)
+#+end_src
+
 ** Go
 
 *** /Go Mode/
