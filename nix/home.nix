@@ -100,11 +100,13 @@ in rec {
           uv
           yt-dlp
         ])
-        (lib.lists.optionals personal (with pkgs; [
-          beets
-          nicotine-plus
-          picard
-        ]))
+        (lib.lists.optionals personal [
+          (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
+            beets
+            nicotine-plus
+            picard
+          ]))
+        ])
         (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
           skhd
         ]))
