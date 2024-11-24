@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/release-24.05;
+    nixpkgs-ghostscript.url = github:carlocab/nixpkgs/fix-ghostscript;
     nixpkgs-unstable.url = github:NixOS/nixpkgs;
     agenix.url = github:ryantm/agenix;
     crane.url = github:ipetkov/crane;
@@ -218,6 +219,9 @@
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
+                    (final: prev: {
+                      ghostscript = inputs.nixpkgs-ghostscript.legacyPackages.${prev.system}.ghostscript;
+                    })
                   ];
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;

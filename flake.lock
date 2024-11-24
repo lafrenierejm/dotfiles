@@ -690,6 +690,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-ghostscript": {
+      "locked": {
+        "lastModified": 1732262885,
+        "narHash": "sha256-YslfcOM7Aq+cfrn2MzwFAU+9wxDyvekuuvahghUbK2g=",
+        "owner": "carlocab",
+        "repo": "nixpkgs",
+        "rev": "8b3d3d5854495297ee537e505bab522c21e0762f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "carlocab",
+        "ref": "fix-ghostscript",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1730504152,
@@ -937,6 +953,7 @@
         "mujmap": "mujmap",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_6",
+        "nixpkgs-ghostscript": "nixpkgs-ghostscript",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "ripgrep-all": "ripgrep-all",
         "rust-overlay": "rust-overlay",

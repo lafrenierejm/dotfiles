@@ -272,7 +272,6 @@ in rec {
               map (patchFilename: inputs.emacs-plus + "/patches/emacs-30/${patchFilename}") [
                 "fix-window-role.patch"
                 "system-appearance.patch"
-                "poll.patch"
               ]
             ));
         });
