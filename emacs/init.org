@@ -5786,6 +5786,7 @@ The package's [[https://github.com/purcell/package-lint][homepage]] describes /P
 /KeyStore Mode/ is a major mode for viewing and editing Java Keystore (.jks) files.
 #+begin_src emacs-lisp
 (use-package keystore-mode
+  :disabled t
   :demand)
 #+end_src
 

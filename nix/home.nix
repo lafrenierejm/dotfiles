@@ -51,7 +51,7 @@ in rec {
           inputs.ripgrep-all.packages."${system}".rga
         ]
         (with pkgs; [
-          (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers en-science])))
+          (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers])))
           atool
           aws-sso-creds
           awscli2
@@ -307,7 +307,6 @@ in rec {
           dired-collapse
           dired-narrow
           dired-subtree
-          docker
           dockerfile-mode
           dtrt-indent
           dwim-shell-command
@@ -356,7 +355,6 @@ in rec {
           jinja2-mode
           journalctl-mode
           json-mode
-          keystore-mode
           lua-mode
           magit
           markdown-mode

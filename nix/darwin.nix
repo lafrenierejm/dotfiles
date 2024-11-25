@@ -11,8 +11,11 @@
   dotnetBrew = "dotnet@6";
   opensslBrew = "openssl";
   libraries =
-    [dotnetBrew opensslBrew]
-    ++ (lib.lists.optionals (!personal) ["postgresql@12"]);
+    [opensslBrew]
+    ++ (lib.lists.optionals (!personal) [
+      dotnetBrew
+      "postgresql@12"
+    ]);
   brewPath = pkg: "/opt/homebrew/opt/${pkg}";
 
   # Electron-based casks.

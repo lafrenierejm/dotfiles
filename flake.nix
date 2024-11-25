@@ -2,7 +2,7 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/release-24.05;
+    nixpkgs.url = github:NixOS/nixpkgs/release-24.11;
     nixpkgs-ghostscript.url = github:carlocab/nixpkgs/fix-ghostscript;
     nixpkgs-unstable.url = github:NixOS/nixpkgs;
     agenix.url = github:ryantm/agenix;
@@ -48,7 +48,7 @@
       flake = false;
     };
     home-manager = {
-      url = github:lafrenierejm/home-manager/release-24.05_ripgrep-all;
+      url = github:lafrenierejm/home-manager/release-24.11_ripgrep-all;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mujmap = {
