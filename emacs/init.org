@@ -830,10 +830,10 @@ If PATH is _not_ in a project, return the abbreviated form of PATH's
 path."
   (s-chop-suffix
    "/"
-   (if-let (((fboundp #'projectile-project-name))
-            ((fboundp #'projectile-project-root))
-            (project-root (projectile-project-root path))
-            (project-name (projectile-project-name project-root)))
+   (if-let* (((fboundp #'projectile-project-name))
+             ((fboundp #'projectile-project-root))
+             (project-root (projectile-project-root path))
+             (project-name (projectile-project-name project-root)))
        ;; If in a project:
        (if (string=
             (file-name-as-directory (expand-file-name path))
@@ -2175,7 +2175,7 @@ If ~rga~ is present, it is preferred to plain ~rg~.
 
 #+begin_src emacs-lisp :noweb-ref counsel/custom
 (counsel-rg-base-command
- (if-let ((command (cl-some #'executable-find '("rga" "rg"))))
+ (if-let* ((command (cl-some #'executable-find '("rga" "rg"))))
      (list command
            "--smart-case"
            "--hidden"
@@ -2195,7 +2195,7 @@ The second is replaced with the name of the current file.
 
 #+begin_src emacs-lisp :noweb-ref counsel/custom
 (counsel-grep-base-command
- (if-let ((command (cl-some #'executable-find '("rga" "rg"))))
+ (if-let* ((command (cl-some #'executable-find '("rga" "rg"))))
      (s-join " " (list command
                        "--smart-case"
                        "--max-columns=88"
@@ -2769,18 +2769,18 @@ This is useful when adding determining information.
   "Determine the year when FILENAME was added to a Git repository.
 
 If the file has not been added to the repository, use the current year."
-  (if-let (((not (string-empty-p filename)))
-           (git-output
-            (shell-command-to-string
-             (format "%s | tail -1 | head -c 4 -z"
-                     (s-join " " `("git" "log"
-                                   "--diff-filter=A"
-                                   "--follow"
-                                   "--format=%aI"
-                                   "--"
-                                   ,filename
-                                   ,(format "2>%s" null-device))))))
-           ((not (string-empty-p git-output))))
+  (if-let* (((not (string-empty-p filename)))
+            (git-output
+             (shell-command-to-string
+              (format "%s | tail -1 | head -c 4 -z"
+                      (s-join " " `("git" "log"
+                                    "--diff-filter=A"
+                                    "--follow"
+                                    "--format=%aI"
+                                    "--"
+                                    ,filename
+                                    ,(format "2>%s" null-device))))))
+            ((not (string-empty-p git-output))))
       git-output
     (format-time-string "%Y")))
 #+end_src
@@ -3552,10 +3552,10 @@ If DIRECTORY is _not_ in a project, return the abbreviated form of DIRECTORY's
 path."
   (s-chop-suffix
    "/"
-   (if-let (((fboundp #'projectile-project-name))
-            ((fboundp #'projectile-project-root))
-            (project-root (projectile-project-root directory))
-            (project-name (projectile-project-name project-root)))
+   (if-let* (((fboundp #'projectile-project-name))
+             ((fboundp #'projectile-project-root))
+             (project-root (projectile-project-root directory))
+             (project-name (projectile-project-name project-root)))
        ;; If in a project:
        (if (string=
             (file-name-as-directory (expand-file-name directory))
@@ -3693,7 +3693,7 @@ comparing the name of buffers to the result of `em-dirs-name-buffer'."
         (unless (equal curdir newdir)
           (eshell-add-to-dir-ring curdir))
         ;; If an Eshell buffer already exists in the new directory...
-        (if-let ((newbuf (get-buffer newname)))
+        (if-let* ((newbuf (get-buffer newname)))
             ;; Then switch to the existing Eshell buffer.
             (switch-to-buffer newbuf)
           ;; Else change to the new directory.
@@ -5677,7 +5677,7 @@ Replace hash symbols with ellipses.
 Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a prefix argument, replaces the expression being evaluated with the result of its evaluation.
 #+begin_src emacs-lisp
 (defun elisp-eval-last-sexp (&optional replace)
-  "Evaluate the preceding sexp, OPTIONALly replacing it with its result."
+  "Evaluate the preceding sexp, optionally REPLACE it with its result."
   (interactive "P")
   (if (not replace)
       (eval-last-sexp replace)
@@ -6025,10 +6025,10 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 #+begin_src emacs-lisp :noweb-ref python/config
 (defun python-shell-get-process-name (&rest _args)
   "Assemble a project-specific name for an inferior Python process."
-  (if-let (((fboundp #'projectile-project-name))
-           ((fboundp #'projectile-project-root))
-           (project-root (projectile-project-root (buffer-file-name (current-buffer))))
-           (project-name (projectile-project-name project-root)))
+  (if-let* (((fboundp #'projectile-project-name))
+            ((fboundp #'projectile-project-root))
+            (project-root (projectile-project-root (buffer-file-name (current-buffer))))
+            (project-name (projectile-project-name project-root)))
       (format "%s %s" python-shell-buffer-name project-name)
     python-shell-buffer-name))
 #+end_src
