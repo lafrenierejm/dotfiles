@@ -103,6 +103,9 @@ in rec {
         (lib.lists.optionals personal [
           (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
             beets
+            ffmpeg-headless
+            imagemagick
+            inkscape
             nicotine-plus
             picard
           ]))
