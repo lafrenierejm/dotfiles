@@ -117,7 +117,7 @@ in rec {
           bitwarden
           dconf2nix
           signal-desktop
-          transmission-gtk
+          transmission_4-gtk
           ungoogled-chromium
           zoom
         ]))
@@ -152,7 +152,7 @@ in rec {
     (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
       pointerCursor = {
         name = "Adwaita";
-        package = pkgs.gnome.adwaita-icon-theme;
+        package = pkgs.adwaita-icon-theme;
         size = 24;
         x11 = {
           enable = true;
