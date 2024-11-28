@@ -6886,17 +6886,7 @@ This allows the keys to be useful whenever the =s= modifier is made available to
 (use-package auth-source
 
   ;; Load this package eagerly.
-  :demand
-
-  ;; Apply the following customizations.
-  :custom
-  (auth-sources
-   (cl-case system-type
-     (darwin
-      '(macos-keychain-internet macos-keychain-generic))
-     (t
-      '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc")))
-   "Attempt to use system keychain."))
+  :demand)
 #+end_src
 
 ** Password Store ([[https://passwordstore.org][passwordstore.org]])
