@@ -71,11 +71,11 @@ in rec {
           git-filter-repo
           gitAndTools.gitFull
           gnupg
-          gojq
           id3v2
           ispell
           isync
           isync
+          jaq
           mosh
           mpv
           mu
@@ -139,7 +139,7 @@ in rec {
           aws-ecr-login = ''
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
           extract = "atool --extract --explain --subdir";
-          jq = "gojq";
+          jq = "jaq";
           la = "eza --long --git --time-style=long-iso --all";
           ll = "eza --long --git --time-style=long-iso";
         }
