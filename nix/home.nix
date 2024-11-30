@@ -101,10 +101,10 @@ in rec {
           yt-dlp
         ])
         (lib.lists.optionals personal [
+          pkgs.imagemagick
           (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
             beets
             ffmpeg-headless
-            imagemagick
             inkscape
             nicotine-plus
             picard
