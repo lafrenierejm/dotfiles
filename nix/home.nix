@@ -71,6 +71,7 @@ in rec {
           git-filter-repo
           gitAndTools.gitFull
           gnupg
+          hyperfine
           id3v2
           ispell
           isync
