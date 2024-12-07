@@ -339,6 +339,7 @@ in rec {
           geiser-guile
           general
           ghq
+          gptel
           go-eldoc
           go-mode
           gorepl-mode
