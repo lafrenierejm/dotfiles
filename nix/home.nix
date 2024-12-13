@@ -63,6 +63,7 @@ in rec {
           coreutils
           curl
           dos2unix
+          exiftool
           eza
           fd
           gh
