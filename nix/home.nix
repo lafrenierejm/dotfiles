@@ -100,6 +100,8 @@ in rec {
           typos
           unzip
           uv
+          vale
+          vale-ls
           yt-dlp
         ])
         (lib.lists.optionals personal [
