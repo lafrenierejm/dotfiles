@@ -14,7 +14,7 @@
       url = github:nix-community/disko;
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-overlay.url = github:nix-community/emacs-overlay/07a183880b1f5bc1c18bbf3583fab17b94b2a110;
+    emacs-overlay.url = github:nix-community/emacs-overlay;
     emacs-plus = {
       url = github:d12frosted/homebrew-emacs-plus;
       flake = false;
