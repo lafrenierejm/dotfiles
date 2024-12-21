@@ -243,9 +243,6 @@ in rec {
         "set enable-bracketed-paste off"
         # Enable extended globbing patterns.
         "shopt -s extglob"
-        # Enable non-Nix programs.
-        pyenvEnable
-        voltaEnable
       ];
     };
 
@@ -626,17 +623,19 @@ in rec {
       autocd = true;
       autosuggestion.enable = true;
       defaultKeymap = "emacs";
-      initExtra = lib.concatStringsSep "\n" [
+      initExtra = lib.concatStringsSep "\n" (lib.lists.flatten [
         ''. "$HOME/.config/zsh/vterm.zsh"''
-        pyenvEnable
-        voltaEnable
+        (lib.lists.optionals (!personal) [
+          pyenvEnable
+          voltaEnable
+        ])
         # nvm
         ''
           # Load NVM.
           export NVM_DIR="$HOME/.nvm"
           [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
           [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"''
-      ];
+      ]);
       profileExtra = lib.concatStringsSep "\n" [
         ''export PATH="$PATH:$HOME/.dotnet/tools"''
       ];

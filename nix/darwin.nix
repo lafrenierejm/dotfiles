@@ -10,12 +10,11 @@
 }: let
   dotnetBrew = "dotnet@6";
   opensslBrew = "openssl";
-  libraries =
-    [opensslBrew]
-    ++ (lib.lists.optionals (!personal) [
-      dotnetBrew
-      "postgresql@12"
-    ]);
+  libraries = lib.lists.optionals (!personal) [
+    dotnetBrew
+    opensslBrew
+    "postgresql@12"
+  ];
   brewPath = pkg: "/opt/homebrew/opt/${pkg}";
 
   # Electron-based casks.
@@ -102,13 +101,14 @@ in (lib.attrsets.mergeAttrsList [
         cleanup = "uninstall";
       };
       brews = lib.lists.flatten [
-        "make"
-        "nvm"
-        "nuget"
-        "pyenv"
         libraries
         (lib.lists.optionals personal ["podman"])
-        (lib.lists.optionals (!personal) ["hashicorp/tap/boundary"])
+        (lib.lists.optionals (!personal) [
+          "hashicorp/tap/boundary"
+          "nvm"
+          "pyenv"
+          "volta"
+        ])
       ];
       masApps = lib.attrsets.mergeAttrsList [
         (lib.attrsets.optionalAttrs personal {
@@ -120,11 +120,14 @@ in (lib.attrsets.mergeAttrsList [
       ];
       taps = builtins.attrNames nix-homebrew.taps;
     };
-    environment = {
-      systemPath =
-        lib.trivial.concat [config.homebrew.brewPrefix]
-        (map (pkg: (brewPath pkg) + "/bin") libraries);
-      variables = rec {
+    environment =
+      {
+        systemPath = lib.lists.flatten [
+          config.homebrew.brewPrefix
+          libraries
+        ];
+      }
+      // lib.attrsets.optionalAttrs (!personal) rec {
         CFLAGS =
           lib.concatStringsSep " "
           (map (pkg: ("-I" + (brewPath pkg) + "/include")) libraries);
@@ -139,7 +142,6 @@ in (lib.attrsets.mergeAttrsList [
           lib.concatStringsSep " "
           (map (pkg: (brewPath pkg) + "/lib/pkgconfig") libraries);
       };
-    };
     security.pam.enableSudoTouchIdAuth = personal;
     services = {
       nix-daemon.enable = true;
