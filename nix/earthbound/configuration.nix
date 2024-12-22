@@ -12,6 +12,7 @@
   imports = [
     ./hardware-configuration.nix
     ./filesystem.nix
+    ./file-server.nix
     ./media-server.nix
     ./networking.nix
     ../linux/graphical.nix
