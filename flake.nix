@@ -334,6 +334,10 @@
                       isSystemUser = true;
                       group = "media";
                     };
+                    rbralley = {
+                      isNormalUser = true;
+                      description = "Ratannya Bralley";
+                    };
                   };
                 }
               ];
