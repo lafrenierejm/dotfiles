@@ -63,6 +63,7 @@ in rec {
           coreutils
           curl
           dos2unix
+          efm-langserver
           exiftool
           eza
           fd
