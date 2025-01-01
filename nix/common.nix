@@ -37,7 +37,22 @@ in {
   };
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = [inputs.agenix.packages."${system}".default] ++ (with pkgs; [atool fd git ripgrep zsh]);
+  environment.systemPackages = lib.lists.flatten [
+    inputs.agenix.packages."${system}".default
+    (with pkgs; [
+      atool
+      coreutils
+      curl
+      exiftool
+      gitAndTools.gitFull
+      gnupg
+      fd
+      git
+      ripgrep
+      unzip
+      zsh
+    ])
+  ];
 
   fonts =
     {
