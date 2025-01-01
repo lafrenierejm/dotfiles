@@ -77,7 +77,6 @@ in rec {
           id3v2
           ispell
           isync
-          isync
           jaq
           mosh
           mpv
