@@ -624,6 +624,7 @@ in rec {
       autosuggestion.enable = true;
       defaultKeymap = "emacs";
       initExtra = lib.concatStringsSep "\n" (lib.lists.flatten [
+        ''. "$HOME/.config/zsh/p10k-config.zsh"''
         ''. "$HOME/.config/zsh/vterm.zsh"''
         (lib.lists.optionals (!personal) [
           pyenvEnable
@@ -636,6 +637,14 @@ in rec {
           [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
           [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"''
       ]);
+      initExtraFirst = ''. "$HOME/.config/zsh/p10k-instant-prompt.zsh"'';
+      plugins = [
+        {
+          name = "powerlevel10k";
+          src = pkgs.zsh-powerlevel10k;
+          file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+        }
+      ];
       profileExtra = lib.concatStringsSep "\n" [
         ''export PATH="$PATH:$HOME/.dotnet/tools"''
       ];
