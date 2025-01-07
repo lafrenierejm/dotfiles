@@ -653,20 +653,13 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp
 (use-package indent-bars
-  :hook
-  ((python-base-mode yaml-mode) . indent-bars-mode)
+  :ghook
+  ('prog-mode-hook #'indent-bars-mode)
 
   :custom
   (indent-bars-treesit-support t)
   (indent-bars-treesit-scope
-   '((python
-      function_definition
-      class_definition
-      for_statement
-      if_statement
-      with_statement
-      while_statement)
-     (rust
+   '((rust
       trait_item
       impl_item
       macro_definition
@@ -692,10 +685,23 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
       argument_list
       parameter_list
       init_declarator)
+     (python
+      argument_list
+      parameters
+      list
+      list_comprehension
+      dictionary
+      dictionary_comprehension
+      parenthesized_expression
+      subscript)
      (rust
       arguments
       parameters)))
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  (indent-bars-pattern ".")
+  (indent-bars-width-frac 0.5)
+  (indent-bars-pad-frac 0.25)
+  (indent-bars-highlight-current-depth '(:face default :blend 0.4))
 
   :config
   (require 'indent-bars-ts))
