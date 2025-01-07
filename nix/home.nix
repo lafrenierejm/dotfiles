@@ -507,6 +507,8 @@ in rec {
       };
       difftastic.enable = true;
       ignores = [
+        # darwin
+        ".DS_Store"
         # emacs
         "*#"
         "*.elc"
