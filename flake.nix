@@ -150,12 +150,13 @@
           flakeCheck = false; # use pre-commit's check instead
           programs = {
             alejandra.enable = true; # nix
+            prettier.enable = true;
             shellcheck.enable = true;
             shfmt = {
               enable = true;
               indent_size = null;
             };
-            prettier.enable = true;
+            taplo.enable = true;
           };
         };
 
