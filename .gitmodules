@@ -1,0 +1,3 @@
+[submodule "waybar"]
+	path = waybar
+	url = https://github.com/lafrenierejm/waybar-config
