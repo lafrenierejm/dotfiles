@@ -661,4 +661,11 @@ in rec {
       defaultEditor = true;
     };
   };
+
+  xdg = {
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
+  };
 }
