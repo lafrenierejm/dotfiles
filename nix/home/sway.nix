@@ -85,30 +85,46 @@ in {
 
   services.kanshi = {
     enable = true;
-    profiles = {
-      home_office = {
-        outputs = [
-          {
-            criteria = "DP-2";
-            scale = 2.0;
-            status = "enable";
-            position = "0,0";
-          }
-          {
-            criteria = "DP-1";
-            scale = 2.0;
-            status = "enable";
-            position = "1920,0";
-          }
-          {
-            criteria = "DP-3";
-            scale = 2.0;
-            status = "enable";
-            position = "3840,0";
-          }
-        ];
-      };
-    };
+    settings = [
+      {
+        profile = {
+          name = "home-office";
+          exec =
+            map
+            (pair: "${pkgs.sway}/bin/swaymsg \"workspace ${builtins.elemAt pair 0} output ${builtins.elemAt pair 1}\"") [
+              ["1" "DP-2"]
+              ["2" "DP-2"]
+              ["3" "DP-2"]
+              ["4" "DP-1"]
+              ["5" "DP-1"]
+              ["6" "DP-1"]
+              ["7" "DP-1"]
+              ["8" "DP-1"]
+              ["9" "DP-1"]
+            ];
+          outputs = [
+            {
+              criteria = "DP-2";
+              scale = 2.0;
+              status = "enable";
+              position = "0,0";
+            }
+            {
+              criteria = "DP-1";
+              scale = 2.0;
+              status = "enable";
+              position = "1920,0";
+            }
+            {
+              criteria = "DP-3";
+              scale = 2.0;
+              status = "enable";
+              position = "3840,0";
+            }
+          ];
+        };
+      }
+    ];
   };
 
   services.swayidle = {
@@ -123,6 +139,7 @@ in {
         command = "lock";
       }
     ];
+    systemdTarget = "sway-session.target";
     timeouts = [
       {
         timeout = 600;
