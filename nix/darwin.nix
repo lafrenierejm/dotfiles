@@ -40,6 +40,7 @@
       lunar = "fyi.lunar.Lunar";
       multipatch = "com.sappharad.MultiPatch";
       openemu = "org.openemu.OpenEmu";
+      syncthing = "com.github.xor-gate.syncthing-macosx";
       tailscale = "io.tailscale.ipn.macsys";
       transmission = "org.m0k.transmission";
     })
