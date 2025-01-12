@@ -22,10 +22,10 @@
     "amazon-chime"
     "balenaetcher"
     "skype"
-    "slack"
     (lib.lists.optionals personal [
       "keybase"
       "signal"
+      "slack"
     ])
   ];
 
