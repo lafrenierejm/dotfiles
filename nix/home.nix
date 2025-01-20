@@ -25,6 +25,16 @@
     else "${pinentryPkg}/bin/pinentry";
   pyenvEnable = pkgs.lib.readFile ../sh/pyenv.sh;
   voltaEnable = pkgs.lib.readFile ../sh/volta.sh;
+  vcIgnores = [
+    "*#" # emacs
+    "*.elc" # emacs
+    "*~" # emacs
+    ".DS_Store" # darwin
+    ".dir-locals.el" # emacs
+    ".direnv/" # direnv
+    ".mono/" # mono
+    ".venv/" # python
+  ];
 in rec {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -506,21 +516,7 @@ in rec {
         };
       };
       difftastic.enable = true;
-      ignores = [
-        # darwin
-        ".DS_Store"
-        # emacs
-        "*#"
-        "*.elc"
-        "*~"
-        ".dir-locals.el"
-        # direnv
-        ".direnv/"
-        # mono
-        ".mono/"
-        # python
-        ".venv/"
-      ];
+      ignores = vcIgnores;
       lfs.enable = true;
       signing =
         if gitUseGpg
@@ -541,6 +537,13 @@ in rec {
     };
 
     lieer.enable = personal;
+
+    mercurial = {
+      enable = true;
+      ignores = vcIgnores;
+      userEmail = "hg@lafreniere.xyz";
+      userName = realName;
+    };
 
     mujmap = {
       enable = personal;
