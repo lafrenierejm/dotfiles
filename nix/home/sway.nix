@@ -12,6 +12,15 @@ in {
       width = 250;
     };
   };
+
+  programs.swayr = {
+    enable = true;
+    systemd.enable = true;
+    # settings.format.icons_dirs = [
+    #   "/run/current-system/sw/share/icons/breeze-dark/apps/"
+    # ];
+  };
+
   wayland.windowManager.sway = {
     enable = true;
     config = {
@@ -37,6 +46,7 @@ in {
         {
           "${mod}+Return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty";
           "Alt+space" = "exec --no-startup-id wofi --show drun,run";
+          "Alt+Tab" = "exec swayr switch-window";
 
           "${mod}+x" = "kill";
 
@@ -63,23 +73,38 @@ in {
           command = "systemctl --user restart kanshi";
           always = true;
         }
+        {
+          command = "systemctl --user restart waybar";
+          always = true;
+        }
+        {
+          command = "systemctl --user restart swayidle";
+          always = true;
+        }
+        {
+          command = "systemctl --user restart swayr";
+          always = true;
+        }
       ];
       window.titlebar = false;
       workspaceAutoBackAndForth = true;
     };
-    systemd.enable = true;
-    wrapperFeatures = {gtk = true;};
+    wrapperFeatures.gtk = true;
   };
 
   programs.waybar = {
     enable = true;
     systemd.enable = true;
+    style = ../../waybar/style.custom.css;
   };
 
   home.file.".hm-graphical-session".text = pkgs.lib.concatStringsSep "\n" [
     "export MOZ_ENABLE_WAYLAND=1"
     "export NIXOS_OZONE_WL=1" # Electron
   ];
+  home.sessionVariables = {
+    XDG_CURRENT_DESKTOP = "sway";
+  };
 
   services.cliphist.enable = true;
 
@@ -89,19 +114,6 @@ in {
       {
         profile = {
           name = "home-office";
-          exec =
-            map
-            (pair: "${pkgs.sway}/bin/swaymsg \"workspace ${builtins.elemAt pair 0} output ${builtins.elemAt pair 1}\"") [
-              ["1" "DP-2"]
-              ["2" "DP-2"]
-              ["3" "DP-2"]
-              ["4" "DP-1"]
-              ["5" "DP-1"]
-              ["6" "DP-1"]
-              ["7" "DP-1"]
-              ["8" "DP-1"]
-              ["9" "DP-1"]
-            ];
           outputs = [
             {
               criteria = "DP-2";
@@ -139,7 +151,6 @@ in {
         command = "lock";
       }
     ];
-    systemdTarget = "sway-session.target";
     timeouts = [
       {
         timeout = 600;
@@ -154,5 +165,29 @@ in {
     mako # notifications
     slurp
     wl-clipboard
+    libsForQt5.qt5ct
+    libsForQt5.qtstyleplugin-kvantum
   ];
+
+  xdg = {
+    portal = {
+      enable = pkgs.stdenv.isLinux;
+      config = {
+        sway = {
+          default = ["gtk"];
+          "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
+          "org.freedesktop.impl.portal.ScreenCast" = ["wlr"];
+        };
+      };
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+      xdgOpenUsePortal = true;
+    };
+    userDirs = {
+      enable = pkgs.stdenv.isLinux;
+      createDirectories = true;
+    };
+  };
 }

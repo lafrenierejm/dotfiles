@@ -2,56 +2,61 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/release-24.11;
-    nixpkgs-unstable.url = github:NixOS/nixpkgs;
-    agenix.url = github:ryantm/agenix;
-    crane.url = github:ipetkov/crane;
+    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs";
+    agenix.url = "github:ryantm/agenix";
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.home-manager.follows = "home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    crane.url = "github:ipetkov/crane";
     darwin = {
-      url = github:lnl7/nix-darwin;
+      url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
-      url = github:nix-community/disko;
+      url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-overlay.url = github:nix-community/emacs-overlay;
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-plus = {
-      url = github:d12frosted/homebrew-emacs-plus;
+      url = "github:d12frosted/homebrew-emacs-plus";
       flake = false;
     };
-    flake-parts.url = github:hercules-ci/flake-parts;
-    flake-root.url = github:srid/flake-root;
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-root.url = "github:srid/flake-root";
     git-hooks = {
-      url = github:cachix/git-hooks.nix;
+      url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    gron.url = github:lafrenierejm/gron;
+    gron.url = "github:lafrenierejm/gron";
     homebrew = {
-      url = github:zhaofengli-wip/nix-homebrew;
+      url = "github:zhaofengli-wip/nix-homebrew";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     homebrew-bundle = {
-      url = github:homebrew/homebrew-bundle;
+      url = "github:homebrew/homebrew-bundle";
       flake = false;
     };
     homebrew-core = {
-      url = github:homebrew/homebrew-core;
+      url = "github:homebrew/homebrew-core";
       flake = false;
     };
     homebrew-cask = {
-      url = github:homebrew/homebrew-cask;
+      url = "github:homebrew/homebrew-cask";
       flake = false;
     };
     homebrew-hashicorp = {
-      url = github:hashicorp/homebrew-tap;
+      url = "github:hashicorp/homebrew-tap";
       flake = false;
     };
     home-manager = {
-      url = github:lafrenierejm/home-manager/release-24.11_ripgrep-all;
+      url = "github:lafrenierejm/home-manager/release-24.11_ripgrep-all";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mujmap = {
-      url = github:lafrenierejm/mujmap;
+      url = "github:lafrenierejm/mujmap";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         crane.follows = "crane";
@@ -60,11 +65,11 @@
       };
     };
     nixos-generators = {
-      url = github:nix-community/nixos-generators;
+      url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ripgrep-all = {
-      url = github:lafrenierejm/ripgrep-all;
+      url = "github:lafrenierejm/ripgrep-all";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         crane.follows = "crane";
@@ -73,11 +78,11 @@
       };
     };
     rust-overlay = {
-      url = github:oxalica/rust-overlay;
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
-      url = github:numtide/treefmt-nix;
+      url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -111,6 +116,7 @@
               inherit system;
               format = "install-iso";
               modules = [
+                inputs.catppuccin.nixosModules.catppuccin
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
                 inputs.disko.nixosModules.disko
@@ -287,6 +293,7 @@
               inherit system;
               modules = [
                 inputs.agenix.nixosModules.default
+                inputs.catppuccin.nixosModules.catppuccin
                 inputs.disko.nixosModules.disko
                 inputs.home-manager.nixosModules.home-manager
                 ./nix/common.nix
@@ -295,6 +302,7 @@
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
                   ];
+                  home-manager.backupFileExtension = "bak";
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" =
@@ -305,6 +313,8 @@
                     }
                     // {
                       imports = [
+                        inputs.catppuccin.homeManagerModules.catppuccin
+                        ./nix/home/theme.nix
                         ./nix/home/sway.nix
                         ./nix/home/udiskie.nix
                       ];

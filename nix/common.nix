@@ -53,6 +53,10 @@ in {
       zsh
     ])
   ];
+  environment.pathsToLink = [
+    "/share/xdg-desktop-portal"
+    "/share/applications"
+  ];
 
   fonts =
     {
