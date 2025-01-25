@@ -596,29 +596,26 @@ in rec {
       enable = true;
       compression = true;
       matchBlocks = {
+        "*" = {
+          host = "*";
+          identitiesOnly = true;
+          identityFile = "~/.ssh/id_ed25519";
+        };
         "github.com" = {
           hostname = "github.com";
           user = "lafrenierejm";
-          identityFile = "~/.ssh/id_ed25519";
-          identitiesOnly = true;
         };
         "gitlab.com" = {
           hostname = "gitlab.com";
           user = "lafrenierejm";
-          identityFile = "~/.ssh/id_ed25519";
-          identitiesOnly = true;
         };
         "git.sr.ht" = {
           hostname = "git.sr.ht";
           user = "lafrenierejm";
-          identityFile = "~/.ssh/id_ed25519";
-          identitiesOnly = true;
         };
         "earthbound" = {
           hostname = "10.0.0.53";
           user = "lafrenierejm";
-          identityFile = "~/.ssh/id_ed25519";
-          identitiesOnly = true;
         };
       };
     };
