@@ -95,7 +95,7 @@ in {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
-    style = ../../waybar/style.custom.css;
+    style = pkgs.lib.readFile ./waybar.css;
   };
 
   home.file.".hm-graphical-session".text = pkgs.lib.concatStringsSep "\n" [
