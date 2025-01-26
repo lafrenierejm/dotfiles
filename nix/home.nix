@@ -664,7 +664,7 @@ in rec {
 
   xdg = {
     userDirs = {
-      enable = true;
+      enable = pkgs.stdenv.isLinux;
       createDirectories = true;
     };
   };

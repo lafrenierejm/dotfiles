@@ -185,9 +185,5 @@ in {
       ];
       xdgOpenUsePortal = true;
     };
-    userDirs = {
-      enable = pkgs.stdenv.isLinux;
-      createDirectories = true;
-    };
   };
 }
