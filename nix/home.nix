@@ -132,7 +132,6 @@ in rec {
           dconf2nix
           signal-desktop
           transmission_4-gtk
-          ungoogled-chromium
           zoom
         ]))
         (pkgs.lib.lists.optionals (!personal) (with pkgs; [
@@ -261,6 +260,16 @@ in rec {
       enableBashIntegration = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
+    };
+
+    chromium = {
+      enable = pkgs.stdenv.isLinux;
+      package = pkgs.ungoogled-chromium;
+      dictionaries = [pkgs.hunspellDictsChromium.en_US];
+      extensions = [
+        {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # ublock origin
+        {id = "nngceckbapebfimnlniiiahkandclblb";} # Bitwarden
+      ];
     };
 
     emacs = {
