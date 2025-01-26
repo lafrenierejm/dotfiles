@@ -44,7 +44,7 @@ in {
           })
 
         {
-          "${mod}+Return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty";
+          "${mod}+Return" = "exec --no-startup-id ${pkgs.ghostty}/bin/ghostty";
           "Alt+space" = "exec --no-startup-id wofi --show drun,run";
           "Alt+Tab" = "exec swayr switch-window";
 
