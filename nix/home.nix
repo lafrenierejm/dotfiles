@@ -448,6 +448,17 @@ in rec {
       enableZshIntegration = true;
     };
 
+    ghostty = {
+      enable = pkgs.stdenv.isLinux;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+      enableZshIntegration = true;
+      settings = {
+        window-decoration = false;
+        gtk-titlebar = false;
+      };
+    };
+
     git = {
       enable = true;
       package = pkgs.gitAndTools.gitFull;
