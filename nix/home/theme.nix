@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   catppuccin = {
     enable = true;
     flavor = "mocha";
@@ -36,9 +31,6 @@
     gtk.enable = true;
     package = pkgs.catppuccin-cursors.latteLight;
     size = 24;
-    # x11 = {
-    #   enable = true;
-    #   defaultCursor = "Breeze";
-    # };
+    x11.enable = true;
   };
 }
