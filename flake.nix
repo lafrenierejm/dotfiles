@@ -164,6 +164,9 @@
             };
             taplo.enable = true;
           };
+          settings.formatter = {
+            prettier.excludes = ["karabiner/karabiner.json"];
+          };
         };
 
         pre-commit = {
