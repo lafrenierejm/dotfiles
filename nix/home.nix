@@ -82,6 +82,7 @@ in rec {
           git-crypt
           git-filter-repo
           gitAndTools.gitFull
+          gitstatus
           gnupg
           hyperfine
           id3v2
