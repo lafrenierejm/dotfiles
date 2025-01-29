@@ -89,6 +89,7 @@ in rec {
           ispell
           isync
           jaq
+          jotdown
           mosh
           mpv
           mu
