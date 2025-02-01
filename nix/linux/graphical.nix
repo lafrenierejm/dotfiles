@@ -1,4 +1,4 @@
-{pkgs, ...}: rec {
+{pkgs, ...}: {
   programs.dconf.enable = true;
 
   services.greetd = {
