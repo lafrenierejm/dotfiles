@@ -55,6 +55,7 @@
       url = "github:lafrenierejm/home-manager/release-24.11_ripgrep-all";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mac-app-util.url = "github:hraban/mac-app-util";
     mujmap = {
       url = "github:lafrenierejm/mujmap";
       inputs = {
@@ -223,11 +224,15 @@
                 inputs.agenix.nixosModules.default
                 inputs.homebrew.darwinModules.nix-homebrew
                 inputs.home-manager.darwinModules.home-manager
+                inputs.mac-app-util.darwinModules.default
                 ./nix/common.nix
                 ./nix/darwin.nix
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
+                  ];
+                  home-manager.sharedModules = [
+                    inputs.mac-app-util.homeManagerModules.default
                   ];
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
