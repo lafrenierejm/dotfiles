@@ -26,6 +26,7 @@
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
+    ghq.url = "github:lafrenierejm/ghq/tilde-nix-flake";
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";

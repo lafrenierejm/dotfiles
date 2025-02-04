@@ -59,6 +59,7 @@ in rec {
         [
           inputs.gron.packages."${system}".gron
           inputs.ripgrep-all.packages."${system}".rga
+          inputs.ghq.packages."${system}".ghq
         ]
         (with pkgs; [
           (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers])))
@@ -78,7 +79,6 @@ in rec {
           eza
           fd
           gh
-          ghq
           git-crypt
           git-filter-repo
           gitAndTools.gitFull
