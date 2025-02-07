@@ -113,6 +113,7 @@ in rec {
           subversion
           terraform-docs
           terraform-ls
+          tflint
           typos
           unzip
           uv
