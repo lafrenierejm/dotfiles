@@ -292,7 +292,6 @@
             domain = "lafreniere.xyz";
             system = "x86_64-linux";
             personal = true;
-            mediaUid = 1100;
             pkgs = inputs.nixpkgs.legacyPackages."${system}";
             pkgsUnstable = legacyPackagesUnstable."${system}";
             lib = pkgs.lib;
@@ -327,12 +326,6 @@
                         ./nix/home/udiskie.nix
                       ];
                     };
-                  users.groups.media = {
-                    members = [
-                      "media"
-                      userName
-                    ];
-                  };
                   users.users = {
                     "${userName}" = {
                       home = "/home/${userName}";
@@ -344,14 +337,11 @@
                       ];
                       extraGroups = [
                         "networkmanager"
+                        "media"
                         "podman"
                         "wheel"
                       ];
                       shell = pkgs.zsh;
-                    };
-                    media = {
-                      isSystemUser = true;
-                      group = "media";
                     };
                     rbralley = {
                       isNormalUser = true;
