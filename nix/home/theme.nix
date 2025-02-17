@@ -3,7 +3,10 @@
     enable = true;
     flavor = "mocha";
     accent = "lavender";
+
+    cursors.enable = true;
     gtk.enable = true;
+    kvantum.enable = true;
   };
 
   gtk.enable = true;
@@ -11,13 +14,7 @@
   qt = {
     enable = true;
     platformTheme.name = "kvantum";
-    style = {
-      name = "kvantum";
-      catppuccin = {
-        enable = true;
-        apply = true;
-      };
-    };
+    style.name = "kvantum";
   };
 
   home.packages = with pkgs; [
@@ -27,9 +24,7 @@
   ];
 
   home.pointerCursor = {
-    name = "catppuccin-latte-light-cursors";
     gtk.enable = true;
-    package = pkgs.catppuccin-cursors.latteLight;
     size = 24;
     x11.enable = true;
   };
