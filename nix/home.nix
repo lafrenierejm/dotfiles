@@ -103,6 +103,7 @@ in rec {
           opentofu
           pre-commit
           pyright
+          python3
           ripgrep
           rsync
           rust-analyzer
