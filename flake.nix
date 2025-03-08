@@ -336,6 +336,7 @@
                         (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
                       ];
                       extraGroups = [
+                        "inputs"
                         "networkmanager"
                         "media"
                         "podman"
