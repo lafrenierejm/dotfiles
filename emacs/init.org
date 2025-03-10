@@ -814,6 +814,11 @@ When switching projects, default to opening the ~vc-dir~ at the root of the proj
 (projectile-switch-project-action #'projectile-vc)
 #+end_src
 
+Do not attempt to automatically discover projects.
+#+begin_src emacs-lisp
+(projectile-auto-discover nil)
+#+end_src
+
 *** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref projectile/config
