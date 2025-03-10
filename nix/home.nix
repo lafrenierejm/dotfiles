@@ -272,7 +272,7 @@ in rec {
         .emacs-overlay
         .packages
         ."${system}"
-        .emacs-pgtk
+        .emacs-git-pgtk
         .overrideAttrs (old: {
           withTreeSitter = true;
           withNativeCompilation = true;
