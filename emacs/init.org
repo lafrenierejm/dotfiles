@@ -6848,6 +6848,10 @@ A minor-mode menu for the mode line.
 
 #+begin_src emacs-lisp
 (use-package frames-only-mode
+  :after frame
+
+  :demand
+
   :ghook
   ('server-after-make-frame-hook #'frames-only-mode)
 
@@ -6857,7 +6861,10 @@ A minor-mode menu for the mode line.
   :general
   (:keymaps 'frames-only-mode-mode-map
    "s-o" #'delete-other-frames
-   "s-x" #'delete-frame))
+   "s-x" #'delete-frame)
+
+  :config
+  (frames-only-mode))
 #+end_src
 
 ** Window
