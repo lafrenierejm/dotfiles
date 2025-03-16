@@ -2772,6 +2772,21 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
   :demand)
 #+end_src
 
+*** /difftastic/
+
+#+begin_src emacs-lisp
+(use-package difftastic
+  :demand t
+  :bind (:map magit-blame-read-only-mode-map
+         ("D" . difftastic-magit-show)
+         ("S" . difftastic-magit-show))
+  :config
+  (eval-after-load 'magit-diff
+    '(transient-append-suffix 'magit-diff '(-1 -1)
+       [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
+        ("S" "Difftastic show" difftastic-magit-show)])))
+#+end_src
+
 *** Determine Year Added
 
 Define a function to determine when a file was first created.
