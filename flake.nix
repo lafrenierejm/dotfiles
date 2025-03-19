@@ -65,6 +65,10 @@
         pre-commit-hooks.follows = "git-hooks";
       };
     };
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -107,6 +111,13 @@
         # Per-system attributes can be defined here. The self' and inputs'
         # module parameters provide easy access to attributes of the same
         # system.
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          overlays = [
+            inputs.nur.overlays.default
+          ];
+        };
+
         packages = {
           default = pkgs.hello;
           install-iso = let
@@ -214,7 +225,12 @@
             hostname = "airborn";
             userName = "lafrenierejm";
             system = "aarch64-darwin";
-            pkgs = legacyPackages."${system}";
+            pkgs = import inputs.nixpkgs {
+              inherit system;
+              overlays = [
+                inputs.nur.overlays.default
+              ];
+            };
             pkgsUnstable = legacyPackagesUnstable."${system}";
             lib = pkgs.lib;
           in
@@ -230,6 +246,7 @@
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
+                    inputs.nur.overlays.default
                   ];
                   home-manager.sharedModules = [
                     inputs.mac-app-util.homeManagerModules.default

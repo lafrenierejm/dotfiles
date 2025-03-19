@@ -430,19 +430,98 @@ in rec {
 
     firefox = {
       enable = personal && pkgs.stdenv.isLinux;
-      package = pkgs.firefox-bin;
-      profiles."personal.default" = {
-        id = 0;
-        name = "personal";
+      package = pkgsUnstable.firefox;
+      profiles.default = {
         isDefault = true;
         userChrome = pkgs.lib.readFile ../firefox/chrome/userChrome.css;
+        containersForce = true;
+        containers = {
+          amazon = {
+            id = 1;
+            color = "yellow";
+            icon = "circle";
+          };
+          microsoft = {
+            id = 2;
+            color = "green";
+            icon = "circle";
+          };
+        };
         search = {
           default = "DuckDuckGo";
           force = true;
         };
         settings = {
+          "beacon.enabled" = false;
+          "browser.contentblocking.category" = "strict";
+          "browser.display.os-zoom-behavior" = 1;
+          "browser.newtabpage.enabled" = false; # blank new tab page
+          "browser.safebrowsing.appRepURL" = "";
+          "browser.safebrowsing.malware.enabled" = false;
+          "browser.search.hiddenOneOffs" = "Google,Yahoo,Bing,Amazon.com,Twitter";
+          "browser.search.suggest.enabled" = false;
+          "browser.send_pings" = false;
+          "browser.startup.page" = 3; # resume last session
+          "browser.tabs.closeWindowWithLastTab" = false;
+          "browser.uidensity" = 1; # Dense.
+          "browser.urlbar.placeholderName" = "DuckDuckGo";
+          "browser.urlbar.speculativeConnect.enabled" = false;
+          "dom.battery.enabled" = false;
+          "dom.security.https_only_mode" = true;
+          "experiments.activeExperiment" = false;
+          "experiments.enabled" = false;
+          "experiments.supported" = false;
+          "extensions.autoDisableScopes" = 0;
+          "extensions.unifiedExtensions.enabled" = false;
+          "general.smoothScroll" = false;
+          "geo.enabled" = false;
+          "gfx.webrender.all" = true;
+          "layout.css.devPixelsPerPx" = 1;
+          "layout.css.prefers-color-scheme.content-override" = 2; # follow system color theme
+          "media.ffmpeg.vaapi.enabled" = true;
+          "media.navigator.enabled" = false;
+          "media.video_stats.enabled" = false;
+          "network.IDN_show_punycode" = true;
+          "network.allow-experiments" = false;
+          "network.dns.disablePrefetch" = true;
+          "network.http.referer.XOriginPolicy" = 1;
+          "network.http.referer.XOriginTrimmingPolicy" = 1;
+          "network.http.referer.trimmingPolicy" = 1;
+          "network.prefetch-next" = false;
+          "permissions.default.shortcuts" = 2; # Don't steal my shortcuts!
+          "privacy.donottrackheader.enabled" = true;
+          "privacy.donottrackheader.value" = 1;
+          "privacy.firstparty.isolate" = true;
+          "signon.rememberSignons" = false;
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "ui.textScaleFactor" = 100;
+
+          # Fully disable Pocket. See
+          # https://www.reddit.com/r/linux/comments/zabm2a.
+          "extensions.pocket.enabled" = false;
+          "extensions.pocket.api" = "0.0.0.0";
+          "extensions.pocket.loggedOutVariant" = "";
+          "extensions.pocket.oAuthConsumerKey" = "";
+          "extensions.pocket.onSaveRecs" = false;
+          "extensions.pocket.onSaveRecs.locales" = "";
+          "extensions.pocket.showHome" = false;
+          "extensions.pocket.site" = "0.0.0.0";
+          "browser.newtabpage.activity-stream.pocketCta" = "";
+          "browser.newtabpage.activity-stream.section.highlights.includePocket" = false;
+          "services.sync.prefs.sync.browser.newtabpage.activity-stream.section.highlights.includePocket" = false;
         };
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          anchors-reveal
+          auto-tab-discard
+          darkreader
+          facebook-container
+          link-cleaner
+          reddit-enhancement-suite
+          sidebery
+          skip-redirect
+          ublacklist
+          ublock-origin
+        ];
       };
     };
 
