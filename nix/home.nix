@@ -628,7 +628,7 @@ in rec {
           user = "lafrenierejm";
         };
         "earthbound" = {
-          hostname = "10.0.0.53";
+          hostname = "earthbound.tail59f470.ts.net";
           user = "lafrenierejm";
         };
       };
