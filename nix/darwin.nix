@@ -57,6 +57,7 @@
     lib.lists.flatten [
       casksElectron
       greedy
+      "anki"
       "displaylink"
       "firefox"
       "karabiner-elements"
