@@ -36,6 +36,7 @@
     }
     (lib.attrsets.optionalAttrs personal {
       aldente = "com.apphousekitchen.aldente-pro";
+      altserver = "com.rileytestut.AltServer";
       iina = "com.colliderli.iina";
       lunar = "fyi.lunar.Lunar";
       multipatch = "com.sappharad.MultiPatch";
