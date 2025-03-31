@@ -1581,6 +1581,12 @@ Unbind =C-r= in insert mode to allow comint/shell history search.
  "C-r" nil)
 #+end_src
 
+Bind =C-w= in insert mode to its readline binding.
+#+begin_src emacs-lisp
+(:states 'insert
+ "C-w" #'backward-kill-word)
+#+end_src
+
 **** Pre-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref evil/init
