@@ -285,9 +285,9 @@ in rec {
           patches =
             (old.patches or [])
             ++ (lib.lists.optionals pkgs.stdenv.isDarwin (
-              map (patchFilename: inputs.emacs-plus + "/patches/emacs-30/${patchFilename}") [
-                "fix-window-role.patch"
-                "system-appearance.patch"
+              map (patchFilename: inputs.emacs-plus + "/patches/${patchFilename}") [
+                "emacs-31/fix-window-role.patch"
+                "emacs-31/system-appearance.patch"
               ]
             ));
         });
