@@ -78,6 +78,7 @@ in rec {
           exiftool
           eza
           fd
+          findutils # GNU `find` and `xargs`
           gh
           git-crypt
           git-filter-repo
