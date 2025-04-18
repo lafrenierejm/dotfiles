@@ -3393,7 +3393,15 @@ Use =C-l= to clear the current buffer.
     (setq comint-process-echoes t))
   (defun shell-indicate-empty-lines ()
     "Visually indicate empty screen lines after the buffer end."
-    (setq indicate-empty-lines t)))
+    (setq indicate-empty-lines t))
+
+  (defun shell-lafrenierejm-rename-buffer (&rest _)
+    "Rename the current shell buffer to include the current directory."
+    (when (eq major-mode 'shell-mode)
+      (rename-buffer
+       (format "*shell %s*" (projectile-lafrenierejm-make-relative-to-root-dwim
+                             default-directory)))))
+  (advice-add 'comint-osc-process-output :after #'shell-lafrenierejm-rename-buffer))
 #+end_src
 
 ** Emacs Shell
