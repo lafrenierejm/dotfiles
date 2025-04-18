@@ -6680,6 +6680,16 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   :if (executable-find "rg"))
 #+end_src
 
+** gptel
+
+#+begin_src emacs-lisp
+(use-package gptel
+ :custom
+ (gptel-model 'deepseek-reasoner)
+ :config
+ (setq gptel-backend (gptel-make-deepseek "DeepSeek" :stream t)))
+#+end_src
+
 * Web
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref web
