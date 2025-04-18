@@ -3387,6 +3387,9 @@ Use =C-l= to clear the current buffer.
   ('shell-mode-hook #'shell-disable-command-echo)
   ('shell-mode-hook #'shell-indicate-empty-lines)
 
+  :general
+  <<shell/general>>
+
   :config
   (defun shell-disable-command-echo ()
     "Turn off command echoing in the current buffer."
@@ -3395,13 +3398,72 @@ Use =C-l= to clear the current buffer.
     "Visually indicate empty screen lines after the buffer end."
     (setq indicate-empty-lines t))
 
+  (defun shell-lafrenierejm-buffer-name (dir)
+    "Generate the name of a shell buffer whose working directory is DIR."
+    (format
+     "*shell %s*"
+     (projectile-lafrenierejm-make-relative-to-root-dwim dir)))
+
   (defun shell-lafrenierejm-rename-buffer (&rest _)
     "Rename the current shell buffer to include the current directory."
     (when (eq major-mode 'shell-mode)
-      (rename-buffer
-       (format "*shell %s*" (projectile-lafrenierejm-make-relative-to-root-dwim
-                             default-directory)))))
-  (advice-add 'comint-osc-process-output :after #'shell-lafrenierejm-rename-buffer))
+      (rename-buffer (shell-lafrenierejm-buffer-name default-directory))))
+
+  (advice-add 'comint-osc-process-output :after #'shell-lafrenierejm-rename-buffer)
+
+  <<shell/config>>)
+#+end_src
+
+**** Open in a Given Directory
+
+Define a function to start a shell in a given.
+
+#+begin_src emacs-lisp :noweb-ref shell/config
+(defun shell-lafrenierejm-find-directory (directory)
+  "Open shell in DIRECTORY.
+
+If a shell instance for the directory already exists, switch to it.  If no
+such instance exists, start a new instance whose name includes the directory."
+  (interactive "DOpen shell in: ")
+  (let* ((buffer-name (shell-lafrenierejm-buffer-name directory))
+         (default-directory directory))
+    (shell buffer-name)
+    (switch-to-buffer buffer-name)))
+#+end_src
+
+Map the above function to =C-x z=.
+This keybinding mirrors the defaults for ~find-file~ and ~dired~.
+
+#+begin_src emacs-lisp :noweb-ref shell/general
+("C-x z" #'shell-lafrenierejm-find-directory)
+#+end_src
+
+**** Open the Current Directory in shell
+
+Define a function to open the current directory in shell.
+
+#+begin_src emacs-lisp :noweb-ref shell/config
+(defun shell-lafrenierejm-here ()
+  "Open shell in the current working directory.
+
+If a shell instance for the directory already exists, switch to it. If no such
+instance exists, start a new instance whose name includes the directory."
+  (interactive)
+  (let ((cwd (abbreviate-file-name
+              (if (buffer-file-name)
+                  (file-name-directory (buffer-file-name))
+                default-directory))))
+    (shell-lafrenierejm-find-directory cwd)))
+#+end_src
+
+Map ~shell-lafrenierejm-here~ to =C-z=.
+This imitates the behavior of unix terminal applications.
+In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
+
+#+begin_src emacs-lisp :noweb-ref shell/general
+("C-z" #'shell-lafrenierejm-here)
+#+end_src
+
 #+end_src
 
 ** Emacs Shell
@@ -4422,13 +4484,6 @@ such instance exists, start a new instance whose name includes the directory."
     buffer))
 #+end_src
 
-Map the above function to =C-x z=.
-This keybinding mirrors the defaults for ~find-file~ and ~dired~.
-
-#+begin_src emacs-lisp :noweb-ref vterm/general
-("C-x z" #'vterm-lafrenierejm-find-directory)
-#+end_src
-
 **** Open the Current Directory in vterm
 
 Define a function to open the current directory in vterm.
@@ -4445,14 +4500,6 @@ instance exists, start a new instance whose name includes the directory."
                   (file-name-directory (buffer-file-name))
                 default-directory))))
     (vterm-lafrenierejm-find-directory cwd)))
-#+end_src
-
-Map ~vterm-lafrenierejm-here~ to =C-z=.
-This imitates the behavior of *NIX terminal applications.
-In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
-
-#+begin_src emacs-lisp :noweb-ref vterm/general
-("C-z" #'vterm-lafrenierejm-here)
 #+end_src
 
 ** Xonsh
