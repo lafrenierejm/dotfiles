@@ -641,6 +641,7 @@ in rec {
       autosuggestion.enable = true;
       defaultKeymap = "emacs";
       initExtra = lib.concatStringsSep "\n" (lib.lists.flatten [
+        ''. "$HOME/.config/zsh/prompt.zsh"''
         ''. "$HOME/.config/zsh/vterm.zsh"''
         (lib.lists.optionals (!personal) [
           pyenvEnable
