@@ -3464,6 +3464,67 @@ In most terminal applications, =C-z= is the key combination to suspend the curre
 ("C-z" #'shell-lafrenierejm-here)
 #+end_src
 
+*** /vterm/
+
+From the [[https://github.com/akermu/emacs-libvterm][project's README]]:
+#+begin_quote
+Emacs-libvterm (vterm) is fully-fledged terminal emulator inside GNU Emacs based on libvterm, a C library.
+As a result of using compiled code (instead of elisp), emacs-libvterm is fully capable, fast, and it can seamlessly handle large outputs.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package vterm
+  :demand
+
+  :general
+  <<vterm/general>>
+
+  :custom
+  (vterm-buffer-name-string "*vterm %s*")
+
+  :config
+  <<vterm/config>>)
+#+end_src
+
+**** Open vterm in a Given Directory
+
+Define a function to open a directory in vterm.
+
+#+begin_src emacs-lisp :noweb-ref vterm/config
+(defun vterm-lafrenierejm-find-directory (directory)
+  "Open VTerm in DIRECTORY.
+
+If a VTerm instance for the directory already exists, switch to it.  If no
+such instance exists, start a new instance whose name includes the directory."
+  (interactive "DOpen vterm in: ")
+  (let* ((buffer-name
+          (format "*vterm %s*"
+                  (projectile-lafrenierejm-make-relative-to-root-dwim
+                   directory)))
+         (buffer (get-buffer-create buffer-name)))
+    (pop-to-buffer-same-window buffer)
+    (cd directory)
+    (unless (derived-mode-p 'vterm-mode)
+      (vterm-mode))
+    buffer))
+#+end_src
+
+**** Open the Current Directory in vterm
+
+Define a function to open the current directory in vterm.
+
+#+begin_src emacs-lisp :noweb-ref vterm/config
+(defun vterm-lafrenierejm-here ()
+  "Open vterm in the current working directory.
+
+If a vterm instance for the directory already exists, switch to it. If no such
+instance exists, start a new instance whose name includes the directory."
+  (interactive)
+  (let ((cwd (abbreviate-file-name
+              (if (buffer-file-name)
+                  (file-name-directory (buffer-file-name))
+                default-directory))))
+    (vterm-lafrenierejm-find-directory cwd)))
 #+end_src
 
 ** Emacs Shell
@@ -4437,70 +4498,6 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   (eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
 #+end_src
 
-** libvterm
-
-*** /vterm/
-
-From the [[https://github.com/akermu/emacs-libvterm][project's README]]:
-#+begin_quote
-Emacs-libvterm (vterm) is fully-fledged terminal emulator inside GNU Emacs based on libvterm, a C library.
-As a result of using compiled code (instead of elisp), emacs-libvterm is fully capable, fast, and it can seamlessly handle large outputs.
-#+end_quote
-
-#+begin_src emacs-lisp
-(use-package vterm
-  :demand
-
-  :general
-  <<vterm/general>>
-
-  :custom
-  (vterm-buffer-name-string "*vterm %s*")
-
-  :config
-  <<vterm/config>>)
-#+end_src
-
-**** Open vterm in a Given Directory
-
-Define a function to open a directory in vterm.
-
-#+begin_src emacs-lisp :noweb-ref vterm/config
-(defun vterm-lafrenierejm-find-directory (directory)
-  "Open VTerm in DIRECTORY.
-
-If a VTerm instance for the directory already exists, switch to it.  If no
-such instance exists, start a new instance whose name includes the directory."
-  (interactive "DOpen vterm in: ")
-  (let* ((buffer-name
-          (format "*vterm %s*"
-                  (projectile-lafrenierejm-make-relative-to-root-dwim
-                   directory)))
-         (buffer (get-buffer-create buffer-name)))
-    (pop-to-buffer-same-window buffer)
-    (cd directory)
-    (unless (derived-mode-p 'vterm-mode)
-      (vterm-mode))
-    buffer))
-#+end_src
-
-**** Open the Current Directory in vterm
-
-Define a function to open the current directory in vterm.
-
-#+begin_src emacs-lisp :noweb-ref vterm/config
-(defun vterm-lafrenierejm-here ()
-  "Open vterm in the current working directory.
-
-If a vterm instance for the directory already exists, switch to it. If no such
-instance exists, start a new instance whose name includes the directory."
-  (interactive)
-  (let ((cwd (abbreviate-file-name
-              (if (buffer-file-name)
-                  (file-name-directory (buffer-file-name))
-                default-directory))))
-    (vterm-lafrenierejm-find-directory cwd)))
-#+end_src
 
 ** Xonsh
 
