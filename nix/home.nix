@@ -304,7 +304,6 @@ in rec {
           buffer-name-relative
           caps-lock
           cascading-dir-locals
-          chatgpt-shell
           cider
           cider-hydra
           clj-refactor
