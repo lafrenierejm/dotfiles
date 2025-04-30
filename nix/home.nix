@@ -1,7 +1,7 @@
 {
   inputs,
   pkgs,
-  pkgsUnstable,
+  pkgsTrunk,
   lib,
   system,
   userName,
@@ -576,7 +576,7 @@ in rec {
 
     rbw = {
       enable = true;
-      package = pkgsUnstable.rbw;
+      package = pkgsTrunk.rbw;
       settings = {
         base_url = "https://vault.bitwarden.com";
         identity_url = "https://identity.bitwarden.com";

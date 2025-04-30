@@ -208,84 +208,60 @@
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
-        darwinConfigurations = {
-          airborn = let
-            personal = true;
-            hostname = "airborn";
-            userName = "lafrenierejm";
-            system = "aarch64-darwin";
-            pkgs = legacyPackages."${system}";
-            pkgsTrunk = legacyPackagesTrunk."${system}";
-            lib = pkgs.lib;
-          in
-            inputs.darwin.lib.darwinSystem rec {
-              inherit system;
-              modules = [
-                inputs.agenix.nixosModules.default
-                inputs.homebrew.darwinModules.nix-homebrew
-                inputs.home-manager.darwinModules.home-manager
-                inputs.mac-app-util.darwinModules.default
-                ./nix/common.nix
-                ./nix/darwin.nix
-                {
-                  nixpkgs.overlays = [
-                    inputs.emacs-overlay.overlays.default
-                  ];
-                  home-manager.sharedModules = [
-                    inputs.mac-app-util.homeManagerModules.default
-                  ];
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.users."${userName}" = import ./nix/home.nix rec {
-                    inherit inputs lib personal pkgs pkgsTrunk userName realName system;
-                    gitEmail = "git@lafreniere.xyz";
-                    gitUseGpg = true;
-                  };
-                  users.users."${userName}".home = "/Users/${userName}";
-                }
-              ];
-              specialArgs = {
-                inherit inputs system personal userName hostname realName;
-              };
+        darwinConfigurations = let
+          pkgs = legacyPackages."${system}";
+          pkgsTrunk = legacyPackagesTrunk."${system}";
+          lib = pkgs.lib;
+          system = "aarch64-darwin";
+          hosts = {
+            airborn = {
+              personal = true;
+              hostname = "airborn";
+              userName = "lafrenierejm";
+              gitEmail = "git@lafreniere.xyz";
             };
+            JLAFRENI0523-MB = rec {
+              domain = "renaissance.com";
+              hostname = "JLAFRENI0523-MB";
+              personal = false;
+              userName = "joseph.lafreniere";
+              gitEmail = "${userName}@${domain}";
+            };
+          };
+        in (builtins.mapAttrs
+          (host: values: (inputs.darwin.lib.darwinSystem {
+            inherit system;
+            modules = [
+              inputs.agenix.nixosModules.default
+              inputs.homebrew.darwinModules.nix-homebrew
+              inputs.home-manager.darwinModules.home-manager
+              inputs.mac-app-util.darwinModules.default
+              ./nix/common.nix
+              ./nix/darwin.nix
+              {
+                nixpkgs.overlays = [
+                  inputs.emacs-overlay.overlays.default
+                ];
+                home-manager.sharedModules = [
+                  inputs.mac-app-util.homeManagerModules.default
+                ];
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users."${values.userName}" = import ./nix/home.nix rec {
+                  inherit inputs lib pkgs pkgsTrunk realName system;
+                  inherit (values) gitEmail personal userName;
+                  gitUseGpg = true;
+                };
+                users.users."${values.userName}".home = "/Users/${values.userName}";
+              }
+            ];
+            specialArgs = {
+              inherit inputs system pkgs pkgsTrunk realName;
+              inherit (values) personal userName hostname;
+            };
+          }))
+          hosts);
 
-          JLAFRENI0523-MB = let
-            domain = "renaissance.com";
-            hostname = "JLAFRENI0523-MB";
-            personal = false;
-            userName = "joseph.lafreniere";
-            system = "aarch64-darwin";
-            pkgs = legacyPackages."${system}";
-            pkgsTrunk = legacyPackagesTrunk."${system}";
-            lib = pkgs.lib;
-          in
-            inputs.darwin.lib.darwinSystem rec {
-              inherit system;
-              modules = [
-                inputs.agenix.nixosModules.default
-                inputs.homebrew.darwinModules.nix-homebrew
-                inputs.home-manager.darwinModules.home-manager
-                ./nix/common.nix
-                ./nix/darwin.nix
-                {
-                  nixpkgs.overlays = [
-                    inputs.emacs-overlay.overlays.default
-                  ];
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.users."${userName}" = import ./nix/home.nix {
-                    inherit inputs lib personal pkgs pkgsTrunk userName realName system;
-                    gitEmail = "joseph.lafreniere@${domain}";
-                    gitUseGpg = true;
-                  };
-                  users.users."${userName}".home = "/Users/${userName}";
-                }
-              ];
-              specialArgs = {
-                inherit inputs personal system hostname realName userName;
-              };
-            };
-        };
         nixosConfigurations = {
           earthbound = let
             userName = "lafrenierejm";
