@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs";
+    nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
     catppuccin = {
       url = "github:catppuccin/nix";
@@ -203,7 +203,7 @@
       flake = let
         realName = "Joseph LaFreniere";
         legacyPackages = inputs.nixpkgs.legacyPackages;
-        legacyPackagesUnstable = inputs.nixpkgs-unstable.legacyPackages;
+        legacyPackagesTrunk = inputs.nixpkgs-trunk.legacyPackages;
       in {
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
@@ -215,7 +215,7 @@
             userName = "lafrenierejm";
             system = "aarch64-darwin";
             pkgs = legacyPackages."${system}";
-            pkgsUnstable = legacyPackagesUnstable."${system}";
+            pkgsTrunk = legacyPackagesTrunk."${system}";
             lib = pkgs.lib;
           in
             inputs.darwin.lib.darwinSystem rec {
@@ -237,7 +237,7 @@
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" = import ./nix/home.nix rec {
-                    inherit inputs lib personal pkgs pkgsUnstable userName realName system;
+                    inherit inputs lib personal pkgs pkgsTrunk userName realName system;
                     gitEmail = "git@lafreniere.xyz";
                     gitUseGpg = true;
                   };
@@ -256,7 +256,7 @@
             userName = "joseph.lafreniere";
             system = "aarch64-darwin";
             pkgs = legacyPackages."${system}";
-            pkgsUnstable = legacyPackagesUnstable."${system}";
+            pkgsTrunk = legacyPackagesTrunk."${system}";
             lib = pkgs.lib;
           in
             inputs.darwin.lib.darwinSystem rec {
@@ -274,7 +274,7 @@
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" = import ./nix/home.nix {
-                    inherit inputs lib personal pkgs pkgsUnstable userName realName system;
+                    inherit inputs lib personal pkgs pkgsTrunk userName realName system;
                     gitEmail = "joseph.lafreniere@${domain}";
                     gitUseGpg = true;
                   };
@@ -293,7 +293,7 @@
             system = "x86_64-linux";
             personal = true;
             pkgs = inputs.nixpkgs.legacyPackages."${system}";
-            pkgsUnstable = legacyPackagesUnstable."${system}";
+            pkgsTrunk = legacyPackagesTrunk."${system}";
             lib = pkgs.lib;
           in
             inputs.nixpkgs.lib.nixosSystem {
@@ -314,7 +314,7 @@
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" =
                     import ./nix/home.nix {
-                      inherit inputs personal system realName userName pkgs pkgsUnstable lib;
+                      inherit inputs personal system realName userName pkgs pkgsTrunk lib;
                       gitEmail = "git@${domain}";
                       gitUseGpg = true;
                     }

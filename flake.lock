@@ -994,13 +994,13 @@
         "type": "github"
       }
     },
-    "nixpkgs-unstable": {
+    "nixpkgs-trunk": {
       "locked": {
-        "lastModified": 1744467753,
-        "narHash": "sha256-WRnk61+f4273rrtBBUGdnSQfU8ha8+CLqzVYjvgJn7Y=",
+        "lastModified": 1745986677,
+        "narHash": "sha256-kEwnynYPrUz0ZQ8ytWSU8XnbbtFZrthdcDedmkTI2IE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "091a2357a8e0e9ab60c82ed3a6fef45993ba03da",
+        "rev": "43bac27dec15bcba9a71803ff28ee56fcc978c10",
         "type": "github"
       },
       "original": {
@@ -1195,7 +1195,7 @@
         "mujmap": "mujmap",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_8",
-        "nixpkgs-unstable": "nixpkgs-unstable",
+        "nixpkgs-trunk": "nixpkgs-trunk",
         "ripgrep-all": "ripgrep-all",
         "rust-overlay": "rust-overlay",
         "treefmt-nix": "treefmt-nix_3"
