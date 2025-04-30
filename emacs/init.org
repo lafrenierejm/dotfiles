@@ -3366,6 +3366,8 @@ You might want to use this to set dir-local variables that apply to all of your 
 
 #+begin_src emacs-lisp
 (use-package comint
+  :gfhook
+  ('comint-output-filter-functions #'comint-osc-process-output)
 
   :general
   <<comint/general>>)
