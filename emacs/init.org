@@ -3399,6 +3399,9 @@ Use =C-l= to clear the current buffer.
   :general
   <<shell/general>>
 
+  :custom
+  (shell-kill-buffer-on-exit t)
+
   :config
   (defun shell-disable-command-echo ()
     "Turn off command echoing in the current buffer."
