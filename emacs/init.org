@@ -3419,7 +3419,7 @@ Use =C-l= to clear the current buffer.
   (defun shell-lafrenierejm-rename-buffer (&rest _)
     "Rename the current shell buffer to include the current directory."
     (when (eq major-mode 'shell-mode)
-      (rename-buffer (shell-lafrenierejm-buffer-name default-directory))))
+      (rename-buffer (shell-lafrenierejm-buffer-name default-directory) t)))
 
   (advice-add 'comint-osc-process-output :after #'shell-lafrenierejm-rename-buffer)
 
