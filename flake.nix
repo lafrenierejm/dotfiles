@@ -107,6 +107,20 @@
         # Per-system attributes can be defined here. The self' and inputs'
         # module parameters provide easy access to attributes of the same
         # system.
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          overlays = [
+            # https://github.com/NixOS/nixpkgs/issues/402079
+            (final: prev: {
+              nodejs = prev.nodejs_22;
+              nodejs-slim = prev.nodejs-slim_22;
+              nodejs_20 = prev.nodejs_22;
+              nodejs-slim_20 = prev.nodejs-slim_22;
+            })
+          ];
+          config = {};
+        };
+
         packages = {
           default = pkgs.hello;
           install-iso = let
@@ -209,7 +223,19 @@
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
         darwinConfigurations = let
-          pkgs = legacyPackages."${system}";
+          pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              # https://github.com/NixOS/nixpkgs/issues/402079
+              (final: prev: {
+                nodejs = prev.nodejs_22;
+                nodejs-slim = prev.nodejs-slim_22;
+                nodejs_20 = prev.nodejs_22;
+                nodejs-slim_20 = prev.nodejs-slim_22;
+              })
+            ];
+            config = {};
+          };
           pkgsTrunk = legacyPackagesTrunk."${system}";
           lib = pkgs.lib;
           system = "aarch64-darwin";
