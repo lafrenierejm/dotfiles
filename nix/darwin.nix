@@ -72,7 +72,6 @@
         "snes9x"
         "steam"
         "visualboyadvance-m"
-        "zsa-wally"
       ])
       (lib.lists.optionals (!personal) [
         "docker"
