@@ -226,6 +226,7 @@
           pkgs = import inputs.nixpkgs {
             inherit system;
             overlays = [
+              inputs.emacs-overlay.overlays.default
               # https://github.com/NixOS/nixpkgs/issues/402079
               (final: prev: {
                 nodejs = prev.nodejs_22;
@@ -288,15 +289,22 @@
           }))
           hosts);
 
-        nixosConfigurations = {
+        nixosConfigurations = let
+          system = "x86_64-linux";
+          pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              inputs.emacs-overlay.overlays.default
+            ];
+            config = {};
+          };
+          pkgsTrunk = legacyPackagesTrunk."${system}";
+          lib = pkgs.lib;
+        in {
           earthbound = let
             userName = "lafrenierejm";
             domain = "lafreniere.xyz";
-            system = "x86_64-linux";
             personal = true;
-            pkgs = inputs.nixpkgs.legacyPackages."${system}";
-            pkgsTrunk = legacyPackagesTrunk."${system}";
-            lib = pkgs.lib;
           in
             inputs.nixpkgs.lib.nixosSystem {
               inherit system;
