@@ -144,9 +144,9 @@ in (lib.attrsets.mergeAttrsList [
           lib.concatStringsSep " "
           (map (pkg: (brewPath pkg) + "/lib/pkgconfig") libraries);
       };
-    security.pam.enableSudoTouchIdAuth = personal;
+    ids.gids.nixbld = 30000;
+    security.pam.services.sudo_local.touchIdAuth = personal;
     services = {
-      nix-daemon.enable = true;
       skhd.enable = personal;
       yabai = {
         enable = personal;
@@ -154,6 +154,7 @@ in (lib.attrsets.mergeAttrsList [
       };
     };
     system.stateVersion = 5;
+    system.primaryUser = userName;
     system.defaults = {
       CustomUserPreferences =
         lib.attrsets.mergeAttrsList

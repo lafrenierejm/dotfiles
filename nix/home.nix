@@ -591,7 +591,7 @@ in rec {
     ripgrep-all = {
       enable = true;
       package = inputs.ripgrep-all.packages."${system}".rga;
-      customAdapters = [
+      custom_adapters = [
         {
           name = "gron";
           version = 1;
@@ -601,8 +601,8 @@ in rec {
           binary = "${
             inputs.gron.packages."${system}".gronWithFallback
           }/bin/gron-with-fallback";
-          disabledByDefault = false;
-          matchOnlyByMime = false;
+          disabled_by_default = false;
+          match_only_by_mime = false;
         }
       ];
     };
@@ -640,13 +640,12 @@ in rec {
       autocd = true;
       autosuggestion.enable = true;
       defaultKeymap = "emacs";
-      initExtra = lib.concatStringsSep "\n" (lib.lists.flatten [
+      initContent = lib.concatStringsSep "\n" (lib.lists.flatten [
         ''. "$HOME/.config/zsh/prompt.zsh"''
         (lib.lists.optionals (!personal) [
           pyenvEnable
           voltaEnable
         ])
-        # nvm
         ''
           # Load NVM.
           export NVM_DIR="$HOME/.nvm"
