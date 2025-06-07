@@ -104,20 +104,6 @@
         # Per-system attributes can be defined here. The self' and inputs'
         # module parameters provide easy access to attributes of the same
         # system.
-        _module.args.pkgs = import inputs.nixpkgs {
-          inherit system;
-          overlays = [
-            # https://github.com/NixOS/nixpkgs/issues/402079
-            (final: prev: {
-              nodejs = prev.nodejs_22;
-              nodejs-slim = prev.nodejs-slim_22;
-              nodejs_20 = prev.nodejs_22;
-              nodejs-slim_20 = prev.nodejs-slim_22;
-            })
-          ];
-          config = {};
-        };
-
         packages = {
           default = pkgs.hello;
           install-iso = let
@@ -224,13 +210,6 @@
             inherit system;
             overlays = [
               inputs.emacs-overlay.overlays.default
-              # https://github.com/NixOS/nixpkgs/issues/402079
-              (final: prev: {
-                nodejs = prev.nodejs_22;
-                nodejs-slim = prev.nodejs-slim_22;
-                nodejs_20 = prev.nodejs_22;
-                nodejs-slim_20 = prev.nodejs-slim_22;
-              })
             ];
             config = {};
           };
