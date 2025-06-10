@@ -4906,6 +4906,14 @@ Redefine ~erc-login~ to identify using NickServ commands sent via PRIVMSG.
   (erc-update-mode-line))
 #+end_src
 
+**** Prefer SASL over NickServ
+
+#+begin_src emacs-lisp :noweb-ref erc/config
+(setopt erc-modules
+        (seq-union '(sasl nicks scrolltobottom)
+                   erc-modules))
+#+end_src
+
 * Multimedia
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref multimedia
