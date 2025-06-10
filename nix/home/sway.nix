@@ -116,13 +116,13 @@ in {
           name = "home-office";
           outputs = [
             {
-              criteria = "DP-2";
+              criteria = "DP-1";
               scale = 2.0;
               status = "enable";
-              position = "0,0";
+              position = "3840,0";
             }
             {
-              criteria = "DP-1";
+              criteria = "DP-2";
               scale = 2.0;
               status = "enable";
               position = "1920,0";
@@ -131,7 +131,7 @@ in {
               criteria = "DP-3";
               scale = 2.0;
               status = "enable";
-              position = "3840,0";
+              position = "0,0";
             }
           ];
         };
