@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# https://stackoverflow.com/a/16049363
+text_files=$(git ls-files | xargs git grep -I --name-only --untracked -e . --)
+
+for file in $text_files; do
+    # https://stackoverflow.com/a/65300310
+    if [[ $(tail -c 1 "$file" | xxd -p) != 0a ]]; then
+	echo >> "$file"
+    fi
+done
