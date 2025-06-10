@@ -588,6 +588,14 @@ in rec {
       };
     };
 
+    ripgrep = {
+      enable = true;
+      arguments = [
+        "--hidden"
+        "--glob=!.git/*" # exclude .git directories
+      ];
+    };
+
     ripgrep-all = {
       enable = true;
       package = inputs.ripgrep-all.packages."${system}".rga;
