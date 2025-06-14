@@ -438,7 +438,7 @@ in rec {
         isDefault = true;
         userChrome = pkgs.lib.readFile ../firefox/chrome/userChrome.css;
         search = {
-          default = "DuckDuckGo";
+          default = "ddg";
           force = true;
         };
         settings = {
