@@ -6931,6 +6931,12 @@ The following functions allow me to do so.
 :HEADER-ARGS+: :noweb-ref windows-and-frames
 :END:
 
+Allow resizing frames by pixel.
+
+#+begin_src emacs-lisp
+(setq frame-resize-pixelwise t)
+#+end_src
+
 ** Minions
 #+BEGIN_QUOTE
 A minor-mode menu for the mode line.
@@ -6959,9 +6965,6 @@ A minor-mode menu for the mode line.
 
   :ghook
   ('server-after-make-frame-hook #'frames-only-mode)
-
-  :custom
-  (frame-resize-pixelwise t "Allow resizing frames by pixel.")
 
   :general
   (:keymaps 'frames-only-mode-mode-map
