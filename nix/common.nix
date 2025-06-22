@@ -22,8 +22,12 @@ in {
     package = pkgs.nixVersions.stable;
     settings = {
       experimental-features = "nix-command flakes";
-      substituters = ["https://cachix.org/api/v1/cache/emacs"];
-      trusted-public-keys = ["emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY="];
+      substituters = [
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
       trusted-users = [userName];
     };
 
