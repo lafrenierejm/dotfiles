@@ -166,6 +166,9 @@ in rec {
       ];
       username = userName;
     }
+    (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
+      file."Library/Application Support/vale/.vale.ini".source = ../vale/.vale.ini;
+    })
   ];
 
   accounts.email = {

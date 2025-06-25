@@ -1395,6 +1395,16 @@ Retain selection after typing =<= or =>= in visual state.
     (setq indent-tabs-mode nil)))
 #+end_src
 
+*** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('markdown-mode-hook #'eglot-ensure)
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref eglot/config
+(add-to-list 'eglot-server-programs '((markdown-mode) "vale-ls"))
+#+end_src
+
 ** reStructuredText (RST)
 
 Emacs includes a package for /RST/ for working with reStructuredText.
