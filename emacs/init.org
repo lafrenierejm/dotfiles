@@ -819,6 +819,11 @@ Do not attempt to automatically discover projects.
 (projectile-auto-discover nil)
 #+end_src
 
+Do not automatically register known projects.
+#+begin_src emacs-lisp
+(projectile-track-known-projects-automatically nil)
+#+end_src
+
 *** Post-Load Evaluation
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref projectile/config
