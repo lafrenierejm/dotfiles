@@ -370,6 +370,7 @@ in rec {
           indent-bars
           inf-ruby
           ivy
+          ivy-hydra
           ivy-pass
           ivy-rich
           ivy-yasnippet
