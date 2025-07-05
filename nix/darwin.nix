@@ -118,6 +118,7 @@ in (lib.attrsets.mergeAttrsList [
           Ivory = 6444602274;
           Kindle = 302584613;
           Parcel = 639968404;
+          Whisper-Transcription = 1668083311;
         })
       ];
       taps = builtins.attrNames nix-homebrew.taps;
