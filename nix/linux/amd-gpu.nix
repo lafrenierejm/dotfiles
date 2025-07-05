@@ -4,6 +4,7 @@
 
   environment.systemPackages = with pkgs; [
     radeontop
+    rocmPackages.rocminfo
   ];
 
   hardware.graphics = {
