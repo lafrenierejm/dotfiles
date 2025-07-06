@@ -22,6 +22,17 @@
     ];
   };
 
+  services.ollama = {
+    enable = true;
+    loadModels = ["deepseek-r1:8b"];
+    acceleration = "rocm";
+    rocmOverrideGfx = "10.3.0";
+  };
+  services.open-webui = {
+    enable = true;
+    openFirewall = true;
+  };
+
   services.foldingathome.enable = true;
 
   # Heterogeneous-computing Interface for Portability (HIP)
