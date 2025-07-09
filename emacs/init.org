@@ -1410,6 +1410,17 @@ Retain selection after typing =<= or =>= in visual state.
 (add-to-list 'eglot-server-programs '((markdown-mode) "vale-ls"))
 #+end_src
 
+*** Formatting via Prettier
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  markdown-format
+  :program "prettier"
+  :args `("--parser" "markdown"
+          "--write"
+          "--stdin-filepath" ,(buffer-file-name)))
+#+end_src
+
 ** reStructuredText (RST)
 
 Emacs includes a package for /RST/ for working with reStructuredText.
