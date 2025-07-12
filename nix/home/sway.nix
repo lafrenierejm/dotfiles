@@ -67,6 +67,7 @@ in {
       bars = [];
       floating.titlebar = false;
       focus.followMouse = false;
+      focus.mouseWarping = false;
       startup = [
         {command = "firefox";}
         {
