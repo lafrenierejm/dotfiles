@@ -49,10 +49,11 @@ in {
       coreutils
       curl
       exiftool
+      fd
+      file
+      git
       gitAndTools.gitFull
       gnupg
-      fd
-      git
       ripgrep
       unzip
       zsh
