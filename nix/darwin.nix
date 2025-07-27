@@ -61,6 +61,7 @@
       "displaylink"
       "firefox"
       "karabiner-elements"
+      "proxy-audio-device"
       "zoom"
       (lib.lists.optionals personal [
         "apparency"
