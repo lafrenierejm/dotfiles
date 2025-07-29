@@ -21,6 +21,8 @@ in {
     # ];
   };
 
+  programs.swayimg.enable = true;
+
   wayland.windowManager.sway = {
     enable = true;
     config = {
