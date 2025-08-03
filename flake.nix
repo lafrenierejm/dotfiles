@@ -66,6 +66,10 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ripgrep-all = {
       url = "github:lafrenierejm/ripgrep-all";
       inputs = {
@@ -122,6 +126,7 @@
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
+                    inputs.nur.overlays.default
                   ];
                   home-manager.extraSpecialArgs = {
                     inherit inputs personal system username;
@@ -271,6 +276,7 @@
             inherit system;
             overlays = [
               inputs.emacs-overlay.overlays.default
+              inputs.nur.overlays.default
             ];
             config = {};
           };
@@ -294,6 +300,7 @@
                 {
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
+                    inputs.nur.overlays.default
                   ];
                   home-manager.backupFileExtension = "bak";
                   home-manager.useGlobalPkgs = true;
