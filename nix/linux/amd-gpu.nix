@@ -24,7 +24,7 @@
 
   services.ollama = {
     enable = true;
-    loadModels = ["deepseek-r1:8b"];
+    loadModels = ["deepseek-r1:8b" "qwen2.5-coder"];
     acceleration = "rocm";
     rocmOverrideGfx = "10.3.0";
   };
