@@ -6774,14 +6774,12 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 #+begin_src emacs-lisp
 (use-package gptel
   :custom
-  (gptel-model 'deepseek-reasoner)
-  :config
-  (setq
-   gptel-api-key (lambda ()
-                   (progn
-                     (auth-source-forget-all-cached)
-                     (auth-source-pick-first-password :host "api.deepseek.com")))
-   gptel-backend (gptel-make-deepseek "DeepSeek" :stream t)))
+  (gptel-model 'qwen2.5-coder)
+  (gptel-backend
+   (gptel-make-ollama "gptel localhost"
+     :host "localhost:11434"
+     :stream t
+     :models '(deepseek-r1:8b qwen2.5-coder:latest))))
 #+end_src
 
 * Web
