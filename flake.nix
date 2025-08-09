@@ -31,7 +31,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     gron.url = "github:lafrenierejm/gron";
-    homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-bundle = {
       url = "github:homebrew/homebrew-bundle";
       flake = false;
