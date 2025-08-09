@@ -41,8 +41,8 @@
       lunar = "fyi.lunar.Lunar";
       multipatch = "com.sappharad.MultiPatch";
       openemu = "org.openemu.OpenEmu";
-      syncthing = "com.github.xor-gate.syncthing-macosx";
-      tailscale = "io.tailscale.ipn.macsys";
+      syncthing-app = "com.github.xor-gate.syncthing-macosx";
+      tailscale-app = "io.tailscale.ipn.macsys";
       transmission = "org.m0k.transmission";
     })
   ];
@@ -65,17 +65,17 @@
       "zoom"
       (lib.lists.optionals personal [
         "apparency"
-        "eloston-chromium"
         "gog-galaxy"
         "inkscape"
         "netnewswire"
         "radio-silence"
         "snes9x"
         "steam"
+        "ungoogled-chromium"
         "visualboyadvance-m"
       ])
       (lib.lists.optionals (!personal) [
-        "docker"
+        "docker-desktop"
       ])
     ];
 in (lib.attrsets.mergeAttrsList [
