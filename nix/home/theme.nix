@@ -5,7 +5,6 @@
     accent = "lavender";
 
     cursors.enable = true;
-    gtk.enable = true;
     kvantum.enable = true;
   };
 
@@ -19,7 +18,6 @@
 
   home.packages = with pkgs; [
     catppuccin-kvantum
-    catppuccin-papirus-folders
     libsForQt5.qt5ct
   ];
 

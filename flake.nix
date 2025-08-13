@@ -313,7 +313,7 @@
                     }
                     // {
                       imports = [
-                        inputs.catppuccin.homeManagerModules.catppuccin
+                        inputs.catppuccin.homeModules.catppuccin
                         ./nix/home/theme.nix
                         ./nix/home/sway.nix
                         ./nix/home/udiskie.nix
