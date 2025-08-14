@@ -97,6 +97,7 @@ in rec {
           nixd
           nodePackages.bash-language-server
           nodePackages.graphql-language-service-cli
+          nodePackages.pnpm
           nodePackages.prettier
           nodePackages.typescript-language-server
           nodePackages.vscode-json-languageserver
