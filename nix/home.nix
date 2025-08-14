@@ -109,6 +109,7 @@ in rec {
           ripgrep
           rsync
           rust-analyzer
+          shfmt
           subversion
           terraform-docs
           terraform-ls
