@@ -381,6 +381,7 @@ in rec {
           nodejs-repl
           notmuch
           nov
+          origami
           package-lint
           password-store
           pdf-tools
