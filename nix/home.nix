@@ -430,19 +430,68 @@ in rec {
 
     firefox = {
       enable = personal && pkgs.stdenv.isLinux;
-      package = pkgs.firefox-bin;
-      profiles."personal.default" = {
-        id = 0;
-        name = "personal";
+      profiles.default = {
         isDefault = true;
-        userChrome = pkgs.lib.readFile ../firefox/chrome/userChrome.css;
         search = {
           default = "ddg";
           force = true;
         };
         settings = {
+          "browser.aboutConfig.showWarning" = false; # No warning when going to config
+          "browser.in-content.dark-mode" = true; # Use dark mode
+          "browser.tabs.closeTabByDblclick" = true;
+          "browser.tabs.groups.dragOverThresholdPercent" = 10;
+          "browser.tabs.groups.enabled" = true;
+          "browser.tabs.loadInBackground" = true; # Load tabs automatically
+          "browser.toolbarbuttons.introduced.sidebar-button" = false;
+          "browser.urlbar.placeholderName" = "DuckDuckGo";
+          "browser.urlbar.placeholderName.private" = "DuckDuckGo";
+          "browser.urlbar.shortcuts.bookmarks" = false;
+          "browser.urlbar.shortcuts.history" = false;
+          "browser.urlbar.shortcuts.tabs" = false;
+          "browser.urlbar.suggest.calculator" = true;
+          "browser.urlbar.suggest.searches" = true; # Need this for basic search suggestions
+          "browser.urlbar.trimHttps" = true;
+          "browser.urlbar.unitConversion.enabled" = true;
+          "browser.warnOnQuitShortcut" = false;
+          "extensions.autoDisableScopes" = 0; # Automatically enable extensions
+          "extensions.update.enabled" = false;
+          "gfx.webrender.all" = true;
+          "layers.acceleration.force-enabled" = true;
+          "media.ffmpeg.vaapi.enabled" = true; # Enable hardware acceleration
+          "sidebar.main.tools" = "syncedTabs";
+          "sidebar.new-sidebar.has-used" = true;
+          "sidebar.revamp" = true;
+          "sidebar.verticalTabs" = true;
+          "sidebar.visibility" = "expand-on-hover";
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "ui.systemUsesDarkTheme" = true;
+          "widget.use-xdg-desktop-portal.file-picker" = 1; # Use new gtk file picker instead of legacy one
         };
+        extensions = {
+          packages = with pkgs.nur.repos.rycee.firefox-addons; [
+            bitwarden
+            consent-o-matic
+            darkreader
+            facebook-container
+            link-cleaner
+            redirector
+            refined-github
+            sponsorblock
+            terms-of-service-didnt-read
+            ublock-origin
+          ];
+        };
+        settings."uBlock0@raymondhill.net".settings = {
+          selectedFilterLists = [
+            "ublock-badware"
+            "ublock-filters"
+            "ublock-privacy"
+            "ublock-quick-fixes"
+            "ublock-unbreak"
+          ];
+        };
+        extensions.force = true;
       };
     };
 
