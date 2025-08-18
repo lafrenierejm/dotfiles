@@ -275,12 +275,7 @@ in rec {
           pkgs.emacs-git-pgtk.overrideAttrs (old: {
             withTreeSitter = true;
             withNativeCompilation = !pkgs.stdenv.isDarwin;
-            passthru =
-              old.passthru
-              // {
-                treeSitter = true;
-              };
-            # Use `nix-prefetch-url` to get the below shasums.
+            passthru = old.passthru // {treeSitter = true;};
             patches =
               (old.patches or [])
               ++ (lib.lists.optionals pkgs.stdenv.isDarwin (
@@ -289,8 +284,7 @@ in rec {
                 ]
               ));
           })
-        )
-        .override {
+        ).override {
           # https://github.com/NixOS/nixpkgs/issues/395169
           withNativeCompilation = !pkgs.stdenv.isDarwin;
         };
