@@ -73,6 +73,7 @@ in rec {
           clojure
           coreutils
           curl
+          dockerfmt
           dos2unix
           efm-langserver
           exiftool
