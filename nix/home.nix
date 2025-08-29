@@ -73,7 +73,6 @@ in rec {
           clojure
           coreutils
           curl
-          dockerfmt
           dos2unix
           efm-langserver
           exiftool
@@ -121,6 +120,9 @@ in rec {
           vale
           vale-ls
           yt-dlp
+        ])
+        (with pkgsTrunk; [
+          dockerfmt
         ])
         (lib.lists.optionals personal [
           pkgs.imagemagick
