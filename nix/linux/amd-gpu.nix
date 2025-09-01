@@ -33,7 +33,7 @@
     openFirewall = true;
   };
 
-  services.foldingathome.enable = true;
+  services.foldingathome.enable = false;
 
   # Heterogeneous-computing Interface for Portability (HIP)
   # https://rocm.docs.amd.com/projects/HIP/en/latest/index.html
