@@ -377,6 +377,7 @@ in rec {
           jinja2-mode
           journalctl-mode
           json-mode
+          json5-ts-mode
           lua-mode
           magit
           markdown-mode

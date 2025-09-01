@@ -736,6 +736,9 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 (use-package tree-sitter
   :demand
 
+  :mode
+  ("\\.json5\\'" . json5-ts-mode)
+
   :ghook
   ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
 
