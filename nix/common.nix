@@ -49,6 +49,7 @@ in {
       coreutils
       curl
       exiftool
+      fuc
       fd
       file
       git
