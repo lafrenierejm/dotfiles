@@ -6727,8 +6727,8 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 (use-package dtrt-indent
   :demand
 
-  :config
-  (dtrt-indent-global-mode +1))
+  :custom
+  (dtrt-indent-global-modes '((not typescript-ts-mode) prog-mode text-mode)))
 #+end_src
 
 * Refactoring
