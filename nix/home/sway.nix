@@ -137,6 +137,20 @@ in {
               position = "0,0";
             }
           ];
+          exec =
+            lib.mapAttrsToList
+            (workspace: display: "${pkgs.sway}/bin/swaymsg workspace ${workspace}, move workspace to ${display}")
+            {
+              "1" = "DP-3";
+              "2" = "DP-3";
+              "3" = "DP-3";
+              "4" = "DP-2";
+              "5" = "DP-2";
+              "6" = "DP-2";
+              "7" = "DP-1";
+              "8" = "DP-1";
+              "9" = "DP-1";
+            };
         };
       }
     ];
