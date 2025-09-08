@@ -167,6 +167,7 @@ in {
     grim
     mako # notifications
     slurp
+    swaylock-fancy
     wl-clipboard
     libsForQt5.qt5ct
     libsForQt5.qtstyleplugin-kvantum
