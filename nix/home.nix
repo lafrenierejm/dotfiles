@@ -36,17 +36,9 @@
     ".venv/" # python
   ];
 in rec {
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
   home = lib.attrsets.mergeAttrsList [
     {
-      stateVersion = "23.05";
+      stateVersion = "23.05"; # back-compat with this version of Home Manager
       file.".gnupg/gpg-agent.conf".text =
         lib.concatStringsSep "\n"
         (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
