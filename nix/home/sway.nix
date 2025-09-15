@@ -4,6 +4,18 @@
   ...
 }: let
   mod = "Mod4";
+  workspaceToDisplay = {
+    "1" = "DP-3";
+    "2" = "DP-3";
+    "3" = "DP-3";
+    "4" = "DP-2";
+    "5" = "DP-2";
+    "6" = "DP-2";
+    "7" = "DP-1";
+    "8" = "DP-1";
+    "9" = "DP-1";
+  };
+  workspaceToDisplays = lib.attrsets.mapAttrs (workspace: display: [display]) workspaceToDisplay;
 in {
   programs.wofi = {
     enable = true;
@@ -97,6 +109,71 @@ in {
 
   programs.waybar = {
     enable = true;
+    settings = {
+      mainbar = {
+        modules-left = [
+          "sway/workspaces"
+        ];
+        modules-right = [
+          "mpd"
+          "idle_inhibitor"
+          "pulseaudio"
+          "network"
+          "power-profiles-daemon"
+          "cpu"
+          "memory"
+          "temperature"
+          "clock"
+          "tray"
+        ];
+        clock = {
+          tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+          format-alt = "{:%Y-%m-%d}";
+        };
+        cpu = {
+          format = "{usage}% ";
+          tooltip = false;
+        };
+        memory = {
+          format = "{}% ";
+        };
+        network = {
+          format-wifi = "{essid} ({signalStrength}%) ";
+          format-ethernet = "{ipaddr}/{cidr} ";
+          tooltip-format = "{ifname} via {gwaddr} ";
+          format-linked = "{ifname} (No IP) ";
+          format-disconnected = "Disconnected ⚠";
+          format-alt = "{ifname}: {ipaddr}/{cidr}";
+        };
+        pulseaudio = {
+          "format" = "{volume}% {icon} {format_source}";
+          "format-bluetooth" = "{volume}% {icon} {format_source}";
+          "format-bluetooth-muted" = " {icon} {format_source}";
+          "format-muted" = " {format_source}";
+          "format-source" = "{volume}% ";
+          "format-source-muted" = "";
+          "format-icons" = {
+            "headphone" = "";
+            "hands-free" = "";
+            "headset" = "";
+            "phone" = "";
+            "portable" = "";
+            "car" = "";
+            "default" = ["" "" ""];
+          };
+          "on-click" = "pavucontrol";
+        };
+        temperature = {
+          critical-threshold = 80;
+          format = "{temperatureC}°C {icon}";
+          format-icons = ["" "" ""];
+        };
+        workspaces = {
+          sort-by-number = true;
+          persistent-workspaces = workspaceToDisplays;
+        };
+      };
+    };
     systemd.enable = true;
     style = pkgs.lib.readFile ./waybar.css;
   };
@@ -140,17 +217,7 @@ in {
           exec =
             lib.mapAttrsToList
             (workspace: display: "${pkgs.sway}/bin/swaymsg workspace ${workspace}, move workspace to ${display}")
-            {
-              "1" = "DP-3";
-              "2" = "DP-3";
-              "3" = "DP-3";
-              "4" = "DP-2";
-              "5" = "DP-2";
-              "6" = "DP-2";
-              "7" = "DP-1";
-              "8" = "DP-1";
-              "9" = "DP-1";
-            };
+            workspaceToDisplay;
         };
       }
     ];
