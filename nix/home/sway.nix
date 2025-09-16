@@ -114,12 +114,14 @@ in {
         modules-left = [
           "sway/workspaces"
         ];
+        modules-center = [
+          "sway/window"
+        ];
         modules-right = [
-          "mpd"
+          # "mpd"
           "idle_inhibitor"
-          "pulseaudio"
+          # "pipewire"
           "network"
-          "power-profiles-daemon"
           "cpu"
           "memory"
           "temperature"
@@ -145,23 +147,23 @@ in {
           format-disconnected = "Disconnected ⚠";
           format-alt = "{ifname}: {ipaddr}/{cidr}";
         };
-        pulseaudio = {
-          "format" = "{volume}% {icon} {format_source}";
-          "format-bluetooth" = "{volume}% {icon} {format_source}";
-          "format-bluetooth-muted" = " {icon} {format_source}";
-          "format-muted" = " {format_source}";
-          "format-source" = "{volume}% ";
-          "format-source-muted" = "";
-          "format-icons" = {
-            "headphone" = "";
-            "hands-free" = "";
-            "headset" = "";
-            "phone" = "";
-            "portable" = "";
-            "car" = "";
-            "default" = ["" "" ""];
+        pipewire = {
+          format = "{volume}% {icon} {format_source}";
+          format-bluetooth = "{volume}% {icon} {format_source}";
+          format-bluetooth-muted = " {icon} {format_source}";
+          format-muted = " {format_source}";
+          format-source = "{volume}% ";
+          format-source-muted = "";
+          format-icons = {
+            headphone = "";
+            hands-free = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = ["" "" ""];
           };
-          "on-click" = "pavucontrol";
+          on-click = "pavucontrol";
         };
         temperature = {
           critical-threshold = 80;
@@ -171,6 +173,31 @@ in {
         workspaces = {
           sort-by-number = true;
           persistent-workspaces = workspaceToDisplays;
+        };
+      };
+      dock = {
+        layer = "top";
+        position = "bottom";
+        mode = "invisible";
+        height = 41;
+        width = 2;
+        modules-center = [
+          "sway/mode"
+          "wlr/taskbar"
+        ];
+        margin = "4";
+        spacing = "5";
+        "sway/window" = {
+          "max-length" = 50;
+        };
+        "wlr/taskbar" = {
+          format = "{icon}";
+          icon-size = 36;
+          spacing = 3;
+          on-click-middle = "close";
+          tooltip-format = "{title}";
+          ignore-list = [];
+          on-click = "activate";
         };
       };
     };
