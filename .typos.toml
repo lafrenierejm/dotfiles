@@ -6,5 +6,6 @@ ignore-vcs = true
 extend-ignore-re = [".*sha256 = \".*\""]
 
 [default.extend-words]
+Sur = "Sur"
 crypted = "crypted"
 edn = "edn"

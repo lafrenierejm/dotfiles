@@ -202,7 +202,7 @@ in {
       };
     };
     systemd.enable = true;
-    style = pkgs.lib.readFile ./waybar.css;
+    # style = pkgs.lib.readFile ./waybar.css;
   };
 
   home.file.".hm-graphical-session".text = pkgs.lib.concatStringsSep "\n" [
