@@ -5,10 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/release-25.05";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
-    catppuccin = {
-      url = "github:catppuccin/nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     crane.url = "github:ipetkov/crane";
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.05";
@@ -118,7 +114,6 @@
               inherit system;
               format = "install-iso";
               modules = [
-                inputs.catppuccin.nixosModules.catppuccin
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
                 inputs.disko.nixosModules.disko
@@ -292,7 +287,6 @@
               inherit system;
               modules = [
                 inputs.agenix.nixosModules.default
-                inputs.catppuccin.nixosModules.catppuccin
                 inputs.disko.nixosModules.disko
                 inputs.home-manager.nixosModules.home-manager
                 ./nix/common.nix
@@ -313,7 +307,6 @@
                     }
                     // {
                       imports = [
-                        inputs.catppuccin.homeModules.catppuccin
                         ./nix/home/theme.nix
                         ./nix/home/sway.nix
                         ./nix/home/udiskie.nix

@@ -1,14 +1,11 @@
 {pkgs, ...}: {
-  catppuccin = {
+  gtk = {
     enable = true;
-    flavor = "mocha";
-    accent = "lavender";
-
-    cursors.enable = true;
-    kvantum.enable = true;
+    iconTheme = {
+      name = "elementary";
+      package = pkgs.pantheon.elementary-icon-theme;
+    };
   };
-
-  gtk.enable = true;
 
   qt = {
     enable = true;
@@ -16,12 +13,10 @@
     style.name = "kvantum";
   };
 
-  home.packages = with pkgs; [
-    catppuccin-kvantum
-    libsForQt5.qt5ct
-  ];
-
   home.pointerCursor = {
+    name = "macOS";
+    package = pkgs.apple-cursor;
+    sway.enable = true;
     gtk.enable = true;
     size = 24;
     x11.enable = true;

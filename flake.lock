@@ -70,26 +70,6 @@
         "type": "github"
       }
     },
-    "catppuccin": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1756741629,
-        "narHash": "sha256-n+mgH3NoQf8d1jd8cDp/9Mt++hhyuE3LO3ZAxzjWRZw=",
-        "owner": "catppuccin",
-        "repo": "nix",
-        "rev": "cd22197da06df1eb6fabdaa2fc22c170c4f67382",
-        "type": "github"
-      },
-      "original": {
-        "owner": "catppuccin",
-        "repo": "nix",
-        "type": "github"
-      }
-    },
     "cl-nix-lite": {
       "locked": {
         "lastModified": 1728174978,
@@ -1198,7 +1178,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "catppuccin": "catppuccin",
         "crane": "crane",
         "darwin": "darwin_2",
         "disko": "disko",
