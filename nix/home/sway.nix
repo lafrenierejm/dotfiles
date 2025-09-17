@@ -136,6 +136,13 @@ in {
           format = "{usage}% ";
           tooltip = true;
         };
+        idle_inhibitor = {
+          format = "{icon}";
+          format-icons = {
+            activated = "";
+            deactivated = "";
+          };
+        };
         memory = {
           format = "{}% ";
         };
