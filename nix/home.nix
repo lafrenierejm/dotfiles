@@ -150,6 +150,7 @@ in rec {
         DIRENV_LOG_FORMAT = "";
         NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
       };
+      shell.enableShellIntegration = true;
       shellAliases = lib.attrsets.mergeAttrsList [
         {
           aws-ecr-login = ''
