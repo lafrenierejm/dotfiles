@@ -22,18 +22,6 @@
   # Use latest kernel that supports ZFS.
   boot.kernelParams = ["nohibernate"];
 
-  boot.kernelPatches = [
-    {
-      # https://github.com/NixOS/nixpkgs/issues/438765
-      name = "proc: fix missing pde_set_flags() for net proc files";
-      patch = pkgs.fetchurl {
-        name = "fix-missing-pde_set_flags-for-net-proc-files.patch";
-        url = "https://patchwork.kernel.org/project/linux-fsdevel/patch/20250821105806.1453833-1-wangzijie1@honor.com/raw/";
-        hash = "sha256-DbQ8FiRj65B28zP0xxg6LvW5ocEH8AHOqaRbYZOTDXg=";
-      };
-    }
-  ];
-
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
