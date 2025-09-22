@@ -457,6 +457,13 @@ in rec {
       enableFishIntegration = true;
       enableZshIntegration = true;
       settings = {
+        theme =
+          lib.concatStringsSep
+          ","
+          (lib.mapAttrsToList (k: v: "${k}:${v}") {
+            dark = "Apple System Colors";
+            light = "Apple System Colors Light";
+          });
         window-decoration = false;
         gtk-titlebar = false;
       };
