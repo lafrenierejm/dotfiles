@@ -457,6 +457,7 @@ in rec {
       enableFishIntegration = true;
       enableZshIntegration = true;
       settings = {
+        font-size = 10;
         theme =
           lib.concatStringsSep
           ","
