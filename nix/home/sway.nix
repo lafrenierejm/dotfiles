@@ -289,15 +289,37 @@ in {
   ];
 
   xdg = {
+    desktopEntries = {
+      "com.mitchellh.ghostty" = {
+        name = "Ghostty";
+        genericName = "Terminal";
+        icon = "terminal";
+      };
+      firefox = {
+        name = "Firefox";
+        genericName = "Web Browser";
+        icon = "firefox";
+      };
+      transmission = {
+        name = "Transmission";
+        icon = "transmission";
+      };
+    };
+    mimeApps.enable = true;
     portal = {
       enable = pkgs.stdenv.isLinux;
       config = {
+        common.default = ["gtk"];
         sway = {
-          default = ["gtk"];
+          default = ["wlr" "gtk"];
           "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
           "org.freedesktop.impl.portal.ScreenCast" = ["wlr"];
         };
       };
+      configPackages = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
