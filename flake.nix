@@ -49,15 +49,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";
-    mujmap = {
-      url = "github:lafrenierejm/mujmap";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        crane.follows = "crane";
-        rust-overlay.follows = "rust-overlay";
-        pre-commit-hooks.follows = "git-hooks";
-      };
-    };
+    mujmap.url = "github:lafrenierejm/mujmap";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -66,19 +58,7 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ripgrep-all = {
-      url = "github:lafrenierejm/ripgrep-all";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        crane.follows = "crane";
-        rust-overlay.follows = "rust-overlay";
-        pre-commit-hooks.follows = "git-hooks";
-      };
-    };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    ripgrep-all.url = "github:lafrenierejm/ripgrep-all";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs-trunk";
