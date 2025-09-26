@@ -59,6 +59,7 @@ in rec {
           aws-sso-creds
           awscli2
           babashka
+          bash-language-server
           bfg-repo-cleaner
           cachix
           clang-tools
@@ -77,6 +78,7 @@ in rec {
           gitAndTools.gitFull
           gitstatus
           gnupg
+          graphql-language-service-cli
           hyperfine
           id3v2
           ispell
@@ -87,30 +89,29 @@ in rec {
           mpv
           mu
           nixd
-          nodePackages.bash-language-server
-          nodePackages.graphql-language-service-cli
-          nodePackages.pnpm
-          nodePackages.prettier
-          nodePackages.typescript-language-server
-          nodePackages.vscode-json-languageserver
-          nodePackages.yaml-language-server
+          nodePackages_latest.prettier
+          nodePackages_latest.vscode-json-languageserver
           opentofu
+          pnpm
           pre-commit
           pyright
           python3
           ripgrep
           rsync
           rust-analyzer
+          shellcheck
           shfmt
           subversion
           terraform-docs
           terraform-ls
           tflint
+          typescript-language-server
           typos
           unzip
           uv
           vale
           vale-ls
+          yaml-language-server
           yt-dlp
         ])
         (with pkgsTrunk; [
