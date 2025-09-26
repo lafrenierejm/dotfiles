@@ -960,11 +960,11 @@
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
-        "lastModified": 1758921196,
-        "narHash": "sha256-oNM2BWN2GX0nzJ4hNc61I+WDpiwMnriF+Hr/5Qmup4U=",
+        "lastModified": 1758922481,
+        "narHash": "sha256-bWPGtdNwvMDsVC4fgABboFRvSVH3UHLulGtZErraaz4=",
         "owner": "lafrenierejm",
         "repo": "mujmap",
-        "rev": "ec40c517f5b496b7876969760f521e0339002207",
+        "rev": "e6472e4b02ca81a405ffc98807e21772b74f9a4e",
         "type": "github"
       },
       "original": {
