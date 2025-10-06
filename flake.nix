@@ -94,6 +94,9 @@
               inherit system;
               format = "install-iso";
               modules = [
+                ./nix/linux/mediaServer.nix
+                ./nix/linux/fileServer.nix
+                ./nix/linux/gpuAmd.nix
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
                 inputs.disko.nixosModules.disko
@@ -122,7 +125,9 @@
                   };
                 }
               ];
-              specialArgs = {inherit inputs personal system username;};
+              specialArgs = {
+                inherit inputs personal system username;
+              };
             };
         };
 
@@ -269,6 +274,9 @@
                 inputs.agenix.nixosModules.default
                 inputs.disko.nixosModules.disko
                 inputs.home-manager.nixosModules.home-manager
+                ./nix/linux/mediaServer.nix
+                ./nix/linux/fileServer.nix
+                ./nix/linux/gpuAmd.nix
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
                 {

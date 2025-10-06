@@ -6,14 +6,13 @@
   config,
   domain,
   pkgs,
+  ports,
   system,
   ...
 }: {
   imports = [
     ./hardware-configuration.nix
     ./filesystem.nix
-    ./file-server.nix
-    ./media-server.nix
     ./networking.nix
     ../linux/audio.nix
     ../linux/graphical.nix
@@ -127,6 +126,9 @@
   };
 
   # services.foldingathome.enable = true;
+  services.fileServer.enable = true;
+  services.gpuAmd.enable = true;
+  services.mediaServer.enable = true;
 
   # https://nixos.wiki/wiki/Fwupd
   services.fwupd.enable = true;
