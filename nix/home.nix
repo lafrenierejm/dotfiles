@@ -76,6 +76,7 @@ in rec {
           git-crypt
           git-filter-repo
           gitAndTools.gitFull
+          github-mcp-server
           gitstatus
           gnupg
           graphql-language-service-cli
@@ -375,6 +376,7 @@ in rec {
           lua-mode
           magit
           markdown-mode
+          mcp
           minions
           modus-themes
           monky
