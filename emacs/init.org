@@ -2929,8 +2929,11 @@ Assemble and yank the URL to view the current context in its forge.
       (let ((line (when browse-at-remote-add-line-number-if-no-region-selected (point))))
         (browse-at-remote--file-url (buffer-file-name) line)))
 
+     (default-directory
+       (browse-at-remote--file-url default-directory))
+
      (t
-      (browse-at-remote--file-url default-directory)))))
+      (error "Unable to determine remote URL")))))
 #+end_src
 
 ** Mercurial (Hg)
