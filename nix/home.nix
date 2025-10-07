@@ -135,7 +135,7 @@ in rec {
           bitwarden
           dconf2nix
           pavucontrol
-          signal-desktop-source
+          signal-desktop
           transmission_4-gtk
           zoom
         ]))
