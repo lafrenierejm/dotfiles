@@ -118,6 +118,7 @@ in (lib.attrsets.mergeAttrsList [
           Bitwarden = 1352778147;
           Ivory = 6444602274;
           Kindle = 302584613;
+          Manet-Music = 6470928235;
           Parcel = 639968404;
           Whisper-Transcription = 1668083311;
         })
