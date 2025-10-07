@@ -134,6 +134,7 @@ in rec {
         (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
           bitwarden
           dconf2nix
+          feishin
           pavucontrol
           signal-desktop
           transmission_4-gtk
