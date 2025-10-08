@@ -30,13 +30,78 @@
     tailscale-systray
     tailscalesd
   ];
+  networking.firewall.trustedInterfaces = ["tailscale0"];
+
+  # Firewall
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [
       22 # SSH
+      80 # HTTP
+      443 # HTTPS
     ];
-    allowedUDPPorts = [config.services.tailscale.port];
-    trustedInterfaces = ["tailscale0"];
+    allowedUDPPorts = [
+      22 # SSH
+      80 # QUIC
+      443 # QUIC
+      config.services.tailscale.port
+    ];
+  };
+
+  # NGINX
+  age.secrets.sslCrt = {
+    file = ./ssl.crt.age;
+    owner = "nginx";
+    group = "nginx";
+    mode = "440";
+  };
+  age.secrets.sslKey = {
+    file = ./ssl.key.age;
+    owner = "nginx";
+    group = "nginx";
+    mode = "440";
+  };
+  services.nginx = {
+    enable = true;
+
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+
+    virtualHosts = {
+      localhost = {
+        addSSL = true;
+        serverAliases = [
+          "localhost"
+          "earthbound.local"
+          "earthbound.fin-alioth.ts.net"
+          "www.earthbound.fin-alioth.ts.net"
+        ];
+        listen = [
+          {
+            addr = "localhost";
+            port = 80;
+          }
+          {
+            addr = "localhost";
+            port = 443;
+            ssl = true;
+          }
+          {
+            addr = "earthbound.fin-alioth.ts.net";
+            port = 80;
+          }
+          {
+            addr = "earthbound.fin-alioth.ts.net";
+            port = 443;
+            ssl = true;
+          }
+        ];
+        sslCertificate = config.age.secrets.sslCrt.path;
+        sslCertificateKey = config.age.secrets.sslKey.path;
+      };
+    };
   };
 
   # Configure network proxy if necessary

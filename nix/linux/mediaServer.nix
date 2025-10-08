@@ -14,16 +14,6 @@ in {
       type = types.bool;
       default = true;
     };
-    ports = {
-      lidarr = mkOption {
-        type = types.port;
-        default = 8686;
-      };
-      jellyfin = mkOption {
-        type = types.port;
-        default = 8096;
-      };
-    };
   };
 
   config = {
@@ -40,7 +30,6 @@ in {
       };
     };
 
-    # Jellyfin runs on port 8096.
     services.jellyfin = {
       enable = true;
       user = user;
@@ -61,16 +50,38 @@ in {
       group = user;
       settings = {
         server = {
-          urlbase = "localhost";
-          port = cfg.ports.lidarr;
+          urlbase = "lidarr";
+          port = 8686;
           bindaddress = "*";
         };
       };
     };
 
-    # Open ports in the firewall.
-    networking.firewall.allowedTCPPorts = [80 443];
-    # networking.firewall.allowedUDPPorts = [ ... ];
+    services.radarr = {
+      enable = true;
+      user = user;
+      group = user;
+      settings = {
+        server = {
+          urlbase = "radarr";
+          port = 7878;
+          bindaddress = "*";
+        };
+      };
+    };
+
+    services.sonarr = {
+      enable = true;
+      user = user;
+      group = user;
+      settings = {
+        server = {
+          urlbase = "sonarr";
+          port = 8989;
+          bindaddress = "*";
+        };
+      };
+    };
 
     services.avahi = {
       enable = true;
@@ -81,39 +92,22 @@ in {
       };
     };
 
-    services.nginx = {
-      enable = true;
-
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = false;
-
-      virtualHosts = {
-        localhost = {
-          serverAliases = [
-            "localhost"
-            "earthbound.local"
-            "earthbound.fin-alioth.ts.net"
-            "www.earthbound.fin-alioth.ts.net"
-          ];
-          listen = [
-            {
-              addr = "localhost";
-            }
-            {
-              addr = "earthbound.fin-alioth.ts.net";
-            }
-          ];
-          locations =
-            lib.mapAttrs'
-            (service: port:
-              lib.nameValuePair
-              "/${service}"
-              {proxyPass = "http://localhost:${builtins.toString port}";})
-            cfg.ports;
-        };
+    services.nginx.virtualHosts.localhost.locations =
+      lib.mapAttrs'
+      (
+        service: port:
+          lib.nameValuePair
+          "/${service}"
+          {
+            proxyPass = "http://localhost:${builtins.toString port}";
+            proxyWebsockets = true;
+          }
+      )
+      {
+        jellyfin = 8096;
+        lidarr = config.services.lidarr.settings.server.port;
+        radarr = config.services.radarr.settings.server.port;
+        sonarr = config.services.sonarr.settings.server.port;
       };
-    };
   };
 }
