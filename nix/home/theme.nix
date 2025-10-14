@@ -6,7 +6,7 @@
       package = pkgs.whitesur-combined;
     };
     theme = {
-      name = "WhiteSur";
+      name = "WhiteSur-Dark";
       package = pkgs.whitesur-gtk-theme;
     };
   };
@@ -14,7 +14,7 @@
   qt = {
     enable = true;
     platformTheme = {
-      name = "WhiteSur";
+      name = "WhiteSur-Dark";
       package = pkgs.whitesur-kde;
     };
   };
