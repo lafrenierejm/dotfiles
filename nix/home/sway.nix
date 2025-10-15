@@ -51,7 +51,7 @@ in {
 
         {
           "${mod}+Return" = "exec --no-startup-id ${pkgs.ghostty}/bin/ghostty";
-          "Alt+space" = "exec --no-startup-id wofi --show drun,run";
+          "Alt+space" = "exec --no-startup-id wofi --allow-images --show=drun,run --term=ghostty";
           "Alt+Tab" = "exec swayr switch-window";
 
           "${mod}+x" = "kill";
