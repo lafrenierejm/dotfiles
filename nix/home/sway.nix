@@ -110,6 +110,7 @@ in {
           "sway/window"
         ];
         modules-right = [
+          "tray"
           # "mpd"
           "idle_inhibitor"
           # "pipewire"
@@ -118,10 +119,9 @@ in {
           "memory"
           "temperature"
           "clock"
-          "tray"
         ];
         clock = {
-          format = "{:%H:%M %Y-%m-%d}";
+          format = "{:%Y-%m-%d %H:%M}";
           tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
         };
         cpu = {
@@ -139,12 +139,13 @@ in {
           format = "{}% ";
         };
         network = {
-          format-wifi = "{essid} ({signalStrength}%) ";
+          format-wifi = "{signalStrength}% ";
+          # format-wifi = "{essid} ({signalStrength}%) ";
           format-ethernet = "{ipaddr}/{cidr} ";
           tooltip-format = "{ifname} via {gwaddr} ";
           format-linked = "{ifname} (No IP) ";
           format-disconnected = "Disconnected ⚠";
-          format-alt = "{ifname}: {ipaddr}/{cidr}";
+          format-alt = "{essid} {ifname} {ipaddr}/{cidr}";
         };
         pipewire = {
           format = "{volume}% {icon} {format_source}";
@@ -201,7 +202,7 @@ in {
       };
     };
     systemd.enable = true;
-    # style = pkgs.lib.readFile ./waybar.css;
+    style = pkgs.lib.readFile ./waybar.css;
   };
 
   home.file.".hm-graphical-session".text = pkgs.lib.concatStringsSep "\n" [
