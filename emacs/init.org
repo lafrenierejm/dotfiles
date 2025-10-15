@@ -3203,8 +3203,6 @@ From the package's description:
 
 #+begin_src emacs-lisp
 (use-package ws-butler
-  :disabled
-
   ;; Load this package eagerly.
   :demand
 

@@ -422,7 +422,7 @@ in rec {
           vterm
           webpaste
           which-key
-          # ws-butler
+          ws-butler
           wucuo
           x509-mode
           xonsh-mode
