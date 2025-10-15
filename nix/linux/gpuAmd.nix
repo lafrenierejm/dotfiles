@@ -13,6 +13,13 @@ in {
       type = types.bool;
       default = true;
     };
+    ports = {
+      ollama = mkOption {
+        description = "Port for ollama to listen on";
+        type = types.port;
+        default = 11434;
+      };
+    };
   };
 
   config = {
@@ -39,58 +46,77 @@ in {
       ];
     };
 
-    services.nginx.virtualHosts."localhost".locations = {
-      "/open-webui/html/static/" = {
-        alias = "${pkgs.open-webui}/lib/python3.12/site-packages/open_webui/static/";
-        # autoindex = "off";
-      };
-      "/open-webui" = {
-        proxyPass = "http://localhost:${builtins.toString config.services.open-webui.port}";
-        proxyWebsockets = true;
-        root = "${pkgs.open-webui}/lib/python3.12/site-packages/open_webui/static"; # config.services.open-webui.stateDir;
-        extraConfig = ''
-          rewrite "^/open-webui/(.*)$" "/$1" break;
-
-          sub_filter_types text/plain text/html application/javascript;
-          sub_filter 'href="/' 'href="/open-webui/';
-          sub_filter 'src="/' 'src="/open-webui/';
-          sub_filter '/_app' '/open-webui/_app';
-          sub_filter '/api' '/open-webui/api';
-          sub_filter '/favicon.png' '/open-webui/html/static/favicon.png';
-          sub_filter '/ollama' '/open-webui/ollama';
-          sub_filter '/openai' '/open-webui/openai';
-          sub_filter '/static' '/open-webui/static';
-          sub_filter '/themes' '/open-webui/themes';
-          sub_filter '/user.png' '/open-webui/user.png';
-          sub_filter_once off;
-
-          proxy_buffering off;
-        '';
-      };
-      "/ollama" = {
-        proxyPass = "http://$host:11434";
-        proxyWebsockets = true;
-        extraConfig = ''
-          rewrite "^/ollama/(.*)$" "/$1" break;
-        '';
-      };
-    };
-
     services.ollama = {
       enable = true;
       acceleration = "rocm";
+      environmentVariables = {
+        OLLAMA_HOST = "0.0.0.0:${builtins.toString cfg.ports.ollama}"; # "localhost:${builtins.toString cfg.ports.ollama}";
+        OLLAMA_BASE_URL = "https://earthbound.fin-alioth.ts.net/ollama";
+        OLLAMA_ORIGINS = "*";
+        # OLLAMA_ORIGINS = lib.concatStringsSep "," [
+        #   "earthbound.fin-alioth.ts.net"
+        #   "localhost"
+        # ];
+      };
       loadModels = ["qwen2.5-coder:7b"];
+      port = cfg.ports.ollama;
       openFirewall = true;
       rocmOverrideGfx = "10.3.0";
     };
+    services.nginx.virtualHosts.localhost.locations."/ollama" = {
+      proxyPass = "http://localhost:${builtins.toString cfg.ports.ollama}";
+      proxyWebsockets = true;
+      extraConfig = ''
+        #   proxy_pass http://localhost:${builtins.toString cfg.ports.ollama};
+        rewrite '^/ollama$' '/' break;
+        rewrite '^/ollama/(.*)$' '/$1' break;
+
+        #   # WebSocket support
+        #   proxy_http_version 1.1;
+        #   proxy_set_header Upgrade $http_upgrade;
+        #   proxy_set_header Connection "upgrade";
+        #   proxy_read_timeout 60s;
+        #   proxy_send_timeout 60s;
+        #   proxy_buffering off;
+
+        #   proxy_set_header Host localhost;
+        #   proxy_set_header X-Real-IP $remote_addr;
+        #   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        #   proxy_set_header X-Forwarded-Proto $scheme;
+        #   proxy_set_header X-Forwarded-Host $host;
+        #   proxy_set_header X-Forwarded-Server $host;
+      '';
+    };
+
     services.open-webui = {
       enable = true;
-      openFirewall = true;
+      openFirewall = true; # port 8080
       environment = {
         ANONYMIZED_TELEMETRY = "False";
         DO_NOT_TRACK = "True";
         SCARF_NO_ANALYTICS = "True";
-        WEBUI_URL = "http://earthbound.fin-alioth.ts.net/open-webui";
+        # WEBUI_URL = "http://earthbound.fin-alioth.ts.net/open-webui";
+      };
+    };
+    services.nginx.virtualHosts = {
+      open-webui = {
+        serverAliases = [
+          "earthbound.local"
+          "earthbound.fin-alioth.ts.net"
+        ];
+        listen = [
+          {
+            addr = "earthbound.fin-alioth.ts.net";
+            port = config.services.open-webui.port;
+          }
+        ];
+        locations."/" = {
+          proxyPass = "http://localhost:${builtins.toString config.services.open-webui.port}$request_uri";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_buffering off;
+          '';
+        };
       };
     };
 
