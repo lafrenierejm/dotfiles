@@ -25,14 +25,6 @@ in {
     };
   };
 
-  programs.swayr = {
-    enable = true;
-    systemd.enable = true;
-    # settings.format.icons_dirs = [
-    #   "/run/current-system/sw/share/icons/breeze-dark/apps/"
-    # ];
-  };
-
   programs.swayimg.enable = true;
 
   wayland.windowManager.sway = {
