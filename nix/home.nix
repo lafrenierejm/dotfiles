@@ -98,7 +98,6 @@ in rec {
           nodePackages_latest.prettier
           nodePackages_latest.vscode-json-languageserver
           opentofu
-          pnpm
           pre-commit
           pyright
           python3
@@ -114,7 +113,6 @@ in rec {
           typescript-language-server
           typos
           unzip
-          uv
           vale
           vale-ls
           yaml-language-server
@@ -122,6 +120,8 @@ in rec {
         ])
         (with pkgsTrunk; [
           dockerfmt
+          pnpm
+          uv
         ])
         (lib.lists.optionals personal [
           pkgs.imagemagick
