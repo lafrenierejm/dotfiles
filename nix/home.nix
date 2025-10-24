@@ -430,6 +430,24 @@ in rec {
           yasnippet
           youtube-dl
         ];
+      overrides = self: super: {
+        browse-at-remote = self.melpaPackages.browse-at-remote.overrideAttrs {
+          src = pkgs.fetchFromGitHub {
+            owner = "lafrenierejm";
+            repo = "browse-at-remote";
+            rev = "default-directory";
+            hash = "sha256-L2WMTQaPrg3EDMa4DCednN54jB6vEvJOBVZ83WXUCG4=";
+          };
+        };
+        ws-butler = self.melpaPackages.ws-butler.overrideAttrs {
+          # https://github.com/nix-community/emacs-overlay/issues/499
+          src = pkgs.fetchFromSavannah {
+            repo = "emacs/nongnu";
+            rev = "9ee5a7657a22e836618813c2e2b64a548d27d2f";
+            hash = "sha256-S9aFJcFMkyB1KozJc9hpwKjAMkOyEnCZ6Wf3JVZ8d0c=";
+          };
+        };
+      };
     };
 
     firefox = {
