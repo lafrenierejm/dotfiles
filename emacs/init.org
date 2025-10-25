@@ -2873,9 +2873,6 @@ Alias the above function to remove my username.
 Assemble and yank the URL to view the current context in its forge.
 #+begin_src emacs-lisp
 (use-package browse-at-remote
-  :vc (:url "https://github.com/gessen/browse-at-remote"
-       :branch "emacs-31")
-
   :general
   (:keymaps 'vc-prefix-map
    "u" #'browse-at-remote-kill)
