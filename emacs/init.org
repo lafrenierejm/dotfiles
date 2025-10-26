@@ -1778,6 +1778,12 @@ The syntactic blocks are as follows, ordered from right to left:
       (evil-back-to-text))))
 #+end_src
 
+***** Start Minibuffer In Insert
+
+#+begin_src emacs-lisp
+(evil-set-initial-state 'minibuffer-mode 'insert)
+#+end_src
+
 *** /Evil Collection/
 
 /Evil Collection/ offers a collection of Evil keybindings for modes that Evil does not support by default.
