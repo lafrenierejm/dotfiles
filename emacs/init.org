@@ -745,7 +745,11 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :ghook
   ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
 
+  :custom
+  (treesit-enabled-modes t "Use tree-sitter's major modes whenever available.")
+
   :config
+  (require 'tree-sitter-langs)
   (global-tree-sitter-mode))
 #+end_src
 
