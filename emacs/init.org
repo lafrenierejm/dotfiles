@@ -740,7 +740,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :demand
 
   :mode
-  ("\\.json5\\'" . json5-ts-mode)
+  ("\\.jsonc\\'" . js-ts-mode)
+  ("\\.json\\'" . json-ts-mode)
 
   :ghook
   ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
@@ -772,6 +773,12 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   (evil-textobj-tree-sitter-define-key "b" "block")
   (evil-textobj-tree-sitter-define-key "s" "statement")
   (evil-textobj-tree-sitter-define-key "c" "call"))
+#+end_src
+
+*** /Eglot/
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('(js-ts-mode-hook json-ts-mode-hook) #'eglot-ensure)
 #+end_src
 
 * Buffer Organization
@@ -5225,7 +5232,7 @@ Enable \src_emacs-lisp{smart-dash-mode} in Terraform buffers.
 Define the inner mode.
 #+begin_src emacs-lisp
 (define-innermode poly-terraform-json-innermode
-  :mode 'json-mode
+  :mode 'js-json-mode
   :head-matcher #'poly-terraform-inline-json-head
   :tail-matcher #'poly-terraform-inline-json-tail
   :head-mode 'host
@@ -5311,23 +5318,7 @@ The defined hook can be added to all Terragrunt files.
 
 ** JavaScript
 
-*** /JSON Mode/
-
-From [[https://github.com/joshwnj/json-mode][the project's README]]:
-#+begin_quote
-Extends the builtin js-mode to add better syntax highlighting for JSON and some nice editing keybindings.
-#+end_quote
-
-#+begin_src emacs-lisp
-(use-package json-mode
-  :mode
-  ("\\.jsonc\\'" . jsonc-mode)
-
-  :gfhook
-  ('json-mode-hook #'hs-minor-mode))
-#+end_src
-
-**** Formatting via Prettier
+*** Formatting JSON via Prettier
 
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
@@ -5338,19 +5329,13 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
           "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
-**** /Eglot/
-
-#+begin_src emacs-lisp :noweb-ref eglot/ghook
-('json-mode-hook #'eglot-ensure)
-#+end_src
-
 *** /nodejs-repl/
 
 #+begin_src emacs-lisp
 (use-package nodejs-repl)
 #+end_src
 
-*** Formatting via Prettier
+*** Formatting JS/TS via Prettier
 
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
@@ -5367,11 +5352,17 @@ Extends the builtin js-mode to add better syntax highlighting for JSON and some 
 (use-package typescript-ts-mode)
 #+end_src
 
-*** Eglot
+**** /Eglot/
 
-Enable Eglot in Javascript and Typescript buffers.
 #+begin_src emacs-lisp :noweb-ref eglot/ghook
-('(js-ts-mode-hook typescript-ts-mode-hook) #'eglot-ensure)
+('typescript-ts-mode-hook #'eglot-ensure)
+#+end_src
+
+*** /json5-ts-mode/
+
+#+begin_src emacs-lisp
+(use-package json5-ts-mode
+  :mode ("\\.json5\\'" . json5-ts-mode))
 #+end_src
 
 ** Go
@@ -6883,7 +6874,7 @@ Define the inner mode for JSON sections.
 
 #+begin_src emacs-lisp
 (define-innermode poly-restclient/json-innermode
-  :mode 'json-mode
+  :mode 'js-json-mode
   :head-mode 'body
   :tail-mode 'body
   :head-matcher (rx line-start "{" line-end)

@@ -372,7 +372,6 @@ in rec {
           ivy-yasnippet
           jinja2-mode
           journalctl-mode
-          json-mode
           json5-ts-mode
           lua-mode
           magit
@@ -418,6 +417,7 @@ in rec {
           terraform-mode
           toml-mode
           tree-sitter
+          tree-sitter-langs
           treesit-grammars.with-all-grammars
           vterm
           webpaste
