@@ -85,18 +85,16 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bandwhich
     clinfo
     curl
-    # fahcontrol
-    # fahviewer
-    neovim
-    zsh
-    teensy-loader-cli
-
-    # containers
     dive
+    lsof
+    neovim
     podman-compose
     podman-tui
+    teensy-loader-cli
+    zsh
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
