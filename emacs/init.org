@@ -740,8 +740,9 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :demand
 
   :mode
-  ("\\.jsonc\\'" . js-ts-mode)
+  ("\\.env\\(?:\\.[^.]+\\)?\\'" . bash-ts-mode)
   ("\\.json\\'" . json-ts-mode)
+  ("\\.jsonc\\'" . js-ts-mode)
 
   :ghook
   ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
