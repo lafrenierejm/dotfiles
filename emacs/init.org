@@ -5104,6 +5104,9 @@ This can benefit both literate and traditional programming by allowing one to co
    :states 'normal
    "g R" #'eglot-rename)
 
+  :custom
+  (eglot-code-action-indications '())
+
   :config
   <<eglot/config>>)
 #+end_src
