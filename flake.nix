@@ -5,7 +5,6 @@
     nixpkgs.url = "github:lafrenierejm/nixpkgs/25.05_whitesur-combined";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
-    crane.url = "github:ipetkov/crane";
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
