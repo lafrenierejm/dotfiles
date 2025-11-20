@@ -393,7 +393,6 @@ in rec {
           poly-markdown
           poly-org
           polymode
-          powershell
           projectile
           pytest
           python

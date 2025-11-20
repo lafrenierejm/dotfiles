@@ -6025,14 +6025,6 @@ Add the above function to be run on all \src_emacs-lisp{sh-mode} buffers.
   :demand)
 #+end_src
 
-** PowerShell
-
-*** /PowerShell/
-
-#+BEGIN_SRC emacs-lisp
-(use-package powershell)
-#+END_SRC
-
 ** Python
 
 *** /Python/
