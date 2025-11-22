@@ -5105,6 +5105,7 @@ This can benefit both literate and traditional programming by allowing one to co
    "g R" #'eglot-rename)
 
   :custom
+  (eglot-code-action-indicator "▼")
   (eglot-code-action-indications '())
 
   :config
