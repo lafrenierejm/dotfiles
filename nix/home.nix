@@ -254,13 +254,6 @@ in rec {
       ];
     };
 
-    direnv = {
-      enable = true;
-      enableBashIntegration = true;
-      enableZshIntegration = true;
-      nix-direnv.enable = true;
-    };
-
     chromium = {
       enable = pkgs.stdenv.isLinux;
       package = pkgs.ungoogled-chromium;
@@ -269,6 +262,13 @@ in rec {
         {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # ublock origin
         {id = "nngceckbapebfimnlniiiahkandclblb";} # Bitwarden
       ];
+    };
+
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
     };
 
     emacs = {
