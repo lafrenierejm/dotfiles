@@ -483,6 +483,14 @@ Some fonts support ligatures.
   (mac-auto-operator-composition-mode))
 #+end_src
 
+*** ANSI Color Codes
+
+#+begin_src emacs-lisp
+(use-package ansi-color
+  :ghook
+  ('compilation-filter-hook #'ansi-color-compilation-filter))
+#+end_src
+
 ** /Form Feed/
 
 Display ^L glyphs as horizontal lines.
