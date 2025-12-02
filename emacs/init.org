@@ -796,7 +796,11 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 *** /Eglot/
 
 #+begin_src emacs-lisp :noweb-ref eglot/ghook
-('(js-ts-mode-hook json-ts-mode-hook rust-ts-mode-hook) #'eglot-ensure)
+('(js-ts-mode-hook
+   json-ts-mode-hook
+   rust-ts-mode-hook
+   yaml-ts-mode-hook)
+ #'eglot-ensure)
 #+end_src
 
 * Buffer Organization
