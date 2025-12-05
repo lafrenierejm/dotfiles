@@ -120,7 +120,7 @@ in {
       };
     };
 
-    services.foldingathome.enable = false;
+    services.foldingathome.enable = true;
 
     # Heterogeneous-computing Interface for Portability (HIP)
     # https://rocm.docs.amd.com/projects/HIP/en/latest/index.html
