@@ -27,6 +27,9 @@ in {
     boot.kernelModules = ["kvm-amd"];
 
     environment.systemPackages = with pkgs; [
+      libva-utils
+      lshw
+      pciutils
       radeontop
       rocmPackages.rocminfo
     ];
