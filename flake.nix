@@ -2,11 +2,11 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:lafrenierejm/nixpkgs/25.05_whitesur-combined";
+    nixpkgs.url = "github:lafrenierejm/nixpkgs/25.11_whitesur-combined";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
     darwin = {
-      url = "github:lnl7/nix-darwin/nix-darwin-25.05";
+      url = "github:lnl7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
@@ -44,7 +44,7 @@
       flake = false;
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";

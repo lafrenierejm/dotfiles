@@ -7,5 +7,6 @@ extend-ignore-re = [".*sha256 = \".*\""]
 
 [default.extend-words]
 Sur = "Sur"
+airborn = "airborn"
 crypted = "crypted"
 edn = "edn"
