@@ -38,14 +38,10 @@ in {
       enable = true;
       enable32Bit = true;
       extraPackages = with pkgs; [
-        amdvlk
         clinfo
         rocmPackages.clr.icd
         rocmPackages.rocminfo
         rocmPackages.rocm-runtime
-      ];
-      extraPackages32 = with pkgs.driversi686Linux; [
-        amdvlk
       ];
     };
 
