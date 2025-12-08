@@ -75,7 +75,6 @@ in rec {
           gh
           git-crypt
           git-filter-repo
-          gitAndTools.gitFull
           github-mcp-server
           gitstatus
           gnupg
@@ -493,7 +492,7 @@ in rec {
 
     git = {
       enable = true;
-      package = pkgs.gitAndTools.gitFull;
+      package = pkgs.gitFull;
       aliases = {
         aban = "checkout --";
         abanp = "checkout -p --";
