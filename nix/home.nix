@@ -263,6 +263,8 @@ in rec {
       ];
     };
 
+    difftastic.enable = true;
+
     direnv = {
       enable = true;
       enableBashIntegration = true;
@@ -493,25 +495,25 @@ in rec {
     git = {
       enable = true;
       package = pkgs.gitFull;
-      aliases = {
-        aban = "checkout --";
-        abanp = "checkout -p --";
-        "abort" = "rebase --abort";
-        alias = "! git config --get-regexp '^alias.' | sed -e 's/^alias.//' -e 's/ / = /'";
-        amend = "commit --amend";
-        cloner = "clone --recursive";
-        cont = "rebase --continue";
-        delete = ''!git branch -d "$1" ; git push "$2" --delete "$1" #'';
-        dif = "diff --word-diff=color";
-        fixup = "commit --amend -C HEAD";
-        head = "log -1 HEAD";
-        pop = "stash pop";
-        pure = "pull --rebase";
-        review = "diff --word-diff=color --staged";
-        st = "status -sb";
-        unstage = "reset HEAD --";
-      };
-      extraConfig = {
+      settings = {
+        aliases = {
+          aban = "checkout --";
+          abanp = "checkout -p --";
+          "abort" = "rebase --abort";
+          alias = "! git config --get-regexp '^alias.' | sed -e 's/^alias.//' -e 's/ / = /'";
+          amend = "commit --amend";
+          cloner = "clone --recursive";
+          cont = "rebase --continue";
+          delete = ''!git branch -d "$1" ; git push "$2" --delete "$1" #'';
+          dif = "diff --word-diff=color";
+          fixup = "commit --amend -C HEAD";
+          head = "log -1 HEAD";
+          pop = "stash pop";
+          pure = "pull --rebase";
+          review = "diff --word-diff=color --staged";
+          st = "status -sb";
+          unstage = "reset HEAD --";
+        };
         init.defaultBranch = "main";
         fetch = {
           prune = true;
@@ -556,8 +558,9 @@ in rec {
             insteadOf = "https://git.sr.ht/";
           };
         };
+        user.email = gitEmail;
+        user.name = realName;
       };
-      difftastic.enable = true;
       ignores = vcIgnores;
       lfs.enable = true;
       signing =
@@ -567,8 +570,6 @@ in rec {
           signByDefault = true;
         }
         else null;
-      userEmail = gitEmail;
-      userName = realName;
     };
 
     home-manager.enable = true;
