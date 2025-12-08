@@ -158,6 +158,7 @@
               enable = true;
               excludes = [
                 ".*\\.age"
+                ".*\\.crypt"
                 ".*\\.gpg"
               ];
             };
