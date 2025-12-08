@@ -131,7 +131,7 @@ in rec {
           skhd
         ]))
         (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
-          bitwarden
+          bitwarden-desktop
           dconf2nix
           feishin
           pavucontrol
