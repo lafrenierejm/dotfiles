@@ -196,7 +196,10 @@
             overlays = [
               inputs.emacs-overlay.overlays.default
             ];
-            config = {};
+            config.allowUnfreePredicate = pkg:
+              builtins.elem (lib.getName pkg) [
+                "claude-code"
+              ];
           };
           pkgsTrunk = legacyPackagesTrunk."${system}";
           lib = pkgs.lib;
@@ -227,6 +230,10 @@
               ./nix/common.nix
               ./nix/darwin.nix
               {
+                nixpkgs.config.allowUnfreePredicate = pkg:
+                  builtins.elem (lib.getName pkg) [
+                    "claude-code"
+                  ];
                 nixpkgs.overlays = [
                   inputs.emacs-overlay.overlays.default
                 ];
