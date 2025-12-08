@@ -645,10 +645,11 @@ in rec {
 
     ssh = {
       enable = true;
-      compression = true;
+      enableDefaultConfig = false;
       matchBlocks = {
         "*" = {
           host = "*";
+          compression = true;
           identitiesOnly = true;
           identityFile = "~/.ssh/id_ed25519";
         };
