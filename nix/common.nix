@@ -53,7 +53,6 @@ in {
       fd
       file
       git
-      gitAndTools.gitFull
       gnupg
       ripgrep
       unzip
@@ -71,11 +70,10 @@ in {
         font-awesome
         noto-fonts
         noto-fonts-cjk-sans
-        noto-fonts-emoji
+        noto-fonts-color-emoji
         source-code-pro
         source-han-sans
-        source-han-sans-japanese
-        source-han-serif-japanese
+        source-han-serif
       ];
     }
     // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
