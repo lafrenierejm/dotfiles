@@ -1073,7 +1073,7 @@ If BUFFER is a buffer object, use it as the subject of the rename.
 If BUFFER is not visiting a file, write BUFFER's contents to NEW-FILE-NAME.
 
 If CONFIRM-OVERWRITE is non-nil, this function asks for confirmation before
-overwiting an existing file at NEW-FILE-NAME.  Interactively, confirmation is
+overwriting an existing file at NEW-FILE-NAME.  Interactively, confirmation is
 required unless a prefix argument is supplied.
 
 The following are passed directly to `copy-file':
