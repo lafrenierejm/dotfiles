@@ -360,7 +360,7 @@ in rec {
           haskell-mode
           hcl-mode
           helpful
-          hindent
+          # hindent
           hy-mode
           indent-bars
           inf-ruby
