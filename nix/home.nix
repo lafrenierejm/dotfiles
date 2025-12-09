@@ -63,6 +63,7 @@ in rec {
           bfg-repo-cleaner
           cachix
           clang-tools
+          claude-code
           clojure
           coreutils
           curl
