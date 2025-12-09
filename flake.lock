@@ -69,6 +69,22 @@
         "type": "github"
       }
     },
+    "claude-code.el": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1760122475,
+        "narHash": "sha256-AW3Q5XScvT3UAmzvoMS53iZtijrii6pwvQjw+VW353w=",
+        "owner": "stevemolitor",
+        "repo": "claude-code.el",
+        "rev": "becece683bcf60f7b150a87a30ef14885dcf8ce3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stevemolitor",
+        "repo": "claude-code.el",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1757183466,
@@ -944,6 +960,23 @@
         "type": "github"
       }
     },
+    "monet.el": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1765264803,
+        "narHash": "sha256-Brh6kAakA6FwsGfdHPdWIEx1/WZMS1Yxxs6Ch+6c2V4=",
+        "owner": "lafrenierejm",
+        "repo": "monet",
+        "rev": "1f2c9051ed96c75219d817d37d9a881f0321883a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lafrenierejm",
+        "ref": "package-buffer-info",
+        "repo": "monet",
+        "type": "github"
+      }
+    },
     "mujmap": {
       "inputs": {
         "advisory-db": "advisory-db",
@@ -1396,6 +1429,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "claude-code.el": "claude-code.el",
         "darwin": "darwin_2",
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",
@@ -1412,6 +1446,7 @@
         "homebrew-core": "homebrew-core",
         "homebrew-hashicorp": "homebrew-hashicorp",
         "mac-app-util": "mac-app-util",
+        "monet.el": "monet.el",
         "mujmap": "mujmap",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_11",

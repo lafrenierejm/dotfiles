@@ -293,144 +293,147 @@ in rec {
           # https://github.com/NixOS/nixpkgs/issues/395169
           withNativeCompilation = !pkgs.stdenv.isDarwin;
         };
-      extraPackages = epkgs:
-        with epkgs; [
-          adoc-mode
-          aggressive-indent
-          ahk-mode
-          ansible
-          apples-mode
-          auctex
-          browse-at-remote
-          buffer-name-relative
-          caps-lock
-          cascading-dir-locals
-          cider
-          cider-hydra
-          clj-refactor
-          clojure-mode
-          company
-          company-posframe
-          company-restclient
-          compdef
-          counsel
-          counsel-notmuch
-          counsel-projectile
-          counsel-tramp
-          counsel-web
-          deadgrep
-          desktop-environment
-          diff-hl
-          difftastic
-          dired-collapse
-          dired-narrow
-          dired-subtree
-          dockerfile-mode
-          dtrt-indent
-          dwim-shell-command
-          editorconfig
-          elfeed
-          elfeed-org
-          envrc
-          evil
-          evil-cleverparens
-          evil-collection
-          evil-indent-plus
-          evil-matchit
-          evil-org
-          evil-surround
-          evil-tex
-          evil-textobj-tree-sitter
-          exec-path-from-shell
-          f
-          feature-mode
-          fennel-mode
-          file-info
-          flx
-          forge
-          form-feed
-          frames-only-mode
-          geiser-guile
-          general
-          ghq
-          gptel
-          go-eldoc
-          go-mode
-          gorepl-mode
-          graphql-ts-mode
-          groovy-mode
-          guix
-          haskell-mode
-          hcl-mode
-          helpful
-          # hindent
-          hy-mode
-          indent-bars
-          inf-ruby
-          ivy
-          ivy-hydra
-          ivy-pass
-          ivy-rich
-          ivy-yasnippet
-          jinja2-mode
-          journalctl-mode
-          json5-ts-mode
-          lua-mode
-          magit
-          markdown-mode
-          mcp
-          minions
-          modus-themes
-          monky
-          nix-mode
-          no-littering
-          nodejs-repl
-          notmuch
-          nov
-          origami
-          package-lint
-          password-store
-          pdf-tools
-          poly-ansible
-          poly-markdown
-          poly-org
-          polymode
-          projectile
-          pytest
-          python
-          racket-mode
-          rainbow-delimiters
-          rainbow-identifiers
-          rbenv
-          reformatter
-          restclient
-          rust-mode
-          seeing-is-believing
-          shadowenv
-          shell-maker
-          shfmt
-          slime
-          smart-dash
-          smartparens
-          sqlite3
-          sqlup-mode
-          standard-dirs
-          terraform-mode
-          toml-mode
-          tree-sitter
-          tree-sitter-langs
-          treesit-grammars.with-all-grammars
-          vterm
-          webpaste
-          which-key
-          ws-butler
-          wucuo
-          x509-mode
-          xonsh-mode
-          yaml-mode
-          yasnippet
-          youtube-dl
-        ];
+      extraPackages = epkgs: (with epkgs; [
+        # hindent
+        adoc-mode
+        aggressive-indent
+        ahk-mode
+        ansible
+        apples-mode
+        auctex
+        browse-at-remote
+        buffer-name-relative
+        caps-lock
+        cascading-dir-locals
+        cider
+        cider-hydra
+        clj-refactor
+        clojure-mode
+        company
+        company-posframe
+        company-restclient
+        compdef
+        counsel
+        counsel-notmuch
+        counsel-projectile
+        counsel-tramp
+        counsel-web
+        csv-mode
+        deadgrep
+        desktop-environment
+        diff-hl
+        difftastic
+        dired-collapse
+        dired-narrow
+        dired-subtree
+        dockerfile-mode
+        dtrt-indent
+        dwim-shell-command
+        eat
+        editorconfig
+        elfeed
+        elfeed-org
+        envrc
+        evil
+        evil-cleverparens
+        evil-collection
+        evil-indent-plus
+        evil-matchit
+        evil-org
+        evil-surround
+        evil-tex
+        evil-textobj-tree-sitter
+        exec-path-from-shell
+        f
+        feature-mode
+        fennel-mode
+        file-info
+        flx
+        forge
+        form-feed
+        frames-only-mode
+        geiser-guile
+        general
+        ghq
+        go-eldoc
+        go-mode
+        gorepl-mode
+        gptel
+        graphql-ts-mode
+        groovy-mode
+        guix
+        haskell-mode
+        hcl-mode
+        helpful
+        hy-mode
+        indent-bars
+        inf-ruby
+        ivy
+        ivy-hydra
+        ivy-pass
+        ivy-rich
+        ivy-yasnippet
+        jinja2-mode
+        journalctl-mode
+        json5-ts-mode
+        lua-mode
+        magit
+        markdown-mode
+        mcp
+        claude-code
+        minions
+        modus-themes
+        monet
+        monky
+        nix-mode
+        no-littering
+        nodejs-repl
+        notmuch
+        nov
+        origami
+        package-lint
+        password-store
+        pdf-tools
+        poly-ansible
+        poly-markdown
+        poly-org
+        polymode
+        projectile
+        pytest
+        python
+        racket-mode
+        rainbow-delimiters
+        rainbow-identifiers
+        rbenv
+        reformatter
+        restclient
+        rust-mode
+        seeing-is-believing
+        shadowenv
+        shell-maker
+        shfmt
+        slime
+        smart-dash
+        smartparens
+        sqlite3
+        sqlup-mode
+        standard-dirs
+        terraform-mode
+        toml-mode
+        tree-sitter
+        tree-sitter-langs
+        treesit-grammars.with-all-grammars
+        vterm
+        webpaste
+        which-key
+        ws-butler
+        wucuo
+        x509-mode
+        xonsh-mode
+        yaml-mode
+        yasnippet
+        youtube-dl
+      ]);
       overrides = self: super: {
         browse-at-remote = self.melpaPackages.browse-at-remote.overrideAttrs {
           src = pkgs.fetchFromGitHub {
@@ -438,6 +441,28 @@ in rec {
             repo = "browse-at-remote";
             rev = "default-directory";
             hash = "sha256-L2WMTQaPrg3EDMa4DCednN54jB6vEvJOBVZ83WXUCG4=";
+          };
+        };
+        claude-code = self.elpaBuild {
+          pname = "claude-code";
+          ename = "claude-code";
+          version = "0.4.5";
+          src = "${inputs."claude-code.el"}/claude-code.el";
+          packageRequires = with self.melpaPackages; [inheritenv transient];
+          meta = {
+            homepage = "https://github.com/stevemolitor/claude-code.el";
+            license = lib.licenses.asl20;
+          };
+        };
+        monet = self.elpaBuild {
+          pname = "monet";
+          ename = "monet";
+          version = "0.0.3";
+          src = "${inputs."monet.el"}/monet.el";
+          packageRequires = with self.melpaPackages; [websocket];
+          meta = {
+            homepage = "https://github.com/stevemolitor/monet.el";
+            license = lib.licenses.mit;
           };
         };
       };

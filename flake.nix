@@ -5,6 +5,10 @@
     nixpkgs.url = "github:lafrenierejm/nixpkgs/25.11_whitesur-combined";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
+    "claude-code.el" = {
+      url = "github:stevemolitor/claude-code.el";
+      flake = false;
+    };
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -48,6 +52,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";
+    "monet.el" = {
+      url = "github:lafrenierejm/monet/package-buffer-info";
+      flake = false;
+    };
     mujmap.url = "github:lafrenierejm/mujmap";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
