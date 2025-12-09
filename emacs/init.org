@@ -3592,6 +3592,12 @@ instance exists, start a new instance whose name includes the directory."
     (vterm-lafrenierejm-find-directory cwd)))
 #+end_src
 
+** /Eat/
+
+#+begin_src emacs-lisp
+(use-package eat)
+#+end_src
+
 ** Emacs Shell
 *** Esh Mode
 #+begin_src emacs-lisp
@@ -4562,7 +4568,6 @@ Normal buffer movement is performed using keybindings provided by ~evil~.
   :custom
   (eshell-cmpl-cycle-completions nil "Use zsh-like completion."))
 #+end_src
-
 
 ** Xonsh
 
@@ -6813,6 +6818,28 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
                   :args ("stdio")))))
   :config
   (require 'gptel-integrations))
+#+end_src
+
+** /Claude Code/
+
+#+begin_src emacs-lisp
+(use-package claude-code
+  :bind-keymap
+  ("C-c c" . claude-code-command-map)
+
+  :config
+  (claude-code-mode))
+#+end_src
+
+** /Monet/
+
+#+begin_src emacs-lisp
+(use-package monet
+  :ghook
+  ('claude-code-process-environment-functions #'monet-start-server-function)
+
+  :config
+  (monet-mode 1))
 #+end_src
 
 * Web
