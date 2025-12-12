@@ -273,7 +273,10 @@
               inputs.emacs-overlay.overlays.default
               inputs.nur.overlays.default
             ];
-            config = {};
+            config.allowUnfreePredicate = pkg:
+              builtins.elem (lib.getName pkg) [
+                "claude-code"
+              ];
           };
           pkgsTrunk = legacyPackagesTrunk."${system}";
           lib = pkgs.lib;
