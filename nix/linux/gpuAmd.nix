@@ -23,7 +23,6 @@ in {
   };
 
   config = {
-    boot.initrd.kernelModules = ["amdgpu"];
     boot.kernelModules = ["kvm-amd"];
 
     environment.systemPackages = with pkgs; [
@@ -34,11 +33,14 @@ in {
       rocmPackages.rocminfo
     ];
 
+    hardware.amdgpu = {
+      initrd.enable = true;
+      opencl.enable = true;
+    };
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
       extraPackages = with pkgs; [
-        clinfo
         rocmPackages.clr.icd
         rocmPackages.rocminfo
         rocmPackages.rocm-runtime
