@@ -19,6 +19,7 @@
   ];
 
   # Use latest kernel that supports ZFS.
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12_hardened;
   boot.kernelParams = ["nohibernate"];
 
   # Bootloader.
