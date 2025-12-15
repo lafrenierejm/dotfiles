@@ -322,7 +322,7 @@ in rec {
         deadgrep
         desktop-environment
         diff-hl
-        difftastic
+        # difftastic
         dired-collapse
         dired-narrow
         dired-subtree
@@ -454,6 +454,9 @@ in rec {
             license = lib.licenses.asl20;
           };
         };
+        # difftastic = self.melpaPackages.difftastic.overrideAttrs {
+        #   buildInputs = with pkgs; [git];
+        # };
         monet = self.elpaBuild {
           pname = "monet";
           ename = "monet";

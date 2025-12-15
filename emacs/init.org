@@ -2852,6 +2852,7 @@ Work with Git forges, such as Github and Gitlab, from the comfort of Magit and t
 
 #+begin_src emacs-lisp
 (use-package difftastic
+  :disabled t
   :demand t
   :bind (:map magit-blame-read-only-mode-map
          ("D" . difftastic-magit-show)
