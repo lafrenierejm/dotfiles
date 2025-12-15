@@ -21,6 +21,9 @@
   # Use latest kernel that supports ZFS.
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12_hardened;
   boot.kernelParams = ["nohibernate"];
+  boot.kernel.sysctl = {
+    "kernel.unprivileged_userns_clone" = 1; # allow non-privileged user namespaces
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
