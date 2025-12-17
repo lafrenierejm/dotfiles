@@ -64,32 +64,6 @@ in {
     "/share/applications"
   ];
 
-  fonts =
-    {
-      packages = with pkgs; [
-        font-awesome
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-color-emoji
-        source-code-pro
-        source-han-sans
-        source-han-serif
-      ];
-    }
-    // (lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
-      fontconfig.defaultFonts = {
-        serif = [
-          "Noto Serif"
-          "Source Han Serif"
-        ];
-        sansSerif = [
-          "Noto Sans"
-          "Source Han Sans"
-        ];
-      };
-      fontDir.enable = true;
-    });
-
   programs = {
     zsh.enable = true;
   };

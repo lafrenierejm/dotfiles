@@ -1,4 +1,30 @@
 {pkgs, ...}: {
+  fonts = {
+    packages = with pkgs; [
+      font-awesome
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+      noto-fonts-lgc-plus
+      noto-fonts-monochrome-emoji
+      source-code-pro
+      source-han-sans
+      source-han-serif
+    ];
+    fontconfig.defaultFonts = {
+      serif = [
+        "Noto Serif"
+        "Source Han Serif"
+      ];
+      sansSerif = [
+        "Noto Sans"
+        "Source Han Sans"
+      ];
+    };
+    fontDir.enable = true;
+  };
+
   programs.dconf.enable = true;
 
   services.greetd = {
