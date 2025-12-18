@@ -3596,7 +3596,33 @@ instance exists, start a new instance whose name includes the directory."
 ** /Eat/
 
 #+begin_src emacs-lisp
-(use-package eat)
+(use-package eat
+  :gfhook
+  <<eat/gfhook>>
+
+  :config
+  <<eat/config>>)
+#+end_src
+
+*** Prettify Symbols
+
+This is used to remap the characters that Claude Code uses for its spinner and response indicator.
+
+#+begin_src emacs-lisp :noweb-ref eat/config
+(defun eat/lafrenierejm/prettify-symbols ()
+  "Map symbol prettifications for vterm buffers."
+  (setq prettify-symbols-alist
+        '(("✻" . ?○)
+          ("✽" . ?◔)
+          ("✶" . ?◑)
+          ("✳" . ?◕)
+          ("✢" . ?●)
+          ("⏺" . ?∴))))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref eat/gfhook
+('eat-mode-hook #'eat/lafrenierejm/prettify-symbols)
+('eat-mode-hook #'prettify-symbols-mode)
 #+end_src
 
 ** Emacs Shell
