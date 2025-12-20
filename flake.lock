@@ -1413,15 +1413,16 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1762719907,
-        "narHash": "sha256-fDSetB2UGzth+3KkCKsXUHj3y08RSfQ2nCKDa8OurW4=",
+        "lastModified": 1765260821,
+        "narHash": "sha256-yV4j1k5Ylls1PdeNBPuRXHQvAfSkocqqQZngyk6/B/Q=",
         "owner": "lafrenierejm",
         "repo": "ripgrep-all",
-        "rev": "e8cd5552379d60b12a17997177b7a8d34eedcdc4",
+        "rev": "059f5e095f1f74cfc63857e68c93a4be981f3470",
         "type": "github"
       },
       "original": {
         "owner": "lafrenierejm",
+        "ref": "async-zip-0.0.18",
         "repo": "ripgrep-all",
         "type": "github"
       }
