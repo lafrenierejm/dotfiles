@@ -436,13 +436,21 @@ The /Faces/ package provides this functionality, so all font setup can can occur
   :config
   (when (member "Noto Sans" (font-family-list))
     (set-face-attribute 'default nil :font "Noto Sans Mono")
-    (set-fontset-font t 'latin "Noto Sans")
+    (set-fontset-font "fontset-default" nil "Noto Sans Mono")
+    (set-fontset-font "fontset-default" nil "Noto Sans Math" nil 'append)
+    (set-fontset-font "fontset-default" nil "Noto Emoji" nil 'append)
+    (set-fontset-font "fontset-default" nil "Noto Sans Symbols" nil 'append)
+    (set-fontset-font "fontset-default" nil "Noto Sans Symbols 2" nil 'append)
+
+    (set-fontset-font "fontset-default" 'symbol "Noto Emoji")
+    (set-fontset-font "fontset-default" 'symbol "Noto Sans Symbols" nil 'append)
+    (set-fontset-font "fontset-default" 'symbol "Noto Sans Symbols 2" nil 'append)
 
     ;; East Asia: 你好, 早晨, こんにちは, 안녕하세요
-    (set-fontset-font t 'han "Noto Sans CJK SC Regular")
-    (set-fontset-font t 'kana "Noto Sans CJK JP Regular")
-    (set-fontset-font t 'hangul "Noto Sans CJK KR Regular")
-    (set-fontset-font t 'cjk-misc "Noto Sans CJK KR Regular")
+    (set-fontset-font "fontset-default" 'han "Noto Sans CJK SC Regular")
+    (set-fontset-font "fontset-default" 'kana "Noto Sans CJK JP Regular")
+    (set-fontset-font "fontset-default" 'hangul "Noto Sans CJK KR Regular")
+    (set-fontset-font "fontset-default" 'cjk-misc "Noto Sans CJK KR Regular")
 
     ;; South East Asia: ជំរាបសួរ, ສະບາຍດີ, မင်္ဂလာပါ, สวัสดีครับ
     (set-fontset-font t 'khmer "Noto Sans Khmer")
