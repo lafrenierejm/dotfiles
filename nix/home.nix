@@ -34,6 +34,7 @@
     ".direnv/" # direnv
     ".mono/" # mono
     ".venv/" # python
+    "/.claude/settings.local.json"
   ];
 in rec {
   home = lib.attrsets.mergeAttrsList [
