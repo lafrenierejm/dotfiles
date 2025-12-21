@@ -3625,7 +3625,7 @@ This is used to remap the characters that Claude Code uses for its spinner and r
           ("✶" . ?◑)
           ("✳" . ?◕)
           ("✢" . ?●)
-          ("⏺" . ?∴))))
+          ("⏺" . ?‣))))
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref eat/gfhook
