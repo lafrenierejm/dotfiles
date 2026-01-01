@@ -65,7 +65,7 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ripgrep-all.url = "github:lafrenierejm/ripgrep-all/async-zip-0.0.18";
+    ripgrep-all.url = "github:lafrenierejm/ripgrep-all/native-gron";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs-trunk";

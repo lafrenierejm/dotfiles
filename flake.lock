@@ -1484,16 +1484,16 @@
         "treefmt-nix": "treefmt-nix_6"
       },
       "locked": {
-        "lastModified": 1765260821,
-        "narHash": "sha256-yV4j1k5Ylls1PdeNBPuRXHQvAfSkocqqQZngyk6/B/Q=",
+        "lastModified": 1767296411,
+        "narHash": "sha256-ZgDT7Zf93qDPr+rUX5kpMRvN0kGCIv7mp/6p+BolVhc=",
         "owner": "lafrenierejm",
         "repo": "ripgrep-all",
-        "rev": "059f5e095f1f74cfc63857e68c93a4be981f3470",
+        "rev": "23ee8ef7ba80cb99127daca95b8e28533565d308",
         "type": "github"
       },
       "original": {
         "owner": "lafrenierejm",
-        "ref": "async-zip-0.0.18",
+        "ref": "native-gron",
         "repo": "ripgrep-all",
         "type": "github"
       }
