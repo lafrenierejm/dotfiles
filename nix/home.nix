@@ -23,7 +23,6 @@
     if pkgs.stdenv.isDarwin
     then "${pinentryPkg}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
     else "${pinentryPkg}/bin/pinentry";
-  voltaEnable = pkgs.lib.readFile ../sh/volta.sh;
   vcIgnores = let
     parseGitignore = file:
       lib.filter (line: line != "" && !(lib.hasPrefix "#" line))
@@ -707,14 +706,6 @@ in rec {
       defaultKeymap = "emacs";
       initContent = lib.concatStringsSep "\n" (lib.lists.flatten [
         ''. "$HOME/.config/zsh/prompt.zsh"''
-        (lib.lists.optionals (!personal) [
-          voltaEnable
-        ])
-        ''
-          # Load NVM.
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
-          [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"''
       ]);
       profileExtra = lib.concatStringsSep "\n" [
         ''export PATH="$PATH:$HOME/.dotnet/tools"''
