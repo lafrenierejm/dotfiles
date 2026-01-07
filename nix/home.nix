@@ -23,7 +23,6 @@
     if pkgs.stdenv.isDarwin
     then "${pinentryPkg}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
     else "${pinentryPkg}/bin/pinentry";
-  pyenvEnable = pkgs.lib.readFile ../sh/pyenv.sh;
   voltaEnable = pkgs.lib.readFile ../sh/volta.sh;
   vcIgnores = let
     parseGitignore = file:
@@ -709,7 +708,6 @@ in rec {
       initContent = lib.concatStringsSep "\n" (lib.lists.flatten [
         ''. "$HOME/.config/zsh/prompt.zsh"''
         (lib.lists.optionals (!personal) [
-          pyenvEnable
           voltaEnable
         ])
         ''
