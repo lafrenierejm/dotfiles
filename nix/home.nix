@@ -25,17 +25,21 @@
     else "${pinentryPkg}/bin/pinentry";
   pyenvEnable = pkgs.lib.readFile ../sh/pyenv.sh;
   voltaEnable = pkgs.lib.readFile ../sh/volta.sh;
-  vcIgnores = [
-    "*#" # emacs
-    "*.elc" # emacs
-    "*~" # emacs
-    ".DS_Store" # darwin
-    ".dir-locals.el" # emacs
-    ".direnv/" # direnv
-    ".mono/" # mono
-    ".venv/" # python
-    "/.claude/settings.local.json"
-  ];
+  vcIgnores = let
+    parseGitignore = file:
+      lib.filter (line: line != "" && !(lib.hasPrefix "#" line))
+      (lib.splitString "\n" (lib.readFile (inputs.gitignore-collection + file)));
+  in
+    lib.lists.flatten [
+      (parseGitignore "/Global/Emacs.gitignore")
+      (parseGitignore "/Global/Linux.gitignore")
+      (parseGitignore "/Global/Windows.gitignore")
+      (parseGitignore "/Global/macOS.gitignore")
+      [
+        ".direnv/"
+        "/.claude/settings.local.json"
+      ]
+    ];
 in rec {
   home = lib.attrsets.mergeAttrsList [
     {

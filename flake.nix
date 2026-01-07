@@ -29,6 +29,10 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    gitignore-collection = {
+      url = "github:github/gitignore";
+      flake = false;
+    };
     gron.url = "github:lafrenierejm/gron";
     homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-bundle = {

@@ -686,6 +686,22 @@
         "type": "github"
       }
     },
+    "gitignore-collection": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1763403792,
+        "narHash": "sha256-cg7j9GzfPgxKO7nHPEacI6jbaCixcnzyHnKwqKQ2gX4=",
+        "owner": "github",
+        "repo": "gitignore",
+        "rev": "86922aee426c32ffb6098f9a38c42da75169501e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "github",
+        "repo": "gitignore",
+        "type": "github"
+      }
+    },
     "gitignore_2": {
       "inputs": {
         "nixpkgs": [
@@ -1510,6 +1526,7 @@
         "flake-root": "flake-root",
         "ghq": "ghq",
         "git-hooks": "git-hooks_2",
+        "gitignore-collection": "gitignore-collection",
         "gron": "gron",
         "home-manager": "home-manager_2",
         "homebrew": "homebrew",
