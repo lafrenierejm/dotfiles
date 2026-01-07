@@ -31,6 +31,9 @@
       (lib.splitString "\n" (lib.readFile (inputs.gitignore-collection + file)));
   in
     lib.lists.flatten [
+      (parseGitignore "/Global/Archives.gitignore")
+      (parseGitignore "/Global/Backup.gitignore")
+      (parseGitignore "/Global/Diff.gitignore")
       (parseGitignore "/Global/Emacs.gitignore")
       (parseGitignore "/Global/Linux.gitignore")
       (parseGitignore "/Global/Windows.gitignore")
