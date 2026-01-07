@@ -708,7 +708,7 @@ in rec {
         ''. "$HOME/.config/zsh/prompt.zsh"''
       ]);
       profileExtra = lib.concatStringsSep "\n" [
-        ''export PATH="$PATH:$HOME/.dotnet/tools"''
+        ''export PATH="$PATH:$HOME/.config/bin"''
       ];
     };
   };
