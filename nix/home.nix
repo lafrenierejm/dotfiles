@@ -56,7 +56,6 @@ in rec {
         pinentryPkg
         [
           inputs.gron.packages."${system}".gron
-          inputs.ripgrep-all.packages."${system}".rga
           inputs.ghq.packages."${system}".ghq
         ]
         (with pkgs; [
@@ -654,20 +653,6 @@ in rec {
     ripgrep-all = {
       enable = true;
       package = inputs.ripgrep-all.packages."${system}".rga;
-      custom_adapters = [
-        {
-          name = "gron";
-          version = 1;
-          description = "Transform JSON into discrete JS assignments";
-          extensions = ["json"];
-          mimetypes = ["application/json"];
-          binary = "${
-            inputs.gron.packages."${system}".gronWithFallback
-          }/bin/gron-with-fallback";
-          disabled_by_default = false;
-          match_only_by_mime = false;
-        }
-      ];
     };
 
     ssh = {
