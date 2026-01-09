@@ -6416,6 +6416,15 @@ Define the actual Polymode.
   :args '("-"))
 #+end_src
 
+** Prisma
+
+*** /Prisma TS Mode/
+
+#+begin_src emacs-lisp
+(use-package prisma-ts-mode
+  :mode ("\\.prisma\\'" . prisma-ts-mode))
+#+end_src
+
 ** Ruby
 
 *** /rbenv.el/

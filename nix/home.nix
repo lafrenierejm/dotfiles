@@ -403,6 +403,7 @@ in rec {
         poly-markdown
         poly-org
         polymode
+        prisma-ts-mode
         projectile
         pytest
         python
