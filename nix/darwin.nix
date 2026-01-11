@@ -36,6 +36,7 @@
     }
     (lib.attrsets.optionalAttrs personal {
       aldente = "com.apphousekitchen.aldente-pro";
+      alt-tab = "com.lwouis.alt-tab-macos";
       altserver = "com.rileytestut.AltServer";
       iina = "com.colliderli.iina";
       lunar = "fyi.lunar.Lunar";
