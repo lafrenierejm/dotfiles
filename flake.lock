@@ -1500,11 +1500,11 @@
         "treefmt-nix": "treefmt-nix_6"
       },
       "locked": {
-        "lastModified": 1767299150,
-        "narHash": "sha256-QoFjJYzEp+tg67NbTY8VnTAIKWmlG+My3zu1pNlVjS4=",
+        "lastModified": 1768110148,
+        "narHash": "sha256-9MnkJ0A1AjPjpQ8f5AYbq9XN/+HY9Ddi43gM7LdUgt0=",
         "owner": "lafrenierejm",
         "repo": "ripgrep-all",
-        "rev": "9833f41244954531282b771e481d174de9cf823c",
+        "rev": "f92ea0c5e627653b5e4a9b2c5b6032cf80acf302",
         "type": "github"
       },
       "original": {
