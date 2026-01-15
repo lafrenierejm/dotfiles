@@ -69,7 +69,7 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ripgrep-all.url = "github:lafrenierejm/ripgrep-all/native-gron";
+    ripgrep-all.url = "github:lafrenierejm/ripgrep-all/native-yaml";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs-trunk";
