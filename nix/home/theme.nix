@@ -36,7 +36,8 @@
   services.darkman = {
     enable = true;
     settings = {
-      usegeoclue = true;
+      lat = 30.27;
+      lng = -97.74;
     };
     lightModeScripts = {
       gtk-theme = ''

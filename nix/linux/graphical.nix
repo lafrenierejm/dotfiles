@@ -1,8 +1,4 @@
-{
-  pkgs,
-  userName,
-  ...
-}: {
+{pkgs, ...}: {
   fonts = {
     packages = with pkgs; [
       font-awesome
@@ -57,15 +53,15 @@
   # Will be exposed through DBus to programs willing to store secrets.
   services.gnome.gnome-keyring.enable = true;
 
-  # Enable geoclue for location services
-  services.geoclue2 = {
-    enable = true;
-    appConfig.darkman = {
-      isAllowed = true;
-      isSystem = false;
-      users = [userName];
-    };
-  };
+  # Geoclue disabled - darkman now uses static location
+  # services.geoclue2 = {
+  #   enable = true;
+  #   appConfig.darkman = {
+  #     isAllowed = true;
+  #     isSystem = false;
+  #     users = [(toString config.users.users.${userName}.uid)];
+  #   };
+  # };
 
   users.users.greeter = {};
 }
