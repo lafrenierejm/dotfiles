@@ -55,9 +55,9 @@
         # Restart waybar to pick up the new theme
         ${pkgs.systemd}/bin/systemctl --user restart waybar || true
       '';
-      notify = ''
-        ${pkgs.libnotify}/bin/notify-send -i weather-clear "darkman" "Switched to light mode"
-      '';
+      # notify = ''
+      #   ${pkgs.libnotify}/bin/notify-send -i weather-clear "darkman" "Switched to light mode"
+      # '';
     };
     darkModeScripts = {
       gtk-theme = ''
@@ -75,9 +75,9 @@
         # Restart waybar to pick up the new theme
         ${pkgs.systemd}/bin/systemctl --user restart waybar || true
       '';
-      notify = ''
-        ${pkgs.libnotify}/bin/notify-send -i weather-clear-night "darkman" "Switched to dark mode"
-      '';
+      # notify = ''
+      #   ${pkgs.libnotify}/bin/notify-send -i weather-clear-night "darkman" "Switched to dark mode"
+      # '';
     };
   };
 
