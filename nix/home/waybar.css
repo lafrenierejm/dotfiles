@@ -9,29 +9,45 @@
   min-height: 0;
 }
 
+/* Define colors that adapt to light/dark mode */
+@define-color base_bg @theme_bg_color;
+@define-color base_fg @theme_fg_color;
+@define-color selected_bg alpha(@base_fg, 0.1);
+@define-color selected_fg @base_fg;
+@define-color warning_color #e5a50a;
+@define-color error_color #c01c28;
+
+window#waybar {
+  background-color: @base_bg;
+  color: @base_fg;
+}
+
 #workspaces button {
   padding: 0 0.4em;
-  /* background-color: transparent; */
-  /* color: #ffffff; */
+  background-color: transparent;
+  color: @base_fg;
+  border-radius: 0;
   /* Use box-shadow instead of border so the text isn't offset */
   box-shadow: inset 0 -3px transparent;
 }
 
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 #workspaces button:hover {
-  /* background: rgba(0, 0, 0, 0.9); */
-  /* box-shadow: inset 0 -3px #ffffff; */
+  background: alpha(@selected_bg, 0.3);
+  box-shadow: inset 0 -3px @selected_bg;
+  border-radius: 0;
 }
 
 #workspaces button.focused {
-  background-color: @text;
-  color: @surface0;
-  /* /\* box-shadow: inset 0 -3px #ffffff; *\/ */
+  background-color: @selected_bg;
+  color: @selected_fg;
+  border-radius: 0;
 }
 
 #workspaces button.urgent {
-  background-color: @pink;
-  color: @surface0;
+  background-color: @error_color;
+  color: @selected_fg;
+  border-radius: 0;
 }
 
 #mode {
@@ -54,6 +70,13 @@
 #mpd {
   padding: 0 0.4em;
   margin: 6px 3px;
+  color: @base_fg;
+  background-color: transparent;
+}
+
+#temperature.critical {
+  color: @error_color;
+  font-weight: bold;
 }
 
 #window,

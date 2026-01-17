@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  userName,
+  ...
+}: {
   fonts = {
     packages = with pkgs; [
       font-awesome
@@ -52,6 +56,16 @@
   # Enable the gnome-keyring secrets vault.
   # Will be exposed through DBus to programs willing to store secrets.
   services.gnome.gnome-keyring.enable = true;
+
+  # Enable geoclue for location services
+  services.geoclue2 = {
+    enable = true;
+    appConfig.darkman = {
+      isAllowed = true;
+      isSystem = false;
+      users = [userName];
+    };
+  };
 
   users.users.greeter = {};
 }
