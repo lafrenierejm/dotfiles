@@ -46,10 +46,9 @@ in {
     # networking.firewall.allowedUDPPorts = [ ... ];
 
     services.transmission = {
-      package = pkgs.transmission_4;
       enable = true;
-      user = cfg.user;
-      group = cfg.group;
+      inherit (cfg) group user;
+      package = pkgs.transmission_4;
       webHome = pkgs.flood-for-transmission;
       downloadDirPermissions = "775";
       settings.trash-original-torrent-files = true;

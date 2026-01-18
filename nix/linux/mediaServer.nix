@@ -32,7 +32,7 @@ in {
 
     services.jellyfin = {
       enable = true;
-      user = user;
+      inherit user;
     };
     environment.systemPackages = with pkgs; [
       (jellyfin-ffmpeg.override {
@@ -46,7 +46,7 @@ in {
 
     services.lidarr = {
       enable = true;
-      user = user;
+      inherit user;
       group = user;
       settings = {
         server = {
@@ -59,7 +59,7 @@ in {
 
     services.radarr = {
       enable = true;
-      user = user;
+      inherit user;
       group = user;
       settings = {
         server = {
@@ -72,7 +72,7 @@ in {
 
     services.sonarr = {
       enable = true;
-      user = user;
+      inherit user;
       group = user;
       settings = {
         server = {

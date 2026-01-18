@@ -178,6 +178,7 @@
               enable = true;
               excludes = [".*\\.crypt"];
             };
+            statix.enable = true;
             taplo.enable = true;
             treefmt.enable = true;
             typos = {

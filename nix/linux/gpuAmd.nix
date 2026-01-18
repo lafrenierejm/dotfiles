@@ -107,8 +107,8 @@ in {
         ];
         listen = [
           {
+            inherit (config.services.open-webui) port;
             addr = "earthbound.fin-alioth.ts.net";
-            port = config.services.open-webui.port;
           }
         ];
         locations."/" = {
