@@ -690,6 +690,7 @@ in rec {
       enable = true;
       autocd = true;
       autosuggestion.enable = true;
+      enableVteIntegration = true;
       defaultKeymap = "emacs";
       initContent = lib.concatStringsSep "\n" (lib.lists.flatten [
         ''. "$HOME/.config/zsh/prompt.zsh"''
