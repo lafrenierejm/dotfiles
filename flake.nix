@@ -2,7 +2,7 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:lafrenierejm/nixpkgs/25.11_whitesur-combined";
+    nixpkgs.url = "github:lafrenierejm/nixpkgs/25.11-darwin";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
     "claude-code.el" = {
