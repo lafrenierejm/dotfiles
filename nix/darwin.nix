@@ -38,6 +38,7 @@
       aldente = "com.apphousekitchen.aldente-pro";
       alt-tab = "com.lwouis.alt-tab-macos";
       altserver = "com.rileytestut.AltServer";
+      fmail3 = "fr.appmac.fmail3";
       iina = "com.colliderli.iina";
       lunar = "fyi.lunar.Lunar";
       multipatch = "com.sappharad.MultiPatch";
