@@ -919,9 +919,11 @@ path."
   ;; Add the following keybindings.
   :general
   (:keymaps 'projectile-mode-map
-   "C-x C-f" #'counsel-projectile-find-file
+   "C-c p s g" #'counsel-projectile-grep
+   "C-c p s r" #'counsel-projectile-rg
    "C-x C-b" #'counsel-projectile-switch-to-buffer
-   "C-x C-d" #'counsel-projectile-find-dir)
+   "C-x C-d" #'counsel-projectile-find-dir
+   "C-x C-f" #'counsel-projectile-find-file)
 
   ;; Customize the following variables.
   :custom
