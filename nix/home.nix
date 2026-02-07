@@ -97,6 +97,7 @@ in rec {
           nixd
           nodePackages_latest.prettier
           nodePackages_latest.vscode-json-languageserver
+          opencode
           opentofu
           pre-commit
           pyright
@@ -396,6 +397,7 @@ in rec {
         nodejs-repl
         notmuch
         nov
+        opencode
         origami
         package-lint
         password-store
@@ -473,6 +475,17 @@ in rec {
           meta = {
             homepage = "https://github.com/stevemolitor/monet.el";
             license = lib.licenses.mit;
+          };
+        };
+        opencode = self.elpaBuild {
+          pname = "opencode";
+          ename = "opencode";
+          version = "0.1.0";
+          src = "${inputs."opencode.el"}/opencode.el";
+          packageRequires = with self.melpaPackages; [transient];
+          meta = {
+            homepage = "https://gitlab.com/rogs/opencode.el";
+            license = lib.licenses.gpl3;
           };
         };
       };
