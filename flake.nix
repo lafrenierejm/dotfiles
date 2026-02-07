@@ -24,7 +24,10 @@
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
-    ghq.url = "github:lafrenierejm/ghq/tilde-nix-flake";
+    ghq = {
+      url = "github:lafrenierejm/ghq/replace-tilde";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -68,6 +71,10 @@
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    "opencode.el" = {
+      url = "github:rogsme/opencode.el";
+      flake = false;
     };
     ripgrep-all.url = "github:lafrenierejm/ripgrep-all/native-yaml";
     treefmt-nix = {
