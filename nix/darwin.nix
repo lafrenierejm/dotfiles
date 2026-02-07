@@ -127,7 +127,7 @@ in (lib.attrsets.mergeAttrsList [
           Ivory = 6444602274;
           Kindle = 302584613;
           Manet-Music = 6470928235;
-          Parcel = 639968404;
+          Parcel = 375589283; # Parcel-Classic = 639968404;
           Whisper-Transcription = 1668083311;
         })
       ];
