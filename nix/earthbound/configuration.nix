@@ -10,7 +10,15 @@
   system,
   userName,
   ...
-}: {
+}: let
+  systemsLinuxCross = [
+    "aarch64-linux"
+    "armv6l-linux"
+    "armv7l-linux"
+    "loongarch64-linux"
+    "riscv64-linux"
+  ];
+in {
   imports = [
     ./hardware-configuration.nix
     ./filesystem.nix
@@ -29,6 +37,10 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # Enable cross-compilation for all Linux systems
+  boot.binfmt.emulatedSystems = systemsLinuxCross;
+  nix.settings.extra-platforms = systemsLinuxCross;
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
