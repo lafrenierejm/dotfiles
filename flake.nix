@@ -172,6 +172,7 @@
 
         pre-commit = {
           check.enable = true;
+          settings.package = pkgs.prek;
           settings.hooks = {
             editorconfig-checker = {
               enable = true;
