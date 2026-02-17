@@ -339,6 +339,7 @@ in rec {
         dwim-shell-command
         eat
         editorconfig
+        eglot
         elfeed
         elfeed-org
         envrc
