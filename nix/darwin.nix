@@ -75,6 +75,7 @@
         "apparency"
         "gog-galaxy"
         "inkscape"
+        "microsoft-word"
         "netnewswire"
         "radio-silence"
         "snes9x"
