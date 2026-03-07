@@ -283,24 +283,18 @@ in rec {
 
     emacs = {
       enable = true;
-      package =
-        (
-          pkgs.emacs-git-pgtk.overrideAttrs (old: {
-            withTreeSitter = true;
-            withNativeCompilation = !pkgs.stdenv.isDarwin;
-            passthru = old.passthru // {treeSitter = true;};
-            patches =
-              (old.patches or [])
-              ++ (lib.lists.optionals pkgs.stdenv.isDarwin (
-                map (patchFilename: inputs.emacs-plus + "/patches/${patchFilename}") [
-                  "emacs-31/system-appearance.patch"
-                ]
-              ));
-          })
-        ).override {
-          # https://github.com/NixOS/nixpkgs/issues/395169
-          withNativeCompilation = !pkgs.stdenv.isDarwin;
-        };
+      package = pkgs.emacs-git-pgtk.overrideAttrs (old: {
+        withTreeSitter = true;
+        withNativeCompilation = true;
+        passthru = old.passthru // {treeSitter = true;};
+        patches =
+          (old.patches or [])
+          ++ (lib.lists.optionals pkgs.stdenv.isDarwin (
+            map (patchFilename: inputs.emacs-plus + "/patches/${patchFilename}") [
+              "emacs-31/system-appearance.patch"
+            ]
+          ));
+      });
       extraPackages = epkgs: (with epkgs; [
         # hindent
         adoc-mode
