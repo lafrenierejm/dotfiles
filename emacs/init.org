@@ -752,24 +752,11 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 ** Treesitter
 
 #+begin_src emacs-lisp
-(use-package tree-sitter
+(use-package treesit
   :demand
 
-  :mode
-  ("\\.env\\(?:\\.[^.]+\\)?\\'" . bash-ts-mode)
-  ("\\.json\\'" . json-ts-mode)
-  ("\\.jsonc\\'" . js-ts-mode)
-  ("\\.mjs\\'" . js-ts-mode)
-
-  :ghook
-  ('tree-sitter-mode-hook #'tree-sitter-hl-mode)
-
   :custom
-  (treesit-enabled-modes t "Use tree-sitter's major modes whenever available.")
-
-  :config
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode))
+  (treesit-enabled-modes t "Use tree-sitter wherever possible"))
 #+end_src
 
 *** /Evil TextObj Tree-Sitter/
@@ -777,7 +764,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 #+begin_src emacs-lisp
 (use-package evil-textobj-tree-sitter
   :demand
-  :after (:all evil tree-sitter)
+  :after (:all evil treesit)
 
   :config
   (defun evil-textobj-tree-sitter-define-key (key textobj)
@@ -791,16 +778,6 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   (evil-textobj-tree-sitter-define-key "b" "block")
   (evil-textobj-tree-sitter-define-key "s" "statement")
   (evil-textobj-tree-sitter-define-key "c" "call"))
-#+end_src
-
-*** /Eglot/
-
-#+begin_src emacs-lisp :noweb-ref eglot/ghook
-('(js-ts-mode-hook
-   json-ts-mode-hook
-   rust-ts-mode-hook
-   yaml-ts-mode-hook)
- #'eglot-ensure)
 #+end_src
 
 * Buffer Organization

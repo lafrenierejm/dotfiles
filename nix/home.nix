@@ -425,8 +425,6 @@ in rec {
         standard-dirs
         terraform-mode
         toml-mode
-        tree-sitter
-        tree-sitter-langs
         treesit-grammars.with-all-grammars
         vterm
         webpaste
