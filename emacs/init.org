@@ -3346,6 +3346,10 @@ EditorConfig files are easily readable and they work nicely with version control
 #+begin_src emacs-lisp
 (use-package editorconfig
   :demand
+
+  :mode
+  ("\\.env\\(?:\\.[^.]+\\)?\\'" . editorconfig-conf-mode)
+
   :config
   (editorconfig-mode 1))
 #+end_src
