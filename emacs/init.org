@@ -756,7 +756,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :demand
 
   :custom
-  (treesit-enabled-modes t "Use tree-sitter wherever possible"))
+  (treesit-enabled-modes t "Use tree-sitter wherever possible")
+  (treesit-font-lock-level 4 "Fontify everything"))
 #+end_src
 
 *** /Evil TextObj Tree-Sitter/
