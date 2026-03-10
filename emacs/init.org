@@ -5985,6 +5985,12 @@ The package's [[https://github.com/purcell/package-lint][homepage]] describes /P
   :mode (("\\.j2\\'" . jinja2-mode)))
 #+end_src
 
+** Just
+
+#+begin_src emacs-lisp
+(use-package just-ts-mode)
+#+end_src
+
 ** UNIX Shell
 
 *** /Sh Script/
