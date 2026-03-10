@@ -5201,7 +5201,6 @@ It started out from Aurélien Tisné's ini-mode.
   :mode
   ("\\.service\\'" . conf-unix-mode)
   ("/\\.flake8\\'" . conf-unix-mode)
-  ("/\\.editorconfig\\'" . conf-unix-mode)
 
   :config
   (add-to-list 'auto-mode-alist (cons conf-mode-ssh-config-dir #'conf-space-mode)))
