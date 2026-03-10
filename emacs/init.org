@@ -766,6 +766,9 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 (use-package treesit
   :demand
 
+  :mode
+  ("\\.toml" . toml-ts-mode)
+
   :custom
   (treesit-enabled-modes t "Use tree-sitter wherever possible")
   (treesit-font-lock-level 4 "Fontify everything"))
