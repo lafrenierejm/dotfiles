@@ -389,6 +389,7 @@ in rec {
         monet
         monky
         nix-mode
+        nix-ts-mode
         no-littering
         nodejs-repl
         notmuch

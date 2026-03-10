@@ -680,7 +680,18 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :custom
   (indent-bars-treesit-support t)
   (indent-bars-treesit-scope
-   '((rust
+   '((nix
+      apply_expression
+      attrpath
+      attrset_expression
+      binding_set
+      list_expression
+      parenthesized_expression
+      path_expression
+      select_expression
+      string_expression
+      variable_expression)
+     (rust
       trait_item
       impl_item
       macro_definition
@@ -6380,15 +6391,19 @@ Define the actual Polymode.
 
 #+begin_src emacs-lisp
 (use-package nix-mode
-  :mode "\\.nix\\'"
-
   :general
-  (:keymaps 'nix-mode-map
+  (:keymaps 'nix-ts-mode-map
    "C-c C-p" #'nix-repl))
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref eglot/ghook
 ('nix-mode-hook #'eglot-ensure)
+#+end_src
+
+*** /Nix TS Mode/
+#+begin_src emacs-lisp
+(use-package nix-ts-mode
+  :mode "\\.nix\\'")
 #+end_src
 
 *** Autoformat
