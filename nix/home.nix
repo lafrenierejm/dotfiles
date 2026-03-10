@@ -427,6 +427,7 @@ in rec {
         terraform-mode
         toml-mode
         treesit-grammars.with-all-grammars
+        vimscript-ts-mode
         vterm
         webpaste
         which-key

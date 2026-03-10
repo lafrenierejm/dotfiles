@@ -6722,6 +6722,12 @@ Enable \src_emacs-lisp{display-line-numbers-mode} in \src_emacs-lisp{tcl-mode} b
   :mode (("poetry\\.lock\\'" . toml-mode)))
 #+end_src
 
+** Vimscript
+
+#+begin_src emacs-lisp
+(use-package vimscript-ts-mode)
+#+end_src
+
 ** YAML
 
 *** /YAML Mode/
