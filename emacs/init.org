@@ -674,6 +674,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp
 (use-package indent-bars
+  :after treesit
+
   :ghook
   ('prog-mode-hook #'indent-bars-mode)
 
