@@ -296,7 +296,6 @@ in rec {
           ));
       });
       extraPackages = epkgs: (with epkgs; [
-        # hindent
         adoc-mode
         aggressive-indent
         ahk-mode
