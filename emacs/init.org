@@ -6396,6 +6396,13 @@ Define the actual Polymode.
 (use-package lua-mode)
 #+end_src
 
+** Mermaid
+
+#+begin_src emacs-lisp
+(use-package mermaid-ts-mode
+  :mode ("\\.mmd\\'" . mermaid-ts-mode))
+#+end_src
+
 ** Nix
 
 *** /Nix Mode/

@@ -384,6 +384,7 @@ in rec {
         magit
         markdown-mode
         mcp
+        mermaid-ts-mode
         claude-code
         minions
         modus-themes
