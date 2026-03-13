@@ -375,7 +375,6 @@ in rec {
         ivy-hydra
         ivy-pass
         ivy-rich
-        ivy-yasnippet
         jinja2-mode
         journalctl-mode
         json5-ts-mode
@@ -439,7 +438,6 @@ in rec {
         x509-mode
         xonsh-mode
         yaml-mode
-        yasnippet
         youtube-dl
       ]);
       overrides = self: super: {

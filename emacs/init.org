@@ -3007,52 +3007,6 @@ Use child frames for /Company/'s candidate menus.
           desktop-minor-mode-table)))
 #+end_src
 
-** YASnippet
-
-#+begin_src emacs-lisp
-(use-package yasnippet
-  ;; Load this package eagerly.
-  :demand
-
-  ;; Evaluate the following code after loading this package.
-  :config
-  <<yasnippet/config>>)
-#+end_src
-
-*** Post-Load Evaluation
-:PROPERTIES:
-:HEADER-ARGS+: :noweb-ref yasnippet/config
-:END:
-
-Enable \src_emacs-lisp{yas-global-mode}.
-#+begin_src emacs-lisp
-(yas-global-mode 1)
-#+end_src
-
-**** Guix Package /emacs-yasnippet-snippets/
-
-Add the snippets from the Guix package /emacs-yasnippet-snippets/.
-#+begin_src emacs-lisp
-(with-eval-after-load 'guix-profiles
-  (when-let* (guix-user-profile
-              (emacs-yasnippet-snippets-dir (expand-file-name
-                                             "share/emacs/yasnippet-snippets"
-                                             guix-user-profile))
-              ((file-accessible-directory-p emacs-yasnippet-snippets-dir)))
-    (add-to-list 'yas-snippet-dirs emacs-yasnippet-snippets-dir)))
-#+end_src
-
-** Ivy YASnippet
-
-#+begin_src emacs-lisp
-(use-package ivy-yasnippet
-  ;; Load this package after the following packages.
-  :after (ivy yasnippet)
-
-  ;; Load this package eagerly.
-  :demand)
-#+end_src
-
 * System Management
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref system
