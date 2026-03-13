@@ -6851,6 +6851,9 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   :bind-keymap
   ("C-c c" . claude-code-command-map)
 
+  :custom
+  (claude-code-display-window-fn #'switch-to-buffer-other-frame)
+
   :config
   (claude-code-mode))
 #+end_src
