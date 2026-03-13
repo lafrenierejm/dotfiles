@@ -395,6 +395,7 @@ in rec {
         nodejs-repl
         notmuch
         nov
+        nushell-ts-mode
         opencode
         origami
         package-lint

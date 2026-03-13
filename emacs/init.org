@@ -6425,6 +6425,13 @@ Define the actual Polymode.
   :args '("-"))
 #+end_src
 
+** Nushell
+
+#+begin_src emacs-lisp
+(use-package nushell-ts-mode
+  :mode ("\\.nu\\'" . nushell-ts-mode))
+#+end_src
+
 ** Prisma
 
 *** /Prisma TS Mode/
