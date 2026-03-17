@@ -6372,10 +6372,23 @@ Define the actual Polymode.
 
 *** Autoformat
 
+**** Alejandra
+
+https://github.com/kamadorueda/alejandra
+
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define nix-alejandra
   :program "alejandra"
   :args '("-"))
+#+end_src
+
+**** Nixfmt
+
+https://github.com/NixOS/nixfmt
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define nixfmt
+  :program "nixfmt")
 #+end_src
 
 ** Nushell
