@@ -65,7 +65,6 @@ in rec {
           aws-sso-creds
           awscli2
           babashka
-          bash-language-server
           bfg-repo-cleaner
           cachix
           clang-tools
@@ -73,7 +72,6 @@ in rec {
           coreutils
           curl
           dos2unix
-          efm-langserver
           exiftool
           eza
           fd
@@ -84,7 +82,6 @@ in rec {
           github-mcp-server
           gitstatus
           gnupg
-          graphql-language-service-cli
           hyperfine
           id3v2
           ispell
@@ -94,35 +91,38 @@ in rec {
           mosh
           mpv
           mu
-          nixd
-          nodePackages_latest.prettier
-          nodePackages_latest.vscode-json-languageserver
           opencode
           opentofu
           pre-commit
-          pyright
           python3
           ripgrep
           rsync
-          rust-analyzer
           shellcheck
           shfmt
           subversion
-          terraform-docs
-          terraform-ls
           tflint
-          typescript-language-server
           typos
           unzip
-          vale
-          vale-ls
-          yaml-language-server
           yt-dlp
         ])
         (with pkgsTrunk; [
+          bash-language-server
           dockerfmt
+          efm-langserver
+          graphql-language-service-cli
+          nixd
           pnpm
+          prettier
+          pyright
+          rust-analyzer
+          terraform-docs
+          terraform-ls
+          typescript-language-server
           uv
+          vale
+          vale-ls
+          vscode-json-languageserver
+          yaml-language-server
         ])
         (lib.lists.optionals personal [
           pkgs.imagemagick
