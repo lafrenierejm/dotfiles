@@ -3595,6 +3595,13 @@ This is used to remap the characters that Claude Code uses for its spinner and r
 ('eat-mode-hook #'prettify-symbols-mode)
 #+end_src
 
+*** Unbind C-z
+
+#+begin_src emacs-lisp :noweb-ref eat/config
+(add-to-list 'eat-semi-char-non-bound-keys [?\C-z])
+(eat-update-semi-char-mode-map)
+#+end_src
+
 ** Emacs Shell
 *** Esh Mode
 #+begin_src emacs-lisp
