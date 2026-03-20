@@ -1,4 +1,5 @@
 /*
+!.gitignore
 !/.editorconfig
 !/.typos.toml
 !/LICENSE
@@ -12,6 +13,7 @@
 !/clojure/
 !/cron/
 !/emacs/
+!/firefox/
 !/flake.lock
 !/flake.nix
 !/guix/
