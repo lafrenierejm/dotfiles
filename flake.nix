@@ -220,6 +220,8 @@
             config.allowUnfreePredicate = pkg:
               builtins.elem (lib.getName pkg) [
                 "claude-code"
+                "firefox-bin"
+                "firefox-bin-unwrapped"
               ];
           };
           pkgsTrunk = legacyPackagesTrunk."${system}";
@@ -254,6 +256,8 @@
                 nixpkgs.config.allowUnfreePredicate = pkg:
                   builtins.elem (lib.getName pkg) [
                     "claude-code"
+                    "firefox-bin"
+                    "firefox-bin-unwrapped"
                   ];
                 nixpkgs.overlays = [
                   inputs.emacs-overlay.overlays.default
@@ -289,6 +293,8 @@
             config.allowUnfreePredicate = pkg:
               builtins.elem (lib.getName pkg) [
                 "claude-code"
+                "firefox-bin"
+                "firefox-bin-unwrapped"
               ];
           };
           pkgsTrunk = legacyPackagesTrunk."${system}";

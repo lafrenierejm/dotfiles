@@ -489,7 +489,7 @@ in rec {
 
     firefox = {
       enable = personal && pkgs.stdenv.isLinux;
-      package = pkgs.firefox;
+      package = pkgs.firefox-bin;
       profiles."personal.default" = {
         id = 0;
         name = "personal";
