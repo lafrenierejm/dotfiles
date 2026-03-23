@@ -69,7 +69,6 @@ in rec {
           bfg-repo-cleaner
           cachix
           clang-tools
-          claude-code
           clojure
           coreutils
           curl
@@ -127,6 +126,7 @@ in rec {
         ])
         (lib.lists.optionals personal [
           pkgs.imagemagick
+          pkgsTrunk.claude-code-bin
           (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
             beets
             ffmpeg-headless
