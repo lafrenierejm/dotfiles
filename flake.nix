@@ -17,7 +17,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     emacs-plus = {
       url = "github:d12frosted/homebrew-emacs-plus";
       flake = false;
@@ -26,6 +29,7 @@
     flake-root.url = "github:srid/flake-root";
     ghq = {
       url = "github:lafrenierejm/ghq/replace-tilde";
+      inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     git-hooks = {
@@ -36,7 +40,13 @@
       url = "github:github/gitignore";
       flake = false;
     };
-    gron.url = "github:lafrenierejm/gron";
+    gron = {
+      url = "github:lafrenierejm/gron";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.git-hooks.follows = "git-hooks";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-bundle = {
       url = "github:homebrew/homebrew-bundle";
@@ -58,25 +68,39 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mac-app-util.url = "github:hraban/mac-app-util";
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     "monet.el" = {
       url = "github:lafrenierejm/monet/package-buffer-info";
       flake = false;
     };
-    mujmap.url = "github:lafrenierejm/mujmap";
+    mujmap = {
+      url = "github:lafrenierejm/mujmap";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur = {
       url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
     "opencode.el" = {
       url = "github:rogsme/opencode.el";
       flake = false;
     };
-    ripgrep-all.url = "github:lafrenierejm/ripgrep-all/native-yaml";
+    ripgrep-all = {
+      url = "github:lafrenierejm/ripgrep-all/native-yaml";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs-trunk";
