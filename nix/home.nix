@@ -625,11 +625,6 @@ in rec {
       userName = realName;
     };
 
-    mujmap = {
-      enable = personal;
-      package = inputs.mujmap.packages."${system}".mujmap;
-    };
-
     notmuch.enable = personal;
 
     pandoc.enable = true;

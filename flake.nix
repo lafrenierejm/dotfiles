@@ -77,12 +77,6 @@
       url = "github:lafrenierejm/monet/package-buffer-info";
       flake = false;
     };
-    mujmap = {
-      url = "github:lafrenierejm/mujmap";
-      inputs.flake-parts.follows = "flake-parts";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.treefmt-nix.follows = "treefmt-nix";
-    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
