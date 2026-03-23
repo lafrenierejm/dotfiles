@@ -18,7 +18,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
+      url = "github:nix-community/emacs-overlay/ff1c7595a7ba4b969e998863d86d19c7db13f345";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-plus = {
@@ -90,7 +90,7 @@
       flake = false;
     };
     ripgrep-all = {
-      url = "github:lafrenierejm/ripgrep-all/native-yaml";
+      url = "github:lafrenierejm/ripgrep-all";
       inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
