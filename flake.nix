@@ -205,8 +205,12 @@
 
       flake = let
         realName = "Joseph LaFreniere";
-        legacyPackages = inputs.nixpkgs.legacyPackages;
-        legacyPackagesTrunk = inputs.nixpkgs-trunk.legacyPackages;
+        unfreePackageFilter = pkg:
+          builtins.elem (inputs.nixpkgs.lib.getName pkg) [
+            "claude-code"
+            "firefox-bin"
+            "firefox-bin-unwrapped"
+          ];
       in {
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
@@ -217,15 +221,12 @@
             overlays = [
               inputs.emacs-overlay.overlays.default
             ];
-            config.allowUnfreePredicate = pkg:
-              builtins.elem (lib.getName pkg) [
-                "claude-code"
-                "firefox-bin"
-                "firefox-bin-unwrapped"
-              ];
+            config.allowUnfreePredicate = unfreePackageFilter;
           };
-          pkgsTrunk = legacyPackagesTrunk."${system}";
-          lib = pkgs.lib;
+          pkgsTrunk = import inputs.nixpkgs-trunk {
+            inherit system;
+            config.allowUnfreePredicate = unfreePackageFilter;
+          };
           system = "aarch64-darwin";
           hosts = {
             airborn = {
@@ -253,12 +254,7 @@
               ./nix/common.nix
               ./nix/darwin.nix
               {
-                nixpkgs.config.allowUnfreePredicate = pkg:
-                  builtins.elem (lib.getName pkg) [
-                    "claude-code"
-                    "firefox-bin"
-                    "firefox-bin-unwrapped"
-                  ];
+                nixpkgs.config.allowUnfreePredicate = unfreePackageFilter;
                 nixpkgs.overlays = [
                   inputs.emacs-overlay.overlays.default
                 ];
@@ -268,7 +264,8 @@
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.users."${values.userName}" = import ./nix/home.nix rec {
-                  inherit inputs lib pkgs pkgsTrunk realName system;
+                  inherit inputs pkgs pkgsTrunk realName system;
+                  inherit (pkgs) lib;
                   inherit (values) gitEmail personal userName;
                   gitUseGpg = true;
                 };
@@ -290,15 +287,12 @@
               inputs.emacs-overlay.overlays.default
               inputs.nur.overlays.default
             ];
-            config.allowUnfreePredicate = pkg:
-              builtins.elem (lib.getName pkg) [
-                "claude-code"
-                "firefox-bin"
-                "firefox-bin-unwrapped"
-              ];
+            config.allowUnfreePredicate = unfreePackageFilter;
           };
-          pkgsTrunk = legacyPackagesTrunk."${system}";
-          lib = pkgs.lib;
+          pkgsTrunk = import inputs.nixpkgs-trunk {
+            inherit system;
+            config.allowUnfreePredicate = unfreePackageFilter;
+          };
         in {
           earthbound = let
             userName = "lafrenierejm";
@@ -326,7 +320,8 @@
                   home-manager.useUserPackages = true;
                   home-manager.users."${userName}" =
                     import ./nix/home.nix {
-                      inherit inputs personal system realName userName pkgs pkgsTrunk lib;
+                      inherit inputs personal system realName userName pkgs pkgsTrunk;
+                      inherit (pkgs) lib;
                       gitEmail = "git@${domain}";
                       gitUseGpg = true;
                     }
