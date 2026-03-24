@@ -3390,6 +3390,9 @@ You might want to use this to set dir-local variables that apply to all of your 
   :gfhook
   ('comint-output-filter-functions #'comint-osc-process-output)
 
+  :custom
+  (comint-prompt-read-only t "Prevent editing shell prompt output.")
+
   :general
   <<comint/general>>)
 #+end_src
