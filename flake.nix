@@ -265,7 +265,7 @@
           (host: values: (inputs.darwin.lib.darwinSystem {
             inherit system;
             modules = [
-              inputs.agenix.nixosModules.default
+              inputs.agenix.darwinModules.default
               inputs.homebrew.darwinModules.nix-homebrew
               inputs.home-manager.darwinModules.home-manager
               inputs.mac-app-util.darwinModules.default
