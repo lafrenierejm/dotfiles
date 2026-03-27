@@ -126,6 +126,7 @@ in rec {
         ])
         (lib.lists.optionals personal [
           pkgs.imagemagick
+          pkgsTrunk.claude-agent-acp
           pkgsTrunk.claude-code-bin
           (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
             beets
@@ -297,6 +298,7 @@ in rec {
       });
       extraPackages = epkgs: (with epkgs; [
         adoc-mode
+        agent-shell
         aggressive-indent
         ahk-mode
         ansible
