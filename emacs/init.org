@@ -6892,6 +6892,37 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   (monet-mode 1))
 #+end_src
 
+** Agent Client Protocol (ACP)
+
+#+begin_src emacs-lisp
+(use-package agent-shell
+
+  :general
+  (:keymaps 'agent-shell-mode-map
+   "RET" #'newline
+   "M-RET" #'comint-send-input)
+
+  :ghook
+  ('diff-mode-hook #'agent-shell/diff-in-emacs-state)
+
+  :custom
+  (agent-shell-header-style 'text "Do not display header")
+
+  :config
+  (setq
+   ;; Default to Claude Code Agent.
+   agent-shell-preferred-agent-config
+   (agent-shell-anthropic-make-claude-code-config)
+   ;; Use interactive login for Claude.
+   agent-shell-anthropic-authentication
+   (agent-shell-anthropic-make-authentication :login t))
+
+  (defun agent-shell/diff-in-emacs-state ()
+    "Start agent-shell-diff buffers in Emacs state."
+    (when (string-match-p "\\*agent-shell-diff\\*" (buffer-name))
+      (evil-emacs-state))))
+#+end_src
+
 * Web
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref web
