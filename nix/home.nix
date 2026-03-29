@@ -408,6 +408,8 @@ in rec {
         ];
       in
         lib.lists.flatten (map (op: map (p: "${op}(${p})") paths) ["Read" "Edit" "Write"]);
+      settings.sandbox.enabled = true;
+      settings.sandbox.allowUnsandboxedCommands = false;
     };
 
     chromium = {
