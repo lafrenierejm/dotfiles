@@ -377,6 +377,37 @@ in rec {
             "status"
           ])
         ]);
+      settings.permissions.deny = let
+        paths = [
+          # env files
+          "**/.env"
+          "**/.env.*"
+          # credentials & tokens
+          "~/.aws/credentials"
+          "~/.azure/**"
+          "~/.config/gcloud/**"
+          "~/.config/op/**"
+          "~/.docker/config.json"
+          "~/.git-credentials"
+          "~/.gnupg/**"
+          "~/.kube/config"
+          "~/.netrc"
+          "~/.ssh/config"
+          "~/.ssh/id_*"
+          "~/.terraformrc"
+          "~/.vault-token"
+          "**/.npmrc"
+          # private keys & certs
+          "**/*.key"
+          "**/*.p12"
+          "**/*.pem"
+          "**/*.pfx"
+          # terraform state
+          "**/*.tfstate"
+          "**/*.tfstate.backup"
+        ];
+      in
+        lib.lists.flatten (map (op: map (p: "${op}(${p})") paths) ["Read" "Edit" "Write"]);
     };
 
     chromium = {
