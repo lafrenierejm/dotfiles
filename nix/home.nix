@@ -127,7 +127,6 @@ in rec {
         (lib.lists.optionals personal [
           pkgs.imagemagick
           pkgsTrunk.claude-agent-acp
-          pkgsTrunk.claude-code-bin
           (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
             beets
             ffmpeg-headless
@@ -260,6 +259,78 @@ in rec {
         # Enable extended globbing patterns.
         "shopt -s extglob"
       ];
+    };
+
+    claude-code = {
+      enable = personal;
+      package = pkgsTrunk.claude-code-bin;
+      settings.permissions.allow =
+        map
+        (cmd: "Bash(${cmd}:*)")
+        (lib.lists.flatten [
+          "basename"
+          "cat"
+          "comm"
+          "date"
+          "diff"
+          "dirname"
+          "echo"
+          "env"
+          "expand"
+          "false"
+          "find"
+          "fold"
+          "grep"
+          "head"
+          "join"
+          "ls"
+          "md5sum"
+          "nl"
+          "od"
+          "paste"
+          "printenv"
+          "printf"
+          "pwd"
+          "readlink"
+          "realpath"
+          "rg"
+          "seq"
+          "sha256sum"
+          "shuf"
+          "sort"
+          "stat"
+          "tac"
+          "tail"
+          "tee"
+          "tr"
+          "true"
+          "type"
+          "uname"
+          "unexpand"
+          "uniq"
+          "wc"
+          "which"
+          "xxd"
+          "yes"
+          # git subcommands
+          (map (sub: "git ${sub}") [
+            "blame"
+            "describe"
+            "diff"
+            "grep"
+            "log"
+            "ls-files"
+            "ls-remote"
+            "ls-tree"
+            "rev-list"
+            "rev-parse"
+            "shortlog"
+            "show"
+            "show-branch"
+            "show-ref"
+            "status"
+          ])
+        ]);
     };
 
     chromium = {
