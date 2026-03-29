@@ -412,6 +412,9 @@ in rec {
       settings.sandbox.allowUnsandboxedCommands = false;
       settings.attribution.commit = "";
       settings.attribution.pr = "";
+      settings.feedbackSurveyRate = 0;
+      settings.prefersReducedMotion = true;
+      settings.spinnerTipsEnabled = false;
     };
 
     chromium = {
