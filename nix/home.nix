@@ -410,6 +410,13 @@ in rec {
         lib.lists.flatten (map (op: map (p: "${op}(${p})") paths) ["Read" "Edit" "Write"]);
       settings.sandbox.enabled = true;
       settings.sandbox.allowUnsandboxedCommands = false;
+      settings.sandbox.filesystem.allowRead = map (dir: "~/Documents/${dir}/") [
+        "codeberg.org"
+        "git.sr.ht"
+        "github.com"
+        "gitlab.com"
+      ];
+      settings.sandbox.filesystem.denyRead = ["~/"];
       settings.attribution.commit = "";
       settings.attribution.pr = "";
       settings.feedbackSurveyRate = 0;
