@@ -134,10 +134,10 @@ in rec {
             nicotine-plus
             picard
           ]))
+          (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
+            skhd
+          ]))
         ])
-        (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
-          skhd
-        ]))
         (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
           bitwarden-desktop
           dconf2nix
