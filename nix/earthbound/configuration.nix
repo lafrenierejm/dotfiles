@@ -91,16 +91,7 @@ in {
     teensy-udev-rules
   ];
 
-  # Allow unfree packages
-  # nixpkgs.config.permittedInsecurePackages = [
-  #   # needed for Folding@home
-  #   "python-2.7.18.8"
-  #   "python-2.7.18.8-env"
-  #   # "electron-24.8.6"
-  # ];
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # Packages installed in system profile.
   environment.systemPackages = with pkgs; [
     bandwhich
     clinfo
@@ -126,14 +117,6 @@ in {
       ];
     }
   ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   # Enable the OpenSSH daemon.
   services.openssh = {
