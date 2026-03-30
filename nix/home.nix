@@ -526,7 +526,6 @@ in rec {
         go-eldoc
         go-mode
         gorepl-mode
-        gptel
         graphql-ts-mode
         groovy-mode
         guix
@@ -547,7 +546,6 @@ in rec {
         lua-mode
         magit
         markdown-mode
-        mcp
         mermaid-ts-mode
         claude-code
         minions

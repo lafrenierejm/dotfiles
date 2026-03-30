@@ -6842,31 +6842,6 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 :HEADER-ARGS+: :noweb-ref llm
 :END:
 
-#+begin_src emacs-lisp
-(use-package gptel
-  :general
-  ("C-c l" #'gptel-menu)
-  :config
-  (setq
-   gptel-backend (gptel-make-ollama "earthbound"
-                   :host "localhost:11434"
-                   :stream t
-                   :models '(qwen2.5-coder:7b))
-   gptel-model 'qwen2.5-coder:7b))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package mcp
-  :ensure t
-  :after gptel
-  :custom
-  (mcp-hub-servers
-   `(("github" . (:command "github-mcp-server"
-                  :args ("stdio")))))
-  :config
-  (require 'gptel-integrations))
-#+end_src
-
 ** /Claude Code/
 
 #+begin_src emacs-lisp
