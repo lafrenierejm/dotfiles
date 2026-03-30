@@ -27,8 +27,7 @@ in {
     ../linux/graphical.nix
   ];
 
-  # Use latest kernel that supports ZFS.
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12_hardened;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18; # LTS supported through end of 2027
   boot.kernelParams = ["nohibernate"];
   boot.kernel.sysctl = {
     "kernel.unprivileged_userns_clone" = 1; # allow non-privileged user namespaces
