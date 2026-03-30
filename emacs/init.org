@@ -6881,7 +6881,8 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   ('diff-mode-hook #'agent-shell/diff-in-emacs-state)
 
   :custom
-  (agent-shell-header-style 'text "Do not display header")
+  (agent-shell-header-style nil "Do not display header")
+  (agent-shell-show-welcome-message nil "Do not display welcome message")
 
   :config
   (setq
