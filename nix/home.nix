@@ -71,6 +71,8 @@ in rec {
           clojure
           coreutils
           curl
+          dogedns
+          doggo
           dos2unix
           exiftool
           eza
