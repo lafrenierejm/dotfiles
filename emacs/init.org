@@ -6871,8 +6871,8 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 
 #+begin_src emacs-lisp
 (use-package agent-shell
-
   :general
+  ("C-c a" #'agent-shell)
   (:keymaps 'agent-shell-mode-map
    "RET" #'newline
    "M-RET" #'comint-send-input)
