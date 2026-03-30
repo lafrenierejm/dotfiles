@@ -489,7 +489,7 @@ in rec {
         deadgrep
         desktop-environment
         diff-hl
-        # difftastic
+        difftastic
         dired-collapse
         dired-narrow
         dired-subtree
