@@ -604,6 +604,7 @@ in rec {
         youtube-dl
       ]);
       overrides = self: super: {
+        agent-shell = self.melpaPackages.agent-shell;
         browse-at-remote = self.melpaPackages.browse-at-remote.overrideAttrs {
           src = pkgs.fetchFromGitHub {
             owner = "lafrenierejm";
