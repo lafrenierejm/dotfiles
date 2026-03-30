@@ -6876,9 +6876,9 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   (:keymaps 'agent-shell-mode-map
    "RET" #'newline
    "M-RET" #'comint-send-input)
-
-  :ghook
-  ('diff-mode-hook #'agent-shell/diff-in-emacs-state)
+  (:keymaps 'agent-shell-diff-mode-map
+   :states '(movement normal)
+   "C-c C-y" #'agent-shell-diff-accept-all)
 
   :custom
   (agent-shell-header-style nil "Do not display header")
@@ -6891,12 +6891,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
    (agent-shell-anthropic-make-claude-code-config)
    ;; Use interactive login for Claude.
    agent-shell-anthropic-authentication
-   (agent-shell-anthropic-make-authentication :login t))
-
-  (defun agent-shell/diff-in-emacs-state ()
-    "Start agent-shell-diff buffers in Emacs state."
-    (when (string-match-p "\\*agent-shell-diff\\*" (buffer-name))
-      (evil-emacs-state))))
+   (agent-shell-anthropic-make-authentication :login t)))
 #+end_src
 
 * Web
