@@ -591,6 +591,7 @@ in rec {
         standard-dirs
         terraform-mode
         toml-mode
+        treesit-fold
         treesit-grammars.with-all-grammars
         vimscript-ts-mode
         vterm
