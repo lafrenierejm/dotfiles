@@ -84,6 +84,7 @@ in rec {
           github-mcp-server
           gitstatus
           gnupg
+          gnused
           hyperfine
           id3v2
           ispell
