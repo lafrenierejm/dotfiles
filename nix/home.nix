@@ -69,7 +69,7 @@ in rec {
           cachix
           clang-tools
           clojure
-          coreutils
+          uutils-coreutils-noprefix
           curl
           dogedns
           doggo
