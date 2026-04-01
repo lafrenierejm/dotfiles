@@ -37,6 +37,7 @@
       (parseGitignore "/Global/Windows.gitignore")
       (parseGitignore "/Global/macOS.gitignore")
       [
+        ".agent-shell/"
         ".cache/"
         ".direnv/"
         "/.claude/settings.local.json"
