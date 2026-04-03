@@ -80,7 +80,6 @@
         "radio-silence"
         "snes9x"
         "steam"
-        "ungoogled-chromium"
         "visualboyadvance-m"
       ])
       (lib.lists.optionals (!personal) [
