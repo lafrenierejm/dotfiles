@@ -298,25 +298,5 @@ in {
       };
     };
     mimeApps.enable = true;
-    portal = {
-      enable = pkgs.stdenv.isLinux;
-      config = {
-        common.default = ["gtk"];
-        sway = {
-          default = ["wlr" "gtk"];
-          "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
-          "org.freedesktop.impl.portal.ScreenCast" = ["wlr"];
-        };
-      };
-      configPackages = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
-      xdgOpenUsePortal = true;
-    };
   };
 }
