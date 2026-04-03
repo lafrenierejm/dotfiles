@@ -281,22 +281,10 @@ in {
   ];
 
   xdg = {
-    desktopEntries = {
-      "com.mitchellh.ghostty" = {
-        name = "Ghostty";
-        genericName = "Terminal";
-        icon = "terminal";
-      };
-      firefox = {
-        name = "Firefox";
-        genericName = "Web Browser";
-        icon = "firefox";
-      };
-      transmission = {
-        name = "Transmission";
-        icon = "transmission";
-      };
-    };
     mimeApps.enable = true;
+    mimeApps.defaultApplicationPackages = with pkgs; [
+      firefox-bin
+      swayimg
+    ];
   };
 }
