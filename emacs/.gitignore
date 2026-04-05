@@ -7,6 +7,7 @@
 .org-id-locations
 /agent/
 /elpa/
+/emms/
 /straight/
 debbugs
 eln-cache/
