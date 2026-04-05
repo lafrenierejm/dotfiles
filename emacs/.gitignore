@@ -5,6 +5,7 @@
 *.sqlite
 .cask
 .org-id-locations
+/agent/
 /elpa/
 /straight/
 debbugs
