@@ -442,6 +442,7 @@ in rec {
 
     direnv = {
       enable = true;
+      package = pkgs.direnv.overrideAttrs (_: {doCheck = pkgs.stdenv.isDarwin;}); # https://github.com/NixOS/nixpkgs/issues/507531
       enableBashIntegration = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
