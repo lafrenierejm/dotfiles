@@ -7082,6 +7082,15 @@ Allow resizing frames by pixel.
 (setq frame-resize-pixelwise t)
 #+end_src
 
+** Title Bar
+
+Disable the title bar on Linux.
+
+#+begin_src emacs-lisp
+(when (eq system-type 'gnu/linux)
+  (add-to-list 'default-frame-alist '(undecorated . t)))
+#+end_src
+
 ** Minions
 #+BEGIN_QUOTE
 A minor-mode menu for the mode line.

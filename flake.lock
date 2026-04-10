@@ -75,6 +75,22 @@
         "type": "github"
       }
     },
+    "cramt-nixconf": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775724524,
+        "narHash": "sha256-4K/iV5njgJ4RcF8DtzRXSy3hrMwlBpVTFsbB1irN//M=",
+        "owner": "cramt",
+        "repo": "nixconf",
+        "rev": "c793030238d08d328eef410c2ae92678de0a7a23",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cramt",
+        "repo": "nixconf",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1767744144,
@@ -1106,6 +1122,7 @@
       "inputs": {
         "agenix": "agenix",
         "claude-code.el": "claude-code.el",
+        "cramt-nixconf": "cramt-nixconf",
         "darwin": "darwin_2",
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",

@@ -9,6 +9,10 @@
       url = "github:stevemolitor/claude-code.el";
       flake = false;
     };
+    cramt-nixconf = {
+      url = "github:cramt/nixconf";
+      flake = false;
+    };
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -149,9 +153,6 @@
                   };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.modules = [
-                    ./nix/home/sway.nix
-                  ];
                   home-manager.users."${username}" = import ./nix/home.nix;
                   users.users."${username}" = {
                     home = "/home/${username}";
@@ -299,11 +300,17 @@
 
         nixosConfigurations = let
           system = "x86_64-linux";
+          cosmicNoSsdOverlay = final: prev: {
+            cosmic-comp = prev.cosmic-comp.overrideAttrs (old: {
+              patches = (old.patches or []) ++ ["${inputs.cramt-nixconf}/patches/no_ssd.patch"];
+            });
+          };
           pkgs = import inputs.nixpkgs {
             inherit system;
             overlays = [
               inputs.emacs-overlay.overlays.default
               inputs.nur.overlays.default
+              cosmicNoSsdOverlay
             ];
             config.allowUnfreePredicate = unfreePackageFilter;
           };
@@ -332,6 +339,7 @@
                   nixpkgs.overlays = [
                     inputs.emacs-overlay.overlays.default
                     inputs.nur.overlays.default
+                    cosmicNoSsdOverlay
                   ];
                   home-manager.backupFileExtension = "bak";
                   home-manager.useGlobalPkgs = true;
@@ -345,8 +353,6 @@
                     }
                     // {
                       imports = [
-                        ./nix/home/theme.nix
-                        ./nix/home/sway.nix
                         ./nix/home/udiskie.nix
                       ];
                     };
