@@ -93,7 +93,6 @@ in rec {
           jaq
           jotdown
           mosh
-          mpv
           mu
           opencode
           opentofu
@@ -146,6 +145,7 @@ in rec {
           bitwarden-desktop
           dconf2nix
           feishin
+          mpv
           pavucontrol
           signal-desktop
           transmission_4-gtk
