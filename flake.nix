@@ -192,25 +192,35 @@
         pre-commit = {
           check.enable = true;
           settings.package = pkgs.prek;
-          settings.hooks = {
+          settings.hooks = let
+            nonplaintext = [
+              ".*\\.age"
+              ".*\\.crypt"
+              ".*\\.gpg"
+            ];
+          in {
             editorconfig-checker = {
               enable = true;
-              excludes = [
-                ".*\\.age"
-                ".*\\.crypt"
-                ".*\\.gpg"
-              ];
+              excludes = nonplaintext;
+            };
+            end-of-file-fixer = {
+              enable = true;
+              excludes = nonplaintext;
             };
             ripsecrets = {
               enable = true;
-              excludes = [".*\\.crypt"];
+              excludes = nonplaintext;
             };
             statix.enable = true;
             taplo.enable = true;
+            trim-trailing-whitespace = {
+              enable = true;
+              excludes = nonplaintext;
+            };
             treefmt.enable = true;
             typos = {
               enable = true;
-              excludes = [".*\\.crypt"];
+              excludes = nonplaintext;
             };
           };
         };
