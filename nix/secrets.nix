@@ -17,11 +17,7 @@ in {
   "earthbound/luks.age".publicKeys = earthbound ++ lafrenierejm;
   "earthbound/tailscale.age".publicKeys = earthbound ++ lafrenierejm;
   "earthbound/zfs-hdd.age".publicKeys = earthbound ++ lafrenierejm;
-  "earthbound/ssl.crt.age" = {
-    publicKeys = earthbound ++ lafrenierejm;
-    armor = true;
-  };
-  "earthbound/ssl.key.age" = {
+  "earthbound/earthbound.fin-alioth.ts.net.key.age" = {
     publicKeys = earthbound ++ lafrenierejm;
     armor = true;
   };

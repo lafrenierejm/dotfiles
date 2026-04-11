@@ -49,14 +49,8 @@
   };
 
   # NGINX
-  age.secrets.sslCrt = {
-    file = ./ssl.crt.age;
-    owner = "nginx";
-    group = "nginx";
-    mode = "440";
-  };
   age.secrets.sslKey = {
-    file = ./ssl.key.age;
+    file = ./earthbound.fin-alioth.ts.net.key.age;
     owner = "nginx";
     group = "nginx";
     mode = "440";
@@ -89,16 +83,16 @@
             ssl = true;
           }
           {
-            addr = "earthbound.fin-alioth.ts.net";
+            addr = "0.0.0.0";
             port = 80;
           }
           {
-            addr = "earthbound.fin-alioth.ts.net";
+            addr = "0.0.0.0";
             port = 443;
             ssl = true;
           }
         ];
-        sslCertificate = config.age.secrets.sslCrt.path;
+        sslCertificate = ./earthbound.fin-alioth.ts.net.crt;
         sslCertificateKey = config.age.secrets.sslKey.path;
       };
     };
