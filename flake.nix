@@ -240,20 +240,35 @@
             "firefox-bin"
             "firefox-bin-unwrapped"
           ];
+        overlays = let
+          cosmicNoSsd = final: prev: {
+            cosmic-comp = prev.cosmic-comp.overrideAttrs (old: {
+              patches = (old.patches or []) ++ ["${inputs.cramt-nixconf}/patches/no_ssd.patch"];
+            });
+          };
+          direnvSkipTests = final: prev: {
+            # https://github.com/NixOS/nixpkgs/issues/507531
+            direnv = prev.direnv.overrideAttrs (_: {
+              doCheck = false;
+            });
+          };
+        in [
+          inputs.emacs-overlay.overlays.default
+          inputs.nur.overlays.default
+          cosmicNoSsd
+          direnvSkipTests
+        ];
       in {
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
         darwinConfigurations = let
           pkgs = import inputs.nixpkgs {
-            inherit system;
-            overlays = [
-              inputs.emacs-overlay.overlays.default
-            ];
+            inherit overlays system;
             config.allowUnfreePredicate = unfreePackageFilter;
           };
           pkgsTrunk = import inputs.nixpkgs-trunk {
-            inherit system;
+            inherit overlays system;
             config.allowUnfreePredicate = unfreePackageFilter;
           };
           system = "aarch64-darwin";
@@ -283,10 +298,10 @@
               ./nix/common.nix
               ./nix/darwin.nix
               {
-                nixpkgs.config.allowUnfreePredicate = unfreePackageFilter;
-                nixpkgs.overlays = [
-                  inputs.emacs-overlay.overlays.default
-                ];
+                nixpkgs = {
+                  inherit overlays;
+                  config.allowUnfreePredicate = unfreePackageFilter;
+                };
                 home-manager.sharedModules = [
                   inputs.mac-app-util.homeManagerModules.default
                 ];
@@ -310,18 +325,8 @@
 
         nixosConfigurations = let
           system = "x86_64-linux";
-          cosmicNoSsdOverlay = final: prev: {
-            cosmic-comp = prev.cosmic-comp.overrideAttrs (old: {
-              patches = (old.patches or []) ++ ["${inputs.cramt-nixconf}/patches/no_ssd.patch"];
-            });
-          };
           pkgs = import inputs.nixpkgs {
-            inherit system;
-            overlays = [
-              inputs.emacs-overlay.overlays.default
-              inputs.nur.overlays.default
-              cosmicNoSsdOverlay
-            ];
+            inherit overlays system;
             config.allowUnfreePredicate = unfreePackageFilter;
           };
           pkgsTrunk = import inputs.nixpkgs-trunk {
@@ -346,11 +351,7 @@
                 ./nix/common.nix
                 ./nix/earthbound/configuration.nix
                 {
-                  nixpkgs.overlays = [
-                    inputs.emacs-overlay.overlays.default
-                    inputs.nur.overlays.default
-                    cosmicNoSsdOverlay
-                  ];
+                  nixpkgs.overlays = overlays;
                   home-manager.backupFileExtension = "bak";
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
