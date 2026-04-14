@@ -193,6 +193,7 @@
           check.enable = true;
           settings.package = pkgs.prek;
           settings.hooks = let
+            cosmicConfigFiles = ["cosmic/com\\.system76\\..*/v1/.*"];
             nonplaintext = [
               ".*\\.age"
               ".*\\.crypt"
@@ -201,11 +202,11 @@
           in {
             editorconfig-checker = {
               enable = true;
-              excludes = nonplaintext;
+              excludes = cosmicConfigFiles ++ nonplaintext;
             };
             end-of-file-fixer = {
               enable = true;
-              excludes = nonplaintext;
+              excludes = cosmicConfigFiles ++ nonplaintext;
             };
             ripsecrets = {
               enable = true;
