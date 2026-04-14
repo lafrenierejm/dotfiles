@@ -12,9 +12,9 @@
         alpha: 1.0,
     ),
     pressed: (
-        red: 0.53913057,
+        red: 0.5391305,
         green: 0.3587384,
-        blue: 0.3567776,
+        blue: 0.35677758,
         alpha: 1.0,
     ),
     selected: (
@@ -36,13 +36,13 @@
         alpha: 1.0,
     ),
     divider: (
-        red: 0.0129200155,
-        green: 0.012919998,
-        blue: 0.012920001,
+        red: 0.0129199885,
+        green: 0.01292001,
+        blue: 0.012919978,
         alpha: 1.0,
     ),
     on: (
-        red: 0.0,
+        red: -0.0,
         green: 0.0,
         blue: 0.0,
         alpha: 1.0,
@@ -54,7 +54,7 @@
         alpha: 1.0,
     ),
     on_disabled: (
-        red: 0.0,
+        red: -0.0,
         green: 0.0,
         blue: 0.0,
         alpha: 0.5,

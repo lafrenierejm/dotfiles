@@ -54,4 +54,9 @@
     cosmic-edit
     cosmic-term
   ];
+  environment.systemPackages = with pkgs; [
+    whitesur-combined
+    whitesur-gtk-theme
+    whitesur-kde
+  ];
 }

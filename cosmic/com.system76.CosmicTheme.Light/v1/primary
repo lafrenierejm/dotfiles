@@ -21,7 +21,7 @@
         pressed: (
             red: 0.88445365,
             green: 0.88445336,
-            blue: 0.8844533,
+            blue: 0.88445324,
             alpha: 1.0,
         ),
         selected: (
@@ -32,26 +32,26 @@
         ),
         selected_text: (
             red: 0.0,
-            green: 0.32156864,
-            blue: 0.3529412,
+            green: 0.47843146,
+            blue: 1.0,
             alpha: 1.0,
         ),
         focus: (
             red: 0.0,
-            green: 0.32156864,
-            blue: 0.3529412,
+            green: 0.47843146,
+            blue: 1.0,
             alpha: 1.0,
         ),
         divider: (
             red: 0.079014115,
             green: 0.079014115,
-            blue: 0.07901395,
+            blue: 0.07901391,
             alpha: 0.2,
         ),
         on: (
             red: 0.079014115,
             green: 0.079014115,
-            blue: 0.07901395,
+            blue: 0.07901391,
             alpha: 1.0,
         ),
         disabled: (
@@ -63,19 +63,19 @@
         on_disabled: (
             red: 0.079014115,
             green: 0.079014115,
-            blue: 0.07901395,
+            blue: 0.07901391,
             alpha: 0.65,
         ),
         border: (
-            red: 0.08610422,
-            green: 0.08610421,
-            blue: 0.08610421,
+            red: 0.08610416,
+            green: 0.08610424,
+            blue: 0.08610415,
             alpha: 1.0,
         ),
         disabled_border: (
-            red: 0.08610422,
-            green: 0.08610421,
-            blue: 0.08610421,
+            red: 0.08610416,
+            green: 0.08610424,
+            blue: 0.08610415,
             alpha: 0.5,
         ),
     ),
@@ -87,14 +87,14 @@
     ),
     on: (
         red: 0.124462046,
-        green: 0.124462016,
-        blue: 0.12446187,
+        green: 0.12446203,
+        blue: 0.12446184,
         alpha: 1.0,
     ),
     small_widget: (
         red: 0.8685193,
-        green: 0.8685193,
-        blue: 0.8685193,
+        green: 0.86851937,
+        blue: 0.8685192,
         alpha: 0.25,
     ),
 )
