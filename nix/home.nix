@@ -580,6 +580,7 @@ in rec {
         rbenv
         reformatter
         restclient
+        ron-mode
         rust-mode
         seeing-is-believing
         shadowenv

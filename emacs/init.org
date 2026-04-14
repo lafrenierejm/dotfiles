@@ -6576,6 +6576,25 @@ Enable \src_emacs-lisp{smart-dash-mode} in Rust buffers.
 ('rust-mode-hook #'eglot-ensure)
 #+end_src
 
+*** Rusty Object Notation (RON)
+
+#+begin_src emacs-lisp
+(use-package ron-mode
+
+  :preface
+  (defconst ron-mode/cosmic-config-pattern
+    (rx string-start (literal (getenv "HOME")) "/.config/cosmic/"
+        ;; match subdirectories `com.system76.*'.
+        "com.system76." (one-or-more (not "/")) "/"
+        ;; all files within the `com.system76' subdirectories.
+        (one-or-more any)
+        string-end)
+    "COSMIC desktop environment config files.")
+
+  :init
+  (add-to-list 'auto-mode-alist (cons ron-mode/cosmic-config-pattern #'ron-mode)))
+#+end_src
+
 ** Structured Query Language (SQL)
 
 *** SQL
