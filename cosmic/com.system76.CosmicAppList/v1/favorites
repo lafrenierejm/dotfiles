@@ -1,8 +1,9 @@
 [
     "firefox",
+    "emacs",
     "com.mitchellh.ghostty",
     "com.system76.CosmicFiles",
     "com.system76.CosmicStore",
     "com.system76.CosmicSettings",
-    "emacs",
+    "feishin",
 ]
