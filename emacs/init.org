@@ -751,19 +751,56 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 (use-package modus-themes
   :demand
 
+  :ghook
+  ('ns-system-appearance-change-functions #'modus-themes/apply-theme)
+
+  ;; Inform the bytecode compiler of the following functions.
+  :functions
+  modus-themes/apply-theme
+  modus-themes/dbus-appearance-changed
+
   :config
-  ;; Load the theme of your choice:
-  (load-theme 'modus-operandi t))
+  (defun modus-themes/apply-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (pcase appearance
+      ('light (load-theme 'modus-operandi t))
+      ('dark (load-theme 'modus-vivendi t))))
+
+  (defun modus-themes/dbus-appearance-changed (namespace key value)
+    "React to freedesktop appearance NAMESPACE KEY VALUE changes via dbus."
+    (when (and (string= namespace "org.freedesktop.appearance")
+               (string= key "color-scheme"))
+      (modus-themes/apply-theme
+       (pcase (car value)
+         (1 'dark)
+         (_ 'light)))))
+
+  (modus-themes/apply-theme
+   (cond
+    ((and (boundp 'ns-system-appearance) ns-system-appearance)
+     ns-system-appearance)
+    ((fboundp 'dbus-call-method)
+     (condition-case nil
+         (pcase (caar (dbus-call-method
+                       :session "org.freedesktop.portal.Desktop"
+                       "/org/freedesktop/portal/desktop"
+                       "org.freedesktop.portal.Settings" "Read"
+                       "org.freedesktop.appearance" "color-scheme"))
+           (1 'dark)
+           (_ 'light))
+       (error 'light)))
+    (t 'light))))
 #+end_src
 
 #+begin_src emacs-lisp
-(defun lafrenierejm/apply-theme (appearance)
-  "Load theme, taking current system APPEARANCE into consideration."
-  (pcase appearance
-    ('light (load-theme 'modus-operandi t))
-    ('dark (load-theme 'modus-vivendi t))))
-
-(add-hook 'ns-system-appearance-change-functions #'lafrenierejm/apply-theme)
+(with-eval-after-load 'dbus
+  (dbus-register-signal
+   :session
+   "org.freedesktop.portal.Desktop"
+   "/org/freedesktop/portal/desktop"
+   "org.freedesktop.portal.Settings"
+   "SettingChanged"
+   #'modus-themes/dbus-appearance-changed))
 #+end_src
 
 ** Treesitter
