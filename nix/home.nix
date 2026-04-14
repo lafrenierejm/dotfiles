@@ -171,8 +171,8 @@ in rec {
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
           extract = "atool --extract --explain --subdir";
           jq = "jaq";
-          la = "eza --long --git --time-style=long-iso --all";
-          ll = "eza --long --git --time-style=long-iso";
+          la = "eza --long --git --group --time-style=long-iso --all";
+          ll = "eza --long --git --group --time-style=long-iso";
         }
         (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
           emacs = "${programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
