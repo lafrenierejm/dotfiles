@@ -3,14 +3,7 @@
         modifiers: [
             Super,
         ],
-        key: "Return",
-    ): System(Terminal),
-    (
-        modifiers: [
-            Alt,
-        ],
-        key: "space",
-    ): System(Launcher),
+    ): Disable,
     (
         modifiers: [
             Super,
@@ -21,14 +14,26 @@
         modifiers: [
             Super,
         ],
-        key: "slash",
+        key: "q",
     ): Disable,
     (
         modifiers: [
             Super,
         ],
-        key: "BackSpace",
+        key: "f",
     ): Disable,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "x",
+    ): Close,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "Return",
+    ): System(Terminal),
     (
         modifiers: [
             Super,
@@ -39,5 +44,18 @@
         modifiers: [
             Super,
         ],
+        key: "BackSpace",
+    ): Disable,
+    (
+        modifiers: [
+            Alt,
+        ],
+        key: "space",
+    ): System(Launcher),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "slash",
     ): Disable,
 }
