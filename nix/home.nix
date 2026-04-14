@@ -880,4 +880,8 @@ in rec {
       defaultEditor = true;
     };
   };
+
+  systemd.user.services.emacs = {
+    Service.Environment = "GDK_BACKEND=wayland";
+  };
 }
