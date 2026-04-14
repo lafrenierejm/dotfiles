@@ -107,6 +107,7 @@ in rec {
           typos
           unzip
           yt-dlp
+          xxd
         ])
         (with pkgsTrunk; [
           bash-language-server
