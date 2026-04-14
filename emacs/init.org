@@ -430,58 +430,62 @@ The /Faces/ package provides this functionality, so all font setup can can occur
 
 #+begin_src emacs-lisp
 (use-package faces
-
   :demand
 
+  ;; Inform the bytecode compiler of the following functions.
+  :functions faces/lafrenierejm-setup-fonts
+
+  :ghook
+  ('after-make-frame-functions #'faces/lafrenierejm-setup-fonts)
+
   :config
-  (when (member "Noto Sans" (font-family-list))
-    (set-face-attribute 'default nil :font "Noto Sans Mono")
-    (set-fontset-font "fontset-default" nil "Noto Sans Mono")
-    (set-fontset-font "fontset-default" nil "Noto Sans Math" nil 'append)
-    (set-fontset-font "fontset-default" nil "Noto Emoji" nil 'append)
-    (set-fontset-font "fontset-default" nil "Noto Sans Symbols" nil 'append)
-    (set-fontset-font "fontset-default" nil "Noto Sans Symbols 2" nil 'append)
+  (defun faces/lafrenierejm-setup-fonts (&optional _frame)
+    "Configure Noto fonts. Safe to call from `after-make-frame-functions'."
+    (when (member "Noto Sans" (font-family-list))
+      (set-face-attribute 'default nil :font "Noto Sans Mono")
+      (set-fontset-font "fontset-default" nil "Noto Sans Mono")
+      (set-fontset-font "fontset-default" nil "Noto Sans Math" nil 'append)
+      (set-fontset-font "fontset-default" nil "Noto Emoji" nil 'append)
+      (set-fontset-font "fontset-default" nil "Noto Sans Symbols" nil 'append)
+      (set-fontset-font "fontset-default" nil "Noto Sans Symbols 2" nil 'append)
 
-    (set-fontset-font "fontset-default" 'symbol "Noto Emoji")
-    (set-fontset-font "fontset-default" 'symbol "Noto Sans Symbols" nil 'append)
-    (set-fontset-font "fontset-default" 'symbol "Noto Sans Symbols 2" nil 'append)
+      (set-fontset-font "fontset-default" 'symbol "Noto Emoji")
+      (set-fontset-font "fontset-default" 'symbol "Noto Sans Symbols" nil 'append)
+      (set-fontset-font "fontset-default" 'symbol "Noto Sans Symbols 2" nil 'append)
 
-    ;; East Asia: 你好, 早晨, こんにちは, 안녕하세요
-    (set-fontset-font "fontset-default" 'han "Noto Sans CJK SC Regular")
-    (set-fontset-font "fontset-default" 'kana "Noto Sans CJK JP Regular")
-    (set-fontset-font "fontset-default" 'hangul "Noto Sans CJK KR Regular")
-    (set-fontset-font "fontset-default" 'cjk-misc "Noto Sans CJK KR Regular")
+      ;; East Asia: 你好, 早晨, こんにちは, 안녕하세요
+      (set-fontset-font "fontset-default" 'han "Noto Sans CJK SC Regular")
+      (set-fontset-font "fontset-default" 'kana "Noto Sans CJK JP Regular")
+      (set-fontset-font "fontset-default" 'hangul "Noto Sans CJK KR Regular")
+      (set-fontset-font "fontset-default" 'cjk-misc "Noto Sans CJK KR Regular")
 
-    ;; South East Asia: ជំរាបសួរ, ສະບາຍດີ, မင်္ဂလာပါ, สวัสดีครับ
-    (set-fontset-font t 'khmer "Noto Sans Khmer")
-    (set-fontset-font t 'lao "Noto Sans Lao")
-    (set-fontset-font t 'burmese "Noto Sans Myanmar")
-    (set-fontset-font t 'thai "Noto Sans Thai")
+      ;; South East Asia: ជំរាបសួរ, ສະບາຍດີ, မင်္ဂလာပါ, สวัสดีครับ
+      (set-fontset-font t 'khmer "Noto Sans Khmer")
+      (set-fontset-font t 'lao "Noto Sans Lao")
+      (set-fontset-font t 'burmese "Noto Sans Myanmar")
+      (set-fontset-font t 'thai "Noto Sans Thai")
 
-    ;; Africa: ሠላም
-    (set-fontset-font t 'ethiopic "Noto Sans Ethiopic")
+      ;; Africa: ሠላም
+      (set-fontset-font t 'ethiopic "Noto Sans Ethiopic")
 
-    ;; Middle/Near East: שלום, السّلام عليكم
-    (set-fontset-font t 'hebrew "Noto Sans Hebrew")
-    (set-fontset-font t 'arabic "Noto Sans Arabic")
+      ;; Middle/Near East: שלום, السّلام عليكم
+      (set-fontset-font t 'hebrew "Noto Sans Hebrew")
+      (set-fontset-font t 'arabic "Noto Sans Arabic")
 
-    ;;  South Asia: નમસ્તે, नमस्ते, ನಮಸ್ಕಾರ, നമസ്കാരം, ଶୁଣିବେ,
-    ;;              ආයුබෝවන්, வணக்கம், నమస్కారం, བཀྲ་ཤིས་བདེ་ལེགས༎
-    (set-fontset-font t 'gujarati "Noto Sans Gujarati")
-    (set-fontset-font t 'devanagari "Noto Sans Devanagari")
-    (set-fontset-font t 'kannada "Noto Sans Kannada")
-    (set-fontset-font t 'malayalam "Noto Sans Malayalam")
-    (set-fontset-font t 'oriya "Noto Sans Oriya")
-    (set-fontset-font t 'sinhala "Noto Sans Sinhala")
-    (set-fontset-font t 'tamil "Noto Sans Tamil")
-    (set-fontset-font t 'telugu "Noto Sans Telugu")
-    (set-fontset-font t 'tibetan "Noto Sans Tibetan"))
+      ;;  South Asia: નમસ્તે, नमस्ते, ನಮಸ್ಕಾರ, നമസ്കാരം, ଶୁଣିବେ,
+      ;;              ආයුබෝවන්, வணக்கம், నమస్కారం, བཀྲ་ཤིས་བདེ་ལེགས༎
+      (set-fontset-font t 'gujarati "Noto Sans Gujarati")
+      (set-fontset-font t 'devanagari "Noto Sans Devanagari")
+      (set-fontset-font t 'kannada "Noto Sans Kannada")
+      (set-fontset-font t 'malayalam "Noto Sans Malayalam")
+      (set-fontset-font t 'oriya "Noto Sans Oriya")
+      (set-fontset-font t 'sinhala "Noto Sans Sinhala")
+      (set-fontset-font t 'tamil "Noto Sans Tamil")
+      (set-fontset-font t 'telugu "Noto Sans Telugu")
+      (set-fontset-font t 'tibetan "Noto Sans Tibetan")))
+  (faces/lafrenierejm-setup-fonts)
   <<faces/config>>)
 #+end_src
-
-When working with prose, I prefer to use a variable-pitch (as opposed to monospace) face.
-Frequently, though, some aspects of a mostly-prose document are better presented in monospace.
-An example of this is the code blocks in this Org file.
 
 *** Ligatures
 
