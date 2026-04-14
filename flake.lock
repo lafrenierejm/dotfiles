@@ -169,6 +169,23 @@
         "type": "github"
       }
     },
+    "emacs-evil-collection": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776200413,
+        "narHash": "sha256-9sW8zQch6H3z9e6ivRVu+a94ZTIBAmYGYyTFgTMM3Xo=",
+        "owner": "lafrenierejm",
+        "repo": "evil-collection",
+        "rev": "8bfa584831a960c816828fb03ac49e85430ecb75",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lafrenierejm",
+        "ref": "agent-shell",
+        "repo": "evil-collection",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "inputs": {
         "nixpkgs": [
@@ -1125,6 +1142,7 @@
         "cramt-nixconf": "cramt-nixconf",
         "darwin": "darwin_2",
         "disko": "disko",
+        "emacs-evil-collection": "emacs-evil-collection",
         "emacs-overlay": "emacs-overlay",
         "emacs-plus": "emacs-plus",
         "flake-parts": "flake-parts",

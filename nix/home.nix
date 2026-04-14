@@ -629,6 +629,9 @@ in rec {
             license = lib.licenses.asl20;
           };
         };
+        evil-collection = self.melpaPackages.evil-collection.overrideAttrs {
+          src = inputs.emacs-evil-collection;
+        };
         monet = self.elpaBuild {
           pname = "monet";
           ename = "monet";
