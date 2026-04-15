@@ -246,9 +246,15 @@
             "firefox-bin-unwrapped"
           ];
         overlays = let
-          cosmicNoSsd = final: prev: {
+          cosmic = final: prev: {
             cosmic-comp = prev.cosmic-comp.overrideAttrs (old: {
               patches = (old.patches or []) ++ ["${inputs.cramt-nixconf}/patches/no_ssd.patch"];
+              postPatch = ''
+                ${old.postPatch or ""}
+
+                # Set all animations to 1ms.
+                find src/shell -type f -name "*.rs" -exec sed -i 's/Duration::from_millis([0-9]\+)/Duration::from_millis(1)/g' {} \;
+              '';
             });
           };
           direnvSkipTests = final: prev: {
@@ -260,7 +266,7 @@
         in [
           inputs.emacs-overlay.overlays.default
           inputs.nur.overlays.default
-          cosmicNoSsd
+          cosmic
           direnvSkipTests
         ];
       in {
