@@ -5270,6 +5270,7 @@ It started out from Aurélien Tisné's ini-mode.
 (use-package hcl-mode
   :mode
   <<hcl-mode/mode>>
+  ("\\.tfvars\\'" . hcl-mode)
 
   :config
   <<hcl-mode/config>>)
