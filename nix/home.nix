@@ -432,6 +432,7 @@ in rec {
     chromium = {
       enable = pkgs.stdenv.isLinux;
       package = pkgs.ungoogled-chromium;
+      commandLineArgs = ["--ozone-platform=wayland"];
       dictionaries = [pkgs.hunspellDictsChromium.en_US];
       extensions = [
         {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # ublock origin
