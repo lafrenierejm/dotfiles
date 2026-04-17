@@ -124,6 +124,7 @@ in {
           yt-dlp
         ])
         (with pkgsTrunk; [
+          actionlint
           bash-language-server
           dockerfmt
           efm-langserver
