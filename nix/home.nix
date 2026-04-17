@@ -142,6 +142,7 @@ in {
           vale-ls
           vscode-json-languageserver
           yaml-language-server
+          yq
         ])
         (lib.lists.optionals personal [
           pkgs.imagemagick
