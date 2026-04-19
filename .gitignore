@@ -27,6 +27,7 @@
 !/nix/
 !/nvim/
 !/pijul/
+!/restic/
 !/rclone/
 !/redshift.conf
 !/sh/

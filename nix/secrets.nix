@@ -22,4 +22,7 @@ in {
     armor = true;
   };
   "mullvad.age".publicKeys = earthbound ++ lafrenierejm;
+  "darwin/airborn/b2-key-id.age".publicKeys = airborn ++ lafrenierejm;
+  "darwin/airborn/b2-key.age".publicKeys = airborn ++ lafrenierejm;
+  "../restic/password.age".publicKeys = airborn ++ earthbound ++ lafrenierejm;
 }

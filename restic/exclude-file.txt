@@ -1,0 +1,6 @@
+github.com
+gitlab.com
+git.sr.ht
+codeberg.org
+Library
+Preferences
