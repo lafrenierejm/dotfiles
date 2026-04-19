@@ -98,6 +98,7 @@ in rec {
           opentofu
           pre-commit
           python3
+          restic
           ripgrep
           rsync
           shellcheck
