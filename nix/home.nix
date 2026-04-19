@@ -122,6 +122,7 @@ in rec {
           rust-analyzer
           terraform-docs
           terraform-ls
+          terraform-mcp-server
           typescript-language-server
           uv
           vale
