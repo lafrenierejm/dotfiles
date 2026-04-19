@@ -70,7 +70,6 @@ in rec {
           cachix
           clang-tools
           clojure
-          uutils-coreutils-noprefix
           curl
           dogedns
           doggo
@@ -107,8 +106,9 @@ in rec {
           tflint
           typos
           unzip
-          yt-dlp
+          uutils-coreutils-noprefix
           xxd
+          yt-dlp
         ])
         (with pkgsTrunk; [
           bash-language-server
