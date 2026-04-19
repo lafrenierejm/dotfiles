@@ -26,7 +26,7 @@
       flake = false;
     };
     emacs-overlay = {
-      url = "github:nix-community/emacs-overlay/ff1c7595a7ba4b969e998863d86d19c7db13f345";
+      url = "github:nix-community/emacs-overlay/1dc0cfc1b5444e0ef94dad4b01dbb85083feed75";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-plus = {
@@ -289,6 +289,7 @@
               hostname = "airborn";
               userName = "lafrenierejm";
               gitEmail = "git@lafreniere.xyz";
+              extraModules = [{services.restic-backup.enable = true;}];
             };
             JLAFRENI0523-MB = rec {
               domain = "renaissance.com";
@@ -296,18 +297,21 @@
               personal = false;
               userName = "joseph.lafreniere";
               gitEmail = "${userName}@${domain}";
+              extraModules = [];
             };
           };
         in (builtins.mapAttrs
           (host: values: (inputs.darwin.lib.darwinSystem {
             inherit system;
-            modules = [
+            modules = pkgs.lib.lists.flatten [
               inputs.agenix.darwinModules.default
               inputs.homebrew.darwinModules.nix-homebrew
               inputs.home-manager.darwinModules.home-manager
               inputs.mac-app-util.darwinModules.default
               ./nix/common.nix
               ./nix/darwin.nix
+              ./nix/darwin/restic-backup.nix
+              values.extraModules
               {
                 nixpkgs = {
                   inherit overlays;
