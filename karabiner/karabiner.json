@@ -124,6 +124,10 @@
                 "country_code": 0,
                 "keyboard_type_v2": "ansi"
             }
+        },
+        {
+            "name": "Vanilla",
+            "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
         }
     ]
 }
