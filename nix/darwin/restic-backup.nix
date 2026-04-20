@@ -15,11 +15,11 @@ in {
       owner = config.system.primaryUser;
     };
     age.secrets."darwin/${hostname}/b2-key-id" = {
-      file = ./. + "/${hostname}/b2-account-id.age";
+      file = ./. + "/${hostname}/b2-key-id.age";
       owner = config.system.primaryUser;
     };
     age.secrets."darwin/${hostname}/b2-key" = {
-      file = ./. + "/${hostname}/b2-account-key.age";
+      file = ./. + "/${hostname}/b2-key.age";
       owner = config.system.primaryUser;
     };
 
@@ -28,8 +28,8 @@ in {
       script = ''
         set -euo pipefail
         export RESTIC_REPOSITORY="s3:s3.us-west-000.backblazeb2.com/${hostname}"
-        export AWS_ACCESS_KEY_ID="$(< ${config.age.secrets."darwin/${hostname}/b2-account-id".path})"
-        export AWS_SECRET_ACCESS_KEY="$(< ${config.age.secrets."darwin/${hostname}/b2-account-key".path})"
+        export AWS_ACCESS_KEY_ID="$(< ${config.age.secrets."darwin/${hostname}/b2-key-id".path})"
+        export AWS_SECRET_ACCESS_KEY="$(< ${config.age.secrets."darwin/${hostname}/b2-key".path})"
         restic backup "$HOME/Documents" --exclude-file=${../../restic/exclude-file.txt}
       '';
       serviceConfig = {
