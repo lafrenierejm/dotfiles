@@ -5,10 +5,6 @@
     nixpkgs.url = "github:lafrenierejm/nixpkgs/25.11-darwin";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
-    "claude-code.el" = {
-      url = "github:stevemolitor/claude-code.el";
-      flake = false;
-    };
     cramt-nixconf = {
       url = "github:cramt/nixconf";
       flake = false;
@@ -81,10 +77,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
-    "monet.el" = {
-      url = "github:lafrenierejm/monet/package-buffer-info";
-      flake = false;
-    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -92,10 +84,6 @@
     nur = {
       url = "github:nix-community/NUR";
       inputs.flake-parts.follows = "flake-parts";
-    };
-    "opencode.el" = {
-      url = "github:rogsme/opencode.el";
-      flake = false;
     };
     ripgrep-all = {
       url = "github:lafrenierejm/ripgrep-all";

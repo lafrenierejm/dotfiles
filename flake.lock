@@ -59,22 +59,6 @@
         "type": "github"
       }
     },
-    "claude-code.el": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1776606665,
-        "narHash": "sha256-AvriQS0mI02N9frOL6xCnezzvp2ID03ZuRiOBrlujsw=",
-        "owner": "stevemolitor",
-        "repo": "claude-code.el",
-        "rev": "e2d29b05a97fdded88ba7ca0586a5483ca2e3dcb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "stevemolitor",
-        "repo": "claude-code.el",
-        "type": "github"
-      }
-    },
     "cramt-nixconf": {
       "flake": false,
       "locked": {
@@ -827,23 +811,6 @@
         "type": "github"
       }
     },
-    "monet.el": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1765264803,
-        "narHash": "sha256-Brh6kAakA6FwsGfdHPdWIEx1/WZMS1Yxxs6Ch+6c2V4=",
-        "owner": "lafrenierejm",
-        "repo": "monet",
-        "rev": "1f2c9051ed96c75219d817d37d9a881f0321883a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lafrenierejm",
-        "ref": "package-buffer-info",
-        "repo": "monet",
-        "type": "github"
-      }
-    },
     "nix-systems": {
       "flake": false,
       "locked": {
@@ -1090,22 +1057,6 @@
         "type": "github"
       }
     },
-    "opencode.el": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1759960463,
-        "narHash": "sha256-ZgbhjQ4CyMB7vE8D2/wIfpUB/Pp6ZSeKQ6uVXvknVEU=",
-        "owner": "rogsme",
-        "repo": "opencode.el",
-        "rev": "e4eee705e9cafbe548611e5c28c98e0cd02c7c5f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rogsme",
-        "repo": "opencode.el",
-        "type": "github"
-      }
-    },
     "ripgrep-all": {
       "inputs": {
         "flake-parts": [
@@ -1138,7 +1089,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "claude-code.el": "claude-code.el",
         "cramt-nixconf": "cramt-nixconf",
         "darwin": "darwin_2",
         "disko": "disko",
@@ -1158,12 +1108,10 @@
         "homebrew-core": "homebrew-core",
         "homebrew-hashicorp": "homebrew-hashicorp",
         "mac-app-util": "mac-app-util",
-        "monet.el": "monet.el",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-trunk": "nixpkgs-trunk",
         "nur": "nur",
-        "opencode.el": "opencode.el",
         "ripgrep-all": "ripgrep-all",
         "treefmt-nix": "treefmt-nix_3"
       }

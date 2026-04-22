@@ -553,10 +553,8 @@ in rec {
         magit
         markdown-mode
         mermaid-ts-mode
-        claude-code
         minions
         modus-themes
-        monet
         monky
         nix-mode
         nix-ts-mode
@@ -565,7 +563,6 @@ in rec {
         notmuch
         nov
         nushell-ts-mode
-        opencode
         origami
         package-lint
         password-store
@@ -621,41 +618,8 @@ in rec {
             hash = "sha256-L2WMTQaPrg3EDMa4DCednN54jB6vEvJOBVZ83WXUCG4=";
           };
         };
-        claude-code = self.elpaBuild {
-          pname = "claude-code";
-          ename = "claude-code";
-          version = "0.4.5";
-          src = "${inputs."claude-code.el"}/claude-code.el";
-          packageRequires = with self.melpaPackages; [inheritenv transient];
-          meta = {
-            homepage = "https://github.com/stevemolitor/claude-code.el";
-            license = lib.licenses.asl20;
-          };
-        };
         evil-collection = self.melpaPackages.evil-collection.overrideAttrs {
           src = inputs.emacs-evil-collection;
-        };
-        monet = self.elpaBuild {
-          pname = "monet";
-          ename = "monet";
-          version = "0.0.3";
-          src = "${inputs."monet.el"}/monet.el";
-          packageRequires = with self.melpaPackages; [websocket];
-          meta = {
-            homepage = "https://github.com/stevemolitor/monet.el";
-            license = lib.licenses.mit;
-          };
-        };
-        opencode = self.elpaBuild {
-          pname = "opencode";
-          ename = "opencode";
-          version = "0.1.0";
-          src = "${inputs."opencode.el"}/opencode.el";
-          packageRequires = with self.melpaPackages; [transient];
-          meta = {
-            homepage = "https://gitlab.com/rogs/opencode.el";
-            license = lib.licenses.gpl3;
-          };
         };
       };
     };
