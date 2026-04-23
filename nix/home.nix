@@ -47,6 +47,17 @@ in rec {
   home = lib.attrsets.mergeAttrsList [
     {
       stateVersion = "23.05"; # back-compat with this version of Home Manager
+
+      # Clear all `nix profile` entries on activation to prevent conflicts between imperatively and declaratively managed packages.
+      # This hook runs immediately before `writeBoundary`.
+      # `writeBoundary` is the activation step that writes files and symlinks to the home directory.
+      activation.clearNixProfile = inputs.home-manager.lib.hm.dag.entryBefore ["writeBoundary"] ''
+        profile_names=$(nix profile list --json 2>/dev/null | ${lib.getExe pkgs.jaq} -r '.elements | keys[]')
+        if [ -n "$profile_names" ]; then
+          run nix profile remove $profile_names
+        fi
+      '';
+
       file.".gnupg/gpg-agent.conf".text =
         lib.concatStringsSep "\n"
         (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
