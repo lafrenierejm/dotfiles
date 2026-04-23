@@ -793,14 +793,15 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 #+end_src
 
 #+begin_src emacs-lisp
-(with-eval-after-load 'dbus
-  (dbus-register-signal
-   :session
-   "org.freedesktop.portal.Desktop"
-   "/org/freedesktop/portal/desktop"
-   "org.freedesktop.portal.Settings"
-   "SettingChanged"
-   #'modus-themes/dbus-appearance-changed))
+(unless (eq system-type 'darwin)
+  (with-eval-after-load 'dbus
+    (dbus-register-signal
+     :session
+     "org.freedesktop.portal.Desktop"
+     "/org/freedesktop/portal/desktop"
+     "org.freedesktop.portal.Settings"
+     "SettingChanged"
+     #'modus-themes/dbus-appearance-changed)))
 #+end_src
 
 ** Treesitter
