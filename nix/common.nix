@@ -15,9 +15,13 @@ in {
   nix = {
     enable = true;
 
-    # Add each flake input as a registry to make `nix` subcommands consistent with the flake.
-    registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
-    # Add flake inputs to the system's legacy channels to make legacy `nix-*` commands consistent.
+    # Add registry entries for nixpkgs and nur.
+    # This allows for commands like `nix run -- nur#package`.
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+      nur.flake = inputs.nur;
+    };
+    # Add the registry keys to system's legacy channels to make legacy `nix-*` commands consistent.
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
     package = pkgs.nixVersions.stable;
