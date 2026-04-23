@@ -8,9 +8,7 @@
   system,
   userName,
   ...
-}: let
-  fontPackages = with pkgs; [source-code-pro font-awesome];
-in {
+}: {
   age.secrets.cachix-auth.file = ./cachix-auth.age;
   nix = {
     enable = true;
