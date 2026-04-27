@@ -149,7 +149,7 @@
                   users.users."${username}" = {
                     home = "/home/${username}";
                     openssh.authorizedKeys.keys = [
-                      (builtins.readFile ./ssh/macbook.pub)
+                      (builtins.readFile ./ssh/airborn.pub)
                     ];
                   };
                 }
@@ -376,7 +376,7 @@
                       isNormalUser = true;
                       description = "Joseph LaFreniere";
                       openssh.authorizedKeys.keys = [
-                        (builtins.readFile ./ssh/macbook.pub)
+                        (builtins.readFile ./ssh/airborn.pub)
                         (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
                       ];
                       extraGroups = [
@@ -391,6 +391,9 @@
                     rbralley = {
                       isNormalUser = true;
                       description = "Ratannya Bralley";
+                      openssh.authorizedKeys.keys = [
+                        (builtins.readFile ./ssh/rbralley/imac.pub)
+                      ];
                     };
                   };
                 }
