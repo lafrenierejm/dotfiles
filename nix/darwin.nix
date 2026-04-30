@@ -8,15 +8,6 @@
   userName,
   ...
 }: let
-  dotnetBrew = "dotnet@6";
-  opensslBrew = "openssl";
-  libraries = lib.lists.optionals (!personal) [
-    dotnetBrew
-    opensslBrew
-    "postgresql@12"
-  ];
-  brewPath = pkg: "/opt/homebrew/opt/${pkg}";
-
   # Electron-based casks.
   casksElectron = lib.lists.flatten [
     "amazon-chime"
@@ -112,7 +103,6 @@ in (lib.attrsets.mergeAttrsList [
         cleanup = "uninstall";
       };
       brews = lib.lists.flatten [
-        libraries
         (lib.lists.optionals personal ["podman"])
         (lib.lists.optionals (!personal) [
           "hashicorp/tap/boundary"
@@ -133,28 +123,7 @@ in (lib.attrsets.mergeAttrsList [
       ];
       taps = builtins.attrNames nix-homebrew.taps;
     };
-    environment =
-      {
-        systemPath = lib.lists.flatten [
-          config.homebrew.brewPrefix
-          libraries
-        ];
-      }
-      // lib.attrsets.optionalAttrs (!personal) rec {
-        CFLAGS =
-          lib.concatStringsSep " "
-          (map (pkg: ("-I" + (brewPath pkg) + "/include")) libraries);
-        CPPFLAGS = CFLAGS;
-        DOTNET_ROOT = (brewPath dotnetBrew) + "/libexec";
-        LDFLAGS =
-          lib.concatStringsSep " "
-          (map (pkg: ("-L" + (brewPath pkg) + "/lib")) libraries);
-        OPENSSL_DIR = brewPath opensslBrew;
-        OPENSSL_ROOT_DIR = OPENSSL_DIR;
-        PKG_CONFIG_PATH =
-          lib.concatStringsSep " "
-          (map (pkg: (brewPath pkg) + "/lib/pkgconfig") libraries);
-      };
+    environment.systemPath = [config.homebrew.brewPrefix];
     ids.gids.nixbld = 30000;
     security.pam.services.sudo_local.touchIdAuth = personal;
     services = {
