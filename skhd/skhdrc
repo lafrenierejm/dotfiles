@@ -1,5 +1,7 @@
-# Close window
-alt - x : yabai -m window --close
+# Close window, focusing the most recent window.
+alt - x : WIN=$(yabai -m query --windows --window | jq '.id') && \
+              (yabai -m window --focus recent || true) && \
+              yabai -m window $WIN --close
 
 # Navigation
 alt - h : yabai -m window --focus west
