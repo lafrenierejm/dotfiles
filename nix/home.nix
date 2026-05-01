@@ -711,6 +711,7 @@ in rec {
         ghq.root = "${homeDirectory}/Documents";
         github.user = "lafrenierejm";
         gitlab.user = "lafrenierejm";
+        merge.conflictStyle = "zdiff3";
         pull = {
           autostash = true;
           ff = "only";
