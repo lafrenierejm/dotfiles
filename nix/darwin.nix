@@ -66,6 +66,7 @@
         "apparency"
         "gog-galaxy"
         "inkscape"
+        "microsoft-teams"
         "microsoft-word"
         "netnewswire"
         "radio-silence"
