@@ -470,11 +470,15 @@ in rec {
         withNativeCompilation = true;
         passthru = old.passthru // {treeSitter = true;};
         patches =
-          (old.patches or [])
+          (builtins.filter
+            (p:
+              !(lib.hasSuffix "fix-off-by-one-mistake-80851-CVE-2026-6861.patch"
+                (builtins.baseNameOf p)))
+            (old.patches or []))
           ++ (lib.lists.optionals pkgs.stdenv.isDarwin (
-            map (patchFilename: inputs.emacs-plus + "/patches/${patchFilename}") [
-              "emacs-31/system-appearance.patch"
-            ]
+            map
+            (patchFilename: inputs.emacs-plus + "/patches/${patchFilename}")
+            ["emacs-31/system-appearance.patch"]
           ));
       });
       extraPackages = epkgs: (with epkgs; [
