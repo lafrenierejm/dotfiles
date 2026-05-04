@@ -62,12 +62,14 @@
     inputs.agenix.packages."${system}".default
     (with pkgs; [
       atool
+      btop
       coreutils
       curl
       exiftool
-      fuc
       fd
       file
+      findutils # find, xargs, etc.
+      fuc # cpz and rmz
       git
       gnupg
       ripgrep
