@@ -86,7 +86,6 @@ in (lib.attrsets.mergeAttrsList [
       user = userName;
       taps = {
         "hashicorp/homebrew-tap" = inputs.homebrew-hashicorp;
-        "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
         "homebrew/homebrew-cask" = inputs.homebrew-cask;
         "homebrew/homebrew-core" = inputs.homebrew-core;
       };

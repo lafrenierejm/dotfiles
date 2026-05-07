@@ -52,10 +52,6 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
     homebrew.url = "github:zhaofengli/nix-homebrew";
-    homebrew-bundle = {
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
-    };
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
