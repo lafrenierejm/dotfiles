@@ -51,7 +51,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
-    homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
@@ -73,6 +72,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -290,9 +290,9 @@
             inherit system;
             modules = pkgs.lib.lists.flatten [
               inputs.agenix.darwinModules.default
-              inputs.homebrew.darwinModules.nix-homebrew
               inputs.home-manager.darwinModules.home-manager
               inputs.mac-app-util.darwinModules.default
+              inputs.nix-homebrew.darwinModules.nix-homebrew
               ./nix/common.nix
               ./nix/darwin.nix
               ./nix/darwin/restic-backup.nix
