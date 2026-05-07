@@ -135,13 +135,16 @@
                     inputs.nur.overlays.default
                   ];
                   home-manager.extraSpecialArgs = {
-                    inherit inputs personal system username;
+                    inherit inputs personal;
+                    pkgsTrunk = pkgs;
+                    realName = "Joseph LaFreniere";
+                    userName = username;
                     gitEmail = "git@lafreniere.xyz";
                     gitUseGpg = true;
                   };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.users."${username}" = import ./nix/home.nix;
+                  home-manager.users."${username}" = ./nix/home.nix;
                   users.users."${username}" = {
                     home = "/home/${username}";
                     openssh.authorizedKeys.keys = [
@@ -302,17 +305,18 @@
                   inherit overlays;
                   config.allowUnfreePredicate = unfreePackageFilter;
                 };
+                home-manager.extraSpecialArgs = {
+                  inherit inputs pkgsTrunk realName;
+                  inherit (values) gitEmail personal userName;
+                  gitUseGpg = true;
+                };
                 home-manager.sharedModules = [
+                  inputs.agenix.homeManagerModules.age
                   inputs.mac-app-util.homeManagerModules.default
                 ];
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users."${values.userName}" = import ./nix/home.nix rec {
-                  inherit inputs pkgs pkgsTrunk realName system;
-                  inherit (pkgs) lib;
-                  inherit (values) gitEmail personal userName;
-                  gitUseGpg = true;
-                };
+                home-manager.users."${values.userName}" = ./nix/home.nix;
                 users.users."${values.userName}".home = "/Users/${values.userName}";
               }
             ];
@@ -352,21 +356,21 @@
                 ./nix/earthbound/configuration.nix
                 {
                   nixpkgs.overlays = overlays;
+                  home-manager.sharedModules = [inputs.agenix.homeManagerModules.age];
                   home-manager.backupFileExtension = "bak";
+                  home-manager.extraSpecialArgs = {
+                    inherit inputs pkgsTrunk realName userName personal;
+                    gitEmail = "git@${domain}";
+                    gitUseGpg = true;
+                  };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.users."${userName}" =
-                    import ./nix/home.nix {
-                      inherit inputs personal system realName userName pkgs pkgsTrunk;
-                      inherit (pkgs) lib;
-                      gitEmail = "git@${domain}";
-                      gitUseGpg = true;
-                    }
-                    // {
-                      imports = [
-                        ./nix/home/udiskie.nix
-                      ];
-                    };
+                  home-manager.users."${userName}" = {
+                    imports = [
+                      ./nix/home.nix
+                      ./nix/home/udiskie.nix
+                    ];
+                  };
                   users.users = {
                     "${userName}" = {
                       home = "/home/${userName}";

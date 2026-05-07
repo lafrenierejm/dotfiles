@@ -1,9 +1,9 @@
 {
-  inputs,
-  pkgs,
-  pkgsTrunk,
+  config,
   lib,
-  system,
+  pkgs,
+  inputs,
+  pkgsTrunk,
   userName,
   gitEmail,
   gitUseGpg,
@@ -11,6 +11,7 @@
   realName,
   ...
 }: let
+  system = pkgs.stdenv.hostPlatform.system;
   homeDirectory =
     if pkgs.stdenv.isDarwin
     then "/Users/${userName}"
@@ -43,7 +44,7 @@
         "/.claude/settings.local.json"
       ]
     ];
-in rec {
+in {
   home = lib.attrsets.mergeAttrsList [
     {
       stateVersion = "23.05"; # back-compat with this version of Home Manager
@@ -188,7 +189,7 @@ in rec {
           ll = "eza --long --git --group --time-style=long-iso";
         }
         (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
-          emacs = "${programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
+          emacs = "${config.programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
         })
       ];
       username = userName;
