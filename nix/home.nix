@@ -92,7 +92,6 @@ in rec {
           gh
           git-crypt
           git-filter-repo
-          github-mcp-server
           gitstatus
           gnupg
           gnused
