@@ -95,14 +95,8 @@ in (lib.attrsets.mergeAttrsList [
     homebrew = {
       inherit casks;
       enable = true;
-      global = {
-        autoUpdate = false;
-      };
-      onActivation = {
-        autoUpdate = true;
-        upgrade = true;
-        cleanup = "uninstall";
-      };
+      global.autoUpdate = false;
+      onActivation.cleanup = "uninstall";
       brews = lib.lists.flatten [
         (lib.lists.optionals personal ["podman"])
         (lib.lists.optionals (!personal) [
