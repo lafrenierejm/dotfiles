@@ -281,7 +281,7 @@ in {
 
     claude-code = {
       enable = personal;
-      package = pkgsTrunk.claude-code-bin;
+      package = pkgsTrunk.claude-code;
       settings.permissions.allow =
         map
         (cmd: "Bash(${cmd}:*)")
