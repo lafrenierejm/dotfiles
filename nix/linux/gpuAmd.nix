@@ -59,7 +59,7 @@ in {
         #   "localhost"
         # ];
       };
-      loadModels = ["qwen2.5-coder:7b"];
+      loadModels = ["deepseek-coder-v2:16b"];
       port = cfg.ports.ollama;
       openFirewall = true;
       rocmOverrideGfx = "10.3.0";
