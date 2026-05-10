@@ -136,7 +136,10 @@ in {
   };
 
   # services.foldingathome.enable = true;
-  services.fileServer.enable = true;
+  services.fileServer = {
+    enable = true;
+    transmission.rpcHostWhitelist = ["localhost" "earthbound.fin-alioth.ts.net"];
+  };
   services.gpuAmd.enable = true;
   services.mediaServer.enable = true;
 

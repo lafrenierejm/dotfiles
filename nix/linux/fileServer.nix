@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkOption types;
+  inherit (lib) concatStringsSep mkOption types;
   cfg = config.services.fileServer;
 in {
   options.services.fileServer = {
@@ -20,6 +20,11 @@ in {
     group = mkOption {
       description = "Group";
       default = "media";
+    };
+    transmission.rpcHostWhitelist = mkOption {
+      description = "Hosts allowed to access the Transmission RPC/web interface";
+      type = types.listOf types.str;
+      default = ["localhost"];
     };
     ports = {
       cnid = mkOption {
@@ -51,6 +56,7 @@ in {
       package = pkgs.transmission_4;
       webHome = pkgs.flood-for-transmission;
       downloadDirPermissions = "775";
+      settings.rpc-host-whitelist = concatStringsSep "," cfg.transmission.rpcHostWhitelist;
       settings.trash-original-torrent-files = true;
     };
     systemd.services.transmission.serviceConfig.StateDirectoryMode = "775";
