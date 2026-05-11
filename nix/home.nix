@@ -1,5 +1,6 @@
 {
   config,
+  osConfig,
   lib,
   pkgs,
   inputs,
@@ -174,10 +175,20 @@ in {
       sessionPath = [
         "$HOME/.local/bin"
       ];
-      sessionVariables = {
-        DIRENV_LOG_FORMAT = "";
-        NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
-      };
+      sessionVariables = let
+        caCerts = osConfig.nix.settings.ssl-cert-file;
+      in
+        {
+          DIRENV_LOG_FORMAT = "";
+          NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
+        }
+        // lib.optionalAttrs (caCerts != "") {
+          AWS_CA_BUNDLE = caCerts;
+          CURL_CA_BUNDLE = caCerts;
+          NODE_EXTRA_CA_CERTS = caCerts;
+          REQUESTS_CA_BUNDLE = caCerts;
+          SSL_CERT_FILE = caCerts;
+        };
       shell.enableShellIntegration = true;
       shellAliases = lib.attrsets.mergeAttrsList [
         {
