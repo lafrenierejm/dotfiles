@@ -1194,10 +1194,17 @@ prefix argument."
     (set-buffer-modified-p nil))
   (kill-buffer (current-buffer)))
 
-(defun current-buffer-yank-name ()
-  "Place the name of the current buffer on the kill ring."
-  (interactive)
-  (let ((name (buffer-name (current-buffer))))
+(defun current-buffer-yank-name (&optional BASENAME)
+  "Place the name of the current buffer on the kill ring.
+
+The default behavior is to use the current buffer's name verbatim.  If optional
+argument BASENAME is set, treat the buffer name as a path as return only the
+basename."
+  (interactive (list current-prefix-arg))
+  (let* ((name-verbatim (buffer-name (current-buffer)))
+         (name (if BASENAME
+                   (file-name-nondirectory name-verbatim)
+                 name-verbatim)))
     (kill-new name)
     (message "Copied buffer name '%s' to the clipboard." name)))
 
