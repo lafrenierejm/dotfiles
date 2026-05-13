@@ -43,7 +43,7 @@
           set -f # disable globbing
           export IFS=' '
           export CACHIX_AUTH_TOKEN="$(cat ${config.age.secrets.cachix-auth.path})"
-          exec ${pkgs.cachix}/bin/cachix push lafrenierejm $OUT_PATHS
+          exec ${lib.getExe pkgs.cachix} push lafrenierejm $OUT_PATHS
         '';
       };
 
