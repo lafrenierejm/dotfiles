@@ -8,6 +8,8 @@
   userName,
   ...
 }: let
+  caBundlePath = "/etc/nix/ca-bundle.crt";
+
   # Electron-based casks.
   casksElectron = lib.lists.flatten [
     "amazon-chime"
@@ -119,6 +121,7 @@ in (lib.attrsets.mergeAttrsList [
     };
     environment.systemPath = [config.homebrew.brewPrefix];
     ids.gids.nixbld = 30000;
+    nix.settings.ssl-cert-file = caBundlePath;
     security.pam.services.sudo_local.touchIdAuth = personal;
     services = {
       skhd.enable = personal;
@@ -127,6 +130,12 @@ in (lib.attrsets.mergeAttrsList [
         enableScriptingAddition = true;
       };
     };
+    system.activationScripts.postActivation.text = lib.mkAfter ''
+      # Build a CA bundle that includes System keychain certificates for Nix.
+      mkdir -p /etc/nix
+      cat ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt > ${caBundlePath}
+      /usr/bin/security find-certificate -a -p /Library/Keychains/System.keychain >> ${caBundlePath} 2>/dev/null || true
+    '';
     system.stateVersion = 5;
     system.primaryUser = userName;
     system.defaults = {
