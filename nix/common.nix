@@ -39,7 +39,7 @@
       // lib.attrsets.optionalAttrs personal {
         post-build-hook = pkgs.writeScript "cachix-push" ''
           #!/bin/sh
-          set -eu
+          set -u
           set -f # disable globbing
           export IFS=' '
           export CACHIX_AUTH_TOKEN="$(cat ${config.age.secrets.cachix-auth.path})"
