@@ -176,7 +176,7 @@ in {
         "$HOME/.local/bin"
       ];
       sessionVariables = let
-        caCerts = osConfig.nix.settings.ssl-cert-file;
+        caCerts = osConfig.nix.settings.ssl-cert-file or "";
       in
         {
           DIRENV_LOG_FORMAT = "";
