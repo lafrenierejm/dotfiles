@@ -146,7 +146,6 @@ in {
           pkgs.imagemagick
           pkgsTrunk.claude-agent-acp
           (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
-            beets
             ffmpeg-headless
             inkscape
             nicotine-plus
