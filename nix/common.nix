@@ -9,7 +9,12 @@
   userName,
   ...
 }: {
-  age.secrets.cachix-auth.file = ./cachix-auth.age;
+  age.secrets.cachix-auth = {
+    file = ./cachix-auth.age;
+    mode = "440";
+    owner = "root";
+    group = "nixbld";
+  };
   nix = {
     enable = true;
 
@@ -37,14 +42,16 @@
         trusted-users = [userName];
       }
       // lib.attrsets.optionalAttrs personal {
-        post-build-hook = pkgs.writeScript "cachix-push" ''
-          #!/bin/sh
-          set -u
-          set -f # disable globbing
-          export IFS=' '
-          export CACHIX_AUTH_TOKEN="$(cat ${config.age.secrets.cachix-auth.path})"
-          exec ${lib.getExe pkgs.cachix} push lafrenierejm $OUT_PATHS
-        '';
+        post-build-hook =
+          pkgs.writeShellScript "cachix-push"
+          ''
+            set -f # disable globbing
+            read -rd "" CACHIX_AUTH_TOKEN < ${config.age.secrets.cachix-auth.path}
+            export CACHIX_AUTH_TOKEN
+            export IFS=' '
+            # shellcheck disable=SC2086 # we want OUT_PATHS to be split
+            exec ${lib.getExe pkgs.cachix} push --verbose lafrenierejm $OUT_PATHS || true
+          '';
       };
 
     gc =
