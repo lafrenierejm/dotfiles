@@ -42,16 +42,20 @@
         trusted-users = [userName];
       }
       // lib.attrsets.optionalAttrs personal {
-        post-build-hook =
-          pkgs.writeShellScript "cachix-push"
-          ''
-            set -f # disable globbing
-            read -rd "" CACHIX_AUTH_TOKEN < ${config.age.secrets.cachix-auth.path}
-            export CACHIX_AUTH_TOKEN
-            export IFS=' '
-            # shellcheck disable=SC2086 # we want OUT_PATHS to be split
-            exec ${lib.getExe pkgs.cachix} push --verbose lafrenierejm $OUT_PATHS || true
+        post-build-hook = lib.getExe (pkgs.writeShellApplication {
+          name = "cachix-push";
+          runtimeInputs = with pkgs; [cachix];
+          text = ''
+            set -uf # disable globbing
+            if [[ -n "''${OUT_PATHS:-}" ]]; then
+              read -rd "" CACHIX_AUTH_TOKEN < ${lib.escapeShellArg config.age.secrets.cachix-auth.path}
+              export CACHIX_AUTH_TOKEN
+              export IFS=' '
+              # shellcheck disable=SC2086 # we want OUT_PATHS to be split
+              exec cachix push --verbose lafrenierejm $OUT_PATHS
+            fi
           '';
+        });
       };
 
     gc =
