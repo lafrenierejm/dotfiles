@@ -2349,7 +2349,7 @@ The second is replaced with the name of the current file.
 
 #+begin_src emacs-lisp :noweb-ref counsel/custom
 (counsel-grep-base-command
- (if-let* ((command (cl-some #'executable-find '("rga" "rg"))))
+ (if-let* ((command (cl-some #'executable-find '("rg"))))
      (s-join " " (list command
                        "--smart-case"
                        "--max-columns=88"
