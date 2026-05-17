@@ -843,12 +843,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp
 (use-package treesit-fold
-  :gfhook
-  ('treesit-fold-mode-hook #'treesit-fold-indicators-mode)
-
   :custom
-  (global-treesit-fold-mode t)
-  (global-treesit-fold-indicators-mode-enable-in-buffer t))
+  (global-treesit-fold-mode t))
 #+end_src
 
 * Buffer Organization
