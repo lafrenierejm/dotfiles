@@ -918,6 +918,14 @@ Use Ivy's integration.
   (setq projectile-completion-system 'ivy))
 #+end_src
 
+~projectile-files-with-string~ uses a hardcoded ~rg~ invocation that omits
+~--hidden~, so ~projectile-replace~ silently skips hidden directories like
+~.github/~ even when their contents are tracked in Git.
+#+begin_src emacs-lisp
+(setf (alist-get 'rg projectile-files-with-string-commands)
+      "rg -lF --no-heading --color never --hidden --glob=!.git/ ")
+#+end_src
+
 *** Return Path Relative to Project Root
 
 #+begin_src emacs-lisp :noweb-ref projectile/config
