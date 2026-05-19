@@ -28,35 +28,18 @@
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
     package = pkgs.nixVersions.stable;
-    settings =
-      {
-        experimental-features = "nix-command flakes";
-        substituters = [
-          "https://nix-community.cachix.org"
-          "https://lafrenierejm.cachix.org"
-        ];
-        trusted-public-keys = [
-          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-          "lafrenierejm.cachix.org-1:80p6+l8ziffNuhGRtiZu0xsV5FGXk2GbkOU2unIi8OM="
-        ];
-        trusted-users = [userName];
-      }
-      // lib.attrsets.optionalAttrs personal {
-        post-build-hook = lib.getExe (pkgs.writeShellApplication {
-          name = "cachix-push";
-          runtimeInputs = with pkgs; [cachix];
-          text = ''
-            set -uf # disable globbing
-            if [[ -n "''${OUT_PATHS:-}" ]]; then
-              read -rd "" CACHIX_AUTH_TOKEN < ${lib.escapeShellArg config.age.secrets.cachix-auth.path}
-              export CACHIX_AUTH_TOKEN
-              export IFS=' '
-              # shellcheck disable=SC2086 # we want OUT_PATHS to be split
-              exec cachix push --verbose lafrenierejm $OUT_PATHS
-            fi
-          '';
-        });
-      };
+    settings = {
+      experimental-features = "nix-command flakes";
+      substituters = [
+        "https://nix-community.cachix.org"
+        "https://lafrenierejm.cachix.org"
+      ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "lafrenierejm.cachix.org-1:80p6+l8ziffNuhGRtiZu0xsV5FGXk2GbkOU2unIi8OM="
+      ];
+      trusted-users = [userName];
+    };
 
     gc =
       {
