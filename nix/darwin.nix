@@ -118,7 +118,13 @@ in (lib.attrsets.mergeAttrsList [
     };
     environment.systemPath = [config.homebrew.prefix];
     ids.gids.nixbld = 30000;
+
     nix.settings.ssl-cert-file = caBundlePath;
+    launchd.daemons."org.nixos.nix-daemon".serviceConfig.EnvironmentVariables = {
+      GIT_SSL_CAINFO = caBundlePath;
+      NIX_SSL_CERT_FILE = caBundlePath;
+    };
+
     security.pam.services.sudo_local.touchIdAuth = personal;
     services = {
       skhd.enable = personal;
