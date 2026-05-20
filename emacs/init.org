@@ -2635,9 +2635,6 @@ The new binding is harder to accidentally press and opens up a convenient bindin
   :ghook
   <<diff-hl/ghook>>
 
-  :custom
-  (diff-hl-side 'right)
-
   ;; Inform the bytecode compiler about the following functions.
   :commands
   (global-diff-hl-mode)
