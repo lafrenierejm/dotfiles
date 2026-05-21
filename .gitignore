@@ -1,6 +1,8 @@
 /*
+!.gitattributes
 !.gitignore
 !/.editorconfig
+!/.git-crypt/
 !/.typos.toml
 !/LICENSE
 !/README.md
