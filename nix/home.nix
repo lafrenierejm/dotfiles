@@ -643,9 +643,6 @@ in {
             hash = "sha256-L2WMTQaPrg3EDMa4DCednN54jB6vEvJOBVZ83WXUCG4=";
           };
         };
-        evil-collection = self.melpaPackages.evil-collection.overrideAttrs {
-          src = inputs.emacs-evil-collection;
-        };
       };
     };
 

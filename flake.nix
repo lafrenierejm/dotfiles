@@ -17,10 +17,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-evil-collection = {
-      url = "github:lafrenierejm/evil-collection/agent-shell";
-      flake = false;
-    };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/1dc0cfc1b5444e0ef94dad4b01dbb85083feed75";
       inputs.nixpkgs.follows = "nixpkgs";
