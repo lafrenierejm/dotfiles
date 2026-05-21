@@ -2,7 +2,7 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:lafrenierejm/nixpkgs/25.11-darwin";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
     agenix.url = "github:ryantm/agenix";
     cramt-nixconf = {
@@ -250,11 +250,15 @@
               doCheck = false;
             });
           };
+          whitesurCombined = final: prev: {
+            whitesur-combined = prev.callPackage ./nix/pkgs/whitesur-combined.nix {};
+          };
         in [
           inputs.emacs-overlay.overlays.default
           inputs.nur.overlays.default
           cosmic
           direnvSkipTests
+          whitesurCombined
         ];
       in {
         # The usual flake attributes can be defined here, including system-
