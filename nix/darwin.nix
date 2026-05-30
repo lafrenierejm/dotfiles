@@ -119,7 +119,7 @@ in (lib.attrsets.mergeAttrsList [
       ];
       taps = builtins.attrNames nix-homebrew.taps;
     };
-    environment.systemPath = [config.homebrew.brewPrefix];
+    environment.systemPath = [config.homebrew.prefix];
     ids.gids.nixbld = 30000;
     nix.settings.ssl-cert-file = caBundlePath;
     security.pam.services.sudo_local.touchIdAuth = personal;

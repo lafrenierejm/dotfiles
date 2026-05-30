@@ -824,7 +824,7 @@ in {
     ssh = {
       enable = true;
       enableDefaultConfig = false;
-      matchBlocks = {
+      settings = {
         "*" = {
           host = "*";
           compression = true;
