@@ -1806,7 +1806,7 @@ will return t."
   (interactive)
   ;; Move point to the last character on this line.
   (move-end-of-line nil)
-  ;; Move backward for non-whitesapce character.
+  ;; Move backward for non-whitespace character.
   (re-search-backward "^\\|[^[:space:]]")
   ;; Move forward one character.
   (forward-char))
