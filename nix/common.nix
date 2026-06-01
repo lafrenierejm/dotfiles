@@ -29,6 +29,7 @@
 
     package = pkgs.nixVersions.stable;
     settings = {
+      auto-optimise-store = true; # detect and replace identical files in store with hard links
       experimental-features = "nix-command flakes";
       substituters = [
         "https://nix-community.cachix.org"
