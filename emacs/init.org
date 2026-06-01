@@ -5923,7 +5923,7 @@ Define a custom \src_emacs-lisp{eval-buffer}-like function that, when passed a p
 Clojure, Hy, and Scheme have built-in macros for commenting out sexps.
 Emacs Lisp, as far as I no, does not have any such macro built-in.
 A. Levy provided a working macro as [[https://stackoverflow.com/a/4201022/8468492][an answer]] on StackOverflow:
-#+begin_src emacs-lisp :noweb-ref elisp-mode/config
+#+begin_src emacs-lisp :noweb-ref bootstrapping
 (defmacro comment (&rest body)
   "Return `nil' in place of BODY, zero or more s-expressions."
   nil)
