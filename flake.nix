@@ -335,71 +335,84 @@
             inherit system;
             config.allowUnfreePredicate = unfreePackageFilter;
           };
-        in {
-          earthbound = let
-            userName = "lafrenierejm";
-            domain = "lafreniere.xyz";
-            personal = true;
-          in
-            inputs.nixpkgs.lib.nixosSystem {
-              inherit system;
-              modules = [
-                inputs.agenix.nixosModules.default
-                inputs.disko.nixosModules.disko
-                inputs.home-manager.nixosModules.home-manager
-                ./nix/linux/mediaServer.nix
-                ./nix/linux/fileServer.nix
-                ./nix/linux/gpuAmd.nix
-                ./nix/common.nix
-                ./nix/earthbound/configuration.nix
-                {
-                  nixpkgs.overlays = overlays;
-                  home-manager.sharedModules = [inputs.agenix.homeManagerModules.age];
-                  home-manager.backupFileExtension = "bak";
-                  home-manager.extraSpecialArgs = {
-                    inherit inputs pkgsTrunk realName userName personal;
-                    gitEmail = "git@${domain}";
-                    gitUseGpg = true;
+          hosts = {
+            earthbound = {
+              personal = true;
+              hostname = "earthbound";
+              userName = "lafrenierejm";
+              gitEmail = "git@lafreniere.xyz";
+              extraModules = [./nix/earthbound/configuration.nix];
+            };
+            darkstar = rec {
+              hostname = "darkstar";
+              personal = true;
+              userName = "lafrenierejm";
+              gitEmail = "git@lafreniere.xyz";
+              extraModules = [./nix/linux/darkstar/configuration.nix];
+            };
+          };
+        in (builtins.mapAttrs
+          (host: values: (inputs.nixpkgs.lib.nixosSystem {
+            inherit system;
+            modules = [
+              inputs.agenix.nixosModules.default
+              inputs.disko.nixosModules.disko
+              inputs.home-manager.nixosModules.home-manager
+              ./nix/linux/mediaServer.nix
+              ./nix/linux/fileServer.nix
+              ./nix/linux/gpuAmd.nix
+              ./nix/common.nix
+              {
+                nixpkgs.overlays = overlays;
+                home-manager.sharedModules = [inputs.agenix.homeManagerModules.age];
+                home-manager.backupFileExtension = "bak";
+                home-manager.extraSpecialArgs = {
+                  inherit inputs pkgsTrunk realName;
+                  inherit (values) gitEmail personal userName;
+                  gitUseGpg = true;
+                };
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users."${values.userName}" = {
+                  imports = [
+                    ./nix/home.nix
+                    ./nix/home/udiskie.nix
+                  ];
+                };
+                users.users = {
+                  "${values.userName}" = {
+                    home = "/home/${values.userName}";
+                    isNormalUser = true;
+                    description = "Joseph LaFreniere";
+                    openssh.authorizedKeys.keys = [
+                      (builtins.readFile ./ssh/airborn.pub)
+                      (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
+                    ];
+                    extraGroups = [
+                      "inputs"
+                      "networkmanager"
+                      "media"
+                      "podman"
+                      "wheel"
+                    ];
+                    shell = pkgs.zsh;
                   };
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.users."${userName}" = {
-                    imports = [
-                      ./nix/home.nix
-                      ./nix/home/udiskie.nix
+                  rbralley = {
+                    isNormalUser = true;
+                    description = "Ratannya Bralley";
+                    openssh.authorizedKeys.keys = [
+                      (builtins.readFile ./ssh/rbralley/imac.pub)
                     ];
                   };
-                  users.users = {
-                    "${userName}" = {
-                      home = "/home/${userName}";
-                      isNormalUser = true;
-                      description = "Joseph LaFreniere";
-                      openssh.authorizedKeys.keys = [
-                        (builtins.readFile ./ssh/airborn.pub)
-                        (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
-                      ];
-                      extraGroups = [
-                        "inputs"
-                        "networkmanager"
-                        "media"
-                        "podman"
-                        "wheel"
-                      ];
-                      shell = pkgs.zsh;
-                    };
-                    rbralley = {
-                      isNormalUser = true;
-                      description = "Ratannya Bralley";
-                      openssh.authorizedKeys.keys = [
-                        (builtins.readFile ./ssh/rbralley/imac.pub)
-                      ];
-                    };
-                  };
-                }
-              ];
-              specialArgs = {inherit inputs domain personal realName system userName;};
+                };
+              }
+            ];
+            specialArgs = {
+              inherit inputs realName system;
+              inherit (values) personal userName hostname;
             };
-        };
+          }))
+          hosts);
       };
     };
 }
