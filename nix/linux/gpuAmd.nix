@@ -49,7 +49,7 @@ in {
 
     services.ollama = {
       enable = true;
-      acceleration = "rocm";
+      package = pkgs.ollama-rocm;
       environmentVariables = {
         OLLAMA_HOST = "0.0.0.0:${builtins.toString cfg.ports.ollama}"; # "localhost:${builtins.toString cfg.ports.ollama}";
         OLLAMA_BASE_URL = "https://earthbound.fin-alioth.ts.net/ollama";
@@ -89,37 +89,37 @@ in {
       '';
     };
 
-    services.open-webui = {
-      enable = true;
-      openFirewall = true; # port 8080
-      environment = {
-        ANONYMIZED_TELEMETRY = "False";
-        DO_NOT_TRACK = "True";
-        SCARF_NO_ANALYTICS = "True";
-        # WEBUI_URL = "http://earthbound.fin-alioth.ts.net/open-webui";
-      };
-    };
-    services.nginx.virtualHosts = {
-      open-webui = {
-        serverAliases = [
-          "earthbound.local"
-          "earthbound.fin-alioth.ts.net"
-        ];
-        listen = [
-          {
-            inherit (config.services.open-webui) port;
-            addr = "earthbound.fin-alioth.ts.net";
-          }
-        ];
-        locations."/" = {
-          proxyPass = "http://localhost:${builtins.toString config.services.open-webui.port}$request_uri";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_buffering off;
-          '';
-        };
-      };
-    };
+    # services.open-webui = {
+    #   enable = true;
+    #   openFirewall = true; # port 8080
+    #   environment = {
+    #     ANONYMIZED_TELEMETRY = "False";
+    #     DO_NOT_TRACK = "True";
+    #     SCARF_NO_ANALYTICS = "True";
+    #     # WEBUI_URL = "http://earthbound.fin-alioth.ts.net/open-webui";
+    #   };
+    # };
+    # services.nginx.virtualHosts = {
+    #   open-webui = {
+    #     serverAliases = [
+    #       "earthbound.local"
+    #       "earthbound.fin-alioth.ts.net"
+    #     ];
+    #     listen = [
+    #       {
+    #         inherit (config.services.open-webui) port;
+    #         addr = "earthbound.fin-alioth.ts.net";
+    #       }
+    #     ];
+    #     locations."/" = {
+    #       proxyPass = "http://localhost:${builtins.toString config.services.open-webui.port}$request_uri";
+    #       proxyWebsockets = true;
+    #       extraConfig = ''
+    #         proxy_buffering off;
+    #       '';
+    #     };
+    #   };
+    # };
 
     services.foldingathome.enable = true;
 

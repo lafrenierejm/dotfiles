@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   # Enable networking
@@ -8,7 +9,7 @@
 
   # Enable wireless.
   networking.networkmanager.enable = true;
-  networking.wireless.enable = false;
+  networking.wireless.enable = lib.mkDefault false;
   networking.wireguard.enable = true;
   services.resolved.enable = true;
 

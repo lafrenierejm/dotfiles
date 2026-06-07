@@ -20,11 +20,14 @@
   ];
 in {
   imports = [
-    ./hardware-configuration.nix
-    ./filesystem.nix
-    ./networking.nix
     ../linux/audio.nix
+    ../linux/fileServer.nix
+    ../linux/gpuAmd.nix
     ../linux/graphical.nix
+    ../linux/mediaServer.nix
+    ./filesystem.nix
+    ./hardware-configuration.nix
+    ./networking.nix
   ];
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18; # LTS supported through end of 2027

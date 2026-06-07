@@ -354,14 +354,12 @@
         in (builtins.mapAttrs
           (host: values: (inputs.nixpkgs.lib.nixosSystem {
             inherit system;
-            modules = [
+            modules = pkgs.lib.lists.flatten [
               inputs.agenix.nixosModules.default
               inputs.disko.nixosModules.disko
               inputs.home-manager.nixosModules.home-manager
-              ./nix/linux/mediaServer.nix
-              ./nix/linux/fileServer.nix
-              ./nix/linux/gpuAmd.nix
               ./nix/common.nix
+              values.extraModules
               {
                 nixpkgs.overlays = overlays;
                 home-manager.sharedModules = [inputs.agenix.homeManagerModules.age];
