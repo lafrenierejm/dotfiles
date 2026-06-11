@@ -348,7 +348,10 @@
               personal = true;
               userName = "lafrenierejm";
               gitEmail = "git@lafreniere.xyz";
-              extraModules = [./nix/linux/darkstar/configuration.nix];
+              extraModules = [
+                ./nix/linux/darkstar/configuration.nix
+                ./nix/linux/darkstar/hardware-configuration.nix
+              ];
             };
           };
         in (builtins.mapAttrs
