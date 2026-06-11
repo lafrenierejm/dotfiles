@@ -156,7 +156,6 @@ in {
           ]))
         ])
         (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
-          bitwarden-desktop
           dconf2nix
           feishin
           mpv
