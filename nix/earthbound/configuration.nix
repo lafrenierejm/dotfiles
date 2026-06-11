@@ -5,6 +5,7 @@
   inputs,
   config,
   domain,
+  hostname,
   pkgs,
   ports,
   system,
@@ -25,10 +26,13 @@ in {
     ../linux/gpuAmd.nix
     ../linux/graphical.nix
     ../linux/mediaServer.nix
+    ../linux/networking.nix
     ./filesystem.nix
     ./hardware-configuration.nix
     ./networking.nix
   ];
+
+  age.secrets.tailscale.file = ./tailscale.age;
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18; # LTS supported through end of 2027
   boot.kernelParams = ["nohibernate"];
