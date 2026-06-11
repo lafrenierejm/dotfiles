@@ -661,6 +661,7 @@ in {
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         };
       };
+      configPath = "${config.xdg.configHome}/mozilla/firefox";
     };
 
     fzf = {
