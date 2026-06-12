@@ -3,6 +3,7 @@
   age.secrets.zfs-hdd.file = ./zfs-hdd.age;
 
   boot.supportedFilesystems = ["ntfs" "zfs"];
+  boot.zfs.forceImportRoot = false;
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/099beb80-1f90-4f04-824d-33fe2fb231c4";
