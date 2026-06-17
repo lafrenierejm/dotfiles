@@ -10,7 +10,7 @@
   ...
 }: {
   age.secrets.cachix-auth = {
-    file = ./cachix-auth.age;
+    file = ./secrets/cachix-auth.age;
     mode = "440";
     owner = "root";
     group = "nixbld";
