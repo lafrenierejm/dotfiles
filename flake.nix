@@ -224,6 +224,7 @@
         unfreePackageFilter = pkg:
           builtins.elem (inputs.nixpkgs.lib.getName pkg) [
             "claude-code"
+            "firefox"
             "firefox-bin"
             "firefox-bin-unwrapped"
           ];
