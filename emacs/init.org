@@ -3072,6 +3072,17 @@ Use child frames for /Company/'s candidate menus.
           desktop-minor-mode-table)))
 #+end_src
 
+** Native Complete
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'shell
+  (native-complete-setup-bash))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref company/config
+(add-to-list 'company-backends 'company-native-complete)
+#+end_src
+
 * System Management
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref system

@@ -580,6 +580,7 @@ in {
         minions
         modus-themes
         monky
+        native-complete
         nix-mode
         nix-ts-mode
         no-littering
