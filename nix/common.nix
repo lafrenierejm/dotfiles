@@ -28,19 +28,30 @@
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
     package = pkgs.nixVersions.stable;
-    settings = {
-      auto-optimise-store = true; # detect and replace identical files in store with hard links
-      experimental-features = "nix-command flakes";
-      substituters = [
-        "https://nix-community.cachix.org"
-        "https://lafrenierejm.cachix.org"
-      ];
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "lafrenierejm.cachix.org-1:80p6+l8ziffNuhGRtiZu0xsV5FGXk2GbkOU2unIi8OM="
-      ];
-      trusted-users = [userName];
-    };
+    settings =
+      {
+        auto-optimise-store = true; # detect and replace identical files in store with hard links
+        experimental-features = "nix-command flakes";
+        substituters = [
+          "https://nix-community.cachix.org"
+          "https://lafrenierejm.cachix.org"
+        ];
+        trusted-public-keys = [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "lafrenierejm.cachix.org-1:I0CTtIze4k7s1kvHtnP04rMfnmT0qSToc0zMqJ80eNg="
+        ];
+        trusted-users = [userName];
+      }
+      // lib.attrsets.optionalAttrs personal {
+        post-build-hook = lib.getExe (pkgs.writeShellApplication {
+          name = "cachix-push";
+          runtimeInputs = with pkgs; [cachix];
+          runtimeEnv = {
+            CACHIX_AUTH_TOKEN_FILE = config.age.secrets.cachix-auth.path;
+          };
+          text = builtins.readFile ./cachix-push.sh;
+        });
+      };
 
     gc =
       {
