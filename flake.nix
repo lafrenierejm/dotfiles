@@ -109,49 +109,6 @@
         # system.
         packages = {
           default = pkgs.hello;
-          install-iso = let
-            username = "lafrenierejm";
-            personal = true;
-          in
-            inputs.nixos-generators.nixosGenerate {
-              inherit system;
-              format = "install-iso";
-              modules = [
-                ./nix/linux/mediaServer.nix
-                ./nix/linux/fileServer.nix
-                ./nix/linux/gpuAmd.nix
-                ./nix/common.nix
-                ./nix/earthbound/configuration.nix
-                inputs.disko.nixosModules.disko
-                inputs.home-manager.nixosModules.home-manager
-                {
-                  nixpkgs.overlays = [
-                    inputs.emacs-overlay.overlays.default
-                    inputs.nur.overlays.default
-                  ];
-                  home-manager.extraSpecialArgs = {
-                    inherit inputs personal;
-                    pkgsTrunk = pkgs;
-                    realName = "Joseph LaFreniere";
-                    userName = username;
-                    gitEmail = "git@lafreniere.xyz";
-                    gitUseGpg = true;
-                  };
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.users."${username}" = ./nix/home.nix;
-                  users.users."${username}" = {
-                    home = "/home/${username}";
-                    openssh.authorizedKeys.keys = [
-                      (builtins.readFile ./ssh/airborn.pub)
-                    ];
-                  };
-                }
-              ];
-              specialArgs = {
-                inherit inputs personal system username;
-              };
-            };
         };
 
         # Auto formatters. This also adds a flake check to ensure that the
