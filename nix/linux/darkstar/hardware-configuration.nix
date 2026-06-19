@@ -51,6 +51,12 @@
     };
   };
 
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "weekly";
+    fileSystems = ["/"];
+  };
+
   swapDevices = [
     {device = "/dev/disk/by-uuid/463241cf-e75d-4fbb-998b-950459dc88d2";}
   ];
