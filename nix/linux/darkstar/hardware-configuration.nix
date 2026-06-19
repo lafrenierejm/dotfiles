@@ -41,6 +41,7 @@
       options = [
         "subvol=nix"
         "compress=zstd"
+        "noatime" # disregard access times to reduce disk wear
       ];
     };
     "/boot" = {
