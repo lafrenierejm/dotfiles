@@ -92,6 +92,7 @@ in {
       };
     };
 
+    services.nginx.enable = true;
     services.nginx.virtualHosts.localhost.locations =
       lib.mapAttrs'
       (

@@ -29,6 +29,7 @@ in {
     ../linux/networking.nix
     ./filesystem.nix
     ./hardware-configuration.nix
+    ./nginx.nix
   ];
 
   age.secrets.tailscale.file = ./tailscale.age;

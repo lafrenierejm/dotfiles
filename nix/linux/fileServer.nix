@@ -60,6 +60,7 @@ in {
       settings.trash-original-torrent-files = true;
     };
     systemd.services.transmission.serviceConfig.StateDirectoryMode = "775";
+    services.nginx.enable = true;
     services.nginx.virtualHosts.localhost.locations = {
       "/transmission" = {
         proxyPass = "http://localhost:${builtins.toString cfg.ports.transmission}";
