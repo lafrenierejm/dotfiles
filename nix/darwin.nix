@@ -30,7 +30,6 @@
     (lib.attrsets.optionalAttrs personal {
       aldente = "com.apphousekitchen.aldente-pro";
       alt-tab = "com.lwouis.alt-tab-macos";
-      altserver = "com.rileytestut.AltServer";
       fmail3 = "fr.appmac.fmail3";
       iina = "com.colliderli.iina";
       lunar = "fyi.lunar.Lunar";
@@ -62,13 +61,11 @@
       "font-noto-sans-symbols"
       "font-noto-sans-symbols-2"
       "karabiner-elements"
-      "proxy-audio-device"
       "zoom"
       (lib.lists.optionals personal [
         "apparency"
         "gog-galaxy"
         "inkscape"
-        "microsoft-teams"
         "microsoft-word"
         "netnewswire"
         "radio-silence"
