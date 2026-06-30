@@ -132,6 +132,7 @@ in {
       PasswordAuthentication = false;
     };
   };
+  programs.mosh.enable = true;
 
   # Enable Podman.
   virtualisation.containers.enable = true;
