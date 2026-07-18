@@ -190,6 +190,23 @@
         "type": "github"
       }
     },
+    "emacsPkg-browse-at-remote": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784342543,
+        "narHash": "sha256-kTl2iyDFzT1Fqfp6t7Z2hbgxk+gltwJaeHRGi8vZESc=",
+        "owner": "lafrenierejm",
+        "repo": "browse-at-remote",
+        "rev": "57209bd0cc957c235780b06ac7b4281ead6c6fb1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lafrenierejm",
+        "ref": "default-directory",
+        "repo": "browse-at-remote",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1029,6 +1046,7 @@
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",
         "emacs-plus": "emacs-plus",
+        "emacsPkg-browse-at-remote": "emacsPkg-browse-at-remote",
         "flake-parts": "flake-parts",
         "flake-root": "flake-root",
         "ghq": "ghq",

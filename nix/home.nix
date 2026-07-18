@@ -638,12 +638,7 @@ in {
       overrides = self: super: {
         agent-shell = self.melpaPackages.agent-shell;
         browse-at-remote = self.melpaPackages.browse-at-remote.overrideAttrs {
-          src = pkgs.fetchFromGitHub {
-            owner = "lafrenierejm";
-            repo = "browse-at-remote";
-            rev = "default-directory";
-            hash = "sha256-L2WMTQaPrg3EDMa4DCednN54jB6vEvJOBVZ83WXUCG4=";
-          };
+          src = inputs.emacsPkg-browse-at-remote;
         };
       };
     };

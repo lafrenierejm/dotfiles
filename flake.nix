@@ -25,6 +25,10 @@
       url = "github:d12frosted/homebrew-emacs-plus";
       flake = false;
     };
+    emacsPkg-browse-at-remote = {
+      url = "github:lafrenierejm/browse-at-remote/default-directory";
+      flake = false;
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
     ghq = {
