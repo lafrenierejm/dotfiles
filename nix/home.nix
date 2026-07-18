@@ -831,6 +831,9 @@ in {
       settings = {
         "*" = {
           Compression = true;
+          ControlMaster = true;
+          ControlPath = "~/.ssh/cm-%r@%h:%p";
+          ControlPersist = "10m";
           IdentitiesOnly = true;
           IdentityFile = "~/.ssh/id_ed25519";
         };
