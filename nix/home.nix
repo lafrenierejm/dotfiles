@@ -554,6 +554,7 @@ in {
         frames-only-mode
         geiser-guile
         general
+        ghostel
         ghq
         go-eldoc
         go-mode
@@ -641,6 +642,7 @@ in {
           src = inputs.emacsPkg-browse-at-remote;
         };
         evil-collection = self.melpaPackages.evil-collection;
+        ghostel = (pkgsTrunk.emacsPackagesFor pkgs.emacs-git-pgtk).ghostel;
       };
     };
 

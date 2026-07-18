@@ -3639,6 +3639,12 @@ instance exists, start a new instance whose name includes the directory."
     (vterm-lafrenierejm-find-directory cwd)))
 #+end_src
 
+*** /Ghostel/
+
+#+begin_src emacs-lisp
+(use-package ghostel)
+#+end_src
+
 ** /Eat/
 
 #+begin_src emacs-lisp
