@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
-    nixpkgs-trunk.url = "github:NixOS/nixpkgs";
+    nixpkgs-trunk.url = "github:lafrenierejm/nixpkgs/ghostel";
     agenix.url = "github:ryantm/agenix";
     cramt-nixconf = {
       url = "github:cramt/nixconf";

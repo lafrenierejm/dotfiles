@@ -537,6 +537,7 @@ in {
         evil
         evil-cleverparens
         evil-collection
+        evil-ghostel
         evil-indent-plus
         evil-matchit
         evil-org
@@ -643,6 +644,7 @@ in {
           src = inputs.emacsPkg-browse-at-remote;
         };
         evil-collection = self.melpaPackages.evil-collection;
+        evil-ghostel = self.melpaPackages.evil-ghostel;
         ghostel = (pkgsTrunk.emacsPackagesFor pkgs.emacs-git-pgtk).ghostel;
       };
     };
