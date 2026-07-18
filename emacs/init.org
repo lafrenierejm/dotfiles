@@ -6878,6 +6878,12 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
           "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
+** Zig
+
+#+begin_src emacs-lisp
+(use-package zig-mode)
+#+end_src
+
 ** Automatic Indentation
 
 *** /DTRT Indent/

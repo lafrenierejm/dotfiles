@@ -635,6 +635,7 @@ in {
         xonsh-mode
         yaml-mode
         youtube-dl
+        zig-mode
       ]);
       overrides = self: super: {
         agent-shell = self.melpaPackages.agent-shell;
