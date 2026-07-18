@@ -830,7 +830,6 @@ in {
       enableDefaultConfig = false;
       settings = {
         "*" = {
-          Host = "*";
           Compression = true;
           IdentitiesOnly = true;
           IdentityFile = "~/.ssh/id_ed25519";
