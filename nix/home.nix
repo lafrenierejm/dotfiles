@@ -640,6 +640,7 @@ in {
         browse-at-remote = self.melpaPackages.browse-at-remote.overrideAttrs {
           src = inputs.emacsPkg-browse-at-remote;
         };
+        evil-collection = self.melpaPackages.evil-collection;
       };
     };
 
