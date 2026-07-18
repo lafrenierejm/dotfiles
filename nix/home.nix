@@ -830,26 +830,26 @@ in {
       enableDefaultConfig = false;
       settings = {
         "*" = {
-          host = "*";
-          compression = true;
-          identitiesOnly = true;
-          identityFile = "~/.ssh/id_ed25519";
+          Host = "*";
+          Compression = true;
+          IdentitiesOnly = true;
+          IdentityFile = "~/.ssh/id_ed25519";
         };
         "github.com" = {
-          hostname = "github.com";
-          user = "lafrenierejm";
+          HostName = "github.com";
+          User = "lafrenierejm";
         };
         "gitlab.com" = {
-          hostname = "gitlab.com";
-          user = "lafrenierejm";
+          HostName = "gitlab.com";
+          User = "lafrenierejm";
         };
         "git.sr.ht" = {
-          hostname = "git.sr.ht";
+          HostName = "git.sr.ht";
           user = "lafrenierejm";
         };
         "earthbound" = {
-          hostname = "earthbound.fin-alioth.ts.net";
-          user = "lafrenierejm";
+          HostName = "earthbound.fin-alioth.ts.net";
+          User = "lafrenierejm";
         };
       };
     };
