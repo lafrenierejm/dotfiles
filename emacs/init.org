@@ -495,14 +495,6 @@ Some fonts support ligatures.
   (mac-auto-operator-composition-mode))
 #+end_src
 
-*** ANSI Color Codes
-
-#+begin_src emacs-lisp
-(use-package ansi-color
-  :ghook
-  ('compilation-filter-hook #'ansi-color-compilation-filter))
-#+end_src
-
 ** /Form Feed/
 
 Display ^L glyphs as horizontal lines.
@@ -3572,11 +3564,6 @@ instance exists, start a new instance whose name includes the directory."
   <<ghostel/config>>)
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package evil-ghostel
-  :after (ghostel evil)
-  :hook (ghostel-mode . evil-ghostel-mode))
-#+end_src
 
 **** Open a Directory In Ghostel
 
@@ -3636,6 +3623,45 @@ Use the above function to generate the names of ghostel buffers.
 
 #+begin_src emacs-lisp :noweb-ref ghostel/custom
 (ghostel-buffer-name-function #'ghostel-lafrenierejm-name)
+#+end_src
+
+**** Compilation Mode Integration
+
+Per [[https://dakra.github.io/ghostel/#compile-mode]]:
+
+#+begin_quote
+Enable ~ghostel-compile-global-mode~ to advise ~compilation-start~ so every caller that goes through it - =M-x compile=, =M-x recompile=, =M-x project-compile=, and any third-party command that uses ~compilation-start~ - runs in a ghostel buffer automatically.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package ghostel-compile
+  :demand
+  :config
+  (ghostel-compile-global-mode +1))
+#+end_src
+
+**** Comint Integration
+
+Per [[https://dakra.github.io/ghostel/#compilation-mode]]:
+
+#+begin_quote
+~ghostel-comint-mode~ replaces comint's built-in ~ansi-color-process-output~ with a stream filter that runs every chunk of process output through libghostty-vt's VT parser.
+In =M-x shell= (and any other comint-derived buffer - REPLs, etc.) output renders with the same SGR fidelity a real ghostel terminal would give it, plus OSC 8 hyperlinks and OSC 7 directory tracking.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package ghostel-comint
+  :demand
+  :config
+  (ghostel-comint-global-mode +1))
+#+end_src
+
+**** Evil Integration
+
+#+begin_src emacs-lisp
+(use-package evil-ghostel
+  :after (ghostel evil)
+  :hook (ghostel-mode . evil-ghostel-mode))
 #+end_src
 
 ** Emacs Shell
