@@ -528,7 +528,6 @@ in {
         dockerfile-mode
         dtrt-indent
         dwim-shell-command
-        eat
         editorconfig
         eglot
         elfeed
@@ -627,7 +626,6 @@ in {
         treesit-fold
         treesit-grammars.with-all-grammars
         vimscript-ts-mode
-        vterm
         webpaste
         which-key
         ws-butler

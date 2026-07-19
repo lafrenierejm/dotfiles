@@ -3496,9 +3496,6 @@ Use =C-l= to clear the current buffer.
   ('shell-mode-hook #'shell-disable-command-echo)
   ('shell-mode-hook #'shell-indicate-empty-lines)
 
-  :general
-  <<shell/general>>
-
   :custom
   (shell-kill-buffer-on-exit t)
 
@@ -3543,13 +3540,6 @@ such instance exists, start a new instance whose name includes the directory."
     (switch-to-buffer buffer-name)))
 #+end_src
 
-Map the above function to =C-x z=.
-This keybinding mirrors the defaults for ~find-file~ and ~dired~.
-
-#+begin_src emacs-lisp :noweb-ref shell/general
-("C-x z" #'shell-lafrenierejm-find-directory)
-#+end_src
-
 **** Open the Current Directory in shell
 
 Define a function to open the current directory in shell.
@@ -3568,123 +3558,84 @@ instance exists, start a new instance whose name includes the directory."
     (shell-lafrenierejm-find-directory cwd)))
 #+end_src
 
-Map ~shell-lafrenierejm-here~ to =C-z=.
-This imitates the behavior of unix terminal applications.
-In most terminal applications, =C-z= is the key combination to suspend the current process which usually results in the user being returned to their shell.
-
-#+begin_src emacs-lisp :noweb-ref shell/general
-("C-z" #'shell-lafrenierejm-here)
-#+end_src
-
-*** /vterm/
-
-From the [[https://github.com/akermu/emacs-libvterm][project's README]]:
-#+begin_quote
-Emacs-libvterm (vterm) is fully-fledged terminal emulator inside GNU Emacs based on libvterm, a C library.
-As a result of using compiled code (instead of elisp), emacs-libvterm is fully capable, fast, and it can seamlessly handle large outputs.
-#+end_quote
+*** /Ghostel/
 
 #+begin_src emacs-lisp
-(use-package vterm
-  :demand
-
+(use-package ghostel
   :general
-  <<vterm/general>>
+  <<ghostel/general>>
 
   :custom
-  (vterm-buffer-name-string "*vterm %s*")
+  <<ghostel/custom>>
 
   :config
-  <<vterm/config>>)
+  <<ghostel/config>>)
 #+end_src
 
-**** Open vterm in a Given Directory
-
-Define a function to open a directory in vterm.
-
-#+begin_src emacs-lisp :noweb-ref vterm/config
-(defun vterm-lafrenierejm-find-directory (directory)
-  "Open VTerm in DIRECTORY.
-
-If a VTerm instance for the directory already exists, switch to it.  If no
-such instance exists, start a new instance whose name includes the directory."
-  (interactive "DOpen vterm in: ")
-  (let* ((buffer-name
-          (format "*vterm %s*"
-                  (projectile-lafrenierejm-make-relative-to-root-dwim
-                   directory)))
-         (buffer (get-buffer-create buffer-name)))
-    (pop-to-buffer-same-window buffer)
-    (cd directory)
-    (unless (derived-mode-p 'vterm-mode)
-      (vterm-mode))
-    buffer))
+#+begin_src emacs-lisp
+(use-package evil-ghostel
+  :after (ghostel evil)
+  :hook (ghostel-mode . evil-ghostel-mode))
 #+end_src
 
-**** Open the Current Directory in vterm
+**** Open a Directory In Ghostel
 
-Define a function to open the current directory in vterm.
+Define an interactive function to open a given directory in ghostel.
 
-#+begin_src emacs-lisp :noweb-ref vterm/config
-(defun vterm-lafrenierejm-here ()
-  "Open vterm in the current working directory.
+#+begin_src emacs-lisp :noweb-ref ghostel/config
+(defun ghostel-lafrenierejm-find-directory (directory)
+  "Open DIRECTORY in ghostel.
 
-If a vterm instance for the directory already exists, switch to it. If no such
+If a ghostel instance for DIRECTORY already exists, switch to it.  If no
+such instance exists, start a new instance for DIRECTORY."
+  (interactive "DOpen ghostel in: ")
+  (cd directory)
+  (ghostel))
+#+end_src
+
+Map the above function to =C-x z=.
+This keybinding mirrors the defaults for ~find-file~ and ~dired~.
+
+#+begin_src emacs-lisp :noweb-ref ghostel/general
+("C-x z" #'ghostel-lafrenierejm-find-directory)
+#+end_src
+
+**** Open Current Directory In Ghostel
+
+#+begin_src emacs-lisp :noweb-ref ghostel/config
+(defun ghostel-lafrenierejm-here ()
+  "Open ghostel in the current working directory.
+
+If a ghostel instance for the directory already exists, switch to it. If no such
 instance exists, start a new instance whose name includes the directory."
   (interactive)
   (let ((cwd (abbreviate-file-name
               (if (buffer-file-name)
                   (file-name-directory (buffer-file-name))
                 default-directory))))
-    (vterm-lafrenierejm-find-directory cwd)))
+    (ghostel-lafrenierejm-find-directory cwd)))
 #+end_src
 
-*** /Ghostel/
+Bind the above function to =C-z=.
+This imitates the common behavior of terminal applications, in which =C-z= suspends the current process and returns the user to the invoking shell.
 
-#+begin_src emacs-lisp
-(use-package ghostel)
-(use-package evil-ghostel
-  :after (ghostel evil)
-  :hook (ghostel-mode . evil-ghostel-mode))
+#+begin_src emacs-lisp :noweb-ref ghostel/general
+("C-z" #'ghostel-lafrenierejm-here)
 #+end_src
 
-** /Eat/
+**** Name Ghostel Buffers With Project-Aware Paths
 
-#+begin_src emacs-lisp
-(use-package eat
-  :gfhook
-  <<eat/gfhook>>
-
-  :config
-  <<eat/config>>)
+#+begin_src emacs-lisp :noweb-ref ghostel/config
+(defun ghostel-lafrenierejm-name (title)
+  (format "*ghostel %s*"
+          (projectile-lafrenierejm-make-relative-to-root-dwim
+           default-directory)))
 #+end_src
 
-*** Prettify Symbols
+Use the above function to generate the names of ghostel buffers.
 
-This is used to remap the characters that Claude Code uses for its spinner and response indicator.
-
-#+begin_src emacs-lisp :noweb-ref eat/config
-(defun eat/lafrenierejm/prettify-symbols ()
-  "Map symbol prettifications for vterm buffers."
-  (setq prettify-symbols-alist
-        '(("✻" . ?○)
-          ("✽" . ?◔)
-          ("✶" . ?◑)
-          ("✳" . ?◕)
-          ("✢" . ?●)
-          ("⏺" . ?‣))))
-#+end_src
-
-#+begin_src emacs-lisp :noweb-ref eat/gfhook
-('eat-mode-hook #'eat/lafrenierejm/prettify-symbols)
-('eat-mode-hook #'prettify-symbols-mode)
-#+end_src
-
-*** Unbind C-z
-
-#+begin_src emacs-lisp :noweb-ref eat/config
-(add-to-list 'eat-semi-char-non-bound-keys [?\C-z])
-(eat-update-semi-char-mode-map)
+#+begin_src emacs-lisp :noweb-ref ghostel/custom
+(ghostel-buffer-name-function #'ghostel-lafrenierejm-name)
 #+end_src
 
 ** Emacs Shell
