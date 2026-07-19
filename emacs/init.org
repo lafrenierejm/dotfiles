@@ -3564,6 +3564,35 @@ instance exists, start a new instance whose name includes the directory."
   <<ghostel/config>>)
 #+end_src
 
+**** Name Ghostel Buffers With Project-Aware Paths
+
+First we define a function that does nothing but return a project-aware buffer name.
+
+#+begin_src emacs-lisp :noweb-ref ghostel/config
+(defun ghostel-lafrenierejm-name-by-directory (_title)
+  "Return a project-aware ghostel buffer name."
+  (format "*ghostel %s*"
+          (projectile-lafrenierejm-make-relative-to-root-dwim
+           default-directory)))
+#+end_src
+
+Next we create a wrapper that not only returns the generated name but also sets the buffer-local ~ghostel--buffer-identity~.
+This is needed so that as a ghostel buffer's directory changes, ghostel's internal tracking of which buffer corresponds to which directory will also be updated.
+
+#+begin_src emacs-lisp :noweb-ref ghostel/config
+(defun ghostel-lafrenierejm-name--mutate (title)
+  "Generate and set `ghostel--buffer-identity' to a project-aware directory name."
+  (let ((name (ghostel-lafrenierejm-name-by-directory title)))
+    (when (derived-mode-p 'ghostel-mode)
+      (setq-local ghostel--buffer-identity name))
+    name))
+#+end_src
+
+Point ghostel to this mutating function for updating the names of ghostel buffers.
+
+#+begin_src emacs-lisp :noweb-ref ghostel/custom
+(ghostel-buffer-name-function #'ghostel-lafrenierejm-name--mutate)
+#+end_src
 
 **** Open a Directory In Ghostel
 
@@ -3576,8 +3605,9 @@ Define an interactive function to open a given directory in ghostel.
 If a ghostel instance for DIRECTORY already exists, switch to it.  If no
 such instance exists, start a new instance for DIRECTORY."
   (interactive "DOpen ghostel in: ")
-  (cd directory)
-  (ghostel))
+  (let* ((default-directory directory)
+         (ghostel-buffer-name (ghostel-lafrenierejm-name-by-directory nil)))
+    (ghostel)))
 #+end_src
 
 Map the above function to =C-x z=.
@@ -3596,11 +3626,7 @@ This keybinding mirrors the defaults for ~find-file~ and ~dired~.
 If a ghostel instance for the directory already exists, switch to it. If no such
 instance exists, start a new instance whose name includes the directory."
   (interactive)
-  (let ((cwd (abbreviate-file-name
-              (if (buffer-file-name)
-                  (file-name-directory (buffer-file-name))
-                default-directory))))
-    (ghostel-lafrenierejm-find-directory cwd)))
+  (ghostel-lafrenierejm-find-directory default-directory))
 #+end_src
 
 Bind the above function to =C-z=.
@@ -3608,21 +3634,6 @@ This imitates the common behavior of terminal applications, in which =C-z= suspe
 
 #+begin_src emacs-lisp :noweb-ref ghostel/general
 ("C-z" #'ghostel-lafrenierejm-here)
-#+end_src
-
-**** Name Ghostel Buffers With Project-Aware Paths
-
-#+begin_src emacs-lisp :noweb-ref ghostel/config
-(defun ghostel-lafrenierejm-name (title)
-  (format "*ghostel %s*"
-          (projectile-lafrenierejm-make-relative-to-root-dwim
-           default-directory)))
-#+end_src
-
-Use the above function to generate the names of ghostel buffers.
-
-#+begin_src emacs-lisp :noweb-ref ghostel/custom
-(ghostel-buffer-name-function #'ghostel-lafrenierejm-name)
 #+end_src
 
 **** Compilation Mode Integration
