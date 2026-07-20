@@ -305,7 +305,7 @@
             config.allowUnfreePredicate = unfreePackageFilter;
           };
           pkgsTrunk = import inputs.nixpkgs-trunk {
-            inherit system;
+            inherit overlays system;
             config.allowUnfreePredicate = unfreePackageFilter;
           };
           hosts = {
