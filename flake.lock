@@ -831,6 +831,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-ghostel": {
+      "locked": {
+        "lastModified": 1784396589,
+        "narHash": "sha256-nVSJ95uUbwk051hlyEAXEzrOpONES7GQjtQ7MnsHE1Y=",
+        "owner": "lafrenierejm",
+        "repo": "nixpkgs",
+        "rev": "c951b5da7947a7b6506054ed66f95842640a7749",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lafrenierejm",
+        "ref": "ghostel",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1782614948,
@@ -879,16 +895,15 @@
     },
     "nixpkgs-trunk": {
       "locked": {
-        "lastModified": 1784396589,
-        "narHash": "sha256-nVSJ95uUbwk051hlyEAXEzrOpONES7GQjtQ7MnsHE1Y=",
-        "owner": "lafrenierejm",
+        "lastModified": 1784520751,
+        "narHash": "sha256-3kGPZ82eF8bNcvw14ja/1XGPRckMcRyr7Nnkkbuy7g4=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "c951b5da7947a7b6506054ed66f95842640a7749",
+        "rev": "8ae4dc8df7a78991d18f195fc4ec28c0a8b8577e",
         "type": "github"
       },
       "original": {
-        "owner": "lafrenierejm",
-        "ref": "ghostel",
+        "owner": "NixOS",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1062,6 +1077,7 @@
         "nix-homebrew": "nix-homebrew",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_6",
+        "nixpkgs-ghostel": "nixpkgs-ghostel",
         "nixpkgs-trunk": "nixpkgs-trunk",
         "nur": "nur",
         "ripgrep-all": "ripgrep-all",
