@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     nixpkgs-trunk.url = "github:NixOS/nixpkgs";
-    nixpkgs-ghostel.url = "github:lafrenierejm/nixpkgs/ghostel";
     agenix.url = "github:ryantm/agenix";
     cramt-nixconf = {
       url = "github:cramt/nixconf";
@@ -213,7 +212,7 @@
               (prev.emacsPackagesFor emacs).overrideScope (efinal: eprev: {
                 ghostel =
                   efinal.callPackage
-                  "${inputs.nixpkgs-ghostel}/pkgs/applications/editors/emacs/elisp-packages/manual-packages/ghostel/package.nix"
+                  "${inputs.nixpkgs-trunk}/pkgs/applications/editors/emacs/elisp-packages/manual-packages/ghostel/package.nix"
                   {};
               });
           };
