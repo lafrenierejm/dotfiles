@@ -214,6 +214,9 @@
                   efinal.callPackage
                   "${inputs.nixpkgs-trunk}/pkgs/applications/editors/emacs/elisp-packages/manual-packages/ghostel/package.nix"
                   {};
+                evil-ghostel = eprev.melpaPackages.evil-ghostel.overrideAttrs {
+                  src = efinal.ghostel.src;
+                };
               });
           };
           whitesurCombined = final: prev: {

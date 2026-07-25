@@ -642,7 +642,6 @@ in {
           src = inputs.emacsPkg-browse-at-remote;
         };
         evil-collection = self.melpaPackages.evil-collection;
-        evil-ghostel = self.melpaPackages.evil-ghostel;
       };
     };
 
