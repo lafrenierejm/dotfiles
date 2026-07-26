@@ -29,6 +29,10 @@
       url = "github:lafrenierejm/browse-at-remote/default-directory";
       flake = false;
     };
+    emacsPkg-counsel-projectile = {
+      url = "github:lafrenierejm/counsel-projectile/projectile-ignored-files";
+      flake = false;
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
     ghq = {

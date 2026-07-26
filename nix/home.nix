@@ -642,6 +642,10 @@ in {
           src = inputs.emacsPkg-browse-at-remote;
         };
         evil-collection = self.melpaPackages.evil-collection;
+        counsel-projectile = self.melpaPackages.counsel-projectile.overrideAttrs {
+          src = inputs.emacsPkg-counsel-projectile;
+        };
+        projectile = self.melpaPackages.projectile;
       };
     };
 
