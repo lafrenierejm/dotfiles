@@ -94,6 +94,8 @@
   #   enableSSHSupport = true;
   # };
 
+  programs.steam.enable = true;
+
   services.fwupd.enable = true;
 
   # This value determines the NixOS release from which the default

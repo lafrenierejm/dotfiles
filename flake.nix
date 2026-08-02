@@ -192,6 +192,8 @@
             "firefox"
             "firefox-bin"
             "firefox-bin-unwrapped"
+            "steam"
+            "steam-unwrapped"
           ];
         overlays = let
           cosmic = final: prev: {
