@@ -211,18 +211,6 @@
               doCheck = false;
             });
           };
-          ghostel = final: prev: {
-            emacsPackagesFor = emacs:
-              (prev.emacsPackagesFor emacs).overrideScope (efinal: eprev: {
-                ghostel =
-                  efinal.callPackage
-                  "${inputs.nixpkgs-trunk}/pkgs/applications/editors/emacs/elisp-packages/manual-packages/ghostel/package.nix"
-                  {};
-                evil-ghostel = eprev.melpaPackages.evil-ghostel.overrideAttrs {
-                  src = efinal.ghostel.src;
-                };
-              });
-          };
           whitesurCombined = final: prev: {
             whitesur-combined = prev.callPackage ./nix/pkgs/whitesur-combined.nix {};
           };
@@ -231,7 +219,6 @@
           inputs.nur.overlays.default
           cosmic
           direnvSkipTests
-          ghostel
           whitesurCombined
         ];
       in {
