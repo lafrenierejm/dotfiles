@@ -650,6 +650,7 @@ in {
         };
         ghostel = (pkgsTrunk.emacsPackagesFor pkgs.emacs-git-pgtk).ghostel;
         projectile = self.melpaPackages.projectile;
+        shell-maker = self.melpaPackages.shell-maker;
       };
     };
 
