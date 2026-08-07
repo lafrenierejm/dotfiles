@@ -509,6 +509,7 @@ in {
         clj-refactor
         clojure-mode
         company
+        company-native-complete
         company-posframe
         company-restclient
         compdef
@@ -583,7 +584,6 @@ in {
         minions
         modus-themes
         monky
-        native-complete
         nix-mode
         nix-ts-mode
         no-littering
