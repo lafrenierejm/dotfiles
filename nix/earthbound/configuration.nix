@@ -9,7 +9,6 @@
   pkgs,
   ports,
   system,
-  userName,
   ...
 }: let
   systemsLinuxCross = [
@@ -109,19 +108,6 @@ in {
     podman-tui
     teensy-loader-cli
     zsh
-  ];
-
-  # Allow passwordless sudo for nixos-rebuild
-  security.sudo.extraRules = [
-    {
-      users = [userName];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = ["NOPASSWD"];
-        }
-      ];
-    }
   ];
 
   # Enable the OpenSSH daemon.

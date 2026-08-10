@@ -7,7 +7,8 @@
   system,
   userName,
   ...
-}: {
+}:
+{
   age.secrets.cachix-auth = {
     file = ./secrets/cachix-auth.age;
     mode = "440";
@@ -90,4 +91,17 @@
   programs = {
     zsh.enable = true;
   };
+}
+// lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
+  security.sudo.extraRules = [
+    {
+      users = [userName];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = ["NOPASSWD"];
+        }
+      ];
+    }
+  ];
 }

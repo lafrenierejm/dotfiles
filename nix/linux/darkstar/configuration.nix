@@ -5,7 +5,6 @@
   config,
   pkgs,
   hostname,
-  userName,
   ...
 }: {
   imports = [
@@ -83,18 +82,6 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  security.sudo.extraRules = [
-    {
-      users = [userName];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = ["NOPASSWD"];
-        }
-      ];
-    }
-  ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
