@@ -460,6 +460,18 @@ in {
             "store ls" # list contents of a store path
             "why-depends" # explain a dependency edge
           ])
+          (map (sub: "uv ${sub}") [
+            "export"
+            "init"
+            "lock"
+            "run mypy"
+            "run pre-commit"
+            "run prek"
+            "run pytest"
+            "run ruff"
+            "run ty"
+            "sync"
+          ])
         ]);
       settings.permissions.deny =
         # `Write`/`NotebookEdit` path rules are accepted but never consulted by Claude Code;
