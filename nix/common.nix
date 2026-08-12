@@ -96,12 +96,30 @@
   security.sudo.extraRules = [
     {
       users = [userName];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = ["NOPASSWD"];
-        }
-      ];
+      commands =
+        [
+          {
+            command = "/run/current-system/sw/bin/nixos-rebuild";
+            options = ["NOPASSWD"];
+          }
+          {
+            command = "/run/current-system/sw/bin/systemctl daemon-reload";
+            options = ["NOPASSWD"];
+          }
+        ]
+        ++ (map (subcommand: {
+            command = "/run/current-system/sw/bin/systemctl ${subcommand} *";
+            options = ["NOPASSWD"];
+          }) [
+            "disable"
+            "enable"
+            "reload"
+            "reload-or-restart"
+            "restart"
+            "start"
+            "status"
+            "stop"
+          ]);
     }
   ];
 }
