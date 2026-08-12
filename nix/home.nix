@@ -388,6 +388,7 @@ in {
           ]
           # other
           [
+            "actionlint"
             "diff" # diffutils
             "dig"
             "doggo"
