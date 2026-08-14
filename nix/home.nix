@@ -60,6 +60,7 @@ in {
         fi
       '';
 
+      file.".claude/CLAUDE.md".source = ../claude/CLAUDE.md;
       file.".gnupg/gpg-agent.conf".text =
         lib.concatStringsSep "\n"
         (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
