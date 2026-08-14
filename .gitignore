@@ -1,6 +1,7 @@
 /*
 !.gitattributes
 !.gitignore
+!/.claude/settings.json
 !/.editorconfig
 !/.git-crypt/
 !/.typos.toml
