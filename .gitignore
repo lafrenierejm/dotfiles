@@ -30,9 +30,9 @@
 !/nix/
 !/nvim/
 !/pijul/
-!/restic/
 !/rclone/
 !/redshift.conf
+!/restic/
 !/sh/
 !/shepherd/
 !/skhd/
