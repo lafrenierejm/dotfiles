@@ -403,6 +403,20 @@ in {
             "show-ref"
             "status"
           ])
+          (map (sub: "nix ${sub}") [
+            "config show" # dump effective config
+            "eval" # pure expression evaluation, no store writes
+            "flake check --no-build" # evaluate flake checks without building
+            "flake metadata" # show flake inputs/revision info
+            "flake show" # list flake outputs
+            "hash" # compute hashes
+            "log" # show build logs
+            "path-info" # inspect store path metadata
+            "registry list" # list flake registry entries
+            "search" # query nixpkgs/flakes
+            "store ls" # list contents of a store path
+            "why-depends" # explain a dependency edge
+          ])
         ]);
       settings.permissions.deny = let
         paths = [
