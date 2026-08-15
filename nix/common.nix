@@ -91,33 +91,35 @@
     zsh.enable = true;
   };
 
-  security.sudo.extraRules = lib.lists.optionals pkgs.stdenv.isLinux [
-    {
-      users = [userName];
-      commands =
-        [
-          {
-            command = "/run/current-system/sw/bin/nixos-rebuild";
-            options = ["NOPASSWD"];
-          }
-          {
-            command = "/run/current-system/sw/bin/systemctl daemon-reload";
-            options = ["NOPASSWD"];
-          }
-        ]
-        ++ (map (subcommand: {
-            command = "/run/current-system/sw/bin/systemctl ${subcommand} *";
-            options = ["NOPASSWD"];
-          }) [
-            "disable"
-            "enable"
-            "reload"
-            "reload-or-restart"
-            "restart"
-            "start"
-            "status"
-            "stop"
-          ]);
-    }
-  ];
+  security.sudo = lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
+    extraRules = [
+      {
+        users = [userName];
+        commands =
+          [
+            {
+              command = "/run/current-system/sw/bin/nixos-rebuild";
+              options = ["NOPASSWD"];
+            }
+            {
+              command = "/run/current-system/sw/bin/systemctl daemon-reload";
+              options = ["NOPASSWD"];
+            }
+          ]
+          ++ (map (subcommand: {
+              command = "/run/current-system/sw/bin/systemctl ${subcommand} *";
+              options = ["NOPASSWD"];
+            }) [
+              "disable"
+              "enable"
+              "reload"
+              "reload-or-restart"
+              "restart"
+              "start"
+              "status"
+              "stop"
+            ]);
+      }
+    ];
+  };
 }
