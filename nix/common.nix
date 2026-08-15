@@ -7,8 +7,7 @@
   system,
   userName,
   ...
-}:
-{
+}: {
   age.secrets.cachix-auth = {
     file = ./secrets/cachix-auth.age;
     mode = "440";
@@ -91,9 +90,8 @@
   programs = {
     zsh.enable = true;
   };
-}
-// lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
-  security.sudo.extraRules = [
+
+  security.sudo.extraRules = lib.lists.optionals pkgs.stdenv.isLinux [
     {
       users = [userName];
       commands =
