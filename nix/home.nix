@@ -505,7 +505,10 @@ in {
             map
             (patchFilename: inputs.emacs-plus + "/patches/${patchFilename}")
             ["emacs-31/system-appearance.patch"]
-          ));
+          ))
+          ++ (lib.lists.optionals pkgs.stdenv.isLinux [
+            ./patches/emacs-pgtk-named-cursors.patch
+          ]);
       });
       extraPackages = epkgs: (with epkgs; [
         adoc-mode
@@ -901,6 +904,13 @@ in {
   };
 
   systemd.user.services.emacs = {
-    Service.Environment = "GDK_BACKEND=wayland";
+    Install.WantedBy = lib.mkForce ["graphical-session.target"];
+    # pgtk build crashes on frame creation if forced onto GDK_BACKEND=x11.  The
+    # blurry mouse pointer at 200% scale under this backend was root-caused to
+    # Emacs itself (src/pgtkfns.c hardcodes cursors via the deprecated,
+    # non-scale-aware `gdk_cursor_new_for_display()`/`GdkCursorType` enum API
+    # rather than the HiDPI-aware `gdk_cursor_new_from_name())`.
+    Service.Environment = ["GDK_BACKEND=wayland"];
+    Unit.After = ["graphical-session.target"];
   };
 }
