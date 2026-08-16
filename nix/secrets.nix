@@ -14,7 +14,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPlXf9T3ngqpk2cklKUKMdQT5q+0oa+Zf1Kv9FJj2Hjp" # root@earthbound
   ];
   darkstar = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPV4UNRhS2KLKBAXsrtxW77wsgtZ9hkTqD5I8fSXSqE8" # root@darkstar
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH9ajjG1hEY7PzB3N2q7EGAbZby50Qs3G/WrqKq8F32t" # root@darkstar
   ];
 in {
   "earthbound/luks.age".publicKeys = earthbound ++ lafrenierejm;
