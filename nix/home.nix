@@ -289,7 +289,38 @@ in {
       ];
     };
 
-    claude-code = {
+    claude-code = let
+      # Home-anchored credential files/directories only. Recursive
+      # `**/*.key`-style patterns are deliberately excluded: with
+      # `sandbox.enabled = true`, Claude Code merges `permissions.deny`
+      # Read/Edit paths into the same bwrap deny-read config as
+      # `sandbox.filesystem.denyRead` below, and expanding a bare `**/...`
+      # pattern against the whole home tree walks into nix-direnv's
+      # churning flake-input mirrors under `.direnv`, crashing `bwrap` at
+      # sandbox setup -- the same failure `denyRead`'s `**/.direnv/**`
+      # exclusion works around for `~/**`. A literal anchored path doesn't
+      # need that expansion, so it's safe here.
+      #
+      # This does NOT cover project-relative secrets (`*.key`, `*.pem`,
+      # `*.p12`, `*.pfx`, `*.tfstate`, `.env*`, a per-project `.npmrc`)
+      # anywhere in a repo -- a tree-wide glob for those hits the same
+      # crash, so they still rely on `.gitignore`/pre-commit discipline.
+      credentialPaths = [
+        "~/.aws/credentials"
+        "~/.azure"
+        "~/.config/gcloud"
+        "~/.config/op"
+        "~/.docker/config.json"
+        "~/.git-credentials"
+        "~/.gnupg"
+        "~/.kube/config"
+        "~/.netrc"
+        "~/.npmrc"
+        "~/.ssh"
+        "~/.terraformrc"
+        "~/.vault-token"
+      ];
+    in {
       enable = personal;
       package = pkgsTrunk.claude-code;
       settings.permissions.allow =
@@ -419,37 +450,22 @@ in {
             "why-depends" # explain a dependency edge
           ])
         ]);
-      settings.permissions.deny = let
-        paths = [
-          # env files
-          "**/.env"
-          "**/.env.*"
-          # credentials & tokens
-          "~/.aws/credentials"
-          "~/.azure/**"
-          "~/.config/gcloud/**"
-          "~/.config/op/**"
-          "~/.docker/config.json"
-          "~/.git-credentials"
-          "~/.gnupg/**"
-          "~/.kube/config"
-          "~/.netrc"
-          "~/.ssh/config"
-          "~/.ssh/id_*"
-          "~/.terraformrc"
-          "~/.vault-token"
-          "**/.npmrc"
-          # private keys & certs
-          "**/*.key"
-          "**/*.p12"
-          "**/*.pem"
-          "**/*.pfx"
-          # terraform state
-          "**/*.tfstate"
-          "**/*.tfstate.backup"
-        ];
-      in
-        lib.lists.flatten (map (op: map (p: "${op}(${p})") paths) ["Read" "Edit" "Write"]);
+      settings.permissions.deny =
+        # `Write`/`NotebookEdit` path rules are accepted but never consulted by Claude Code;
+        # only `Read`/`Edit` are checked, and a `Read` deny also blocks `Write` on the same path.
+        lib.lists.flatten (map (op: map (p: "${op}(${p})") credentialPaths) ["Read" "Edit"]);
+      # Blocks sandboxed Bash subprocesses from reading these paths directly.
+      # `permissions.deny` above only gates the Read/Edit *tools*; a
+      # sandboxed shell command reading the same file goes through the
+      # sandbox's filesystem layer instead, which `sandbox.credentials.files`
+      # is the purpose-built mechanism for (unlike `denyRead`, it doesn't
+      # need glob expansion, so it's not subject to the `bwrap` crash above).
+      settings.sandbox.credentials.files =
+        map (path: {
+          inherit path;
+          mode = "deny";
+        })
+        credentialPaths;
       settings.sandbox.enabled = true;
       settings.sandbox.allowUnsandboxedCommands = false;
       settings.sandbox.filesystem.allowRead =
@@ -459,8 +475,16 @@ in {
           "github.com"
           "gitlab.com"
         ]
-        ++ ["."];
-      settings.sandbox.filesystem.denyRead = ["~/"];
+        ++ ["${config.xdg.configHome}/"];
+      settings.sandbox.filesystem.denyRead = [
+        "~/**"
+        # `nix-direnv`'s flake-input mirrors churn as `flake.lock` changes, so
+        # letting `**/.npmrc`/`**/*.key` (etc.) deny globs expand against them
+        # produces stale literal paths that crash `bwrap` at sandbox setup.
+        # NB: needs the `/**` suffix (not a bare trailing slash) to actually
+        # exclude the directory's *contents* from that glob expansion.
+        "**/.direnv/**"
+      ];
       settings.attribution.commit = "";
       settings.attribution.pr = "";
       settings.feedbackSurveyRate = 0;
