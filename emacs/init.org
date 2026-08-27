@@ -6970,6 +6970,17 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
    (agent-shell-anthropic-make-authentication :login t)))
 #+end_src
 
+** Agent Shell Ediff
+
+#+begin_src emacs-lisp
+(use-package agent-shell-ediff
+  :after agent-shell
+  :custom
+  (agent-shell-ediff-quick-quit t)
+  :config
+  (agent-shell-ediff-mode 1))
+#+end_src
+
 * Web
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref web

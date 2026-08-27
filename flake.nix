@@ -25,6 +25,10 @@
       url = "github:d12frosted/homebrew-emacs-plus";
       flake = false;
     };
+    emacsPkg-agent-shell-ediff = {
+      url = "github:cassandracomar/agent-shell-ediff";
+      flake = false;
+    };
     emacsPkg-browse-at-remote = {
       url = "github:lafrenierejm/browse-at-remote/default-directory";
       flake = false;

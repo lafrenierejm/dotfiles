@@ -539,6 +539,7 @@ in {
       extraPackages = epkgs: (with epkgs; [
         adoc-mode
         agent-shell
+        agent-shell-ediff
         aggressive-indent
         ahk-mode
         ansible
@@ -682,6 +683,12 @@ in {
       ]);
       overrides = self: super: {
         agent-shell = self.melpaPackages.agent-shell;
+        agent-shell-ediff = self.trivialBuild {
+          pname = "agent-shell-ediff";
+          version = "0.0.1";
+          src = inputs.emacsPkg-agent-shell-ediff;
+          packageRequires = [self.agent-shell];
+        };
         browse-at-remote = self.melpaPackages.browse-at-remote.overrideAttrs {
           src = inputs.emacsPkg-browse-at-remote;
         };

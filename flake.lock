@@ -190,6 +190,22 @@
         "type": "github"
       }
     },
+    "emacsPkg-agent-shell-ediff": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775788773,
+        "narHash": "sha256-+ZFw4iCWVoPr5TnD4A3qZJ6k0PYpwtKWemLJ2OwRsEc=",
+        "owner": "cassandracomar",
+        "repo": "agent-shell-ediff",
+        "rev": "cf70687f373decd23642cb662eeb117ea8ac4631",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cassandracomar",
+        "repo": "agent-shell-ediff",
+        "type": "github"
+      }
+    },
     "emacsPkg-browse-at-remote": {
       "flake": false,
       "locked": {
@@ -1063,6 +1079,7 @@
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",
         "emacs-plus": "emacs-plus",
+        "emacsPkg-agent-shell-ediff": "emacsPkg-agent-shell-ediff",
         "emacsPkg-browse-at-remote": "emacsPkg-browse-at-remote",
         "emacsPkg-counsel-projectile": "emacsPkg-counsel-projectile",
         "flake-parts": "flake-parts",
