@@ -320,11 +320,20 @@ in {
         "~/.terraformrc"
         "~/.vault-token"
       ];
+      sourceDirectories =
+        map (dir: "~/Documents/${dir}/") [
+          "codeberg.org"
+          "git.sr.ht"
+          "github.com"
+          "gitlab.com"
+        ]
+        ++ ["${config.xdg.configHome}/"];
     in {
       enable = personal;
       package = pkgsTrunk.claude-code;
       settings.permissions.allow =
-        map
+        map (dir: "Read(${dir}**)") sourceDirectories
+        ++ map
         (cmd: "Bash(${cmd}:*)")
         (lib.lists.flatten [
           # shell built-ins
@@ -468,14 +477,7 @@ in {
         credentialPaths;
       settings.sandbox.enabled = true;
       settings.sandbox.allowUnsandboxedCommands = false;
-      settings.sandbox.filesystem.allowRead =
-        map (dir: "~/Documents/${dir}/") [
-          "codeberg.org"
-          "git.sr.ht"
-          "github.com"
-          "gitlab.com"
-        ]
-        ++ ["${config.xdg.configHome}/"];
+      settings.sandbox.filesystem.allowRead = sourceDirectories;
       settings.sandbox.filesystem.denyRead = [
         "~/**"
         # `nix-direnv`'s flake-input mirrors churn as `flake.lock` changes, so
