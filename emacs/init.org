@@ -6964,6 +6964,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
   :custom
   (agent-shell-header-style nil "Do not display header")
   (agent-shell-show-welcome-message nil "Do not display welcome message")
+  (agent-shell-chat-mode nil "Use comint-based interface")
 
   :config
   (setq
