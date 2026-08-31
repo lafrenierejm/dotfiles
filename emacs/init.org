@@ -6962,6 +6962,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
    "C-c C-y" #'agent-shell-diff-accept-all)
 
   :custom
+  (agent-shell-activity-group-expand-by-default 'latest "Expand current activity")
   (agent-shell-header-style nil "Do not display header")
   (agent-shell-show-welcome-message nil "Do not display welcome message")
   (agent-shell-chat-mode nil "Use comint-based interface")
