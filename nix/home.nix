@@ -132,11 +132,11 @@ in {
           nixd
           pnpm
           prettier
-          pyright
           rust-analyzer
           terraform-docs
           terraform-ls
           terraform-mcp-server
+          ty
           typescript-language-server
           uv
           vale
