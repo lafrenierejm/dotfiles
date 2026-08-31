@@ -117,6 +117,7 @@ in {
           shfmt
           subversion
           tflint
+          tokei
           typos
           unzip
           uutils-coreutils-noprefix
@@ -398,6 +399,7 @@ in {
             "jaq"
             "rg"
             "shellcheck"
+            "tokei"
             "typos"
             "vale"
             "which"
