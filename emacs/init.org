@@ -6249,6 +6249,11 @@ Enable \src_emacs-lisp{rainbow-identifiers-mode} for \src_emacs-lisp{python-mode
 ('(python-mode-hook python-ts-mode-hook) #'eglot-ensure)
 #+end_src
 
+#+begin_src emacs-lisp :noweb-ref eglot/config
+(setf (alist-get '(python-mode python-ts-mode) eglot-server-programs nil nil #'equal)
+      '("ty" "server"))
+#+end_src
+
 **** Per-Project REPLs
 
 #+begin_src emacs-lisp :noweb-ref python/config
