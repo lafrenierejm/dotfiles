@@ -223,23 +223,6 @@
         "type": "github"
       }
     },
-    "emacsPkg-counsel-projectile": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1785002974,
-        "narHash": "sha256-VV0+ylXsC2V/rSoAaeiYRU3bqqbReHMmikM0EdJ2cmQ=",
-        "owner": "lafrenierejm",
-        "repo": "counsel-projectile",
-        "rev": "5d86232d52d25790ee333f8f361507db39555291",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lafrenierejm",
-        "ref": "projectile-ignored-files",
-        "repo": "counsel-projectile",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1081,7 +1064,6 @@
         "emacs-plus": "emacs-plus",
         "emacsPkg-agent-shell-ediff": "emacsPkg-agent-shell-ediff",
         "emacsPkg-browse-at-remote": "emacsPkg-browse-at-remote",
-        "emacsPkg-counsel-projectile": "emacsPkg-counsel-projectile",
         "flake-parts": "flake-parts",
         "flake-root": "flake-root",
         "ghq": "ghq",

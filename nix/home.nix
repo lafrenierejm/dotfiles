@@ -710,9 +710,6 @@ in {
         browse-at-remote = self.melpaPackages.browse-at-remote.overrideAttrs {
           src = inputs.emacsPkg-browse-at-remote;
         };
-        counsel-projectile = self.melpaPackages.counsel-projectile.overrideAttrs {
-          src = inputs.emacsPkg-counsel-projectile;
-        };
         evil-collection = self.melpaPackages.evil-collection;
         evil-ghostel = (pkgsTrunk.emacsPackagesFor pkgs.emacs-git-pgtk).evil-ghostel.overrideAttrs {
           src = self.ghostel.src;
