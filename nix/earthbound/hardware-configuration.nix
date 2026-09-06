@@ -19,7 +19,12 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp4s0.useDHCP = lib.mkDefault true;
 
+  # CPU
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
+
+  # Logitech unified receiver
+  hardware.logitech.wireless.enable = true;
+  environment.systemPackages = [pkgs.solaar]; # https://pwr-solaar.github.io/Solaar/
 }
