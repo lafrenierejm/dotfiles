@@ -677,6 +677,22 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
   :custom
   (indent-bars-treesit-support t)
+  (indent-bars-pattern ".")
+  (indent-bars-width-frac 0.5)
+  (indent-bars-pad-frac 0.25)
+  (indent-bars-highlight-current-depth '(:face default :blend 0.4)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package indent-bars-ts
+  :demand
+
+  :after indent-bars
+
+  :ghook
+  ('json-ts-mode-hook #'indent-bars-ts/lafrenierejm/json-indent)
+
+  :custom
   (indent-bars-treesit-scope
    '((nix
       apply_expression
@@ -727,21 +743,15 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
       subscript)
      (rust
       arguments
-      parameters)))
+      parameters)
+     (toml
+      array
+      comment
+      table)
+     (yaml
+      block_mapping_pair
+      comment)))
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
-  (indent-bars-pattern ".")
-  (indent-bars-width-frac 0.5)
-  (indent-bars-pad-frac 0.25)
-  (indent-bars-highlight-current-depth '(:face default :blend 0.4)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package indent-bars-ts
-  :demand
-  :after indent-bars
-
-  :ghook
-  ('json-ts-mode-hook #'indent-bars-ts/lafrenierejm/json-indent)
 
   :config
   (defun indent-bars-ts/lafrenierejm/json-indent ()
