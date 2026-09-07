@@ -690,7 +690,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :after indent-bars
 
   :ghook
-  ('json-ts-mode-hook #'indent-bars-ts/lafrenierejm/json-indent)
+  ('editorconfig-after-apply-functions #'indent-bars-ts/lafrenierejm/set-indent)
 
   :custom
   (indent-bars-treesit-scope
@@ -754,10 +754,18 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
 
   :config
-  (defun indent-bars-ts/lafrenierejm/json-indent ()
-    "Sync `indent-bars-spacing' with JSON indent offset."
-
-    (setq-local indent-bars-spacing-override json-ts-indent-offset)))
+  (defun indent-bars-ts/lafrenierejm/set-indent (props)
+    "Sync `indent-bars-spacing' with the major mode's indent size."
+    (setq-local
+     indent-bars-spacing-override
+     (cond
+      ((derived-mode-p 'json-ts-mode)
+       json-ts-indent-offset)
+      ((derived-mode-p 'toml-ts-mode)
+       toml-ts-indent-offset)))
+    ;; Update the indent bars if an override was set.
+    (when indent-bars-spacing-override
+      (indent-bars-setup))))
 #+end_src
 
 ** Theme
