@@ -193,15 +193,16 @@
     "emacsPkg-agent-shell-ediff": {
       "flake": false,
       "locked": {
-        "lastModified": 1775788773,
-        "narHash": "sha256-+ZFw4iCWVoPr5TnD4A3qZJ6k0PYpwtKWemLJ2OwRsEc=",
-        "owner": "cassandracomar",
+        "lastModified": 1788822888,
+        "narHash": "sha256-cTjxgvOD5Y703ObN4satfzlaZCqLG5/0dI0lJrmN5uk=",
+        "owner": "lafrenierejm",
         "repo": "agent-shell-ediff",
-        "rev": "cf70687f373decd23642cb662eeb117ea8ac4631",
+        "rev": "ff763c38a3347ed905ab3c6ab8483bdc301c8c84",
         "type": "github"
       },
       "original": {
-        "owner": "cassandracomar",
+        "owner": "lafrenierejm",
+        "ref": "diffs-keyword",
         "repo": "agent-shell-ediff",
         "type": "github"
       }

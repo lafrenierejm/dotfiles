@@ -26,7 +26,7 @@
       flake = false;
     };
     emacsPkg-agent-shell-ediff = {
-      url = "github:cassandracomar/agent-shell-ediff";
+      url = "github:lafrenierejm/agent-shell-ediff/diffs-keyword";
       flake = false;
     };
     emacsPkg-browse-at-remote = {
