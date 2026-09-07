@@ -755,16 +755,13 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
   :config
   (defun indent-bars-ts/lafrenierejm/set-indent (props)
-    "Sync `indent-bars-spacing' with the major mode's indent size."
-    (setq-local
-     indent-bars-spacing-override
-     (cond
-      ((derived-mode-p 'json-ts-mode)
-       json-ts-indent-offset)
-      ((derived-mode-p 'toml-ts-mode)
-       toml-ts-indent-offset)))
-    ;; Update the indent bars if an override was set.
-    (when indent-bars-spacing-override
+    "Sync indent-bars with the major mode's indent size."
+    (when-let* ((mode-indent-vars
+                 '((json-ts-mode . json-ts-indent-offset)
+                   (toml-ts-mode . toml-ts-indent-offset)))
+                (var (alist-get major-mode mode-indent-vars nil nil
+                                #'provided-mode-derived-p)))
+      (setq-local indent-bars-spacing-override (symbol-value var))
       (indent-bars-setup))))
 #+end_src
 
@@ -7008,7 +7005,7 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
    (agent-shell-anthropic-make-authentication :login t)))
 #+end_src
 
-** Agent Shell Ediff
+*** Agent Shell Ediff
 
 #+begin_src emacs-lisp
 (use-package agent-shell-ediff
