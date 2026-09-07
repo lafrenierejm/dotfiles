@@ -1765,7 +1765,7 @@ Define a function to enable \src_emacs-lisp{evil-move-beyond-eol}.
 #+begin_src emacs-lisp
 (defun evil-move-beyond-eol ()
   "Allow the cursor to move beyond the end of the line."
-  (set (make-local-variable 'evil-move-beyond-eol) t))
+  (setq-local evil-move-beyond-eol t))
 #+end_src
 
 ***** Define =evil-yank-to-end-of-line=
@@ -6171,8 +6171,8 @@ Precede inline (i.e. end-of-line) comments with two spaces, per PEP 8.
 
 #+begin_src emacs-lisp :noweb-ref python/config
 (defun python-set-comment-inline-offset ()
-  (set (make-local-variable 'comment-inline-offset) 2)
-  (setq comment-column 0))
+  (setq-local comment-inline-offset 2
+              comment-column 0))
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref python/gfhook
@@ -6720,7 +6720,7 @@ Define a function to restrict each line of text to a single screen line.
 #+begin_src emacs-lisp
 (defun sql-lafrenierejm-truncate-lines ()
   "Restrict each line of text to a single visual line."
-  (setq truncate-lines t))
+  (setq-local truncate-lines t))
 #+end_src
 
 Alias the above function to remove my username.
