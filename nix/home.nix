@@ -46,171 +46,171 @@
       ]
     ];
 in {
-  home = lib.attrsets.mergeAttrsList [
-    {
-      stateVersion = "23.05"; # back-compat with this version of Home Manager
+  home = {
+    stateVersion = "23.05"; # back-compat with this version of Home Manager
 
-      # Clear all `nix profile` entries on activation to prevent conflicts between imperatively and declaratively managed packages.
-      # This hook runs immediately before `writeBoundary`.
-      # `writeBoundary` is the activation step that writes files and symlinks to the home directory.
-      activation.clearNixProfile = inputs.home-manager.lib.hm.dag.entryBefore ["writeBoundary"] ''
-        profile_names=$(nix profile list --json 2>/dev/null | ${lib.getExe pkgs.jaq} -r '.elements | keys[]')
-        if [ -n "$profile_names" ]; then
-          run nix profile remove $profile_names
-        fi
-      '';
+    # Clear all `nix profile` entries on activation to prevent conflicts between imperatively and declaratively managed packages.
+    # This hook runs immediately before `writeBoundary`.
+    # `writeBoundary` is the activation step that writes files and symlinks to the home directory.
+    activation.clearNixProfile = inputs.home-manager.lib.hm.dag.entryBefore ["writeBoundary"] ''
+      profile_names=$(nix profile list --json 2>/dev/null | ${lib.getExe pkgs.jaq} -r '.elements | keys[]')
+      if [ -n "$profile_names" ]; then
+        run nix profile remove $profile_names
+      fi
+    '';
 
-      file.".claude/CLAUDE.md".source = ../claude/CLAUDE.md;
-      file.".gnupg/gpg-agent.conf".text =
-        lib.concatStringsSep "\n"
-        (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
-          pinentry-program = pinentryBin;
-          default-cache-ttl = 7200;
-          default-cache-ttl-ssh = 7200;
-        });
-      packages = lib.lists.flatten [
-        pinentryPkg
-        [
-          inputs.gron.packages."${system}".gron
-          inputs.ghq.packages."${system}".ghq
-        ]
-        (with pkgs; [
-          (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers])))
-          atool
-          aws-sso-creds
-          awscli2
-          babashka
-          bfg-repo-cleaner
-          cachix
-          clang-tools
-          clojure
-          curl
-          dogedns
-          doggo
-          dos2unix
-          exiftool
-          eza
-          fd
-          findutils # GNU `find` and `xargs`
-          gh
-          git-crypt
-          git-filter-repo
-          gitstatus
-          gnupg
-          gnused
-          hyperfine
-          id3v2
-          ispell
-          isync
-          jaq
-          jotdown
-          mosh
-          mu
-          opencode
-          opentofu
-          pre-commit
-          python3
-          restic
-          ripgrep
-          rsync
-          shellcheck
-          shfmt
-          subversion
-          tflint
-          tokei
-          typos
-          unzip
-          uutils-coreutils-noprefix
-          xxd
-          yt-dlp
-        ])
-        (with pkgsTrunk; [
-          actionlint
-          bash-language-server
-          dockerfmt
-          efm-langserver
-          graphql-language-service-cli
-          nixd
-          pnpm
-          prettier
-          rust-analyzer
-          terraform-docs
-          terraform-ls
-          terraform-mcp-server
-          ty
-          typescript-language-server
-          uv
-          vale
-          vale-ls
-          vscode-json-languageserver
-          yaml-language-server
-          yq
-        ])
-        (lib.lists.optionals personal [
-          pkgs.imagemagick
-          pkgsTrunk.claude-agent-acp
-          (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
-            ffmpeg-headless
-            inkscape
-            nicotine-plus
-            picard
-          ]))
-          (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
-            skhd
-          ]))
-        ])
+    file =
+      {
+        ".claude/CLAUDE.md".source = ../claude/CLAUDE.md;
+        ".gnupg/gpg-agent.conf".text =
+          lib.concatStringsSep "\n"
+          (lib.attrsets.mapAttrsToList (name: value: name + " " + toString value) {
+            pinentry-program = pinentryBin;
+            default-cache-ttl = 7200;
+            default-cache-ttl-ssh = 7200;
+          });
+      }
+      // lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
+        "Library/Application Support/vale/.vale.ini".source = ../vale/.vale.ini;
+      };
+    packages = lib.lists.flatten [
+      pinentryPkg
+      [
+        inputs.gron.packages."${system}".gron
+        inputs.ghq.packages."${system}".ghq
+      ]
+      (with pkgs; [
+        (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers])))
+        atool
+        aws-sso-creds
+        awscli2
+        babashka
+        bfg-repo-cleaner
+        cachix
+        clang-tools
+        clojure
+        curl
+        dogedns
+        doggo
+        dos2unix
+        exiftool
+        eza
+        fd
+        findutils # GNU `find` and `xargs`
+        gh
+        git-crypt
+        git-filter-repo
+        gitstatus
+        gnupg
+        gnused
+        hyperfine
+        id3v2
+        ispell
+        isync
+        jaq
+        jotdown
+        mosh
+        mu
+        opentofu
+        pre-commit
+        python3
+        restic
+        ripgrep
+        rsync
+        shellcheck
+        shfmt
+        subversion
+        tflint
+        tokei
+        typos
+        unzip
+        uutils-coreutils-noprefix
+        xxd
+        yt-dlp
+      ])
+      (with pkgsTrunk; [
+        actionlint
+        bash-language-server
+        claude-agent-acp
+        dockerfmt
+        efm-langserver
+        graphql-language-service-cli
+        nixd
+        pnpm
+        prettier
+        rust-analyzer
+        terraform-docs
+        terraform-ls
+        terraform-mcp-server
+        ty
+        typescript-language-server
+        uv
+        vale
+        vale-ls
+        vscode-json-languageserver
+        yaml-language-server
+        yq
+      ])
+      (lib.lists.optionals personal [
+        pkgs.imagemagick
         (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
-          dconf2nix
-          feishin
-          mpv
-          pavucontrol
-          signal-desktop
-          transmission_4-gtk
-          zoom
+          ffmpeg-headless
+          inkscape
+          nicotine-plus
+          picard
         ]))
-        (pkgs.lib.lists.optionals (!personal) (with pkgs; [
-          groovy
-          nodejs
-          # vault
+        (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
+          skhd
         ]))
-      ];
-      sessionPath = [
-        "$HOME/.local/bin"
-      ];
-      sessionVariables = let
-        caCerts = osConfig.nix.settings.ssl-cert-file or "";
-      in
-        {
-          DIRENV_LOG_FORMAT = "";
-          NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
-        }
-        // lib.optionalAttrs (caCerts != "") {
-          AWS_CA_BUNDLE = caCerts;
-          CURL_CA_BUNDLE = caCerts;
-          NODE_EXTRA_CA_CERTS = caCerts;
-          REQUESTS_CA_BUNDLE = caCerts;
-          SSL_CERT_FILE = caCerts;
-        };
-      shell.enableShellIntegration = true;
-      shellAliases = lib.attrsets.mergeAttrsList [
-        {
-          aws-ecr-login = ''
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
-          extract = "atool --extract --explain --subdir";
-          jq = "jaq";
-          la = "eza --long --git --group --time-style=long-iso --all";
-          ll = "eza --long --git --group --time-style=long-iso";
-        }
-        (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
-          emacs = "${config.programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
-        })
-      ];
-      username = userName;
-    }
-    (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
-      file."Library/Application Support/vale/.vale.ini".source = ../vale/.vale.ini;
-    })
-  ];
+      ])
+      (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
+        dconf2nix
+        feishin
+        mpv
+        pavucontrol
+        signal-desktop
+        transmission_4-gtk
+        zoom
+      ]))
+      (pkgs.lib.lists.optionals (!personal) (with pkgsTrunk; [
+        groovy
+        nodejs
+        # vault
+      ]))
+    ];
+    sessionPath = [
+      "$HOME/.local/bin"
+    ];
+    sessionVariables = let
+      caCerts = osConfig.nix.settings.ssl-cert-file or "";
+    in
+      {
+        DIRENV_LOG_FORMAT = "";
+        NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
+      }
+      // lib.optionalAttrs (caCerts != "") {
+        AWS_CA_BUNDLE = caCerts;
+        CURL_CA_BUNDLE = caCerts;
+        NODE_EXTRA_CA_CERTS = caCerts;
+        REQUESTS_CA_BUNDLE = caCerts;
+        SSL_CERT_FILE = caCerts;
+      };
+    shell.enableShellIntegration = true;
+    shellAliases = lib.attrsets.mergeAttrsList [
+      {
+        aws-ecr-login = ''
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$(aws sts get-caller-identity | jq -r '.Account').dkr.ecr.us-east-1.amazonaws.com"'';
+        extract = "atool --extract --explain --subdir";
+        jq = "jaq";
+        la = "eza --long --git --group --time-style=long-iso --all";
+        ll = "eza --long --git --group --time-style=long-iso";
+      }
+      (lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
+        emacs = "${config.programs.emacs.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
+      })
+    ];
+    username = userName;
+  };
 
   accounts.email = {
     maildirBasePath = "Mail";
