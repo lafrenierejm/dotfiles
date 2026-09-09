@@ -1,4 +1,7 @@
 # Tools
 
 - Prefer `rg` over `grep` and `git grep`.
-- `rg` is configured to exclude `.git` directories and respect gitignores by default.
+  `rg` excludes `.git/` and respects gitignore files by default.
+
+- Prefer `fd` over `find`.
+  `fd` excludes `.git/` and respects gitignore files by default.
