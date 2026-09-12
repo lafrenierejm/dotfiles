@@ -795,33 +795,34 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
          (1 'dark)
          (_ 'light)))))
 
+  (unless (eq system-type 'darwin)
+    (with-eval-after-load 'dbus
+      (dbus-register-signal
+       :session
+       "org.freedesktop.portal.Desktop"
+       "/org/freedesktop/portal/desktop"
+       "org.freedesktop.portal.Settings"
+       "SettingChanged"
+       #'modus-themes/dbus-appearance-changed)))
+
   (modus-themes/apply-theme
    (cond
     ((and (boundp 'ns-system-appearance) ns-system-appearance)
      ns-system-appearance)
-    ((fboundp 'dbus-call-method)
+    ((ignore-errors (require 'dbus))
      (condition-case nil
          (pcase (caar (dbus-call-method
-                       :session "org.freedesktop.portal.Desktop"
+                       :session
+                       "org.freedesktop.portal.Desktop"
                        "/org/freedesktop/portal/desktop"
-                       "org.freedesktop.portal.Settings" "Read"
-                       "org.freedesktop.appearance" "color-scheme"))
+                       "org.freedesktop.portal.Settings"
+                       "Read"
+                       "org.freedesktop.appearance"
+                       "color-scheme"))
            (1 'dark)
            (_ 'light))
        (error 'light)))
     (t 'light))))
-#+end_src
-
-#+begin_src emacs-lisp
-(unless (eq system-type 'darwin)
-  (with-eval-after-load 'dbus
-    (dbus-register-signal
-     :session
-     "org.freedesktop.portal.Desktop"
-     "/org/freedesktop/portal/desktop"
-     "org.freedesktop.portal.Settings"
-     "SettingChanged"
-     #'modus-themes/dbus-appearance-changed)))
 #+end_src
 
 ** Treesitter
