@@ -6,3 +6,4 @@ trim_trailing_whitespace = true
 
 [*.{bash,envrc,sh,zsh}]
 indent_style = tab
+indent_size = 4
