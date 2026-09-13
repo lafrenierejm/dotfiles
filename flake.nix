@@ -2,8 +2,8 @@
   description = "Joseph LaFreniere (lafrenierejm)'s dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
-    nixpkgs-trunk.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "https://channels.nixos.org/nixpkgs-26.05-darwin/nixexprs.tar.zst";
+    nixpkgs-trunk.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
     agenix.url = "github:ryantm/agenix";
     cramt-nixconf = {
       url = "github:cramt/nixconf";
