@@ -207,12 +207,6 @@
               '';
             });
           };
-          direnvSkipTests = final: prev: {
-            # https://github.com/NixOS/nixpkgs/issues/507531
-            direnv = prev.direnv.overrideAttrs (_: {
-              doCheck = false;
-            });
-          };
           whitesurCombined = final: prev: {
             whitesur-combined = prev.callPackage ./nix/pkgs/whitesur-combined.nix {};
           };
@@ -220,7 +214,6 @@
           inputs.emacs-overlay.overlays.default
           inputs.nur.overlays.default
           cosmic
-          direnvSkipTests
           whitesurCombined
         ];
       in {
