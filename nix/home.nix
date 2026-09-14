@@ -956,14 +956,43 @@ in {
     };
   };
 
-  systemd.user.services.emacs = {
-    Install.WantedBy = lib.mkForce ["graphical-session.target"];
-    # pgtk build crashes on frame creation if forced onto GDK_BACKEND=x11.  The
-    # blurry mouse pointer at 200% scale under this backend was root-caused to
-    # Emacs itself (src/pgtkfns.c hardcodes cursors via the deprecated,
-    # non-scale-aware `gdk_cursor_new_for_display()`/`GdkCursorType` enum API
-    # rather than the HiDPI-aware `gdk_cursor_new_from_name())`.
-    Service.Environment = ["GDK_BACKEND=wayland"];
-    Unit.After = ["graphical-session.target"];
+  systemd.user = let
+    tarballCacheName = "nix-tarball-cache-repack";
+  in {
+    services.emacs = {
+      Install.WantedBy = lib.mkForce ["graphical-session.target"];
+      # pgtk build crashes on frame creation if forced onto GDK_BACKEND=x11.  The
+      # blurry mouse pointer at 200% scale under this backend was root-caused to
+      # Emacs itself (src/pgtkfns.c hardcodes cursors via the deprecated,
+      # non-scale-aware `gdk_cursor_new_for_display()`/`GdkCursorType` enum API
+      # rather than the HiDPI-aware `gdk_cursor_new_from_name())`.
+      Service.Environment = ["GDK_BACKEND=wayland"];
+      Unit.After = ["graphical-session.target"];
+    };
+
+    # Periodically repack the tarball cache.
+    # Use a multi-pack-file index for more locality for file lookups.
+    # Source: https://discourse.nixos.org/t/snappier-tarball-fetches-with-nix/79994
+    # Upstream PR: https://github.com/NixOS/nix/pull/16427
+    timers.${tarballCacheName} = {
+      Install.WantedBy = ["timers.target"];
+      Timer = {
+        OnCalendar = "daily";
+        Unit = "${tarballCacheName}.service";
+      };
+    };
+    services.${tarballCacheName} = {
+      Unit.Description = "Repack nix's tarball cache";
+      Service = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeShellScript tarballCacheName ''
+          set -eu
+          cd ${config.xdg.cacheHome}/nix/tarball-cache-v2
+          ${pkgs.git}/bin/git multi-pack-index write
+          ${pkgs.git}/bin/git multi-pack-index repack --batch-size 1024m
+          ${pkgs.git}/bin/git multi-pack-index expire
+        '';
+      };
+    };
   };
 }

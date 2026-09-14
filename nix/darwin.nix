@@ -125,6 +125,31 @@ in (lib.attrsets.mergeAttrsList [
       NIX_SSL_CERT_FILE = caBundlePath;
     };
 
+    launchd.agents."repack-nix-tarball-cache" = {
+      # Periodically repack the tarball cache.
+      # Use a multi-pack-file index for more locality for file lookups.
+      # Source: https://discourse.nixos.org/t/snappier-tarball-fetches-with-nix/79994
+      # Upstream PR: https://github.com/NixOS/nix/pull/16427
+      script = ''
+        set -eu
+        cd "/Users/${config.system.primaryUser}/.cache/nix/tarball-cache-v2"
+        ${pkgs.git}/bin/git multi-pack-index write
+        ${pkgs.git}/bin/git multi-pack-index repack --batch-size 1024m
+        ${pkgs.git}/bin/git multi-pack-index expire
+      '';
+      serviceConfig = {
+        StartCalendarInterval = [
+          {
+            Hour = 0;
+            Minute = 0;
+          } # daily at midnight
+        ];
+        RunAtLoad = false;
+        StandardOutPath = "/Users/${config.system.primaryUser}/Library/Logs/repack-nix-tarball-cache.log";
+        StandardErrorPath = "/Users/${config.system.primaryUser}/Library/Logs/repack-nix-tarball-cache.log";
+      };
+    };
+
     security.pam.services.sudo_local.touchIdAuth = personal;
     services = {
       skhd.enable = personal;
