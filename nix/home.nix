@@ -59,6 +59,14 @@ in {
       fi
     '';
 
+    # Disable delta compression during Nix's tarball unpacking.
+    # Source: https://discourse.nixos.org/t/snappier-tarball-fetches-with-nix/79994
+    # Upstream PR: https://github.com/libgit2/libgit2/pull/7367
+    activation.configureTarballCacheGitConfig = inputs.home-manager.lib.hm.dag.entryAfter ["writeBoundary"] ''
+      mkdir -p ${config.xdg.cacheHome}/nix/tarball-cache-v2
+      ${pkgs.git}/bin/git -C ${config.xdg.cacheHome}/nix/tarball-cache-v2 config pack.deltaCacheSize 1
+    '';
+
     file =
       {
         ".claude/CLAUDE.md".source = ../claude/CLAUDE.md;
