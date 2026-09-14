@@ -495,6 +495,10 @@ in {
         credentialPaths;
       settings.sandbox.enabled = true;
       settings.sandbox.allowUnsandboxedCommands = false;
+      # Allow sandboxed commands to connect to the Nix daemon (Darwin-specific).
+      settings.sandbox.network.allowUnixSockets = [
+        "/nix/var/nix/daemon-socket/socket"
+      ];
       settings.sandbox.filesystem.allowRead = sourceDirectories;
       settings.sandbox.filesystem.denyRead = [
         "~/**"
