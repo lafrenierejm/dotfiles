@@ -1243,11 +1243,12 @@ argument."
   (interactive (list current-prefix-arg))
   (when-let* ((path (or (buffer-file-name) default-directory))
               (path-absolute (expand-file-name path))
-              (path-final (if-let* ((PROJECT-RELATIVE)
-                                    (project (project-current nil))
-                                    (project-root (project-root project)))
-                              (f-relative path-absolute project-root)
-                            path-absolute)))
+              (path-final (f-short
+                           (if-let* ((PROJECT-RELATIVE)
+                                     (project (project-current nil))
+                                     (project-root (project-root project)))
+                               (f-relative path-absolute project-root)
+                             path-absolute))))
     (kill-new path-final)
     (message "Copied buffer path '%s' to the clipboard." path-final)))
 
