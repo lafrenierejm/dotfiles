@@ -339,6 +339,10 @@ in {
           "gitlab.com"
         ]
         ++ ["${config.xdg.configHome}/"];
+      # `nix` CLI subcommands like `build`/`eval` read and update the
+      # client-side fetcher/eval/tarball caches here.  Actual store writes go
+      # through the Nix daemon (see `allowUnixSockets`).
+      nixCachePaths = ["${config.xdg.cacheHome}/nix"];
     in {
       enable = personal;
       package = pkgsTrunk.claude-code;
@@ -458,6 +462,7 @@ in {
             "status"
           ])
           (map (sub: "nix ${sub}") [
+            "build" # build a derivation and its dependencies
             "config show" # dump effective config
             "eval" # pure expression evaluation, no store writes
             "flake check --no-build" # evaluate flake checks without building
@@ -507,7 +512,8 @@ in {
       settings.sandbox.network.allowUnixSockets = [
         "/nix/var/nix/daemon-socket/socket"
       ];
-      settings.sandbox.filesystem.allowRead = sourceDirectories;
+      settings.sandbox.filesystem.allowRead = sourceDirectories ++ nixCachePaths;
+      settings.sandbox.filesystem.allowWrite = nixCachePaths;
       settings.sandbox.filesystem.denyRead = [
         "~/**"
         # `nix-direnv`'s flake-input mirrors churn as `flake.lock` changes, so
