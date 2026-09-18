@@ -338,11 +338,20 @@ in {
           "github.com"
           "gitlab.com"
         ]
-        ++ ["${config.xdg.configHome}/"];
-      # `nix` CLI subcommands like `build`/`eval` read and update the
-      # client-side fetcher/eval/tarball caches here.  Actual store writes go
-      # through the Nix daemon (see `allowUnixSockets`).
-      nixCachePaths = ["${config.xdg.cacheHome}/nix"];
+        ++ ["${config.xdg.configHome}/" "/nix/store/"];
+      cachePaths = lib.lists.flatten [
+        # `nix` CLI subcommands like `build`/`eval` read and update the
+        # client-side fetcher/eval/tarball caches here.  Actual store writes go
+        # through the Nix daemon (see `allowUnixSockets`).
+        "${config.xdg.cacheHome}/nix"
+        [
+          "~/.cargo/.global-cache"
+          "~/.cargo/.package-cache"
+          "~/.cargo/.package-cache-mutate"
+          "~/.cargo/git"
+          "~/.cargo/registry"
+        ]
+      ];
     in {
       enable = personal;
       package = pkgsTrunk.claude-code;
@@ -512,8 +521,8 @@ in {
       settings.sandbox.network.allowUnixSockets = [
         "/nix/var/nix/daemon-socket/socket"
       ];
-      settings.sandbox.filesystem.allowRead = sourceDirectories ++ nixCachePaths;
-      settings.sandbox.filesystem.allowWrite = nixCachePaths;
+      settings.sandbox.filesystem.allowRead = sourceDirectories ++ cachePaths;
+      settings.sandbox.filesystem.allowWrite = cachePaths;
       settings.sandbox.filesystem.denyRead = [
         "~/**"
         # `nix-direnv`'s flake-input mirrors churn as `flake.lock` changes, so
