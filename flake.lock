@@ -1037,16 +1037,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1789749703,
-        "narHash": "sha256-5JNyUpYPpgQjkAcHlLS/bsw0mkuTqlXaqzPN2/QQwhc=",
+        "lastModified": 1789762482,
+        "narHash": "sha256-ZJGvNCxPVheE9wuyx/fdurzzb+h0Wf4YFO9GJB+oxBM=",
         "owner": "lafrenierejm",
         "repo": "ripgrep-all",
-        "rev": "01e53e449ac3c8f3fcb90b1b48962dd8ad30c55a",
+        "rev": "830254aa9d05fb0694b2c7118d72569f43003ee1",
         "type": "github"
       },
       "original": {
         "owner": "lafrenierejm",
-        "ref": "nixpkgs-26.05",
+        "ref": "gron-adapters",
         "repo": "ripgrep-all",
         "type": "github"
       }

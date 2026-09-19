@@ -85,7 +85,7 @@
       inputs.flake-parts.follows = "flake-parts";
     };
     ripgrep-all = {
-      url = "github:lafrenierejm/ripgrep-all/nixpkgs-26.05";
+      url = "github:lafrenierejm/ripgrep-all/gron-adapters";
       inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
