@@ -332,13 +332,16 @@ in {
         "~/.vault-token"
       ];
       sourceDirectories =
-        map (dir: "~/Documents/${dir}/") [
-          "codeberg.org"
-          "git.sr.ht"
-          "github.com"
-          "gitlab.com"
-        ]
-        ++ ["${config.xdg.configHome}/" "/nix/store/"];
+        lib.lists.flatten
+        [
+          "${config.xdg.configHome}/"
+          (map (dir: "~/Documents/${dir}/") [
+            "codeberg.org"
+            "git.sr.ht"
+            "github.com"
+            "gitlab.com"
+          ])
+        ];
       cachePaths = lib.lists.flatten [
         # `nix` CLI subcommands like `build`/`eval` read and update the
         # client-side fetcher/eval/tarball caches here.  Actual store writes go
@@ -356,149 +359,152 @@ in {
       enable = personal;
       package = pkgsTrunk.claude-code;
       settings.permissions.allow =
-        map (dir: "Read(${dir}**)") sourceDirectories
-        ++ map
-        (cmd: "Bash(${cmd}:*)")
-        (lib.lists.flatten [
-          # shell built-ins
-          [
-            "["
-            "compgen"
-            "echo"
-            "false"
-            "help"
-            "printf"
-            "pwd"
-            "test"
-            "true"
-            "type"
-          ]
-          # coreutils
-          [
-            "basename"
-            "cat"
-            "comm"
-            "date"
-            "dirname"
-            "env"
-            "expand"
-            "fold"
-            "head"
-            "join"
-            "ls"
-            "md5sum"
-            "nl"
-            "od"
-            "paste"
-            "printenv"
-            "readlink"
-            "realpath"
-            "seq"
-            "sha256sum"
-            "shuf"
-            "sort"
-            "stat"
-            "tac"
-            "tail"
-            "tee"
-            "tr"
-            "uname"
-            "unexpand"
-            "uniq"
-            "wc"
-            "yes"
-          ]
-          # other
-          [
-            "actionlint"
-            "diff" # diffutils
-            "dig"
-            "doggo"
-            "eza"
-            "find" # findutils
-            "grep"
-            "jaq"
-            "rg"
-            "shellcheck"
-            "tokei"
-            "typos"
-            "vale"
-            "which"
-            "xxd"
-          ]
-          (map (sub: "gh ${sub}") [
-            "auth status"
-            "gist list"
-            "gist view"
-            "issue list"
-            "issue status"
-            "issue view"
-            "label list"
-            "pr checks"
-            "pr diff"
-            "pr list"
-            "pr status"
-            "pr view"
-            "release list"
-            "release view"
-            "repo list"
-            "repo view"
-            "run list"
-            "run view"
-            "search commits"
-            "search issues"
-            "search prs"
-            "search repos"
-            "status"
-            "workflow list"
-            "workflow view"
-          ])
-          (map (sub: "git ${sub}") [
-            "blame"
-            "describe"
-            "diff"
-            "grep"
-            "log"
-            "ls-files"
-            "ls-remote"
-            "ls-tree"
-            "rev-list"
-            "rev-parse"
-            "shortlog"
-            "show"
-            "show-branch"
-            "show-ref"
-            "status"
-          ])
-          (map (sub: "nix ${sub}") [
-            "build" # build a derivation and its dependencies
-            "config show" # dump effective config
-            "eval" # pure expression evaluation, no store writes
-            "flake check --no-build" # evaluate flake checks without building
-            "flake metadata" # show flake inputs/revision info
-            "flake show" # list flake outputs
-            "hash" # compute hashes
-            "log" # show build logs
-            "path-info" # inspect store path metadata
-            "registry list" # list flake registry entries
-            "search" # query nixpkgs/flakes
-            "store ls" # list contents of a store path
-            "why-depends" # explain a dependency edge
-          ])
-          (map (sub: "uv ${sub}") (
-            let
-              tools = ["mypy" "pre-commit" "prek" "pytest" "ruff" "ty"];
-            in
-              lib.lists.flatten [
-                "export"
-                "init"
-                "lock"
-                "sync"
-                (map (tool: "-- ${tool}") tools)
-                (map (tool: "${tool}") tools)
+        lib.lists.flatten
+        [
+          (map (dir: "Read(${dir}**)") (sourceDirectories ++ ["/nix/store/"]))
+          (map
+            (cmd: "Bash(${cmd}:*)")
+            (lib.lists.flatten [
+              # shell built-ins
+              [
+                "["
+                "compgen"
+                "echo"
+                "false"
+                "help"
+                "printf"
+                "pwd"
+                "test"
+                "true"
+                "type"
               ]
-          ))
-        ]);
+              # coreutils
+              [
+                "basename"
+                "cat"
+                "comm"
+                "date"
+                "dirname"
+                "env"
+                "expand"
+                "fold"
+                "head"
+                "join"
+                "ls"
+                "md5sum"
+                "nl"
+                "od"
+                "paste"
+                "printenv"
+                "readlink"
+                "realpath"
+                "seq"
+                "sha256sum"
+                "shuf"
+                "sort"
+                "stat"
+                "tac"
+                "tail"
+                "tee"
+                "tr"
+                "uname"
+                "unexpand"
+                "uniq"
+                "wc"
+                "yes"
+              ]
+              # other
+              [
+                "actionlint"
+                "diff" # diffutils
+                "dig"
+                "doggo"
+                "eza"
+                "find" # findutils
+                "grep"
+                "jaq"
+                "rg"
+                "shellcheck"
+                "tokei"
+                "typos"
+                "vale"
+                "which"
+                "xxd"
+              ]
+              (map (sub: "gh ${sub}") [
+                "auth status"
+                "gist list"
+                "gist view"
+                "issue list"
+                "issue status"
+                "issue view"
+                "label list"
+                "pr checks"
+                "pr diff"
+                "pr list"
+                "pr status"
+                "pr view"
+                "release list"
+                "release view"
+                "repo list"
+                "repo view"
+                "run list"
+                "run view"
+                "search commits"
+                "search issues"
+                "search prs"
+                "search repos"
+                "status"
+                "workflow list"
+                "workflow view"
+              ])
+              (map (sub: "git ${sub}") [
+                "blame"
+                "describe"
+                "diff"
+                "grep"
+                "log"
+                "ls-files"
+                "ls-remote"
+                "ls-tree"
+                "rev-list"
+                "rev-parse"
+                "shortlog"
+                "show"
+                "show-branch"
+                "show-ref"
+                "status"
+              ])
+              (map (sub: "nix ${sub}") [
+                "build" # build a derivation and its dependencies
+                "config show" # dump effective config
+                "eval" # pure expression evaluation, no store writes
+                "flake check --no-build" # evaluate flake checks without building
+                "flake metadata" # show flake inputs/revision info
+                "flake show" # list flake outputs
+                "hash" # compute hashes
+                "log" # show build logs
+                "path-info" # inspect store path metadata
+                "registry list" # list flake registry entries
+                "search" # query nixpkgs/flakes
+                "store ls" # list contents of a store path
+                "why-depends" # explain a dependency edge
+              ])
+              (map (sub: "uv ${sub}") (
+                let
+                  tools = ["mypy" "pre-commit" "prek" "pytest" "ruff" "ty"];
+                in
+                  lib.lists.flatten [
+                    "export"
+                    "init"
+                    "lock"
+                    "sync"
+                    (map (tool: "-- ${tool}") tools)
+                    (map (tool: "${tool}") tools)
+                  ]
+              ))
+            ]))
+        ];
       settings.permissions.deny =
         # `Write`/`NotebookEdit` path rules are accepted but never consulted by Claude Code;
         # only `Read`/`Edit` are checked, and a `Read` deny also blocks `Write` on the same path.
@@ -521,8 +527,8 @@ in {
       settings.sandbox.network.allowUnixSockets = [
         "/nix/var/nix/daemon-socket/socket"
       ];
-      settings.sandbox.filesystem.allowRead = sourceDirectories ++ cachePaths;
-      settings.sandbox.filesystem.allowWrite = cachePaths;
+      settings.sandbox.filesystem.allowRead = sourceDirectories ++ cachePaths ++ ["/nix/store/"];
+      settings.sandbox.filesystem.allowWrite = sourceDirectories ++ cachePaths;
       settings.sandbox.filesystem.denyRead = [
         "~/**"
         # `nix-direnv`'s flake-input mirrors churn as `flake.lock` changes, so
