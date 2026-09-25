@@ -158,6 +158,7 @@ in {
         vscode-json-languageserver
         yaml-language-server
         yq
+        zls_0_16 # Zig Language Server
       ])
       (lib.lists.optionals personal [
         pkgs.imagemagick

@@ -6908,6 +6908,12 @@ Prettier's CLI be used via the /Reformatter/ package to automatically format YAM
 (use-package zig-mode)
 #+end_src
 
+*** Eglot
+
+#+begin_src emacs-lisp :noweb-ref eglot/ghook
+('zig-mode-hook #'eglot-ensure)
+#+end_src
+
 ** Automatic Indentation
 
 *** /DTRT Indent/
