@@ -1031,6 +1031,8 @@ A minimal minor-mode that sets project relative paths for buffer names with opti
 
 #+begin_src emacs-lisp
 (use-package buffer-name-relative
+  :demand
+
   :custom
   (buffer-name-relative-prefix '("" . "/"))
 
@@ -1117,7 +1119,9 @@ OK-IF-ALREADY-EXISTS is passed directly to `rename-file'."
       (rename-file file new-file-name ok-if-already-exists)))
     ;; Rename BUFFER, using `generate-new-buffer-name' if necessary.
     ;; Record the name actually assigned.
-    (setq new-buffer-name (rename-buffer new-file-name t))
+    (setq
+     new-buffer-name
+     (rename-buffer (buffer-name-relative--root-path-calc-relative new-file-name) t))
     (set-visited-file-name new-file-name t t)
     (message "Renamed buffer %s to %s and its file to %s."
              orig-buffer-name new-buffer-name
