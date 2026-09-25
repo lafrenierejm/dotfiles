@@ -144,6 +144,7 @@ in {
         efm-langserver
         graphql-language-service-cli
         nixd
+        pinact # pin external GitHub Actions
         pnpm
         prettier
         rust-analyzer
