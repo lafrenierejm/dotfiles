@@ -554,11 +554,8 @@ The package's source is available at [[https://github.com/Fanael/rainbow-delimit
 
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
-  ;; Load this package eagerly.
-  :demand
-
   :ghook
-  <<rainbow-delimiters/ghook>>)
+  ('prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 
 ** /Paren/
@@ -6419,13 +6416,6 @@ Format code using Black.
   :args '("--" "-"))
 #+end_src
 
-*** /Rainbow Delimiters/
-
-Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} buffers.
-#+begin_src emacs-lisp :noweb-ref rainbow-delimiters/ghook
-('(python-mode-hook python-ts-mode-hook) nil)
-#+end_src
-
 *** Spell Check
 
 #+begin_src emacs-lisp :noweb-ref wucou/ghook
@@ -6463,11 +6453,6 @@ Enable \src_emacs-lisp{rainbow-delimiters-mode} in \src_emacs-lisp{python-mode} 
   (defun run-groovy ()
     (interactive)
     (comint-run "groovysh")))
-#+end_src
-
-Enable \src_emacs-lisp{rainbow-delimiters-mode} in Groovy buffers.
-#+begin_src emacs-lisp :noweb-ref rainbow-delimiters/ghook
-('groovy-mode-hook nil)
 #+end_src
 
 *** Polymode
