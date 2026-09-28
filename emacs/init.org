@@ -3252,6 +3252,90 @@ Enable ws-butler globally.
 (ws-butler-global-mode)
 #+end_src
 
+*** Whitespace Visualization
+
+To make it easier to identify indentation and EOL patterns, I want leading and trailing ASCII spaces and tabs to have distinct visual characteristics.
+To that end, I want the space character to be displayed as a middle dot (~·~) and the tab character as one or more ~─~ characters filling out the tab's original width.
+What I do /not/ want is for spaces within a line to be replaced in this manner.
+
+The built-in ~whitespace-mode~ cannot do this.
+~whitespace-mode~ substitute glyphs via buffer-wide ~buffer-display-table~ entries keyed on the raw character code, so they apply unconditionally to every space and tab in the buffer.
+That substitution never consults ~whitespace-space-regexp~ (which only scopes the /face/, not the glyph), so there is no way to restrict it to leading/trailing whitespace via configuration alone.
+
+To bypass the limitations of ~whitespace-mode~ I define a custom minor mode.
+This mode uses Font Lock to match /only/ leading and trailing runs and replaces each matched character with a glyph via the ~display~ text property.
+The ~display~ property is inherently position-aware and the mode sets it one character at a time.
+This keeps each character individually addressable by point for familiar navigation.
+
+#+begin_src emacs-lisp
+;; Load `whitespace' so that its faces, which are used below, are defined.
+(require 'whitespace)
+
+(defface lafrenierejm-whitespace-space-face
+  '((t :inherit whitespace-space))
+  "Face used by `lafrenierejm-whitespace-mode' for its space characters.
+
+Inherits from `whitespace-space' so that the dots are fontified the same
+way `whitespace-mode' fontifies its own `space-mark' dots.")
+
+(defface lafrenierejm-whitespace-tab-face
+  '((t :inherit whitespace-tab))
+  "Face used by `lafrenierejm-whitespace-mode' for its tab characters.
+
+Inherits from `whitespace-tab' so that the tab visualization is fontified the
+same way `whitespace-mode' fontifies its own `tab-mark' arrows.")
+
+(defun lafrenierejm-whitespace--mark-whitespace ()
+  "Display each whitespace character just matched by Font Lock as a glyph.
+
+Each space character becomes a middle dot.  Each tab character becomes
+enough \"─\" characters to reach the same tab stop the tab itself would
+have reached, so the substitution always has the same display width as
+the text it replaces.
+
+Used as the FACESPEC of a Font Lock keyword: setting the `display'
+property here, one character at a time, is the actual highlighting, so
+this always returns nil."
+  (let ((pos (match-beginning 0))
+        (end (match-end 0))
+        (col (save-excursion (goto-char (match-beginning 0)) (current-column))))
+    (while (< pos end)
+      (pcase (char-after pos)
+        (?\s
+         (put-text-property pos (1+ pos) 'display
+                             (propertize "·" 'face 'lafrenierejm-whitespace-space-face))
+         (setq col (1+ col)))
+        (?\t
+         (let ((width (- tab-width (mod col tab-width))))
+           (put-text-property pos (1+ pos) 'display
+                               (propertize (make-string width ?─) 'face 'lafrenierejm-whitespace-tab-face))
+           (setq col (+ col width)))))
+      (setq pos (1+ pos))))
+  nil)
+
+(defvar lafrenierejm-whitespace-font-lock-keywords
+  '(("^[ \t]+" 0 (lafrenierejm-whitespace--mark-whitespace))
+    ("[ \t]+$" 0 (lafrenierejm-whitespace--mark-whitespace)))
+  "Font Lock keywords used by `lafrenierejm-whitespace-mode'.")
+
+(define-minor-mode lafrenierejm-whitespace-mode
+  "Display leading and trailing whitespace characters as glyphs.
+
+Whitespace in the middle of a line is left unfontified."
+  :lighter nil
+  (if lafrenierejm-whitespace-mode
+      (progn
+        (add-to-list (make-local-variable 'font-lock-extra-managed-props) 'display)
+        (font-lock-add-keywords nil lafrenierejm-whitespace-font-lock-keywords))
+    (font-lock-remove-keywords nil lafrenierejm-whitespace-font-lock-keywords))
+  (font-lock-flush))
+
+(define-globalized-minor-mode lafrenierejm-whitespace-global-mode
+  lafrenierejm-whitespace-mode lafrenierejm-whitespace-mode)
+
+(lafrenierejm-whitespace-global-mode +1)
+#+end_src
+
 * Directories
 :PROPERTIES:
 :HEADER-ARGS+: :noweb-ref directories
