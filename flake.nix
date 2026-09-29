@@ -90,6 +90,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
+    semantic-clause-break = {
+      url = "github:lafrenierejm/semantic-clause-break";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-root.follows = "flake-root";
+      inputs.git-hooks.follows = "git-hooks";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs-trunk";

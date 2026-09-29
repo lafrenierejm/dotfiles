@@ -86,6 +86,7 @@ in {
       [
         inputs.gron.packages."${system}".gron
         inputs.ghq.packages."${system}".ghq
+        inputs.semantic-clause-break.packages."${system}".default
       ]
       (with pkgs; [
         (aspellWithDicts (aspellDicts: (with aspellDicts; [en en-computers])))
