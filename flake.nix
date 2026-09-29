@@ -204,6 +204,9 @@
             "steam-unwrapped"
           ];
         overlays = let
+          claude-agent-acp = final: prev: {
+            claude-agent-acp = prev.callPackage ./nix/pkgs/claude-agent-acp.nix {};
+          };
           cosmic = final: prev: {
             cosmic-comp = prev.cosmic-comp.overrideAttrs (old: {
               patches = (old.patches or []) ++ ["${inputs.cramt-nixconf}/patches/no_ssd.patch"];
