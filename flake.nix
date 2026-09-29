@@ -203,11 +203,11 @@
             "steam"
             "steam-unwrapped"
           ];
-        overlays = let
-          claude-agent-acp = final: prev: {
+        overlays = [
+          inputs.emacs-overlay.overlays.default
+          inputs.nur.overlays.default
+          (final: prev: {
             claude-agent-acp = prev.callPackage ./nix/pkgs/claude-agent-acp.nix {};
-          };
-          cosmic = final: prev: {
             cosmic-comp = prev.cosmic-comp.overrideAttrs (old: {
               patches = (old.patches or []) ++ ["${inputs.cramt-nixconf}/patches/no_ssd.patch"];
               postPatch = ''
@@ -217,15 +217,8 @@
                 find src/shell -type f -name "*.rs" -exec sed -i 's/Duration::from_millis([0-9]\+)/Duration::from_millis(1)/g' {} \;
               '';
             });
-          };
-          whitesurCombined = final: prev: {
             whitesur-combined = prev.callPackage ./nix/pkgs/whitesur-combined.nix {};
-          };
-        in [
-          inputs.emacs-overlay.overlays.default
-          inputs.nur.overlays.default
-          cosmic
-          whitesurCombined
+          })
         ];
       in {
         # The usual flake attributes can be defined here, including system-
