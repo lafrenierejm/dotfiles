@@ -345,18 +345,77 @@ in {
             "gitlab.com"
           ])
         ];
+      # Many tools ignore XDG on macOS in favor of `~/Library/Caches`.
+      platformCache = darwinName: xdgName:
+        if pkgs.stdenv.isDarwin
+        then "~/Library/Caches/${darwinName}"
+        else "${config.xdg.cacheHome}/${xdgName}";
       cachePaths = lib.lists.flatten [
         # `nix` CLI subcommands like `build`/`eval` read and update the
         # client-side fetcher/eval/tarball caches here.  Actual store writes go
         # through the Nix daemon (see `allowUnixSockets`).
         "${config.xdg.cacheHome}/nix"
+        # Rust
         [
           "~/.cargo/.global-cache"
           "~/.cargo/.package-cache"
           "~/.cargo/.package-cache-mutate"
           "~/.cargo/git"
           "~/.cargo/registry"
+          (platformCache "Mozilla.sccache" "sccache")
         ]
+        # Go
+        [
+          "~/go/pkg/mod"
+          (platformCache "go-build" "go-build")
+        ]
+        # Python
+        [
+          (platformCache "pip" "pip")
+          (platformCache "pypoetry" "pypoetry")
+          "${config.xdg.cacheHome}/pre-commit"
+          "${config.xdg.cacheHome}/uv"
+        ]
+        # JavaScript/TypeScript
+        [
+          "~/.bun/install/cache"
+          "~/.npm/_cacache"
+          "~/.yarn/berry/cache"
+          (platformCache "Yarn" "yarn")
+          (platformCache "pnpm" "pnpm")
+          (
+            if pkgs.stdenv.isDarwin
+            then "~/Library/pnpm/store"
+            else "${config.xdg.dataHome}/pnpm/store"
+          )
+        ]
+        # JVM/Clojure
+        [
+          "~/.clojure/.cpcache"
+          "~/.gitlibs"
+          "~/.gradle/caches"
+          "~/.gradle/wrapper"
+          "~/.m2/repository"
+          (platformCache "Coursier" "coursier")
+        ]
+        # Haskell
+        [
+          "${config.xdg.cacheHome}/cabal"
+          "~/.cabal/packages"
+          "~/.stack"
+        ]
+        # Ruby
+        [
+          "~/.bundle/cache"
+          "~/.gem/ruby"
+        ]
+        # Elixir
+        [
+          "~/.hex/packages"
+          "~/.mix"
+        ]
+        # Zig
+        "${config.xdg.cacheHome}/zig"
       ];
     in {
       enable = personal;
