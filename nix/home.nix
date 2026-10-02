@@ -685,6 +685,15 @@ in {
       settings.feedbackSurveyRate = 0;
       settings.prefersReducedMotion = true;
       settings.spinnerTipsEnabled = false;
+      # Entries prefix-match model IDs, so "claude-sonnet-5" allows Sonnet 5.x.
+      settings.availableModels = [
+        "claude-fable"
+        "claude-haiku"
+        "claude-opus-5-5"
+        "claude-sonnet-5"
+      ];
+      # Constrain the default model selection to `availableModels` as well.
+      settings.enforceAvailableModels = true;
     };
 
     chromium = {
