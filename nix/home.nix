@@ -694,6 +694,7 @@ in {
       ];
       # Constrain the default model selection to `availableModels` as well.
       settings.enforceAvailableModels = true;
+      settings.model = "sonnet"; # alias for latest Sonnet
     };
 
     chromium = {
