@@ -3328,9 +3328,57 @@ Whitespace in the middle of a line is left unfontified."
   (font-lock-flush))
 
 (define-globalized-minor-mode lafrenierejm-whitespace-global-mode
-  lafrenierejm-whitespace-mode lafrenierejm-whitespace-mode)
+  lafrenierejm-whitespace-mode lafrenierejm-whitespace-mode
+  :predicate '(not magit-status-mode))
 
 (lafrenierejm-whitespace-global-mode +1)
+#+end_src
+
+*** Magit Status Whitespace Visualization
+
+Diffs in ~magit-status~ buffers prefix every line with a marker: ~+~, ~-~, or a space.
+I want the leading spaces and tabs /after/ that marker to be visualized the same way, but nothing else in the buffer.
+The marker itself is never replaced, so a context line's first space stays blank.
+
+Magit erases and re-inserts its buffer contents on every refresh, which discards any overlays.
+Therefore the glyphs are reapplied from ~magit-post-refresh-hook~.
+
+#+begin_src emacs-lisp
+(defun lafrenierejm-magit-whitespace--mark ()
+  "Overlay each leading space and tab after a diff marker in the current buffer.
+
+Only lines beginning with \"+\", \"-\", or \" \" are considered.
+The marker character at column zero is skipped."
+  (remove-overlays (point-min) (point-max) 'lafrenierejm-magit-whitespace t)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "^[-+ ]\\([ \t]+\\)" nil t)
+      (let ((end (match-end 1)))
+        (goto-char (match-beginning 1))
+        (while (< (point) end)
+          (let ((glyph
+                 (if (eq (char-after) ?\t)
+                     (propertize (make-string (- tab-width (mod (current-column) tab-width)) ?─)
+                                 'face 'lafrenierejm-whitespace-tab-face)
+                   (propertize "·" 'face 'lafrenierejm-whitespace-space-face)))
+                (overlay (make-overlay (point) (1+ (point)))))
+            (overlay-put overlay 'display glyph)
+            (overlay-put overlay 'lafrenierejm-magit-whitespace t))
+          (forward-char 1))))))
+
+(define-minor-mode lafrenierejm-magit-whitespace-mode
+  "Visualize leading spaces and tabs in Magit diffs.
+
+Only lines beginning with \"+\", \"-\", or \" \" are affected."
+  :lighter nil
+  (if lafrenierejm-magit-whitespace-mode
+      (progn
+        (add-hook 'magit-post-refresh-hook #'lafrenierejm-magit-whitespace--mark nil t)
+        (lafrenierejm-magit-whitespace--mark))
+    (remove-hook 'magit-post-refresh-hook #'lafrenierejm-magit-whitespace--mark t)
+    (remove-overlays (point-min) (point-max) 'lafrenierejm-magit-whitespace t)))
+
+(add-hook 'magit-status-mode-hook #'lafrenierejm-magit-whitespace-mode)
 #+end_src
 
 * Directories
