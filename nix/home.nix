@@ -901,6 +901,7 @@ in {
           src = self.ghostel.src;
         };
         ghostel = (pkgsTrunk.emacsPackagesFor pkgs.emacs-git-pgtk).ghostel;
+        magit = self.melpaPackages.magit;
         projectile = self.melpaPackages.projectile;
         shell-maker = self.melpaPackages.shell-maker;
       };
