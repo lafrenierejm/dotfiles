@@ -989,12 +989,14 @@ in {
           tags = true;
         };
         push = {
+          default = "current"; # push `feature` to `<remote>/feature` regardless of upstream
           gpgSign =
             if gitUseGpg
             then "if-asked"
             else "false";
         };
         rebase.autoStash = true;
+        remote.pushDefault = "origin"; # resolve `@{push}` without per-branch `branch.<name>.pushRemote`.
         sendemail = {
           from = "Joseph LaFreniere <${gitEmail}>";
           smtpuser = "";
