@@ -6,6 +6,9 @@
 - Prefer `fd` over `find`.
   `fd` excludes `.git/` and respects gitignore files by default.
 
+- The coreutils, `sed`, findutils, and diffutils on `PATH` are always the GNU variants on both Darwin and Linux.
+  Use GNU flags and syntax (e.g. `date -d`, `stat -c`, `sed -i` without a backup suffix), not BSD ones.
+
 # Git
 
 - A branch's upstream (what it is based on and pulls from) and its push target are separate.
