@@ -3341,7 +3341,7 @@ I want the leading spaces and tabs /after/ that marker to be visualized the same
 The marker itself is never replaced, so a context line's first space stays blank.
 
 Magit erases and re-inserts its buffer contents on every refresh, which discards any overlays.
-Therefore the glyphs are reapplied from ~magit-post-refresh-hook~.
+Therefore the glyphs are reapplied from ~magit-refresh-buffer-hook~.
 
 #+begin_src emacs-lisp
 (defun lafrenierejm-magit-whitespace--mark ()
@@ -3373,9 +3373,9 @@ Only lines beginning with \"+\", \"-\", or \" \" are affected."
   :lighter nil
   (if lafrenierejm-magit-whitespace-mode
       (progn
-        (add-hook 'magit-post-refresh-hook #'lafrenierejm-magit-whitespace--mark nil t)
+        (add-hook 'magit-refresh-buffer-hook #'lafrenierejm-magit-whitespace--mark nil t)
         (lafrenierejm-magit-whitespace--mark))
-    (remove-hook 'magit-post-refresh-hook #'lafrenierejm-magit-whitespace--mark t)
+    (remove-hook 'magit-refresh-buffer-hook #'lafrenierejm-magit-whitespace--mark t)
     (remove-overlays (point-min) (point-max) 'lafrenierejm-magit-whitespace t)))
 
 (add-hook 'magit-status-mode-hook #'lafrenierejm-magit-whitespace-mode)
