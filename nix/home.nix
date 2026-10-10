@@ -1179,4 +1179,36 @@ in {
       };
     };
   };
+
+  launchd.agents = let
+    nixTarballCacheRepack = "nix-tarball-cache-repack";
+  in {
+    ${nixTarballCacheRepack} = {
+      # Periodically repack the tarball cache.
+      # Use a multi-pack-file index for more locality for file lookups.
+      # Source: https://discourse.nixos.org/t/snappier-tarball-fetches-with-nix/79994
+      # Upstream PR: https://github.com/NixOS/nix/pull/16427
+      enable = true;
+      config = {
+        ProgramArguments = [
+          (toString (pkgs.writeShellScript nixTarballCacheRepack ''
+            set -eu
+            cd ${config.xdg.cacheHome}/nix/tarball-cache-v2
+            ${pkgs.git}/bin/git multi-pack-index write
+            ${pkgs.git}/bin/git multi-pack-index repack --batch-size 1024m
+            ${pkgs.git}/bin/git multi-pack-index expire
+          ''))
+        ];
+        StartCalendarInterval = [
+          {
+            Hour = 0;
+            Minute = 0;
+          } # daily at midnight
+        ];
+        RunAtLoad = false;
+        StandardOutPath = "${homeDirectory}/Library/Logs/${nixTarballCacheRepack}.log";
+        StandardErrorPath = "${homeDirectory}/Library/Logs/${nixTarballCacheRepack}.log";
+      };
+    };
+  };
 }
