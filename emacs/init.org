@@ -3252,7 +3252,8 @@ Enable ws-butler globally.
 *** Whitespace Visualization
 
 To make it easier to identify indentation and EOL patterns, I want leading and trailing ASCII spaces and tabs to have distinct visual characteristics.
-To that end, I want the space character to be displayed as a middle dot (~·~) and the tab character as one or more ~─~ characters filling out the tab's original width.
+To that end, I want the space character to be displayed as a middle dot (~·~) and the tab character as a ~→~ followed by plain, unvisualized whitespace padding out to the tab's original width.
+These two replacement characters are each held in a variable so that both the general-purpose minor mode below and the Magit-specific one further down stay in sync.
 What I do /not/ want is for spaces within a line to be replaced in this manner.
 
 The built-in ~whitespace-mode~ cannot do this.
@@ -3282,13 +3283,25 @@ way `whitespace-mode' fontifies its own `space-mark' dots.")
 Inherits from `whitespace-tab' so that the tab visualization is fontified the
 same way `whitespace-mode' fontifies its own `tab-mark' arrows.")
 
+(defvar lafrenierejm-whitespace-space-char ?·
+  "Character used to visualize a space character.")
+
+(defvar lafrenierejm-whitespace-tab-char ?→
+  "Character used to visualize the start of a tab character.
+
+The remainder of the tab's width is padded out with plain, unfontified
+spaces; see `lafrenierejm-whitespace--mark-whitespace' and
+`lafrenierejm-magit-whitespace--mark'.")
+
 (defun lafrenierejm-whitespace--mark-whitespace ()
   "Display each whitespace character just matched by Font Lock as a glyph.
 
-Each space character becomes a middle dot.  Each tab character becomes
-enough \"─\" characters to reach the same tab stop the tab itself would
-have reached, so the substitution always has the same display width as
-the text it replaces.
+Each space character becomes `lafrenierejm-whitespace-space-char'.  Each tab
+character becomes `lafrenierejm-whitespace-tab-char' followed by plain space
+padding, reaching the same tab stop the tab itself would have reached, so the
+substitution always has the same display width as the text it replaces.  The
+padding spaces are left unfontified so that only the leading glyph itself is
+visualized.
 
 Used as the FACESPEC of a Font Lock keyword: setting the `display'
 property here, one character at a time, is the actual highlighting, so
@@ -3300,12 +3313,15 @@ this always returns nil."
       (pcase (char-after pos)
         (?\s
          (put-text-property pos (1+ pos) 'display
-                             (propertize "·" 'face 'lafrenierejm-whitespace-space-face))
+                             (propertize (char-to-string lafrenierejm-whitespace-space-char)
+                                         'face 'lafrenierejm-whitespace-space-face))
          (setq col (1+ col)))
         (?\t
-         (let ((width (- tab-width (mod col tab-width))))
+         (let* ((width (- tab-width (mod col tab-width)))
+                (arrow (propertize (char-to-string lafrenierejm-whitespace-tab-char)
+                                    'face 'lafrenierejm-whitespace-tab-face)))
            (put-text-property pos (1+ pos) 'display
-                               (propertize (make-string width ?─) 'face 'lafrenierejm-whitespace-tab-face))
+                               (concat arrow (make-string (1- width) ?\s)))
            (setq col (+ col width)))))
       (setq pos (1+ pos))))
   nil)
@@ -3358,9 +3374,11 @@ The marker character at column zero is skipped."
         (while (< (point) end)
           (let ((glyph
                  (if (eq (char-after) ?\t)
-                     (propertize (make-string (- tab-width (mod (current-column) tab-width)) ?─)
-                                 'face 'lafrenierejm-whitespace-tab-face)
-                   (propertize "·" 'face 'lafrenierejm-whitespace-space-face)))
+                     (concat (propertize (char-to-string lafrenierejm-whitespace-tab-char)
+                                          'face 'lafrenierejm-whitespace-tab-face)
+                             (make-string (1- (- tab-width (mod (current-column) tab-width))) ?\s))
+                   (propertize (char-to-string lafrenierejm-whitespace-space-char)
+                               'face 'lafrenierejm-whitespace-space-face)))
                 (overlay (make-overlay (point) (1+ (point)))))
             (overlay-put overlay 'display glyph)
             (overlay-put overlay 'lafrenierejm-magit-whitespace t))
