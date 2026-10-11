@@ -1123,6 +1123,7 @@ in {
       enableVteIntegration = true;
       defaultKeymap = "emacs";
       initContent = lib.concatStringsSep "\n" (lib.lists.flatten [
+        ''eval "$(${pkgs.zsh-patina}/bin/zsh-patina activate)"''
         ''. "$HOME/.config/zsh/prompt.zsh"''
       ]);
       profileExtra = lib.concatStringsSep "\n" [
