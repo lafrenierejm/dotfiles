@@ -665,10 +665,18 @@ in {
         credentialPaths;
       settings.sandbox.enabled = true;
       settings.sandbox.allowUnsandboxedCommands = false;
-      # Allow sandboxed commands to connect to the Nix daemon (Darwin-specific).
-      settings.sandbox.network.allowUnixSockets = [
-        "/nix/var/nix/daemon-socket/socket"
-      ];
+      # Allow sandboxed commands to connect to the Nix daemon.
+      # On Linux the sandbox filters sockets with seccomp, which cannot match
+      # paths, so `allowUnixSockets` is ignored and creating any Unix socket
+      # (e.g. `nix eval`) fails unless `allowAllUnixSockets` is set.
+      settings.sandbox.network =
+        if pkgs.stdenv.isLinux
+        then {allowAllUnixSockets = true;}
+        else {
+          allowUnixSockets = [
+            "/nix/var/nix/daemon-socket/socket"
+          ];
+        };
       settings.sandbox.filesystem.allowRead = sourceDirectories ++ cachePaths ++ ["/nix/store/"];
       settings.sandbox.filesystem.allowWrite = sourceDirectories ++ cachePaths;
       settings.sandbox.filesystem.denyRead = [
