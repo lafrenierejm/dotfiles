@@ -690,7 +690,7 @@ in {
         "claude-fable"
         "claude-haiku"
         "claude-opus-5-5"
-        "claude-sonnet-5"
+        "claude-sonnet-5-5"
       ];
       # Constrain the default model selection to `availableModels` as well.
       settings.enforceAvailableModels = true;
