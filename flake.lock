@@ -1136,11 +1136,11 @@
         "zig2nix": "zig2nix"
       },
       "locked": {
-        "lastModified": 1791466470,
-        "narHash": "sha256-fOoSI/zb8+avgf5tHDeYl4OTVCLKoLUG4cOB9ubQImE=",
+        "lastModified": 1791985805,
+        "narHash": "sha256-zQGsL2lQ4qBKfPwNRV4WE+6weXc5GFbJSRpg1tEzaeg=",
         "owner": "lafrenierejm",
         "repo": "semantic-clause-break",
-        "rev": "d0c0429be9096a5f22276996506c125f9619eece",
+        "rev": "8b273e4b321c5f0155b3d2cb1a3b2023f6075566",
         "type": "github"
       },
       "original": {
