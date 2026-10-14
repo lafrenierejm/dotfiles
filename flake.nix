@@ -327,6 +327,7 @@
               inputs.disko.nixosModules.disko
               inputs.home-manager.nixosModules.home-manager
               ./nix/common.nix
+              ./nix/linux.nix
               values.extraModules
               {
                 nixpkgs.overlays = overlays;
