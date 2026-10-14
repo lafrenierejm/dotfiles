@@ -1544,6 +1544,16 @@ Retain selection after typing =<= or =>= in visual state.
           "--stdin-filepath" ,(buffer-file-name)))
 #+end_src
 
+*** Formatting via Semantic Clause Break
+
+#+begin_src emacs-lisp :noweb-ref reformatter/config
+(reformatter-define
+  semantic-clause-break
+  :program "semantic-clause-break"
+  :args (list "--exit-zero" "--fix" input-file)
+  :stdin nil)
+#+end_src
+
 ** reStructuredText (RST)
 
 Emacs includes a package for /RST/ for working with reStructuredText.
