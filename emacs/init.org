@@ -1590,8 +1590,8 @@ From [[https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#embedd
   - No start-string, end-string = =_=.
   - Start-string = =`=, end-string = =`_=. (Phrase references.)
 - Anonymous hyperlink references:
-   - No start-string, end-string = =__=.
-   - Start-string = =`=, end-string = =`__=. (Phrase references.)
+  - No start-string, end-string = =__=.
+  - Start-string = =`=, end-string = =`__=. (Phrase references.)
 
 A hyperlink reference may directly embed a target URI or (since Docutils 0.11) a hyperlink reference within angle brackets ("<...>") as follows:
 #+begin_example rst
