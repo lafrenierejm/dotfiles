@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   fonts = {
     packages = with pkgs; [
+      dejavu-fonts
       font-awesome
       noto-fonts
       noto-fonts-cjk-sans
