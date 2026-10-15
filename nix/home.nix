@@ -687,6 +687,15 @@ in {
       settings.feedbackSurveyRate = 0;
       settings.prefersReducedMotion = true;
       settings.spinnerTipsEnabled = false;
+      settings.env = {
+        CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY = "1";
+        CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
+        DISABLE_AUTOUPDATER = "1";
+        DISABLE_BUG_COMMAND = "1";
+        DISABLE_ERROR_REPORTING = "1";
+        DISABLE_FEEDBACK_COMMAND = "1";
+        DISABLE_TELEMETRY = "1";
+      };
       # Entries prefix-match model IDs, so "claude-sonnet-5" allows Sonnet 5.x.
       settings.availableModels = [
         "claude-fable"
