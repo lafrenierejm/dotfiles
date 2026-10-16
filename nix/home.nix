@@ -694,7 +694,12 @@ in {
         DISABLE_BUG_COMMAND = "1";
         DISABLE_ERROR_REPORTING = "1";
         DISABLE_FEEDBACK_COMMAND = "1";
+        DISABLE_INSTALLATION_CHECKS = "1";
+        DISABLE_INSTALL_GITHUB_APP_COMMAND = "1";
         DISABLE_TELEMETRY = "1";
+        DISABLE_UPDATES = "1";
+        DISABLE_UPGRADE_COMMAND = "1";
+        DO_NOT_TRACK = "1";
       };
       # Entries prefix-match model IDs, so "claude-sonnet-5" allows Sonnet 5.x.
       settings.availableModels = [
