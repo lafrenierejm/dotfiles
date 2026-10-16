@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   fonts = {
     packages = with pkgs; [
-      dejavu-fonts
+      dejavu_fonts
       font-awesome
       noto-fonts
       noto-fonts-cjk-sans
@@ -10,17 +10,21 @@
       noto-fonts-lgc-plus
       noto-fonts-monochrome-emoji
       source-code-pro
+      source-sans
+      source-serif
       source-han-sans
       source-han-serif
     ];
     fontconfig.defaultFonts = {
       serif = [
-        "Noto Serif"
+        "Source Serif"
         "Source Han Serif"
+        "Noto Serif"
       ];
       sansSerif = [
-        "Noto Sans"
+        "Source Sans"
         "Source Han Sans"
+        "Noto Sans"
       ];
     };
     fontDir.enable = true;
