@@ -1066,7 +1066,7 @@
         "nixpkgs-trunk": "nixpkgs-trunk",
         "nur": "nur",
         "ripgrep-all": "ripgrep-all",
-        "semantic-clause-break": "semantic-clause-break",
+        "senbreak": "senbreak",
         "treefmt-nix": "treefmt-nix_3"
       }
     },
@@ -1115,7 +1115,7 @@
         "type": "github"
       }
     },
-    "semantic-clause-break": {
+    "senbreak": {
       "inputs": {
         "flake-parts": [
           "flake-parts"
@@ -1139,13 +1139,13 @@
         "lastModified": 1791985805,
         "narHash": "sha256-zQGsL2lQ4qBKfPwNRV4WE+6weXc5GFbJSRpg1tEzaeg=",
         "owner": "lafrenierejm",
-        "repo": "semantic-clause-break",
+        "repo": "senbreak",
         "rev": "8b273e4b321c5f0155b3d2cb1a3b2023f6075566",
         "type": "github"
       },
       "original": {
         "owner": "lafrenierejm",
-        "repo": "semantic-clause-break",
+        "repo": "senbreak",
         "type": "github"
       }
     },
@@ -1287,7 +1287,7 @@
       "inputs": {
         "flake-utils": "flake-utils_4",
         "nixpkgs": [
-          "semantic-clause-break",
+          "senbreak",
           "nixpkgs"
         ]
       },

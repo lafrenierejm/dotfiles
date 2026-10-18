@@ -1555,8 +1555,8 @@ Retain selection after typing =<= or =>= in visual state.
 
 #+begin_src emacs-lisp :noweb-ref reformatter/config
 (reformatter-define
-  semantic-clause-break
-  :program "semantic-clause-break"
+  senbreak
+  :program "senbreak"
   :args (list "--exit-zero" "--fix" input-file)
   :stdin nil)
 #+end_src
