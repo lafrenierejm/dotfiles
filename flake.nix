@@ -5,6 +5,10 @@
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-26.05-darwin/nixexprs.tar.zst";
     nixpkgs-trunk.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
     agenix.url = "github:ryantm/agenix";
+    claude-code-nix = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs-trunk";
+    };
     cramt-nixconf = {
       url = "github:cramt/nixconf";
       flake = false;
@@ -204,6 +208,7 @@
             "steam-unwrapped"
           ];
         overlays = [
+          inputs.claude-code-nix.overlays.default
           inputs.emacs-overlay.overlays.default
           inputs.nur.overlays.default
           (final: prev: {
