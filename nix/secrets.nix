@@ -16,6 +16,9 @@ let
   darkstar = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH9ajjG1hEY7PzB3N2q7EGAbZby50Qs3G/WrqKq8F32t" # root@darkstar
   ];
+  uavionix = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN8Yglp/JETMhlSw/LhW7NYbTtetlz+FHDTE0Y477NKN" # root@uavionix
+  ];
 in {
   "earthbound/luks.age".publicKeys = earthbound ++ lafrenierejm;
   "earthbound/tailscale.age".publicKeys = earthbound ++ lafrenierejm;
@@ -26,7 +29,7 @@ in {
   };
   "darwin/airborn/b2-key-id.age".publicKeys = airborn ++ lafrenierejm;
   "darwin/airborn/b2-key.age".publicKeys = airborn ++ lafrenierejm;
-  "secrets/cachix-auth.age".publicKeys = airborn ++ darkstar ++ earthbound ++ lafrenierejm;
+  "secrets/cachix-auth.age".publicKeys = airborn ++ darkstar ++ earthbound ++ uavionix ++ lafrenierejm;
   "secrets/mullvad.age".publicKeys = earthbound ++ darkstar ++ lafrenierejm;
   "../restic/password.age".publicKeys = airborn ++ earthbound ++ lafrenierejm;
 }

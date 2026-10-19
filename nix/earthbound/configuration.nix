@@ -26,6 +26,7 @@ in {
     ../linux/graphical.nix
     ../linux/mediaServer.nix
     ../linux/networking.nix
+    ../linux/tailscale.nix
     ./filesystem.nix
     ./hardware-configuration.nix
     ./nginx.nix
@@ -41,6 +42,7 @@ in {
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 25;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Enable cross-compilation for all Linux systems

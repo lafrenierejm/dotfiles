@@ -323,6 +323,17 @@
                 ./nix/linux/darkstar/hardware-configuration.nix
               ];
             };
+            uavionix = rec {
+              hostname = "uavionix";
+              personal = false;
+              userName = "lafrenierejm";
+              gitEmail = "joseph.lafreniere@uavionix.com";
+              extraModules = [
+                ./nix/linux/uavionix/configuration.nix
+                ./nix/linux/uavionix/disko.nix
+                ./nix/linux/uavionix/hardware-configuration.nix
+              ];
+            };
           };
         in (builtins.mapAttrs
           (host: values: (inputs.nixpkgs.lib.nixosSystem {
@@ -369,7 +380,7 @@
                     ];
                     shell = pkgs.zsh;
                   };
-                  rbralley = {
+                  rbralley = pkgs.lib.attrsets.optionalAttrs values.personal {
                     isNormalUser = true;
                     description = "Ratannya Bralley";
                     openssh.authorizedKeys.keys = [
