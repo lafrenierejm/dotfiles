@@ -204,6 +204,7 @@
             "firefox"
             "firefox-bin"
             "firefox-bin-unwrapped"
+            "slack"
             "steam"
             "steam-unwrapped"
           ];

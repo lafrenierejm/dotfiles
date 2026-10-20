@@ -184,9 +184,7 @@ in {
         zoom
       ]))
       (pkgs.lib.lists.optionals (!personal) (with pkgsTrunk; [
-        groovy
-        nodejs
-        # vault
+        slack
       ]))
     ];
     sessionPath = [
