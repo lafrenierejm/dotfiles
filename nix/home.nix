@@ -416,7 +416,7 @@ in {
         "${config.xdg.cacheHome}/zig"
       ];
     in {
-      enable = personal;
+      enable = true;
       package = pkgsTrunk.claude-code;
       settings.permissions.allow =
         lib.lists.flatten
