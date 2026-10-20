@@ -5,6 +5,10 @@
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-26.05-darwin/nixexprs.tar.zst";
     nixpkgs-trunk.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
     agenix.url = "github:ryantm/agenix";
+    bun-overlay = {
+      url = "github:alleneubank/bun-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     claude-code-nix = {
       url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs-trunk";

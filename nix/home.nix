@@ -25,6 +25,18 @@
     if pkgs.stdenv.isDarwin
     then "${pinentryPkg}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
     else "${pinentryPkg}/bin/pinentry";
+  # Expose a pinned bun release as `bun-<minor>` so multiple versions can coexist on `PATH`.
+  mkVersionedBun = minor: version: let
+    bunPkg =
+      (import (inputs.bun-overlay + "/default.nix") {
+        inherit pkgs system;
+        bunVersion = version;
+      }).bun;
+  in
+    pkgs.runCommand "bun-${version}" {meta.mainProgram = "bun-${minor}";} ''
+      mkdir -p $out/bin
+      ln -s ${bunPkg}/bin/bun $out/bin/bun-${minor}
+    '';
   vcIgnores = let
     parseGitignore = file:
       lib.filter (line: line != "" && !(lib.hasPrefix "#" line))
@@ -183,9 +195,11 @@ in {
         pavucontrol
         zoom
       ]))
-      (pkgs.lib.lists.optionals (!personal) (with pkgsTrunk; [
-        slack
-      ]))
+      (pkgs.lib.lists.optionals (!personal) [
+        (mkVersionedBun "1.3" "1.3.14")
+        (mkVersionedBun "1.4" "1.4.3")
+        pkgsTrunk.slack
+      ])
     ];
     sessionPath = [
       "$HOME/.local/bin"
