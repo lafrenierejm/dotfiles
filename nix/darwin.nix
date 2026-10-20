@@ -64,6 +64,7 @@
       "font-noto-sans-symbols-2"
       "font-source-code-pro"
       "karabiner-elements"
+      "ungoogled-chromium"
       "zoom"
       (lib.lists.optionals personal [
         "apparency"
