@@ -75,8 +75,11 @@ in {
     # Source: https://discourse.nixos.org/t/snappier-tarball-fetches-with-nix/79994
     # Upstream PR: https://github.com/libgit2/libgit2/pull/7367
     activation.configureTarballCacheGitConfig = inputs.home-manager.lib.hm.dag.entryAfter ["writeBoundary"] ''
-      mkdir -p ${config.xdg.cacheHome}/nix/tarball-cache-v2
-      ${pkgs.git}/bin/git -C ${config.xdg.cacheHome}/nix/tarball-cache-v2 config pack.deltaCacheSize 1
+      mkdir -p "${config.xdg.cacheHome}/nix/tarball-cache-v2"
+      if [[ ! -f "${config.xdg.cacheHome}/nix/tarball-cache-v2/HEAD" ]]; then
+        ${pkgs.git}/bin/git init --bare "${config.xdg.cacheHome}/nix/tarball-cache-v2"
+      fi
+      ${pkgs.git}/bin/git -C "${config.xdg.cacheHome}/nix/tarball-cache-v2" config pack.deltaCacheSize 1
     '';
 
     file =
