@@ -922,7 +922,7 @@ in {
     };
 
     firefox = {
-      enable = personal && pkgs.stdenv.isLinux;
+      enable = pkgs.stdenv.isLinux;
       package = pkgs.firefox-bin;
       profiles."personal.default" = {
         id = 0;
