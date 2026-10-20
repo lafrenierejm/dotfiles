@@ -165,10 +165,13 @@ in {
       (lib.lists.optionals personal [
         pkgs.imagemagick
         (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
+          feishin
           ffmpeg-headless
           inkscape
           nicotine-plus
           picard
+          signal-desktop
+          transmission_4-gtk
         ]))
         (lib.lists.optionals pkgs.stdenv.isDarwin (with pkgs; [
           skhd
@@ -176,11 +179,8 @@ in {
       ])
       (lib.lists.optionals pkgs.stdenv.isLinux (with pkgs; [
         dconf2nix
-        feishin
         mpv
         pavucontrol
-        signal-desktop
-        transmission_4-gtk
         zoom
       ]))
       (pkgs.lib.lists.optionals (!personal) (with pkgsTrunk; [
