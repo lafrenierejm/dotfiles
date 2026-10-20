@@ -227,12 +227,93 @@ Hibernation needs swap at least as large as the memory in use at the time.
 The 32 GiB swapfile matches the 32768 MB of RAM and normally suffices because the image is compressed.
 To add headroom, raise `swap.swapfile.size` in `disko.nix` **before** installing.
 
+## 7. Set up GPG commit signing
+
+[`home.nix`](../../home.nix) signs commits with the key whose fingerprint is set in `programs.git.signing.key`.
+Give this host its own signing subkey rather than copying the primary key onto it.
+GnuPG picks the newest valid signing subkey of that fingerprint, so `home.nix` needs no change.
+
+### 7.1 Create the subkey (working machine)
+
+Do this on a machine that holds the primary (certify) secret key.
+
+1. Add a signing-only subkey that expires on January 1st of the following year:
+   ```sh
+   gpg --quick-add-key 0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3 ed25519 sign "$(($(date +%Y) + 1))-01-01"
+   ```
+   GnuPG accepts an ISO date as the expiration.
+   The command computes the year from the current date, so it needs no editing.
+2. Note the new subkey's ID, then confirm it appears with capability `[S]`:
+   ```sh
+   gpg --list-secret-keys --with-subkey-fingerprints 0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3
+   ```
+
+### 7.2 Export only the subkey
+
+`!` after the subkey fingerprint selects that subkey alone.
+Exporting it with `--export-secret-subkeys` leaves the primary secret key out of the file.
+
+```sh
+gpg --export-secret-subkeys "<subkey-fingerprint>!" > "$d/uavionix-signing.gpg"
+gpg --export 0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3 > "$d/public.gpg"
+```
+
+`gpg` prompts for the primary key's passphrase and for a passphrase to protect the exported subkey.
+Use a different passphrase for the exported subkey if you want the new machine's copy to be independent of the primary key.
+
+### 7.3 Import on the new machine
+
+Move both files over (second USB stick or `scp`), then:
+
+```sh
+gpg --import public.gpg
+gpg --import uavionix-signing.gpg
+gpg --list-secret-keys --keyid-format long
+```
+
+The primary key should show `sec#`, meaning its secret half is absent, and the new subkey should show `ssb`.
+
+Mark the key as yours so GnuPG trusts it:
+
+```sh
+gpg --edit-key 0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3
+# gpg> trust
+# choose 5 (ultimate), confirm, then: quit
+```
+
+### 7.4 Publish the new subkey
+
+Git hosts only verify signatures from subkeys they know about.
+Export the updated public key from the working machine and upload it:
+
+```sh
+gpg --armor --export 0375DD9AEDD168A3ADA39EBAEE236AA0141EFCA3
+```
+
+Paste the output into GitHub, GitLab, and Codeberg under _GPG keys_ (and `keys.openpgp.org` if you publish there).
+Pushing the old public key again does not add the subkey.
+
+### 7.5 Verify
+
+```sh
+echo test | gpg --clearsign
+git -C ~/.config commit --allow-empty -S -m "test signing"
+git -C ~/.config log --show-signature -1
+```
+
+You should see `Good signature`.
+Drop the test commit with `git reset --hard HEAD~1`.
+
+> [!NOTE]
+> `home.nix` configures `pinentry-gnome3` for `gpg-agent`.
+> The passphrase prompt needs a graphical session, so run the signing test from the desktop, not from a TTY.
+
 ### Cleaning up
 
 On the working machine, remove the private host key once it is installed and (optionally) backed up somewhere durable:
 
 ```sh
-shred -u "$d/ssh_host_ed25519_key"
+shred -u "$d/ssh_host_ed25519_key" "$d/uavionix-signing.gpg"
 rm -rf "$d"
 ```
 
