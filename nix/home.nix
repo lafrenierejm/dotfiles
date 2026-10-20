@@ -193,12 +193,12 @@ in {
         dconf2nix
         mpv
         pavucontrol
-        zoom
       ]))
       (pkgs.lib.lists.optionals (!personal) [
         (mkVersionedBun "1.3" "1.3.14")
         (mkVersionedBun "1.4" "1.4.3")
         pkgsTrunk.slack
+        pkgsTrunk.zoom-us
       ])
     ];
     sessionPath = [

@@ -211,6 +211,7 @@
             "slack"
             "steam"
             "steam-unwrapped"
+            "zoom"
           ];
         overlays = [
           inputs.claude-code-nix.overlays.default
