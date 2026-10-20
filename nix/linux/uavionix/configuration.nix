@@ -27,7 +27,7 @@
   #   btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
   boot.resumeDevice = "/dev/mapper/cryptroot";
   boot.kernelParams = let
-    resumeOffset = null;
+    resumeOffset = 533760; # `btrfs inspect-internal map-swapfile -r /.swapvol/swapfile`
   in
     pkgs.lib.optional (resumeOffset != null) "resume_offset=${toString resumeOffset}";
 
