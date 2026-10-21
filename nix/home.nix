@@ -1127,6 +1127,7 @@ in {
           ControlPersist = "10m";
           IdentitiesOnly = true;
           IdentityFile = "~/.ssh/id_ed25519";
+          StrictHostKeyChecking = "accept-new";
         };
         "github.com" = {
           HostName = "github.com";
