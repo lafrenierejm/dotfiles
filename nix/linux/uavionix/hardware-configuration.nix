@@ -18,6 +18,7 @@
     "thunderbolt"
     "usb_storage"
     "usbhid"
+    "vmd"
     "xhci_pci"
   ];
   boot.initrd.kernelModules = [];
