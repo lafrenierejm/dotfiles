@@ -677,17 +677,32 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :after treesit
 
   :ghook
-  ('prog-mode-hook #'indent-bars-mode)
+  ('prog-mode-hook #'indent-bars-mode/lafrenierejm/maybe-enable)
+  ('yaml-ts-mode-hook #'indent-bars-mode)
+  ('conf-mode-hook #'indent-bars-mode)
 
   :custom
+  (indent-bars-color-by-depth nil)
   (indent-bars-treesit-support t)
   (indent-bars-pattern ".")
-  (indent-bars-width-frac 0.5)
-  (indent-bars-pad-frac 0.25)
-  (indent-bars-highlight-current-depth '(:face default :blend 0.4)))
-#+end_src
+  (indent-bars-width-frac 0.1)
+  (indent-bars-pad-frac 0.45)
+  (indent-bars-highlight-selection-method nil "Select the last bar actually shown for
+highlight")
+  (indent-bars-highlight-current-depth
+   '(:blend 0.9
+     :pad 0.3
+     :width 0.4))
 
-#+begin_src emacs-lisp
+  :functions ;; Inform the bytecode compiler of the following functions.
+  indent-bars-mode/lafrenierejm/maybe-enable
+
+  :config
+  (defun indent-bars-mode/lafrenierejm/maybe-enable ()
+    "Enable `indent-bars-mode' unless in one of `lisp-major-modes'."
+    (unless (derived-mode-p lisp-major-modes)
+      (indent-bars-mode))))
+
 (use-package indent-bars-ts
   :demand
 
