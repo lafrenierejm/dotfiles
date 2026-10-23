@@ -602,6 +602,7 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
   :custom
   (display-line-numbers-widen t "Disregard any narrowing.")
   (display-line-numbers-current-absolute t "Always display absolute number of current line.")
+  (display-line-numbers-width-start t "Size the gutter once for the whole buffer.")
 
   ;; Add the following auto-loading hooks.
   :ghook
