@@ -6654,6 +6654,9 @@ Define the actual Polymode.
 
 #+begin_src emacs-lisp
 (use-package nix-mode
+  :gfhook
+  ('nix-mode-hook #'use-spaces)
+
   :general
   (:keymaps 'nix-ts-mode-map
    "C-c C-p" #'nix-repl))
