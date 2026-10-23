@@ -576,10 +576,17 @@ Show matching parentheses.
 #+end_src
 
 ** Line Wrapping
+
 Out of the box, Emacs will fill paragraph to 72 characters.
 Most projects that care about line width adhere to an 80 character (79 + line feed) maximum width, so to reduce the amount of per-project customization we can set the default value to 80.
 #+begin_src emacs-lisp
 (custom-set-default 'fill-column 80)
+#+end_src
+
+** Do not display line continuation in fringe
+
+#+begin_src emacs-lisp
+(setf (alist-get 'continuation fringe-indicator-alist) '(nil nil))
 #+end_src
 
 ** Display Line Numbers
@@ -646,8 +653,8 @@ Most projects that care about line width adhere to an 80 character (79 + line fe
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/config
 (defun display-line-numbers-relative ()
-  "Display visual-relative line numbers."
-  (setq-local display-line-numbers 'visual))
+  "Display relative line numbers."
+  (setq-local display-line-numbers 'relative))
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref display-line-numbers/config
