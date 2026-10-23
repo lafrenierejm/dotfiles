@@ -3377,7 +3377,7 @@ Whitespace in the middle of a line is left unfontified."
 
 (define-globalized-minor-mode lafrenierejm-whitespace-global-mode
   lafrenierejm-whitespace-mode lafrenierejm-whitespace-mode
-  :predicate '(not magit-status-mode))
+  :predicate '(not magit-process-mode magit-status-mode))
 
 (lafrenierejm-whitespace-global-mode +1)
 #+end_src
