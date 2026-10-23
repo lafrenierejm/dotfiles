@@ -157,6 +157,7 @@ in {
         bash-language-server
         claude-agent-acp
         dockerfmt
+        editorconfig-checker
         efm-langserver
         graphql-language-service-cli
         nixd
