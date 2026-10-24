@@ -41,5 +41,10 @@
     enable = true;
     platform = "ipu6epmtl";
   };
-  environment.systemPackages = [pkgs.v4l-utils];
+  environment.systemPackages = with pkgs; [
+    gst_all_1.icamerasrc-ipu6epmtl
+    intel-gpu-tools
+    ipu6epmtl-camera-hal
+    v4l-utils
+  ];
 }
