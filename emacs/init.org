@@ -3891,7 +3891,24 @@ In =M-x shell= (and any other comint-derived buffer - REPLs, etc.) output render
 #+begin_src emacs-lisp
 (use-package evil-ghostel
   :after (ghostel evil)
-  :hook (ghostel-mode . evil-ghostel-mode))
+  :hook (ghostel-mode . evil-ghostel-mode)
+  :config
+  (evil-define-key* 'insert evil-ghostel-mode-map
+    (kbd "C-l") #'caps-lock-mode))
+#+end_src
+
+=evil-ghostel= passes =C-l= through to the terminal in Insert state;
+the above overrides that with =caps-lock-mode=.
+=caps-lock-mode= rewrites =last-command-event=, but =ghostel--self-insert= reads =this-command-keys=, so make the latter report the rewritten event while =caps-lock-mode= is enabled.
+
+#+begin_src emacs-lisp :noweb-ref ghostel/config
+(define-advice ghostel--self-insert (:around (fn) caps-lock)
+  "Honor `caps-lock-mode', which only rewrites `last-command-event'."
+  (if (bound-and-true-p caps-lock-mode)
+      (cl-letf (((symbol-function 'this-command-keys)
+                 (lambda () (vector last-command-event))))
+        (funcall fn))
+    (funcall fn)))
 #+end_src
 
 ** Emacs Shell
