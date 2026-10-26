@@ -10,6 +10,24 @@
 }: let
   caBundlePath = "/etc/nix/ca-bundle.crt";
 
+  # macOS keys Full Disk Access (TCC) grants to an app's bundle ID and code-signing
+  # requirement, but Home Manager's `Emacs.app` lives at a store path and is re-signed
+  # on every rebuild, so a grant made to it goes stale.
+  # Instead, grant Full Disk Access once to this small launcher, which has a fixed
+  # path and a fixed designated requirement (see the activation script below).
+  # It spawns (rather than execs) Emacs so that TCC keeps attributing Emacs's file
+  # accesses to the launcher as the responsible process.
+  # See `pkgs/emacs-launcher`.
+  emacsLauncherId = "xyz.lafreniere.emacs-launcher";
+  emacsLauncherApp = "/Applications/Emacs Launcher.app";
+  emacsLauncher = pkgs.callPackage ./pkgs/emacs-launcher {
+    bundleId = emacsLauncherId;
+    # The per-user profile does not link `Applications/`, so point at the package.
+    # A new Emacs build rebuilds the launcher, which is fine because the TCC grant
+    # is matched by the signing requirement rather than the binary.
+    emacsPath = "${config.home-manager.users.${userName}.programs.emacs.finalPackage}/Applications/Emacs.app/Contents/MacOS/Emacs";
+  };
+
   # Electron-based casks.
   casksElectron = lib.lists.flatten [
     "amazon-chime"
@@ -142,6 +160,23 @@ in (lib.attrsets.mergeAttrsList [
       mkdir -p /etc/nix
       cat ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt > ${caBundlePath}
       /usr/bin/security find-certificate -a -p /Library/Keychains/System.keychain >> ${caBundlePath} 2>/dev/null || true
+
+      # Install the Emacs launcher (see `emacsLauncher`) at a fixed path.
+      # The explicit designated requirement keeps the TCC grant valid when the
+      # launcher binary changes; Full Disk Access must still be granted to it once,
+      # manually, in System Settings > Privacy & Security.
+      launcher=${lib.escapeShellArg emacsLauncherApp}
+      if [ "$(cat "$launcher/Contents/Resources/store-path" 2>/dev/null)" != ${emacsLauncher} ]; then
+        rm -rf "$launcher"
+        cp -R "${emacsLauncher}/Applications/Emacs Launcher.app" "$launcher"
+        chmod -R u+w "$launcher"
+        mkdir -p "$launcher/Contents/Resources"
+        echo ${emacsLauncher} > "$launcher/Contents/Resources/store-path"
+        /usr/bin/codesign --force --sign - \
+          --identifier ${emacsLauncherId} \
+          -r='designated => identifier "${emacsLauncherId}"' \
+          "$launcher"
+      fi
     '';
     system.stateVersion = 5;
     system.primaryUser = userName;
