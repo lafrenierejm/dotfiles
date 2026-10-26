@@ -3893,6 +3893,9 @@ In =M-x shell= (and any other comint-derived buffer - REPLs, etc.) output render
   :after (ghostel evil)
   :ghook ('ghostel-mode-hook #'evil-ghostel-mode)
 
+  :custom
+  (evil-ghostel-escape 'evil "Always run evil's binding.")
+
   :general
   (:keymaps 'evil-ghostel-mode-map
    :states 'insert
