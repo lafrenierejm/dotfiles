@@ -14,4 +14,10 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
+
+  security.pki.caCertificateBlacklist = [
+    # https://emudhra.we-have-a-problem.com/
+    "Comodo AAA Services root"
+    "emSign ECC Root CA - G3"
+  ];
 }
