@@ -588,6 +588,21 @@ in {
                 "sso list-accounts"
                 "sts get-caller-identity"
               ])
+              (map (sub: "bun ${sub}") [
+                "--revision" # print the Bun git revision
+                "--version" # print the Bun version
+                "audit" # query the registry for known vulnerabilities; read-only
+                "build" # bundle entrypoints to the output directory; does not execute the bundled code
+                "info" # show registry metadata for a package; read-only
+                "outdated" # compare installed versions against the registry; read-only
+                "pm bin" # print the bin directory path
+                "pm cache" # print the cache directory path
+                "pm ls" # list installed dependencies
+                "pm view" # show registry metadata for a package; read-only
+                "pm why" # explain why a package is installed
+                "test" # run the project's tests, like the allowed `uv run pytest`
+                "why" # explain why a package is installed
+              ])
               (map (sub: "gh ${sub}") [
                 "auth status"
                 "gist list"
