@@ -3891,10 +3891,15 @@ In =M-x shell= (and any other comint-derived buffer - REPLs, etc.) output render
 #+begin_src emacs-lisp
 (use-package evil-ghostel
   :after (ghostel evil)
-  :hook (ghostel-mode . evil-ghostel-mode)
-  :config
-  (evil-define-key* 'insert evil-ghostel-mode-map
-    (kbd "C-l") #'caps-lock-mode))
+  :ghook ('ghostel-mode-hook #'evil-ghostel-mode)
+
+  :general
+  (:keymaps 'evil-ghostel-mode-map
+   :states 'insert
+   "C-l" #'caps-lock-mode)
+  (:keymaps 'evil-ghostel-mode-map
+   :states 'normal
+   "C-l" #'ghostel-clear))
 #+end_src
 
 =evil-ghostel= passes =C-l= through to the terminal in Insert state;
