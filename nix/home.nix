@@ -1082,6 +1082,17 @@ in {
 
     notmuch.enable = personal;
 
+    nushell = {
+      enable = true;
+      settings = {
+        completions.external = {
+          enable = true;
+          max_results = 200;
+        };
+        show_banner = false;
+      };
+    };
+
     pandoc.enable = true;
 
     rbenv = {
