@@ -662,6 +662,24 @@ in {
                 "store ls" # list contents of a store path
                 "why-depends" # explain a dependency edge
               ])
+              (map (sub: "pnpm ${sub}") [
+                "--version" # print version
+                "audit" # query registry for known vulnerabilities; read-only
+                "bin" # print bin directory path
+                "build" # run project's `build` script
+                "config get" # print single config value
+                "config list" # print effective config
+                "licenses list" # list licenses of installed packages; read-only
+                "list" # list installed dependencies
+                "ls" # alias of `list`
+                "outdated" # compare installed versions against registry; read-only
+                "root" # print node_modules directory path
+                "store path" # print content-addressable store path
+                "store status" # check store packages for modifications; read-only
+                "test" # run project's `test` script
+                "view" # show registry metadata for a package; read-only
+                "why" # explain why a package is installed
+              ])
               (map (sub: "uv ${sub}") (
                 let
                   tools = ["mypy" "pre-commit" "prek" "pytest" "ruff" "ty"];
