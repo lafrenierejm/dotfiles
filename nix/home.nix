@@ -680,6 +680,19 @@ in {
                 "view" # show registry metadata for a package; read-only
                 "why" # explain why a package is installed
               ])
+              (map (sub: "pulumi ${sub}") [
+                "about" # print CLI, runtime, and environment info
+                "logs" # read cloud resource logs; read-only
+                "org get-default" # print the default organization
+                "plugin ls" # list installed plugins
+                "policy ls" # list policy packs; read-only
+                "preview" # show planned changes without applying
+                "stack history" # show stack update history; read-only
+                "stack ls" # list stacks
+                "stack --show-name" # print current stack name
+                "version" # print Pulumi version
+                "whoami" # print logged-in user
+              ])
               (map (sub: "uv ${sub}") (
                 let
                   tools = ["mypy" "pre-commit" "prek" "pytest" "ruff" "ty"];
