@@ -1272,7 +1272,40 @@ in {
 
   launchd.agents = let
     nixTarballCacheRepack = "nix-tarball-cache-repack";
+    solidWallpaper = "solid-wallpaper";
   in {
+    ${solidWallpaper} = {
+      # Set a solid desktop color that follows the system appearance.
+      # The appearance lives in the global preferences plist, so launchd re-runs
+      # this whenever that file changes (covering both manual and automatic switches).
+      enable = pkgs.stdenv.isDarwin;
+      config = {
+        ProgramArguments = let
+          # Backgrounds of Ghostty's "Apple System Colors" themes.
+          light = "feffff";
+          dark = "1e1e1e";
+          # `desktoppr` can only set a picture, so use a 1x1 image of the color scaled to fill.
+          wallpaperImage = name: color:
+            pkgs.runCommand "wallpaper-${name}.png" {nativeBuildInputs = [pkgs.imagemagick];}
+            "magick -size 1x1 xc:'#${color}' $out";
+        in [
+          (toString (pkgs.writeShellScript solidWallpaper ''
+            if [ "$(/usr/bin/defaults read -g AppleInterfaceStyle 2>/dev/null)" = Dark ]; then
+              image=${wallpaperImage "dark" dark}
+            else
+              image=${wallpaperImage "light" light}
+            fi
+            # `desktoppr` rejects scale and path in a single invocation.
+            ${pkgs.desktoppr}/bin/desktoppr scale fill
+            exec ${pkgs.desktoppr}/bin/desktoppr "$image"
+          ''))
+        ];
+        RunAtLoad = true;
+        WatchPaths = ["${homeDirectory}/Library/Preferences/.GlobalPreferences.plist"];
+        StandardOutPath = "${homeDirectory}/Library/Logs/${solidWallpaper}.log";
+        StandardErrorPath = "${homeDirectory}/Library/Logs/${solidWallpaper}.log";
+      };
+    };
     ${nixTarballCacheRepack} = {
       # Periodically repack the tarball cache.
       # Use a multi-pack-file index for more locality for file lookups.
