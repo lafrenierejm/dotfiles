@@ -17,6 +17,11 @@
     if pkgs.stdenv.isDarwin
     then "/Users/${userName}"
     else "/home/${userName}";
+  # Backgrounds of Ghostty's "Apple System Colors" themes.
+  solidBackgroundColor = {
+    light = "feffff";
+    dark = "1e1e1e";
+  };
   pinentryPkg =
     if pkgs.stdenv.isDarwin
     then pkgs.pinentry_mac
@@ -202,6 +207,7 @@ in {
         (mkVersionedBun "1.3" "1.3.14")
         (mkVersionedBun "1.4" "1.4.3")
         pkgsTrunk.slack
+        pkgsTrunk.ssm-session-manager-plugin
         pkgsTrunk.zoom-us
       ])
     ];
@@ -1203,6 +1209,10 @@ in {
           HostName = "earthbound.fin-alioth.ts.net";
           User = "lafrenierejm";
         };
+        "i-*" = {
+          ProxyCommand = ''sh -c "aws ec2-instance-connect send-ssh-public-key --instance-id %h --instance-os-user ec2-user --ssh-public-key \"$(cat ~/.ssh/id_ed25519.pub)\" && aws ec2-instance-connect open-tunnel --instance-id %h"'';
+          User = "ec2-user";
+        };
       };
     };
 
@@ -1236,8 +1246,7 @@ in {
     solidBackground = "cosmic-solid-background";
     cosmicDir = "${config.xdg.configHome}/cosmic";
   in {
-    # Keep the COSMIC desktop background a solid color matching the theme's
-    # background, following light/dark mode.
+    # Keep the COSMIC desktop background a solid color, following light/dark mode.
     # COSMIC records the mode in `is_dark`; `cosmic-bg` applies changes to its
     # config as soon as they are written.
     paths.${solidBackground} = {
@@ -1246,41 +1255,19 @@ in {
       Install.WantedBy = ["default.target"];
     };
     services.${solidBackground} = {
-      Unit.Description = "Set COSMIC's background to the theme's background color";
+      Unit.Description = "Set COSMIC's background to a solid color";
       Service = {
         Type = "oneshot";
-        ExecStart = pkgs.writeShellScript solidBackground ''
-          set -eu
-          cosmic=${cosmicDir}
-          # COSMIC defaults to dark until it has written `is_dark`.
-          mode=$(${pkgs.coreutils}/bin/cat "$cosmic/com.system76.CosmicTheme.Mode/v1/is_dark" 2>/dev/null || echo true)
-          if [ "$mode" = true ]; then
-            theme=Dark
-          else
-            theme=Light
-          fi
-          # The first `red`/`green`/`blue` values in the theme's `background` file
-          # are the container's base color.
-          channel() {
-            ${pkgs.gnused}/bin/sed -n "s/^ *$1: *\([0-9.]*\),.*/\1/p" \
-              "$cosmic/com.system76.CosmicTheme.$theme/v1/background" | ${pkgs.coreutils}/bin/head -n1
-          }
-          dir=$cosmic/com.system76.CosmicBackground/v1
-          ${pkgs.coreutils}/bin/mkdir -p "$dir"
-          ${pkgs.coreutils}/bin/cat > "$dir/all.tmp" <<EOF
-          (
-              output: "all",
-              source: Color(Single(($(channel red), $(channel green), $(channel blue)))),
-              filter_by_theme: false,
-              rotation_frequency: 900,
-              filter_method: Lanczos,
-              scaling_mode: Zoom,
-              sampling_method: Alphanumeric,
-          )
-          EOF
-          ${pkgs.coreutils}/bin/mv "$dir/all.tmp" "$dir/all"
-          printf true > "$dir/same-on-all"
-        '';
+        ExecStart = lib.getExe (pkgs.writeShellApplication {
+          name = solidBackground;
+          runtimeInputs = with pkgs; [coreutils gawk gnused procps];
+          text = lib.readFile ./linux/cosmic-solid-background.sh;
+        });
+        Environment = [
+          "COLOR_DARK=${solidBackgroundColor.dark}"
+          "COLOR_LIGHT=${solidBackgroundColor.light}"
+          "COSMIC_DIR=${cosmicDir}"
+        ];
       };
       Install.WantedBy = ["default.target"];
     };
@@ -1332,9 +1319,7 @@ in {
       enable = pkgs.stdenv.isDarwin;
       config = {
         ProgramArguments = let
-          # Backgrounds of Ghostty's "Apple System Colors" themes.
-          light = "feffff";
-          dark = "1e1e1e";
+          inherit (solidBackgroundColor) light dark;
           # `desktoppr` can only set a picture, so use a 1x1 image of the color scaled to fill.
           wallpaperImage = name: color:
             pkgs.runCommand "wallpaper-${name}.png" {nativeBuildInputs = [pkgs.imagemagick];}
