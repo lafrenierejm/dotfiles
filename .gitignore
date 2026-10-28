@@ -46,3 +46,6 @@
 !/yabai/
 !/zsh/
 /nix/nix.conf
+
+# Written by the `cosmic-solid-background` systemd user service.
+/cosmic/com.system76.CosmicBackground/

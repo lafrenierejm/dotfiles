@@ -1232,7 +1232,57 @@ in {
 
   systemd.user = let
     tarballCacheName = "nix-tarball-cache-repack";
+    solidBackground = "cosmic-solid-background";
+    cosmicDir = "${config.xdg.configHome}/cosmic";
   in {
+    # Keep the COSMIC desktop background a solid color matching the theme's
+    # background, following light/dark mode.
+    # COSMIC records the mode in `is_dark`; `cosmic-bg` applies changes to its
+    # config as soon as they are written.
+    paths.${solidBackground} = {
+      Unit.Description = "Watch COSMIC's light/dark mode";
+      Path.PathChanged = "${cosmicDir}/com.system76.CosmicTheme.Mode/v1/is_dark";
+      Install.WantedBy = ["default.target"];
+    };
+    services.${solidBackground} = {
+      Unit.Description = "Set COSMIC's background to the theme's background color";
+      Service = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeShellScript solidBackground ''
+          set -eu
+          cosmic=${cosmicDir}
+          # COSMIC defaults to dark until it has written `is_dark`.
+          mode=$(${pkgs.coreutils}/bin/cat "$cosmic/com.system76.CosmicTheme.Mode/v1/is_dark" 2>/dev/null || echo true)
+          if [ "$mode" = true ]; then
+            theme=Dark
+          else
+            theme=Light
+          fi
+          # The first `red`/`green`/`blue` values in the theme's `background` file
+          # are the container's base color.
+          channel() {
+            ${pkgs.gnused}/bin/sed -n "s/^ *$1: *\([0-9.]*\),.*/\1/p" \
+              "$cosmic/com.system76.CosmicTheme.$theme/v1/background" | ${pkgs.coreutils}/bin/head -n1
+          }
+          dir=$cosmic/com.system76.CosmicBackground/v1
+          ${pkgs.coreutils}/bin/mkdir -p "$dir"
+          ${pkgs.coreutils}/bin/cat > "$dir/all.tmp" <<EOF
+          (
+              output: "all",
+              source: Color(Single(($(channel red), $(channel green), $(channel blue)))),
+              filter_by_theme: false,
+              rotation_frequency: 900,
+              filter_method: Lanczos,
+              scaling_mode: Zoom,
+              sampling_method: Alphanumeric,
+          )
+          EOF
+          ${pkgs.coreutils}/bin/mv "$dir/all.tmp" "$dir/all"
+          printf true > "$dir/same-on-all"
+        '';
+      };
+      Install.WantedBy = ["default.target"];
+    };
     services.emacs = {
       Install.WantedBy = lib.mkForce ["graphical-session.target"];
       # pgtk build crashes on frame creation if forced onto GDK_BACKEND=x11.  The
