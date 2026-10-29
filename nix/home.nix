@@ -445,7 +445,8 @@ in {
       settings.permissions.allow =
         lib.lists.flatten
         [
-          (map (dir: "Read(${dir}**)") (sourceDirectories ++ ["/nix/store/"]))
+          (map (dir: "Read(${dir}**)")
+            (sourceDirectories ++ ["/nix/store/" "~/.aws/config"]))
           (map
             (cmd: "Bash(${cmd}:*)")
             (lib.lists.flatten [
