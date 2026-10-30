@@ -67,6 +67,7 @@
     inputs.agenix.packages."${system}".default
     (with pkgs; [
       atool
+      bc # GNU software calculator
       btop
       coreutils
       curl
