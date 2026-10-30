@@ -225,6 +225,7 @@
           inputs.emacs-overlay.overlays.default
           inputs.nur.overlays.default
           (final: prev: {
+            actionlint = prev.callPackage ./nix/pkgs/actionlint.nix {};
             claude-agent-acp = prev.callPackage ./nix/pkgs/claude-agent-acp.nix {};
             cosmic-comp = prev.cosmic-comp.overrideAttrs (old: {
               patches = (old.patches or []) ++ ["${inputs.cramt-nixconf}/patches/no_ssd.patch"];
