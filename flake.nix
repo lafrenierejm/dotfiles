@@ -110,7 +110,7 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.flake-root.follows = "flake-root";
       inputs.git-hooks.follows = "git-hooks";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-trunk";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
     treefmt-nix = {
