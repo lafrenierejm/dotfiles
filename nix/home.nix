@@ -447,7 +447,7 @@ in {
         lib.lists.flatten
         [
           (map (dir: "Read(${dir}**)")
-            (sourceDirectories ++ ["/nix/store/" "~/.aws/config"]))
+            (sourceDirectories ++ ["/nix/store/" "~/.aws/config" "~/.nix-defexpr/"]))
           (map
             (cmd: "Bash(${cmd}:*)")
             (lib.lists.flatten [
