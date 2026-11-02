@@ -750,6 +750,7 @@ in {
         lib.lists.concatMap
         (domain: [domain "*.${domain}"])
         [
+          "amazonaws.com" # AWS API endpoints
           "apache.org"
           "clojars.org"
           "crates.io"
