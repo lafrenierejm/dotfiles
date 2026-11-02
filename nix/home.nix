@@ -440,14 +440,18 @@ in {
         # Zig
         "${config.xdg.cacheHome}/zig"
       ];
+      # Paths readable both by the `Read` tool and by sandboxed commands.
+      readablePaths =
+        sourceDirectories
+        ++ cachePaths
+        ++ ["/nix/store/" "~/.aws/config" "~/.nix-defexpr/"];
     in {
       enable = true;
       package = pkgsTrunk.claude-code;
       settings.permissions.allow =
         lib.lists.flatten
         [
-          (map (dir: "Read(${dir}**)")
-            (sourceDirectories ++ ["/nix/store/" "~/.aws/config" "~/.nix-defexpr/"]))
+          (map (dir: "Read(${dir}**)") readablePaths)
           (map
             (cmd: "Bash(${cmd}:*)")
             (lib.lists.flatten [
@@ -749,7 +753,7 @@ in {
           "github.com"
           "githubusercontent.com"
         ];
-      settings.sandbox.filesystem.allowRead = sourceDirectories ++ cachePaths ++ ["/nix/store/"];
+      settings.sandbox.filesystem.allowRead = readablePaths;
       settings.sandbox.filesystem.allowWrite = sourceDirectories ++ cachePaths;
       settings.sandbox.filesystem.denyRead = [
         "~/**"
