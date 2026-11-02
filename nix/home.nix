@@ -750,8 +750,20 @@ in {
         lib.lists.concatMap
         (domain: [domain "*.${domain}"])
         [
+          "apache.org"
+          "clojars.org"
+          "crates.io"
           "github.com"
           "githubusercontent.com"
+          "golang.org"
+          "hex.pm" # Elixir
+          "maven.org"
+          "nixos.org"
+          "npmjs.org"
+          "pypi.org"
+          "pythonhosted.org"
+          "rubygems.org"
+          "ziglang.org"
         ];
       settings.sandbox.filesystem.allowRead = readablePaths;
       settings.sandbox.filesystem.allowWrite = sourceDirectories ++ cachePaths;
