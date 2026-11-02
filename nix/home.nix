@@ -741,6 +741,14 @@ in {
       settings.sandbox.network.allowAllUnixSockets = pkgs.stdenv.isLinux;
       # Allow sandboxed commands to connect to the Nix daemon.
       settings.sandbox.network.allowUnixSockets = ["/nix/var/nix/daemon-socket/socket"];
+      # Each domain is allowed along with all of its subdomains.
+      settings.sandbox.network.allowedDomains =
+        lib.lists.concatMap
+        (domain: [domain "*.${domain}"])
+        [
+          "github.com"
+          "githubusercontent.com"
+        ];
       settings.sandbox.filesystem.allowRead = sourceDirectories ++ cachePaths ++ ["/nix/store/"];
       settings.sandbox.filesystem.allowWrite = sourceDirectories ++ cachePaths;
       settings.sandbox.filesystem.denyRead = [

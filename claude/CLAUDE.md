@@ -31,3 +31,8 @@
 
 - Don't use `git push -u`/`--set-upstream` or `--track` since they overwrite the upstream with the pushed branch.
   Use a plain `git push`.
+
+## GitHub
+
+Use the `gh` CLI for anything on GitHub (issues, PRs, files, releases, API reads), not `WebFetch` or raw `curl` commands.
+`gh` is authenticated, and `gh api` covers endpoints that have no dedicated subcommand.
