@@ -1332,24 +1332,18 @@ in {
       # this whenever that file changes (covering both manual and automatic switches).
       enable = pkgs.stdenv.isDarwin;
       config = {
-        ProgramArguments = let
-          inherit (solidBackgroundColor) light dark;
-          # `desktoppr` can only set a picture, so use a 1x1 image of the color scaled to fill.
-          wallpaperImage = name: color:
-            pkgs.runCommand "wallpaper-${name}.png" {nativeBuildInputs = [pkgs.imagemagick];}
-            "magick -size 1x1 xc:'#${color}' $out";
-        in [
-          (toString (pkgs.writeShellScript solidWallpaper ''
-            if [ "$(/usr/bin/defaults read -g AppleInterfaceStyle 2>/dev/null)" = Dark ]; then
-              image=${wallpaperImage "dark" dark}
-            else
-              image=${wallpaperImage "light" light}
-            fi
-            # `desktoppr` rejects scale and path in a single invocation.
-            ${pkgs.desktoppr}/bin/desktoppr scale fill
-            exec ${pkgs.desktoppr}/bin/desktoppr "$image"
-          ''))
+        ProgramArguments = [
+          (lib.getExe (pkgs.writeShellApplication {
+            name = solidWallpaper;
+            runtimeInputs = with pkgs; [coreutils desktoppr python3];
+            text = lib.readFile ./home/darwin/solid-wallpaper.sh;
+          }))
         ];
+        EnvironmentVariables = {
+          COLOR_DARK = solidBackgroundColor.dark;
+          COLOR_LIGHT = solidBackgroundColor.light;
+          SPREAD_WALLPAPER = toString ./home/darwin/spread-wallpaper.py;
+        };
         RunAtLoad = true;
         WatchPaths = ["${homeDirectory}/Library/Preferences/.GlobalPreferences.plist"];
         StandardOutPath = "${homeDirectory}/Library/Logs/${solidWallpaper}.log";
