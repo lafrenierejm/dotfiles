@@ -31,16 +31,17 @@
     then "${pinentryPkg}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
     else "${pinentryPkg}/bin/pinentry";
   # Expose a pinned bun release as `bun-<minor>` so multiple versions can coexist on `PATH`.
+  bunPkg = version:
+    (import (inputs.bun-overlay + "/default.nix") {
+      inherit pkgs system;
+      bunVersion = version;
+    }).bun;
   mkVersionedBun = minor: version: let
-    bunPkg =
-      (import (inputs.bun-overlay + "/default.nix") {
-        inherit pkgs system;
-        bunVersion = version;
-      }).bun;
+    pkg = bunPkg version;
   in
     pkgs.runCommand "bun-${version}" {meta.mainProgram = "bun-${minor}";} ''
       mkdir -p $out/bin
-      ln -s ${bunPkg}/bin/bun $out/bin/bun-${minor}
+      ln -s ${pkg}/bin/bun $out/bin/bun-${minor}
     '';
   vcIgnores = let
     parseGitignore = file:
@@ -204,8 +205,9 @@ in {
         pavucontrol
       ]))
       (pkgs.lib.lists.optionals (!personal) [
-        (mkVersionedBun "1.3" "1.3.14")
-        (mkVersionedBun "1.4" "1.4.3")
+        (mkVersionedBun "1.3" "1.3.14") # bun-1.3
+        (mkVersionedBun "1.4" "1.4.4") # bun-1.4
+        (bunPkg "1.4.4") # bun
         pkgsTrunk.slack
         pkgsTrunk.terragrunt
         pkgsTrunk.ssm-session-manager-plugin
