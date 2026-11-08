@@ -383,10 +383,8 @@ in {
         then "~/Library/Caches/${darwinName}"
         else "${config.xdg.cacheHome}/${xdgName}";
       cachePaths = lib.lists.flatten [
-        # `nix` CLI subcommands like `build`/`eval` read and update the
-        # client-side fetcher/eval/tarball caches here.  Actual store writes go
-        # through the Nix daemon (see `allowUnixSockets`).
         "${config.xdg.cacheHome}/nix"
+        "${config.xdg.cacheHome}/prek"
         # Rust
         [
           "~/.cargo/.global-cache"
