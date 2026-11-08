@@ -344,20 +344,27 @@ in {
       # `*.p12`, `*.pfx`, `*.tfstate`, `.env*`, a per-project `.npmrc`)
       # anywhere in a repo -- a tree-wide glob for those hits the same
       # crash, so they still rely on `.gitignore`/pre-commit discipline.
-      credentialPaths = [
+      credentialPaths = lib.lists.flatten [
         "~/.aws/credentials"
         "~/.azure"
         "~/.config/gcloud"
         "~/.config/op"
         "~/.docker/config.json"
         "~/.git-credentials"
-        "~/.gnupg"
         "~/.kube/config"
         "~/.netrc"
         "~/.npmrc"
         "~/.ssh"
         "~/.terraformrc"
         "~/.vault-token"
+        [
+          # Only the secret-key material is denied, not all of `~/.gnupg`:
+          # `gpg` needs the public keyring, trustdb, and config to sign commits.
+          # Private keys stay inside `gpg-agent`, which is reached via its socket (see `gnupgPaths`).
+          "~/.gnupg/openpgp-revocs.d"
+          "~/.gnupg/private-keys-v1.d"
+          "~/.gnupg/secring.gpg"
+        ]
       ];
       sourceDirectories =
         lib.lists.flatten
@@ -442,11 +449,18 @@ in {
         # Zig
         "${config.xdg.cacheHome}/zig"
       ];
+      # Let sandboxed `git commit` sign with GPG. `gpg` reads the public keyring
+      # and config and writes lock files and the trustdb under `~/.gnupg`, and
+      # asks `gpg-agent` (over its socket) to do the actual signing.
+      # `~/.gnupg/gpg-agent.conf` and `gpg.conf` are write-protected below since
+      # e.g. `pinentry-program` would execute outside the sandbox.
+      gpgHome = "~/.gnupg";
+      gpgSocket = "${gpgHome}/S.gpg-agent";
       # Paths readable both by the `Read` tool and by sandboxed commands.
       readablePaths =
         sourceDirectories
         ++ cachePaths
-        ++ ["/nix/store/" "~/.aws/config" "~/.nix-defexpr/"];
+        ++ ["/nix/store/" "~/.aws/config" "~/.nix-defexpr/" "${gpgHome}/"];
     in {
       enable = true;
       package = pkgsTrunk.claude-code;
@@ -745,8 +759,11 @@ in {
       # paths, so `allowUnixSockets` is ignored and creating any Unix socket
       # (e.g. `nix eval`) fails unless `allowAllUnixSockets` is set.
       settings.sandbox.network.allowAllUnixSockets = pkgs.stdenv.isLinux;
-      # Allow sandboxed commands to connect to the Nix daemon.
-      settings.sandbox.network.allowUnixSockets = ["/nix/var/nix/daemon-socket/socket"];
+      # Allow sandboxed commands to connect to the Nix daemon and (on macOS,
+      # where the socket lives in `~/.gnupg`) to `gpg-agent` for commit signing.
+      settings.sandbox.network.allowUnixSockets =
+        ["/nix/var/nix/daemon-socket/socket"]
+        ++ lib.lists.optional pkgs.stdenv.isDarwin gpgSocket;
       # Each domain is allowed along with all of its subdomains.
       settings.sandbox.network.allowedDomains =
         lib.lists.concatMap
@@ -769,7 +786,11 @@ in {
           "ziglang.org"
         ];
       settings.sandbox.filesystem.allowRead = readablePaths;
-      settings.sandbox.filesystem.allowWrite = sourceDirectories ++ cachePaths;
+      settings.sandbox.filesystem.allowWrite = sourceDirectories ++ cachePaths ++ [gpgHome];
+      settings.sandbox.filesystem.denyWrite = [
+        "${gpgHome}/gpg-agent.conf"
+        "${gpgHome}/gpg.conf"
+      ];
       settings.sandbox.filesystem.denyRead = [
         "~/**"
         # `nix-direnv`'s flake-input mirrors churn as `flake.lock` changes, so
