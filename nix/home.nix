@@ -1361,6 +1361,11 @@ in {
   launchd.agents = let
     nixTarballCacheRepack = "nix-tarball-cache-repack";
     solidWallpaper = "solid-wallpaper";
+    # `desktoppr color` only sets the fill behind the current image and never replaces it,
+    # so use a 1x1 image of the color scaled to fill.
+    wallpaperImage = name: color:
+      pkgs.runCommand "wallpaper-${name}.png" {nativeBuildInputs = [pkgs.imagemagick];}
+      "magick -size 1x1 xc:'#${color}' $out";
   in {
     ${solidWallpaper} = {
       # Set a solid desktop color that follows the system appearance.
@@ -1376,9 +1381,10 @@ in {
           }))
         ];
         EnvironmentVariables = {
-          COLOR_DARK = solidBackgroundColor.dark;
-          COLOR_LIGHT = solidBackgroundColor.light;
-          SPREAD_WALLPAPER = toString ./home/darwin/spread-wallpaper.py;
+          IMAGE_DARK = "${wallpaperImage "dark" solidBackgroundColor.dark}";
+          IMAGE_LIGHT = "${wallpaperImage "light" solidBackgroundColor.light}";
+          # Interpolate (not `toString`) so the file is a tracked store dependency and survives GC.
+          SPREAD_WALLPAPER = "${./home/darwin/spread-wallpaper.py}";
         };
         RunAtLoad = true;
         WatchPaths = ["${homeDirectory}/Library/Preferences/.GlobalPreferences.plist"];

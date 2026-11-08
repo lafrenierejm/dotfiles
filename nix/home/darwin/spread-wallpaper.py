@@ -6,18 +6,45 @@ the top-level `Displays`, and the entries of the current Space in macOS's
 wallpaper store.  Every other Space keeps its own `Desktop` entry, so copy
 `SystemDefault`'s over them.
 
-Usage: spread-wallpaper.py PATH-TO-Index.plist
+`desktoppr` writes the store asynchronously, so first wait until `SystemDefault`
+references IMAGE; otherwise a stale entry would be copied over every Space.
+
+Usage: spread-wallpaper.py PATH-TO-Index.plist IMAGE
 """
 
 import copy
 import os
 import plistlib
 import sys
+import time
+
+TIMEOUT = 15  # seconds
 
 
-def main(path):
-    with open(path, "rb") as f:
-        index = plistlib.load(f)
+def references(desktop, image):
+    return any(
+        image.encode() in choice["Configuration"]
+        for choice in desktop["Content"]["Choices"]
+    )
+
+
+def load(path, image):
+    deadline = time.monotonic() + TIMEOUT
+    while True:
+        try:
+            with open(path, "rb") as f:
+                index = plistlib.load(f)
+            if references(index["SystemDefault"]["Desktop"], image):
+                return index
+        except (plistlib.InvalidFileException, OSError, KeyError):
+            pass  # the store is mid-write
+        if time.monotonic() >= deadline:
+            sys.exit(f"timed out waiting for {path} to reference {image}")
+        time.sleep(0.25)
+
+
+def main(path, image):
+    index = load(path, image)
 
     desktop = index["SystemDefault"]["Desktop"]
     for space in index.get("Spaces", {}).values():
@@ -32,4 +59,4 @@ def main(path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
