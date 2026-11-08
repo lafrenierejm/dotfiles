@@ -92,6 +92,10 @@
     zsh.enable = true;
   };
 
+  security.pki.caCertificateBlacklist = [
+    # https://emudhra.we-have-a-problem.com/
+    "Comodo AAA Services root"
+  ];
   security.sudo = lib.attrsets.optionalAttrs pkgs.stdenv.isLinux {
     extraRules = [
       {
