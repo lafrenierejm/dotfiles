@@ -852,7 +852,7 @@ in {
 
     emacs = {
       enable = true;
-      package = pkgs.emacs-git-pgtk.overrideAttrs (old: {
+      package = pkgsTrunk.emacs-pgtk.overrideAttrs (old: {
         withTreeSitter = true;
         withNativeCompilation = true;
         passthru = old.passthru // {treeSitter = true;};
