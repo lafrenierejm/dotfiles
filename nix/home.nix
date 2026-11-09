@@ -1258,7 +1258,7 @@ in {
           User = "lafrenierejm";
         };
         "i-*" = {
-          ProxyCommand = ''sh -c "aws ec2-instance-connect send-ssh-public-key --instance-id %h --instance-os-user ec2-user --ssh-public-key \"$(cat ~/.ssh/id_ed25519.pub)\" && aws ec2-instance-connect open-tunnel --instance-id %h"'';
+          ProxyCommand = ''sh -c "aws ec2-instance-connect send-ssh-public-key --instance-id %h --instance-os-user %r --ssh-public-key \"$(cat ~/.ssh/id_ed25519.pub)\" >/dev/null && aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p"'';
           User = "ec2-user";
         };
       };
