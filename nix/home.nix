@@ -535,6 +535,18 @@ in {
                 "which"
                 "xxd"
               ]
+              # Read-only launchd/plist inspection.
+              # Mutating subcommands (`kickstart`, `bootout`, ...) are deliberately omitted.
+              (lib.lists.optionals pkgs.stdenv.isDarwin [
+                "launchctl list"
+                "launchctl print"
+                # The unified log is unscoped otherwise, so pin to launchd's subsystem.
+                # The predicate must come first, as rules match on a command prefix.
+                "log show --predicate 'subsystem == \"com.apple.xpc.launchd\"'"
+                "plutil -convert xml1 -o -"
+                "plutil -lint"
+                "plutil -p"
+              ])
               (map (sub: "aws ${sub}") [
                 "acm describe-certificate"
                 "acm list-certificates"
