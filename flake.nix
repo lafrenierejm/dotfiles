@@ -222,6 +222,7 @@
             "firefox"
             "firefox-bin"
             "firefox-bin-unwrapped"
+            "packer"
             "slack"
             "steam"
             "steam-unwrapped"

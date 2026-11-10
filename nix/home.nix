@@ -208,6 +208,8 @@ in {
         (mkVersionedBun "1.3" "1.3.14") # bun-1.3
         (mkVersionedBun "1.4" "1.4.4") # bun-1.4
         (bunPkg "1.4.4") # bun
+        pkgsTrunk.packer
+        pkgsTrunk.pulumi-bin
         pkgsTrunk.slack
         pkgsTrunk.terragrunt
         pkgsTrunk.ssm-session-manager-plugin
