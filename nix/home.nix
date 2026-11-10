@@ -458,7 +458,12 @@ in {
       readablePaths =
         sourceDirectories
         ++ cachePaths
-        ++ ["/nix/store/" "~/.aws/config" "~/.nix-defexpr/" "${gpgHome}/"];
+        ++ ["/nix/store/" "~/.aws/config" "~/.nix-defexpr/" "${gpgHome}/"]
+        ++ lib.lists.optionals pkgs.stdenv.isDarwin [
+          "~/Library/Application Support/com.apple.wallpaper/" # wallpaper store
+          "~/Library/LaunchAgents/" # generated plists for launchd agent
+          "~/Library/Logs/" # launchd agents write logs here
+        ];
     in {
       enable = true;
       package = pkgsTrunk.claude-code;
