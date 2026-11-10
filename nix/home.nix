@@ -1172,7 +1172,10 @@ in {
       settings.show_program_path = true;
     };
 
-    lieer.enable = personal;
+    lieer = {
+      enable = personal;
+      package = inputs.lieer.packages.${system}.lieer;
+    };
 
     mercurial = {
       enable = true;

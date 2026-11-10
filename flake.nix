@@ -83,6 +83,13 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lieer = {
+      url = "github:lafrenierejm/lieer/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.git-hooks.follows = "git-hooks";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     mac-app-util = {
       url = "github:hraban/mac-app-util";
       inputs.treefmt-nix.follows = "treefmt-nix";
