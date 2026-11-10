@@ -22,6 +22,7 @@
 !/firefox/
 !/flake.lock
 !/flake.nix
+!/gh/
 !/guix/
 !/interception-tools/
 !/isync/
@@ -45,6 +46,7 @@
 !/weechat/
 !/yabai/
 !/zsh/
+/gh/hosts.yml
 /nix/nix.conf
 
 # Written by the `cosmic-solid-background` systemd user service.
