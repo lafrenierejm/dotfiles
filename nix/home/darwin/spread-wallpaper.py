@@ -1,62 +1,86 @@
 #!/usr/bin/env python
 """Copy the desktop wallpaper that was just set to every Space.
 
-`desktoppr` (like `NSWorkspace.setDesktopImageURL`) only updates `SystemDefault`,
-the top-level `Displays`, and the entries of the current Space in macOS's
-wallpaper store.  Every other Space keeps its own `Desktop` entry, so copy
-`SystemDefault`'s over them.
+`desktoppr` (like `NSWorkspace.setDesktopImageURL`) only updates some entries of
+macOS's wallpaper store: always the current Space's, and usually `SystemDefault`
+and the top-level `Displays` -- but not reliably.  Every other Space keeps its own
+`Desktop` entry, so copy the updated entry over all of them.
 
-`desktoppr` writes the store asynchronously, so first wait until `SystemDefault`
-references IMAGE; otherwise a stale entry would be copied over every Space.
+`desktoppr` also writes the store asynchronously, so first wait until any entry
+references IMAGE and use the most recently set one as the source.  (Waiting on one
+specific entry, like `SystemDefault`, can time out even though the image was set.)
 
 Usage: spread-wallpaper.py PATH-TO-Index.plist IMAGE
 """
 
+import asyncio
 import copy
-import os
 import plistlib
 import sys
 import time
+from collections.abc import Generator
+from pathlib import Path
+from typing import Any
 
-TIMEOUT = 15  # seconds
+# The store is untyped plist data, so these are only as precise as `plistlib` allows.
+type Desktop = dict[str, Any]
+type Index = dict[str, Any]
+
+TIMEOUT: float = 15  # seconds
 
 
-def references(desktop, image):
+def desktops(index: Index) -> Generator[Desktop, None, None]:
+    """Yield every `Desktop` dict in the store."""
+    yield index["SystemDefault"]["Desktop"]
+    for display in index.get("Displays", {}).values():
+        yield display["Desktop"]
+    for space in index.get("Spaces", {}).values():
+        yield space["Default"]["Desktop"]
+        for display in space.get("Displays", {}).values():
+            yield display["Desktop"]
+
+
+def references(desktop: Desktop, image: str) -> bool:
     return any(
         image.encode() in choice["Configuration"]
         for choice in desktop["Content"]["Choices"]
     )
 
 
-def load(path, image):
+async def load(path: Path, image: str) -> tuple[Index, Desktop]:
+    """Return the store and its newest entry referencing IMAGE."""
     deadline = time.monotonic() + TIMEOUT
     while True:
         try:
-            with open(path, "rb") as f:
+            with path.open("rb") as f:
                 index = plistlib.load(f)
-            if references(index["SystemDefault"]["Desktop"], image):
-                return index
+            matches = [d for d in desktops(index) if references(d, image)]
+            if matches:
+                return index, max(matches, key=lambda d: d["LastSet"])
         except (plistlib.InvalidFileException, OSError, KeyError):
             pass  # the store is mid-write
         if time.monotonic() >= deadline:
             sys.exit(f"timed out waiting for {path} to reference {image}")
-        time.sleep(0.25)
+        await asyncio.sleep(0.25)
 
 
-def main(path, image):
-    index = load(path, image)
+async def main(path: Path, image: str) -> None:
+    index, source = await load(path, image)
 
-    desktop = index["SystemDefault"]["Desktop"]
+    source = copy.deepcopy(source)
+    index["SystemDefault"]["Desktop"] = copy.deepcopy(source)
+    for display in index.get("Displays", {}).values():
+        display["Desktop"] = copy.deepcopy(source)
     for space in index.get("Spaces", {}).values():
-        space["Default"]["Desktop"] = copy.deepcopy(desktop)
+        space["Default"]["Desktop"] = copy.deepcopy(source)
         for display in space.get("Displays", {}).values():
-            display["Desktop"] = copy.deepcopy(desktop)
+            display["Desktop"] = copy.deepcopy(source)
 
-    tmp = path + ".tmp"
-    with open(tmp, "wb") as f:
+    tmp = path.with_name(path.name + ".tmp")
+    with tmp.open("wb") as f:
         plistlib.dump(index, f, fmt=plistlib.FMT_BINARY)
-    os.replace(tmp, path)
+    tmp.replace(path)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    asyncio.run(main(Path(sys.argv[1]), sys.argv[2]))
