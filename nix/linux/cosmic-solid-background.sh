@@ -51,6 +51,7 @@ fi
 write_output all all
 printf true >"$dir/same-on-all"
 
-# `cosmic-bg` doesn't reload on config changes.
-# `cosmic-session` will respawn it with the new config.
-pkill -x cosmic-bg || true
+# Do not kill `cosmic-bg` to force a reload;
+# it watches its config and applies changes live.
+# `cosmic-session` respawns it with exponential backoff (2^n ms, never reset),
+# so after a couple dozen kills it stays down for days.

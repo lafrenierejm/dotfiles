@@ -1330,7 +1330,7 @@ in {
         Type = "oneshot";
         ExecStart = lib.getExe (pkgs.writeShellApplication {
           name = solidBackground;
-          runtimeInputs = with pkgs; [coreutils gawk gnused procps];
+          runtimeInputs = with pkgs; [coreutils gawk gnused];
           text = lib.readFile ./linux/cosmic-solid-background.sh;
         });
         Environment = [
