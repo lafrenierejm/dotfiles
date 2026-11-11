@@ -158,6 +158,7 @@
           programs = {
             alejandra.enable = true; # nix
             prettier.enable = true;
+            ruff.enable = true;
             shellcheck.enable = true;
             shfmt = {
               enable = true;
@@ -193,6 +194,7 @@
               enable = true;
               excludes = nonplaintext;
             };
+            ruff.enable = true;
             statix.enable = true;
             taplo.enable = true;
             trim-trailing-whitespace = {
