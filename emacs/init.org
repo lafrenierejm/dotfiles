@@ -3385,14 +3385,14 @@ Whitespace in the middle of a line is left unfontified."
 
 (define-globalized-minor-mode lafrenierejm-whitespace-global-mode
   lafrenierejm-whitespace-mode lafrenierejm-whitespace-mode
-  :predicate '(not magit-process-mode magit-status-mode))
+  :predicate '(not magit-mode))
 
 (lafrenierejm-whitespace-global-mode +1)
 #+end_src
 
-*** Magit Status Whitespace Visualization
+*** Magit Whitespace Visualization
 
-Diffs in ~magit-status~ buffers prefix every line with a marker: ~+~, ~-~, or a space.
+Diffs in Magit buffers prefix every line with a marker: ~+~, ~-~, or a space.
 I want the leading spaces and tabs /after/ that marker to be visualized the same way, but nothing else in the buffer.
 The marker itself is never replaced, so a context line's first space stays blank.
 
@@ -3436,7 +3436,7 @@ Only lines beginning with \"+\", \"-\", or \" \" are affected."
     (remove-hook 'magit-refresh-buffer-hook #'lafrenierejm-magit-whitespace--mark t)
     (remove-overlays (point-min) (point-max) 'lafrenierejm-magit-whitespace t)))
 
-(add-hook 'magit-status-mode-hook #'lafrenierejm-magit-whitespace-mode)
+(add-hook 'magit-mode-hook #'lafrenierejm-magit-whitespace-mode)
 #+end_src
 
 * Directories
