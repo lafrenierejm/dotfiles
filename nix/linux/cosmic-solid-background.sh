@@ -8,11 +8,13 @@ set -euo pipefail
 cosmic=${COSMIC_DIR:?}
 
 # COSMIC defaults to dark until it has written `is_dark`.
-mode=$(cat "$cosmic/com.system76.CosmicTheme.Mode/v1/is_dark" 2>/dev/null || echo true)
-if [ "$mode" = true ]; then
+dark=$(cat "$cosmic/com.system76.CosmicTheme.Mode/v1/is_dark" 2>/dev/null || echo true)
+if [ "$dark" = true ]; then
 	hex=${COLOR_DARK:?}
+	echo "Setting solid background for dark mode: $hex"
 else
 	hex=${COLOR_LIGHT:?}
+	echo "Setting solid background for light mode: $hex"
 fi
 
 dir="$cosmic"/com.system76.CosmicBackground/v1
