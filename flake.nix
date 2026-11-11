@@ -386,32 +386,35 @@
                     ./nix/home/udiskie.nix
                   ];
                 };
-                users.users = {
-                  "${values.userName}" = {
-                    home = "/home/${values.userName}";
-                    isNormalUser = true;
-                    description = "Joseph LaFreniere";
-                    openssh.authorizedKeys.keys = [
-                      (builtins.readFile ./ssh/airborn.pub)
-                      (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
-                    ];
-                    extraGroups = [
-                      "inputs"
-                      "networkmanager"
-                      "media"
-                      "podman"
-                      "wheel"
-                    ];
-                    shell = pkgs.zsh;
+                users.users =
+                  {
+                    "${values.userName}" = {
+                      home = "/home/${values.userName}";
+                      isNormalUser = true;
+                      description = "Joseph LaFreniere";
+                      openssh.authorizedKeys.keys = [
+                        (builtins.readFile ./ssh/airborn.pub)
+                        (builtins.readFile ./ssh/JLAFRENI0523-MB.renaissance.com.pub)
+                      ];
+                      extraGroups = [
+                        "inputs"
+                        "networkmanager"
+                        "media"
+                        "podman"
+                        "wheel"
+                      ];
+                      shell = pkgs.zsh;
+                    };
+                  }
+                  // pkgs.lib.attrsets.optionalAttrs values.personal {
+                    rbralley = {
+                      isNormalUser = true;
+                      description = "Ratannya Bralley";
+                      openssh.authorizedKeys.keys = [
+                        (builtins.readFile ./ssh/rbralley/imac.pub)
+                      ];
+                    };
                   };
-                  rbralley = pkgs.lib.attrsets.optionalAttrs values.personal {
-                    isNormalUser = true;
-                    description = "Ratannya Bralley";
-                    openssh.authorizedKeys.keys = [
-                      (builtins.readFile ./ssh/rbralley/imac.pub)
-                    ];
-                  };
-                };
               }
             ];
             specialArgs = {
