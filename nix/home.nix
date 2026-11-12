@@ -1396,15 +1396,16 @@ in {
         ProgramArguments = [
           (lib.getExe (pkgs.writeShellApplication {
             name = solidWallpaper;
-            runtimeInputs = with pkgs; [coreutils desktoppr python3];
+            runtimeInputs = [
+              pkgs.coreutils
+              inputs.desktoppr.packages."${system}".desktoppr
+            ];
             text = lib.readFile ./home/darwin/solid-wallpaper.sh;
           }))
         ];
         EnvironmentVariables = {
           IMAGE_DARK = "${wallpaperImage "dark" solidBackgroundColor.dark}";
           IMAGE_LIGHT = "${wallpaperImage "light" solidBackgroundColor.light}";
-          # Interpolate (not `toString`) so the file is a tracked store dependency and survives GC.
-          SPREAD_WALLPAPER = "${./home/darwin/spread-wallpaper.py}";
         };
         RunAtLoad = true;
         WatchPaths = ["${homeDirectory}/Library/Preferences/.GlobalPreferences.plist"];

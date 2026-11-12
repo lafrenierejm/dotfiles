@@ -150,6 +150,36 @@
         "type": "github"
       }
     },
+    "desktoppr": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "git-hooks": [
+          "git-hooks"
+        ],
+        "nixpkgs": [
+          "nixpkgs-trunk"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794453458,
+        "narHash": "sha256-ym1YCNfsRC544/Z4KZn/efuzQFBK2CQ+Rl/YAhaIOa8=",
+        "owner": "lafrenierejm",
+        "repo": "desktoppr",
+        "rev": "36501ff2051992379418c425368b16953c0e2d01",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lafrenierejm",
+        "ref": "all-desktops",
+        "repo": "desktoppr",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -1225,6 +1255,7 @@
         "claude-code-nix": "claude-code-nix",
         "cramt-nixconf": "cramt-nixconf",
         "darwin": "darwin",
+        "desktoppr": "desktoppr",
         "disko": "disko",
         "emacs-overlay": "emacs-overlay",
         "emacs-plus": "emacs-plus",

@@ -21,6 +21,13 @@
       url = "github:lnl7/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    desktoppr = {
+      url = "github:lafrenierejm/desktoppr/all-desktops";
+      inputs.nixpkgs.follows = "nixpkgs-trunk";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.git-hooks.follows = "git-hooks";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
