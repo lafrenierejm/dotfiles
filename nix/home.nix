@@ -1021,6 +1021,7 @@ in {
         sqlite3
         sqlup-mode
         standard-dirs
+        swift-mode
         terraform-mode
         toml-mode
         treesit-fold
@@ -1056,6 +1057,7 @@ in {
         magit = self.melpaPackages.magit;
         projectile = self.melpaPackages.projectile;
         shell-maker = self.melpaPackages.shell-maker;
+        swift-mode = self.melpaPackages.swift-mode;
       };
     };
 
