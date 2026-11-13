@@ -11,6 +11,7 @@
     ../audio.nix
     ../graphical.nix
     ../networking.nix
+    ../tailscale.nix
   ];
 
   # Bootloader.
