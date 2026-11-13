@@ -166,11 +166,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794453458,
-        "narHash": "sha256-ym1YCNfsRC544/Z4KZn/efuzQFBK2CQ+Rl/YAhaIOa8=",
+        "lastModified": 1794472240,
+        "narHash": "sha256-DPiqDuQNteVxUevTvcJHLPE8BwCWVqlRpxgCdpKk5cs=",
         "owner": "lafrenierejm",
         "repo": "desktoppr",
-        "rev": "36501ff2051992379418c425368b16953c0e2d01",
+        "rev": "5d15c8c2c2f60e05d92eb94b0709e4b8012ea965",
         "type": "github"
       },
       "original": {
