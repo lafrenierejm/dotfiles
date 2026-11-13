@@ -387,6 +387,7 @@ in {
       cachePaths = lib.lists.flatten [
         "${config.xdg.cacheHome}/nix"
         "${config.xdg.cacheHome}/prek"
+        (platformCache "treefmt" "treefmt")
         # Rust
         [
           "~/.cargo/.global-cache"
