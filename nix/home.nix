@@ -782,6 +782,8 @@ in {
       settings.sandbox.network.allowUnixSockets =
         ["/nix/var/nix/daemon-socket/socket"]
         ++ lib.lists.optional pkgs.stdenv.isDarwin gpgSocket;
+      # On macOS, Go-based CLIs otherwise fail TLS verification under Seatbelt with `x509: OSStatus -26276`.
+      settings.sandbox.enableWeakerNetworkIsolation = pkgs.stdenv.isDarwin;
       # Each domain is allowed along with all of its subdomains.
       settings.sandbox.network.allowedDomains =
         lib.lists.concatMap
