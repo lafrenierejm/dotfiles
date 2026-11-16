@@ -241,6 +241,16 @@
           inputs.claude-code-nix.overlays.default
           inputs.emacs-overlay.overlays.default
           inputs.nur.overlays.default
+          # Take all COSMIC packages from trunk.
+          (final: prev: let
+            trunk = inputs.nixpkgs-trunk.legacyPackages.${prev.stdenv.hostPlatform.system};
+            inherit (inputs.nixpkgs.lib) genAttrs hasPrefix;
+            cosmicNames = builtins.filter (hasPrefix "cosmic-") (builtins.attrNames trunk);
+          in
+            genAttrs cosmicNames (name: trunk.${name})
+            // {
+              inherit (trunk) xdg-desktop-portal-cosmic;
+            })
           (final: prev: {
             actionlint = prev.callPackage ./nix/pkgs/actionlint.nix {};
             claude-agent-acp = prev.callPackage ./nix/pkgs/claude-agent-acp.nix {};
