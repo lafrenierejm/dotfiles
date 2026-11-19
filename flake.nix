@@ -98,7 +98,8 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
     mac-app-util = {
-      url = "github:hraban/mac-app-util";
+      url = "github:lafrenierejm/mac-app-util/codesign";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
     nix-homebrew = {

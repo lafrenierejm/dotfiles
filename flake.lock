@@ -838,22 +838,25 @@
         "cl-nix-lite": "cl-nix-lite",
         "flake-compat": "flake-compat_4",
         "flake-utils": "flake-utils_4",
-        "nixpkgs": "nixpkgs_5",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "systems": "systems_6",
         "treefmt-nix": [
           "treefmt-nix"
         ]
       },
       "locked": {
-        "lastModified": 1783182903,
-        "narHash": "sha256-7IteXipJZfFepi5zakxe0jQ5i3vRBQguk0+Gtte1Fu4=",
-        "owner": "hraban",
+        "lastModified": 1794894665,
+        "narHash": "sha256-oT7RwCi1X30UuFUt73dmkb0zF0nf4nGRX1gfbU3+zrg=",
+        "owner": "lafrenierejm",
         "repo": "mac-app-util",
-        "rev": "039f33deef21782d4db97087f426504951239887",
+        "rev": "a7893bfd64c1efd8303a034aeb51326d48ae7fe7",
         "type": "github"
       },
       "original": {
-        "owner": "hraban",
+        "owner": "lafrenierejm",
+        "ref": "codesign",
         "repo": "mac-app-util",
         "type": "github"
       }
@@ -1103,22 +1106,6 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1782999065,
-        "narHash": "sha256-5Dgj5+pIQYZKrXUGaLCk7CKfN3MmpwIhO94++WVxvng=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "80d591ed473cfc46329932c2aadac9b435342c7c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-26.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_6": {
-      "locked": {
         "lastModified": 1794217284,
         "narHash": "sha256-gDgDxMHOYuYTP5sbSvzlFivvOZSc3gZyzJcwOdG9ZyM=",
         "rev": "f4244ef33645badc8157562b5e80748929b396c2",
@@ -1130,7 +1117,7 @@
         "url": "https://channels.nixos.org/nixpkgs-26.05-darwin/nixexprs.tar.zst"
       }
     },
-    "nixpkgs_7": {
+    "nixpkgs_6": {
       "locked": {
         "lastModified": 1794386569,
         "narHash": "sha256-x9sADJvoVG0L6RejZB+/BB4YiGZFBZrfTlhF4uBq1tQ=",
@@ -1151,7 +1138,7 @@
         "flake-parts": [
           "flake-parts"
         ],
-        "nixpkgs": "nixpkgs_7"
+        "nixpkgs": "nixpkgs_6"
       },
       "locked": {
         "lastModified": 1794638362,
@@ -1275,7 +1262,7 @@
         "mac-app-util": "mac-app-util",
         "nix-homebrew": "nix-homebrew",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs_6",
+        "nixpkgs": "nixpkgs_5",
         "nixpkgs-trunk": "nixpkgs-trunk",
         "nur": "nur",
         "ripgrep-all": "ripgrep-all",
