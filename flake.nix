@@ -261,6 +261,11 @@
 
                 # Set all animations to 1ms.
                 find src/shell -type f -name "*.rs" -exec sed -i 's/Duration::from_millis([0-9]\+)/Duration::from_millis(1)/g' {} \;
+
+                # Keep the active-window hint square when the window corner radius is 0.
+                substituteInPlace src/backend/render/mod.rs \
+                  --replace-fail 'inner_radius.map(|r| r + thickness)' \
+                                 'inner_radius.map(|r| if r == 0 { 0 } else { r + thickness })'
               '';
             });
             whitesur-combined = prev.callPackage ./nix/pkgs/whitesur-combined.nix {};
