@@ -1201,6 +1201,8 @@ in {
       package = inputs.lieer.packages.${system}.lieer;
     };
 
+    man.generateCaches = true;
+
     mercurial = {
       enable = true;
       ignores = vcIgnores;

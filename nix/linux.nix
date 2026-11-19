@@ -1,4 +1,6 @@
 {
+  documentation.man.cache.enable = true;
+
   time.timeZone = "America/Chicago";
 
   # Select internationalisation properties.
