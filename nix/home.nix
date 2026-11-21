@@ -892,6 +892,21 @@ in {
           ++ (lib.lists.optionals pkgs.stdenv.isLinux [
             ./patches/emacs-pgtk-named-cursors.patch
           ]);
+        # Put the custom icon in the Emacs that actually runs.  The
+        # with-packages wrapper execs this package's own Emacs.app, so an icon
+        # applied only to a copy of the wrapper app (see
+        # targets.darwin.mac-app-util.icons) is not what the Dock and app
+        # switchers show for the running process.
+        postInstall =
+          (old.postInstall or "")
+          + lib.optionalString pkgs.stdenv.isDarwin ''
+            resources="$out/Applications/Emacs.app/Contents/Resources"
+            install -m644 ${inputs.emacs-icons}/Resources/Emacs.icns "$resources/Emacs.icns"
+            install -m644 ${inputs.emacs-icons}/Resources/Assets.car "$resources/Assets.car"
+            substituteInPlace "$out/Applications/Emacs.app/Contents/Info.plist" \
+              --replace-fail '<string>Emacs.icns</string>' \
+              '<string>Emacs.icns</string><key>CFBundleIconName</key><string>Emacs</string>'
+          '';
       });
       extraPackages = epkgs: (with epkgs; [
         adoc-mode

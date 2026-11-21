@@ -200,6 +200,22 @@
         "type": "github"
       }
     },
+    "emacs-icons": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768342854,
+        "narHash": "sha256-aQBHEW/grlVvTdrIzNGkRGIHyNxYoL+EFAQPJYaa2pI=",
+        "owner": "leaferiksen",
+        "repo": "emacs-liquid-glass-icon",
+        "rev": "1d2cba63900f1e9d67914774c38d74b19601b630",
+        "type": "github"
+      },
+      "original": {
+        "owner": "leaferiksen",
+        "repo": "emacs-liquid-glass-icon",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "inputs": {
         "nixpkgs": [
@@ -1244,6 +1260,7 @@
         "darwin": "darwin",
         "desktoppr": "desktoppr",
         "disko": "disko",
+        "emacs-icons": "emacs-icons",
         "emacs-overlay": "emacs-overlay",
         "emacs-plus": "emacs-plus",
         "emacsPkg-agent-shell-ediff": "emacsPkg-agent-shell-ediff",
