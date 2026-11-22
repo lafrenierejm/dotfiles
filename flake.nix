@@ -187,7 +187,7 @@
           check.enable = true;
           settings.package = pkgs.prek;
           settings.hooks = let
-            cosmicConfigFiles = ["cosmic/com\\.system76\\..*/v1/.*"];
+            cosmicConfigFiles = ["cosmic/*"];
             nonplaintext = [
               ".*\\.age"
               ".*\\.crypt"
