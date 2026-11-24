@@ -5691,7 +5691,8 @@ The defined hook can be added to all Terragrunt files.
 *** /typescript-ts-mode/
 
 #+begin_src emacs-lisp
-(use-package typescript-ts-mode)
+(use-package typescript-ts-mode
+  :mode ("\\.jsonl\\'" . typescript-ts-mode))
 #+end_src
 
 **** /Eglot/
