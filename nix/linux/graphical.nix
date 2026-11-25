@@ -39,6 +39,9 @@
   # Enable the gnome-keyring secrets vault.
   # Will be exposed through DBus to programs willing to store secrets.
   services.gnome.gnome-keyring.enable = true;
+  # The gnome-keyring module only hooks PAM for `login`;
+  # unlock the keyring on COSMIC greeter and lock-screen authentication too.
+  security.pam.services.cosmic-greeter.enableGnomeKeyring = true;
 
   # Geoclue disabled - darkman now uses static location
   # services.geoclue2 = {
