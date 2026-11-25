@@ -3,6 +3,7 @@
   lib,
   pkgs,
   personal,
+  userName,
   ...
 }: {
   services.tailscale = {
@@ -18,6 +19,8 @@
         "--exit-node=us-mia-wg-003.mullvad.ts.net"
       ])
     ];
+    # Let this user run `tailscale` commands without sudo.
+    extraSetFlags = ["--operator=${userName}"];
   };
   environment.systemPackages = with pkgs; [
     tailscale
