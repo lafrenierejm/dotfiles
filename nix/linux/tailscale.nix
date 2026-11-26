@@ -24,7 +24,6 @@
   };
   environment.systemPackages = with pkgs; [
     tailscale
-    tailscale-systray
     tailscalesd
   ];
   networking.firewall.trustedInterfaces = ["tailscale0"];

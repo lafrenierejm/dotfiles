@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   fonts = {
     packages = with pkgs; [
       dejavu_fonts
@@ -66,5 +70,16 @@
     whitesur-combined
     whitesur-gtk-theme
     whitesur-kde
+    trayscale
   ];
+
+  # Start Trayscale with the desktop session, tray only (no window).
+  # COSMIC's status area applet displays the StatusNotifierItem it registers.
+  # Trayscale needs the Tailscale operator (see tailscale.nix) to control the daemon.
+  environment.etc."xdg/autostart/trayscale.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=Trayscale
+    Exec=${lib.getExe pkgs.trayscale} --hide-window
+  '';
 }
