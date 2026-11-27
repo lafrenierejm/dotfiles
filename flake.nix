@@ -445,7 +445,7 @@
               }
             ];
             specialArgs = {
-              inherit inputs realName system;
+              inherit inputs pkgsTrunk realName system;
               inherit (values) personal userName hostname;
             };
           }))

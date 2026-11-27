@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  pkgsTrunk,
   ...
 }: {
   fonts = {
@@ -70,7 +71,7 @@
     whitesur-combined
     whitesur-gtk-theme
     whitesur-kde
-    trayscale
+    pkgsTrunk.trayscale
   ];
 
   # Start Trayscale with the desktop session, tray only (no window).
@@ -80,6 +81,6 @@
     [Desktop Entry]
     Type=Application
     Name=Trayscale
-    Exec=${lib.getExe pkgs.trayscale} --hide-window
+    Exec=${lib.getExe pkgsTrunk.trayscale} --hide-window
   '';
 }
